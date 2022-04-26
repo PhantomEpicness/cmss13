@@ -903,6 +903,7 @@
 #include "code\game\objects\items\explosives\explosive.dm"
 #include "code\game\objects\items\explosives\mine.dm"
 #include "code\game\objects\items\explosives\plastic.dm"
+#include "code\game\objects\items\explosives\satchel.dm"
 #include "code\game\objects\items\explosives\warhead.dm"
 #include "code\game\objects\items\explosives\grenades\chem_grenade.dm"
 #include "code\game\objects\items\explosives\grenades\emgrenade.dm"
