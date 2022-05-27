@@ -45,7 +45,21 @@
 	if(QDELETED(E))
 		return
 
-
+/obj/item/explosive/grenade/base_gas_glob
+	name = "acid ball"
+	desc = "A bulging, pulsating ball of gas."
+	icon_state = "neuro_nade_greyscale"
+	item_state = "neuro_nade_greyscale"
+	det_time = 5 SECONDS
+	color = COLOR_GREEN
+	// you got beamed with a fat fucking ball of acid, rip
+	throwforce = 30
+	rebounds = FALSE
+	//var/spray_type = /obj/effect/xenomorph/spray
+	var/range = 3
+	var/smoke_duration = 5 SECONDS
+	var/datum/effect_system/smoke_spread/xeno_acid/smoke
+	//var/hivenumber = XENO_HIVE_NORMAL
 	// trapper warning below
 
 	//for(var/turf/T in orange(range, loc)/*range(range,loc)*/)
@@ -53,11 +67,17 @@
 	//	new /obj/effect/xenomorph/acid_damage_delay(T, damage, 7, TRUE, "You are blasted with a stream of high-velocity acid!")
 	//	for(var/mob/living/carbon/H in T)
 	//		SP.apply_spray(H)
-	playsound(loc, 'sound/effects/blobattack.ogg', 25, 1)
-	qdel(src)
+
+/obj/item/explosive/grenade/base_gas_glob/Initialize()
 	..()
+	smoke = new /datum/effect_system/smoke_spread/xeno_acid
+	smoke.attach(src)
 
-
+/obj/item/explosive/grenade/base_gas_glob/prime(range,smoke_duration, cause_data)
+	playsound(src.loc, 'sound/effects/smoke.ogg', 25, 1, 4)
+	smoke.set_up(range, 0, get_turf(src), smoke_time = smoke_duration, cause_data)
+	smoke.start()
+	qdel(src)
 
 /obj/item/explosive/grenade/splasher_slime_glob
 	name = "slime ball"

@@ -57,6 +57,15 @@
 		X.visible_message(SPAN_XENODANGER("[X] fires a massive blast of acid at [A]!"), SPAN_XENODANGER("You fire a massive blast of acid at [A]!"))
 		remove_stack_effects("You feel your speed return to normal!")
 
+
+
+/*
+	X.visible_message(SPAN_XENODANGER("[X] digs itself into place!"), SPAN_XENODANGER("You dig yourself into place!"))
+	if (!do_after(X, activation_delay, interrupt_flags, BUSY_ICON_HOSTILE))
+		to_chat(X, SPAN_XENODANGER("You decide to cancel your bombard."))
+		return FALSE
+
+*/
 /datum/action/xeno_action/activable/acid_lance/proc/stack()
 	var/mob/living/carbon/Xenomorph/X = owner
 	if (!istype(X))
@@ -312,12 +321,12 @@
 	bonus_projectiles_amount = 0
 	max_range = 4
 
-/// acid splasher powers
+/////////////////////// acid splasher powers
 
 
-/datum/action/xeno_action/activable/splasher_acid_glob/use_ability(atom/A)
+/datum/action/xeno_action/activable/throw_glob/use_ability(atom/A)
 	var/mob/living/carbon/Xenomorph/X = owner
-	to_chat(X, SPAN_XENODANGER("You prepare to lob a massive acid glob!"))
+	to_chat(X, SPAN_XENODANGER("You prepare to lob a massive glob!"))
 	if (!X.check_state() || X.action_busy)
 		return
 
@@ -330,7 +339,7 @@
 		return
 
 	if (!do_after(X, activation_delay, INTERRUPT_ALL | BEHAVIOR_IMMOBILE, BUSY_ICON_HOSTILE))
-		to_chat(X, SPAN_XENODANGER("You cancel your acid glob."))
+		to_chat(X, SPAN_XENODANGER("You stop throwing."))
 		return
 
 	if (!action_cooldown_check())
@@ -338,10 +347,11 @@
 
 	apply_cooldown()
 
-	to_chat(X, SPAN_XENOWARNING("You lob a massive ball of acid into the air!"))
+	to_chat(X, SPAN_XENOWARNING("You lob a massive glob into the air!"))
 // throw_atom(target, range, speed, ? , ?)
 	var/obj/item/explosive/grenade/grenade = new globtype
 	grenade.cause_data = create_cause_data(initial(X.caste_type), X)
+	//cause_data = create_cause_data(initial(X.caste_type), X)
 	grenade.forceMove(get_turf(X))
 	// 2nd var is range
 	// TODO: PLEASE MAKE THIS A FUCKING VARIABLE THAT YOU CAN CHANGE IN THE ACID SPLASH DELEGATES!!!1
@@ -353,7 +363,7 @@
 	return
 
 
-/datum/action/xeno_action/activable/splasher_acid_glob/slime/use_ability(atom/A)
+/datum/action/xeno_action/activable/throw_glob/slime/use_ability(atom/A)
 	var/mob/living/carbon/Xenomorph/X = owner
 	to_chat(X, SPAN_XENODANGER("You prepare to lob a massive slime glob!"))
 	if (!X.check_state() || X.action_busy)
@@ -377,6 +387,7 @@
 	apply_cooldown()
 
 	to_chat(X, SPAN_XENOWARNING("You lob a massive ball of slime into the air!"))
+	playsound(X.loc,'sound/effects/blobattack.ogg', 25, 1)
 // throw_atom(target, range, speed, ? , ?)
 	var/obj/item/explosive/grenade/grenade = new globtype
 	grenade.cause_data = create_cause_data(initial(X.caste_type), X)

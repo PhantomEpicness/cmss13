@@ -61,8 +61,8 @@ BASICALLY
 		/datum/action/xeno_action/onclick/dump_acid,
 	) /////////////// todo: put the actions you want here
 	mutator_actions_to_add = list(
-		/datum/action/xeno_action/activable/splasher_acid_glob,
-		/datum/action/xeno_action/activable/splasher_acid_glob/slime,
+		/datum/action/xeno_action/activable/throw_glob,
+		/datum/action/xeno_action/activable/throw_glob/slime,
 		///datum/action/xeno_action/activable/acid_mine,
 		/datum/action/xeno_action/activable/acid_shotgun,
 	)
