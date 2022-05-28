@@ -115,7 +115,7 @@
 	var/prime_delay = 1 SECONDS
 	// throw range in tiles
 	var/throw_range = 10
-	var/globtype = /obj/item/explosive/grenade/splasher_acid_glob
+	var/globtype = /obj/item/explosive/grenade/xeno/splasher_acid_glob
 
 /datum/action/xeno_action/activable/throw_glob/gas
 	name = "Acid Glob"
@@ -131,7 +131,23 @@
 	prime_delay = 1 SECONDS
 	// throw range in tiles
 	throw_range = 10
-	globtype = /obj/item/explosive/grenade/base_gas_glob
+	globtype = /obj/item/explosive/grenade/xeno/base_gas_glob
+
+/datum/action/xeno_action/activable/throw_glob/neuro
+	name = "Neuro Glob"
+	action_icon_state = "prae_acid_ball"
+	ability_name = "acid gas"
+	macro_path = /datum/action/xeno_action/verb/verb_acid_ball
+	action_type = XENO_ACTION_CLICK
+	ability_primacy = XENO_PRIMARY_ACTION_1
+	xeno_cooldown = 20 SECONDS
+	plasma_cost = 120
+	// activation delay is warmup
+	activation_delay = 5 SECONDS
+	prime_delay = 1 SECONDS
+	// throw range in tiles
+	throw_range = 10
+	globtype = /obj/item/explosive/grenade/xeno/base_gas_glob/neuro
 
 /datum/action/xeno_action/activable/throw_glob/slime
 	name = "Slime Glob"
@@ -147,4 +163,25 @@
 	prime_delay = 1 SECONDS
 	throw_range = 5
 	globtype = /obj/item/explosive/grenade/splasher_slime_glob
+
+
+/datum/action/xeno_action/activable/spray_acid/boiler
+	name = "Spray Acid"
+	action_icon_state = "spray_acid"
+	ability_name = "spray acid"
+	macro_path = /datum/action/xeno_action/verb/verb_spray_acid
+	action_type = XENO_ACTION_CLICK
+
+	plasma_cost = 40
+	xeno_cooldown = 80
+
+
+	// Configurable options
+
+	spray_type = ACID_SPRAY_LINE	// Enum for the shape of spray to do
+	spray_distance = 7 				// Distance to spray
+	spray_effect_type = /obj/effect/xenomorph/spray
+
+	activation_delay = FALSE		// Is there an activation delay?
+	activation_delay_length = 0		// Only used if activation_delay is TRUE.
 

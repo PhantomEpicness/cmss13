@@ -723,7 +723,7 @@
 
 	to_chat(X, SPAN_XENOWARNING("You lob a compressed ball of acid into the air!"))
 
-	var/obj/item/explosive/grenade/xeno_acid_grenade/grenade = new /obj/item/explosive/grenade/xeno_acid_grenade
+	var/obj/item/explosive/grenade/xeno/xeno_acid_grenade/grenade = new /obj/item/explosive/grenade/xeno/xeno_acid_grenade
 	grenade.cause_data = create_cause_data(initial(X.caste_type), X)
 	grenade.forceMove(get_turf(X))
 	grenade.throw_atom(A, 5, SPEED_SLOW, X, TRUE)

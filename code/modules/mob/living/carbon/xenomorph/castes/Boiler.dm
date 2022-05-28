@@ -57,9 +57,9 @@
 		/datum/action/xeno_action/watch_xeno,
 		/datum/action/xeno_action/activable/corrosive_acid/strong,
 		/datum/action/xeno_action/activable/throw_glob/gas, //1st macro
-		/datum/action/xeno_action/activable/acid_lance, //2nd macro
-		/datum/action/xeno_action/onclick/dump_acid, //3rd macro
-		///datum/action/xeno_action/onclick/toggle_long_range/boiler, //4th macro
+		/datum/action/xeno_action/activable/spray_acid/boiler, //2nd macro
+		/datum/action/xeno_action/activable/throw_glob/neuro, //3rd macro
+		/datum/action/xeno_action/onclick/dump_acid, //4th macro
 	)
 
 /mob/living/carbon/Xenomorph/Boiler/Initialize(mapload, mob/living/carbon/Xenomorph/oldXeno, h_number)

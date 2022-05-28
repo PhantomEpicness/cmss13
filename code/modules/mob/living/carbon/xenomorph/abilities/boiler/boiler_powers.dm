@@ -349,8 +349,13 @@
 
 	to_chat(X, SPAN_XENOWARNING("You lob a massive glob into the air!"))
 // throw_atom(target, range, speed, ? , ?)
-	var/obj/item/explosive/grenade/grenade = new globtype
+	var/obj/item/explosive/grenade/xeno/grenade = new globtype
+	//grenade.hivenumber = X.hivenumber
 	grenade.cause_data = create_cause_data(initial(X.caste_type), X)
+	grenade.thrower = X
+	grenade.xenotype = X.caste_type
+	grenade.hivedata = X.hivenumber
+	//grenade.thrower = owner
 	//cause_data = create_cause_data(initial(X.caste_type), X)
 	grenade.forceMove(get_turf(X))
 	// 2nd var is range
@@ -389,7 +394,7 @@
 	to_chat(X, SPAN_XENOWARNING("You lob a massive ball of slime into the air!"))
 	playsound(X.loc,'sound/effects/blobattack.ogg', 25, 1)
 // throw_atom(target, range, speed, ? , ?)
-	var/obj/item/explosive/grenade/grenade = new globtype
+	var/obj/item/explosive/grenade/xeno/grenade = new globtype
 	grenade.cause_data = create_cause_data(initial(X.caste_type), X)
 	grenade.forceMove(get_turf(X))
 	grenade.throw_atom(A, throw_range, SPEED_SLOW, X, TRUE)
