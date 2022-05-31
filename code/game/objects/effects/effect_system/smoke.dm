@@ -16,7 +16,7 @@
 	var/time_to_live = 8
 	var/smokeranking = SMOKE_RANK_HARMLESS //Override priority. A higher ranked smoke cloud will displace lower and equal ones on spreading.
 	var/datum/cause_data/cause_data = null
-
+	var/spreadsound
 	//Remove this bit to use the old smoke
 	icon = 'icons/effects/96x96.dmi'
 	pixel_x = -32
@@ -91,6 +91,8 @@
 		S.setDir(pick(cardinal))
 		S.time_to_live = time_to_live
 		if(S.amount>0)
+			if(spreadsound)
+				playsound(U,loc,spreadsound, 25, 1)
 			S.spread_smoke()
 
 
@@ -263,16 +265,18 @@
 
 	var/hivenumber = XENO_HIVE_NORMAL
 	var/gas_damage = 20
+	spreadsound = "sound/bullets/acid_impact1.ogg"
 
 /obj/effect/particle_effect/smoke/xeno_burn/Initialize(mapload, amount, datum/cause_data/cause_data)
-	var/mob/living/carbon/Xenomorph/X = cause_data.resolve_mob()
-	if (istype(X) && X.hivenumber)
-		hivenumber = X.hivenumber
+	//var/mob/living/carbon/Xenomorph/X = cause_data.resolve_mob()
+	//if (istype(X) && X.hivenumber)
+	//	hivenumber = X.hivenumber
 
-		set_hive_data(src, hivenumber)
+
+	//	set_hive_data(src, hivenumber)
 
 	. = ..()
-
+	cause_data = create_cause_data("Acid Gas")
 
 /obj/effect/particle_effect/smoke/xeno_burn/apply_smoke_effect(turf/T)
 	..()

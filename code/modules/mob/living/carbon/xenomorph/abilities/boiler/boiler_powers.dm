@@ -346,7 +346,7 @@
 		return
 
 	apply_cooldown()
-
+	playsound(X.loc,'sound/effects/blobattack.ogg', 25, 1)
 	to_chat(X, SPAN_XENOWARNING("You lob a massive glob into the air!"))
 // throw_atom(target, range, speed, ? , ?)
 	var/obj/item/explosive/grenade/xeno/grenade = new globtype
@@ -360,43 +360,6 @@
 	grenade.forceMove(get_turf(X))
 	// 2nd var is range
 	// TODO: PLEASE MAKE THIS A FUCKING VARIABLE THAT YOU CAN CHANGE IN THE ACID SPLASH DELEGATES!!!1
-	grenade.throw_atom(A, throw_range, SPEED_SLOW, X, TRUE)
-
-	addtimer(CALLBACK(grenade, /obj/item/explosive.proc/prime), prime_delay)
-
-	..()
-	return
-
-
-/datum/action/xeno_action/activable/throw_glob/slime/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/X = owner
-	to_chat(X, SPAN_XENODANGER("You prepare to lob a massive slime glob!"))
-	if (!X.check_state() || X.action_busy)
-		return
-
-	if (!action_cooldown_check() && check_and_use_plasma_owner())
-		return
-
-	var/turf/current_turf = get_turf(X)
-
-	if (!current_turf)
-		return
-
-	if (!do_after(X, activation_delay, INTERRUPT_ALL | BEHAVIOR_IMMOBILE, BUSY_ICON_HOSTILE))
-		to_chat(X, SPAN_XENODANGER("You cancel your slime glob."))
-		return
-
-	if (!action_cooldown_check())
-		return
-
-	apply_cooldown()
-
-	to_chat(X, SPAN_XENOWARNING("You lob a massive ball of slime into the air!"))
-	playsound(X.loc,'sound/effects/blobattack.ogg', 25, 1)
-// throw_atom(target, range, speed, ? , ?)
-	var/obj/item/explosive/grenade/xeno/grenade = new globtype
-	grenade.cause_data = create_cause_data(initial(X.caste_type), X)
-	grenade.forceMove(get_turf(X))
 	grenade.throw_atom(A, throw_range, SPEED_SLOW, X, TRUE)
 
 	addtimer(CALLBACK(grenade, /obj/item/explosive.proc/prime), prime_delay)

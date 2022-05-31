@@ -60,7 +60,7 @@
 	// you got beamed with a fat fucking ball of acid, rip
 	throwforce = 30
 	//var/spray_type = /obj/effect/xenomorph/spray
-	var/range = 3
+	var/range = 5
 	var/datum/effect_system/smoke_spread/xeno_acid/smoke
 	//var/hivenumber = XENO_HIVE_NORMAL
 	// trapper warning below
@@ -94,7 +94,7 @@
 	// you got beamed with a fat fucking ball of acid, rip
 	throwforce = 30
 	//var/spray_type = /obj/effect/xenomorph/spray
-	range = 3
+	range = 5
 	smoke_duration = 5 SECONDS
 	smoke = /datum/effect_system/smoke_spread/xeno_weaken
 	//var/hivenumber = XENO_HIVE_NORMAL
