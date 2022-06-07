@@ -1082,6 +1082,32 @@
 							/obj/item/attachable/angledgrip
 							)
 
+/obj/item/weapon/gun/rifle/type71/integrated
+	name = "\improper AK-104S suitgun"
+	desc = "A cut down version of the now phased out AK-104 pulse rifle. Despite the last kalashnikov based desgins being relagated to reserve units, the designers of the UH10 have decided that the suit needed it's legendary reliability for fierce boarding operations."
+	icon_state = "ak104s"
+	item_state = "ak104s"
+	flags_item = DELONDROP
+	aim_slowdown = SLOWDOWN_ADS_QUICK //Carbine is more lightweight
+	wield_delay = WIELD_DELAY_VERY_FAST
+	bonus_overlay_x = -2
+	attachable_allowed = list(
+						/obj/item/attachable/flashlight
+						)
+	random_spawn_chance = 1
+	random_spawn_rail = list()
+
+/obj/item/weapon/gun/rifle/type71/integrated/set_gun_attachment_offsets()
+	attachable_offset = list("muzzle_x" = 30, "muzzle_y" = 18,"rail_x" = 19, "rail_y" = 22, "under_x" = 21, "under_y" = 14, "stock_x" = 24, "stock_y" = 13)
+
+/obj/item/weapon/gun/rifle/type71/integrated/set_gun_config_values()
+	..()
+	fire_delay = FIRE_DELAY_TIER_10
+	accuracy_mult_unwielded = BASE_ACCURACY_MULT + HIT_ACCURACY_MULT_TIER_4
+	scatter_unwielded = SCATTER_AMOUNT_TIER_6
+	recoil_unwielded = SCATTER_AMOUNT_TIER_10
+
+
 /obj/item/weapon/gun/rifle/type71/carbine/commando
 	name = "\improper Type 71 'Commando' pulse carbine"
 	desc = "A much rarer variant of the Type 71, this version contains an integrated supressor, integrated scope, and extensive fine-tuning. Many parts have been replaced, filed down, and improved upon. As a result, this variant is rarely seen outside of commando units."

@@ -948,6 +948,27 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	armor_rad = CLOTHING_ARMOR_MEDIUMLOW
 	armor_internaldamage = CLOTHING_ARMOR_HIGHPLUS
 
+/obj/item/clothing/head/helmet/marine/veteran/UPP/boarding
+	name = "\improper UH10 sealed helmet"
+	desc = "A heavily armoured, hermeticall sealed helmet for operations in hard vaccum enviroments"
+	icon_state = "upp_helmet_heavy"
+	permeability_coefficient = 0
+	gas_transfer_coefficient = 0
+	flags_inv_hide = HIDEFACE|HIDEMASK|HIDEEARS|HIDEALLHAIR
+	flags_armor_protection = BODY_FLAG_HEAD|BODY_FLAG_FACE|BODY_FLAG_EYES
+	armor_melee = CLOTHING_ARMOR_ULTRAHIGH
+	armor_bullet = CLOTHING_ARMOR_ULTRAHIGH
+	armor_laser = CLOTHING_ARMOR_HIGHPLUS
+	armor_energy = CLOTHING_ARMOR_HIGHPLUS
+	armor_bomb = CLOTHING_ARMOR_HIGH
+	armor_bio = CLOTHING_ARMOR_HARDCORE
+	armor_rad = CLOTHING_ARMOR_HARDCORE
+	armor_internaldamage = CLOTHING_ARMOR_ULTRAHIGH
+	fire_intensity_resistance = BURN_LEVEL_TIER_1
+	flags_inventory = BLOCK_KNOCKDOWN|BLOCKSHARPOBJ|NOPRESSUREDMAGE|BLOCKGASEFFECT
+	siemens_coefficient = 0
+
+
 /obj/item/clothing/head/uppcap
 	name = "\improper UL2 UPP cap"
 	desc = "UPP headgear issued to soldiers when they're not expected to face combat, and may be requested by officers and above."

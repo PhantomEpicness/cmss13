@@ -76,6 +76,28 @@
 	update_icon()
 
 
+
+/obj/item/clothing/shoes/marine/upp/boarding
+	name = "Hermetically sealed boots"
+	permeability_coefficient = 0
+	gas_transfer_coefficient = 0
+	armor_melee = CLOTHING_ARMOR_ULTRAHIGH
+	armor_bullet = CLOTHING_ARMOR_ULTRAHIGH
+	armor_laser = CLOTHING_ARMOR_HIGHPLUS
+	armor_energy = CLOTHING_ARMOR_HIGHPLUS
+	armor_bomb = CLOTHING_ARMOR_HIGH
+	armor_bio = CLOTHING_ARMOR_HARDCORE
+	armor_rad = CLOTHING_ARMOR_HARDCORE
+	armor_internaldamage = CLOTHING_ARMOR_ULTRAHIGH
+	flags_cold_protection = BODY_FLAG_FEET
+	flags_heat_protection = BODY_FLAG_FEET
+	flags_armor_protection = BODY_FLAG_FEET
+	min_cold_protection_temperature = SHOE_min_cold_protection_temperature
+	max_heat_protection_temperature = SHOE_max_heat_protection_temperature
+	fire_intensity_resistance = BURN_LEVEL_TIER_1
+	flags_inventory = BLOCK_KNOCKDOWN|BLOCKSHARPOBJ|NOPRESSUREDMAGE|BLOCKGASEFFECT
+	siemens_coefficient = 0
+
 /obj/item/clothing/shoes/dress
 	name = "dress shoes"
 	desc = "Only a small amount of monkeys, kittens, and orphans were killed in making this."

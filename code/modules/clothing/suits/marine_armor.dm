@@ -1452,6 +1452,131 @@ var/list/squad_colors_chat = list(rgb(230,125,125), rgb(255,230,80), rgb(255,150
 		/obj/item/ammo_magazine/minigun
 		)
 
+
+/obj/item/clothing/suit/storage/marine/faction/UPP/boarding
+	name = "\improper UH10 Boarding Armor"
+	desc = "The hallmark of UPP armor design, an extremely heavyset suit that enable the wearer to walk through the gates of hell and back. These were originally the armor compenent of the UH18M Boarding armor, with the exoskeleton and hermatic seals removed as a cost down measure to enable to to be deployed more widely. Due to the cost of the UH18M, it prohibited general deployment of it, relagating use of it to special Narodnyy Morskaya Pekhota (People's Marine) boarding teams."
+	icon_state = "upp_armor_superheavy"
+	slowdown = SLOWDOWN_ARMOR_VERY_HEAVY
+	movement_compensation = SLOWDOWN_ARMOR_VERY_HEAVY
+	flags_armor_protection = BODY_FLAG_ALL_BUT_HEAD
+	armor_melee = CLOTHING_ARMOR_ULTRAHIGH
+	armor_bullet = CLOTHING_ARMOR_ULTRAHIGH
+	armor_laser = CLOTHING_ARMOR_HIGHPLUS
+	armor_energy = CLOTHING_ARMOR_HIGHPLUS
+	armor_bomb = CLOTHING_ARMOR_HIGH
+	armor_bio = CLOTHING_ARMOR_HARDCORE
+	armor_rad = CLOTHING_ARMOR_HARDCORE
+	armor_internaldamage = CLOTHING_ARMOR_ULTRAHIGH
+	fire_intensity_resistance = BURN_LEVEL_TIER_1
+	flags_inventory = BLOCK_KNOCKDOWN|BLOCKSHARPOBJ|NOPRESSUREDMAGE|BLOCKGASEFFECT
+	siemens_coefficient = 0
+	storage_slots = 1
+	actions_types = list(/datum/action/item_action/specialist/integrated_ak)
+	var/caster_active = 0
+	var/charge = 600
+	var/charge_max = 600
+	var/can_activate = TRUE
+
+/obj/item/clothing/suit/storage/marine/faction/UPP/boarding/proc/drain_power(var/mob/living/carbon/human/M, var/amount)
+	if(!M) return 0
+	if(charge < amount)
+		to_chat(M, SPAN_WARNING("Your suit is out of spare magazines."))
+		return 0
+	charge -= amount
+	var/perc = (charge / charge_max * 100)
+	M.update_power_display(perc)
+
+/obj/item/clothing/suit/storage/marine/faction/UPP/boarding/examine(mob/user)
+	..()
+	to_chat(user, "IMPORTANT: Due to the way the weapon is integrated, it cannot allow for any spare magazines to be loaded")
+	to_chat(user, "You currently have [charge/50] spare magazines.")
+
+/obj/item/clothing/suit/storage/marine/faction/UPP/boarding/verb/integrated()
+	set name = "Use integrated weapon"
+	set desc = "Activate your integrated weapon. If it is dropped it will retract back into your armor."
+	set category = "Integrated.Weapons"
+	set src in usr
+	. = weapon_internal(FALSE)
+
+/obj/item/clothing/suit/storage/marine/faction/UPP/boarding/proc/weapon_internal()
+	if(!usr.loc || !usr.canmove || usr.stat) return
+	var/mob/living/carbon/human/M = usr
+	var/obj/item/weapon/gun/rifle/type71/integrated/R = usr.r_hand
+	var/obj/item/weapon/gun/rifle/type71/integrated/L = usr.l_hand
+	if(!istype(R) && !istype(L))
+		caster_active = 0
+	if(caster_active) //Turn it off.
+		var/found = 0
+		if(R && istype(R))
+			found = 1
+			usr.r_hand = null
+			if(R)
+				M.temp_drop_inv_item(R)
+				R.forceMove(src)
+			M.update_inv_r_hand()
+		if(L && istype(L))
+			found = 1
+			usr.l_hand = null
+			if(L)
+				M.temp_drop_inv_item(L)
+				L.forceMove(src)
+			M.update_inv_l_hand()
+		if(found)
+			to_chat(usr, SPAN_NOTICE("The weapon retracts, excess ammo is dumped and you can use your extrmeties again."))
+			playsound(src,'sound/weapons/generic_gun_handling.ogg', 20)
+			caster_active = 0
+		return
+	else //Turn it on!
+		if(usr.get_active_hand())
+			to_chat(usr, SPAN_WARNING("Your hand must be free to deploy the weapon"))
+			return
+		if(charge == 0)
+			to_chat(usr, SPAN_WARNING("Your suit is out of spare magazines"))
+			return
+
+		var/obj/item/weapon/gun/rifle/type71/integrated/W
+		if(!istype(W))
+			W = new(usr)
+		usr.put_in_active_hand(W)
+		caster_active = 1
+		to_chat(usr, SPAN_NOTICE("You activate the integrated weapon and a new magazine is loaded."))
+		playsound(src,'sound/weapons/generic_gun_handling.ogg', 20)
+		drain_power(usr,50)
+	return 1
+
+/datum/action/item_action/specialist/integrated_ak
+	ability_primacy = SPEC_PRIMARY_ACTION_1
+
+/datum/action/item_action/specialist/integrated_ak/New(var/mob/living/user, var/obj/item/holder)
+	..()
+	name = "Activate Integrated AK-104S"
+	button.name = name
+	button.overlays.Cut()
+	var/image/IMG = image('icons/obj/items/weapons/guns/gun.dmi', button, "ak104s")
+	button.overlays += IMG
+
+/datum/action/item_action/specialist/integrated_ak/action_cooldown_check()
+	var/obj/item/clothing/suit/storage/marine/faction/UPP/boarding/armor = holder_item
+	if (!istype(armor))
+		return FALSE
+
+	return !armor.can_activate
+
+/datum/action/item_action/specialist/integrated_ak/can_use_action()
+	var/mob/living/carbon/human/H = owner
+	if(istype(H) && !H.is_mob_incapacitated() && H.wear_suit == holder_item)
+		return TRUE
+
+/datum/action/item_action/specialist/integrated_ak/action_activate()
+	var/obj/item/clothing/suit/storage/marine/faction/UPP/boarding/armor = holder_item
+	if (!istype(armor))
+		return
+
+	armor.integrated()
+
+
+
 /obj/item/clothing/suit/storage/marine/faction/UPP/officer
 	name = "\improper UL6 officers jacket"
 	desc = "A lightweight jacket, issued to officers of the UPP's military. Still studded to the brim with kevlar shards, though the synthread construction reduces its effectiveness."

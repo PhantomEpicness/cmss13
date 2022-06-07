@@ -136,6 +136,32 @@
 	armor_internaldamage = CLOTHING_ARMOR_ULTRAHIGH
 	unacidable = TRUE
 
+
+/obj/item/clothing/gloves/marine/veteran/UPP/boarding
+	name = "\improper UM10 gauntlets"
+	desc = "A pair of heavily armored gloves made to complete the UM10 boarding armour"
+	icon_state = "gauntlets"
+	item_state = "bgloves"
+	permeability_coefficient = 0
+	gas_transfer_coefficient = 0
+	armor_melee = CLOTHING_ARMOR_ULTRAHIGH
+	armor_bullet = CLOTHING_ARMOR_ULTRAHIGH
+	armor_laser = CLOTHING_ARMOR_HIGHPLUS
+	armor_energy = CLOTHING_ARMOR_HIGHPLUS
+	armor_bomb = CLOTHING_ARMOR_HIGH
+	armor_bio = CLOTHING_ARMOR_HARDCORE
+	armor_rad = CLOTHING_ARMOR_HARDCORE
+	armor_internaldamage = CLOTHING_ARMOR_ULTRAHIGH
+	flags_cold_protection = BODY_FLAG_HANDS
+	flags_heat_protection = BODY_FLAG_HANDS
+	min_cold_protection_temperature = GLOVES_min_cold_protection_temperature
+	max_heat_protection_temperature = GLOVES_max_heat_protection_temperature
+	flags_armor_protection = BODY_FLAG_HANDS
+	fire_intensity_resistance = BURN_LEVEL_TIER_1
+	flags_inventory = BLOCK_KNOCKDOWN|BLOCKSHARPOBJ|NOPRESSUREDMAGE
+	siemens_coefficient = 0
+
+
 /obj/item/clothing/gloves/marine/dress
 	name = "dress gloves"
 	desc = "A pair of fashionable white gloves, worn by marines in dress."
