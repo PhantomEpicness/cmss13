@@ -479,6 +479,7 @@
 	icon_state = "welderpack"
 	w_class = SIZE_LARGE
 	health = 75		// More robust liner I guess
+	var/datum/effect_system/spark_spread/spark_system
 	var/original_health = 1 //placeholder value to be replaced in init
 	var/max_fuel = 600 	//Because the marine backpack can carry 260, and still allows you to take items, there should be a reason to still use this one.
 
@@ -487,6 +488,9 @@
 	create_reagents(max_fuel) //Lotsa refills
 	reagents.add_reagent("fuel", max_fuel)
 	original_health = health
+	src.spark_system = new /datum/effect_system/spark_spread
+	spark_system.set_up(3, 0, src)
+	spark_system.attach(src)
 
 /obj/item/tool/weldpack/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W, /obj/item/tool/weldingtool))
@@ -534,11 +538,37 @@
 		to_chat(user, "No punctures are seen on \the [src] upon closer inspection.")
 
 /obj/item/tool/weldpack/bullet_act(var/obj/item/projectile/P)
+	..()
 	var/damage = P.damage
 	health -= damage
-	..()
 	healthcheck()
 	return 1
+
+/obj/item/tool/weldpack/ex_act(severity)
+	..()
+	spark_system.start(src)
+	health -= severity*15
+	healthcheck()
+	return 1
+
+/obj/item/tool/weldpack/fire_act()
+	..()
+	health -= health
+	playsound(loc, 'sound/effects/refill.ogg', 25, 1, 3)
+	spark_system.start(src)
+	visible_message(SPAN_WARNING("\The [src] cannot withstand the flames!")) // Some special effects and a warning so it isn't instant
+	addtimer(CALLBACK(src, .proc/healthcheck), 10)
+	return 1
+
+/obj/item/tool/weldpack/flamer_fire_act()
+	..()
+	health -= health
+	playsound(loc, 'sound/effects/refill.ogg', 25, 1, 3)
+	spark_system.start(src)
+	visible_message(SPAN_WARNING("\The [src] cannot withstand the flames!")) // Some special effects and a warning so it isn't instant
+	addtimer(CALLBACK(src, .proc/healthcheck), 10)
+	return 1
+
 
 /obj/item/tool/weldpack/proc/healthcheck()
 	if(health <= 0)
