@@ -556,8 +556,7 @@
 	health -= health
 	playsound(loc, 'sound/effects/refill.ogg', 25, 1, 3)
 	spark_system.start(src)
-	visible_message(SPAN_WARNING("\The [src] cannot withstand the flames!")) // Some special effects and a warning so it isn't instant
-	addtimer(CALLBACK(src, .proc/healthcheck), 10)
+	visible_message(SPAN_WARNING("\The [src] cannot withstand the flames and bursts!")) // Some special effects and a warning so it isn't instant
 	return 1
 
 /obj/item/tool/weldpack/flamer_fire_act()
@@ -565,8 +564,7 @@
 	health -= health
 	playsound(loc, 'sound/effects/refill.ogg', 25, 1, 3)
 	spark_system.start(src)
-	visible_message(SPAN_WARNING("\The [src] cannot withstand the flames!")) // Some special effects and a warning so it isn't instant
-	addtimer(CALLBACK(src, .proc/healthcheck), 10)
+	visible_message(SPAN_WARNING("\The [src] cannot withstand the flames and bursts!")) // Some special effects and a warning so it isn't instant
 	return 1
 
 
