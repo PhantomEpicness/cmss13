@@ -16,53 +16,38 @@
 		/datum/action/xeno_action/onclick/toggle_long_range/boiler
 	)
 	keystone = TRUE
-	spit_types = list(
-					/datum/ammo/xeno/acid/railgun,
-					/datum/ammo/xeno/acid/fragmenting_shot,
-					/datum/ammo/xeno/acid/fragmenting_shot/neuro
-	)
 	behavior_delegate_type = /datum/behavior_delegate/boiler_striker
-
+	//zoom(user, 11, 12)
 /datum/xeno_mutator/striker/apply_mutator(datum/mutator_set/individual_mutators/MS)
-    . = ..()
-    if(. == 0)
-        return
+	. = ..()
+	if(. == 0)
+		return
+	var/mob/living/carbon/Xenomorph/Boiler/B = MS.xeno
+	if(B.is_zoomed)
+		B.zoom_out()
+	B.spit_types = list(/datum/ammo/xeno/acid/railgun,/datum/ammo/xeno/acid/fragmenting_shot,/datum/ammo/xeno/acid/fragmenting_shot/neuro)
+	B.ammo = GLOB.ammo_list[/datum/ammo/xeno/acid/railgun]
+	B.spit_delay = 5 SECONDS
+	B.spit_windup = 3 SECONDS
+	B.mutation_type = BOILER_STRIKER
+	B.plasma_types -= PLASMA_NEUROTOXIN
 
-    var/mob/living/carbon/Xenomorph/Boiler/B = MS.xeno
-    if(B.is_zoomed)
-        B.zoom_out()
- 	B.spit_types = list(
-					/datum/ammo/xeno/acid/railgun,
-					/datum/ammo/xeno/acid/fragmenting_shot,
-					/datum/ammo/xeno/acid/fragmenting_shot/neuro
-	)
-   // B.ammo = GLOB.ammo_list[/datum/ammo/xeno/acid/railgun]
-    B.spit_delay = 5 SECONDS
-    B.spit_windup = 3 SECONDS
-    B.mutation_type = BOILER_STRIKER
-    B.plasma_types -= PLASMA_NEUROTOXIN
+	apply_behavior_holder(B)
+	//B.speed_modifier += XENO_SPEED_SLOWMOD_TIER_1
+	B.recalculate_everything()
 
 
-    //B.speed_modifier += XENO_SPEED_SLOWMOD_TIER_1
-    B.recalculate_everything()
-
-    apply_behavior_holder(B)
-
-    mutator_update_actions(B)
-    MS.recalculate_actions(description, flavor_description)
+	mutator_update_actions(B)
+	MS.recalculate_actions(description, flavor_description)
 
 // find out why its being dumb and making it neuro gas
 // save neuro gas for base globber
 /datum/behavior_delegate/boiler_striker
 	name = "Boiler striker Behavior Delegate"
+	// config
+	var/row_hits = 0 // Tracks the amount of hits for the Ultimate
+	var/hits_threshold = 3 // amount of hits before ultimate is avalible
 
-	// Config
-	var/temp_movespeed_amount = 1.25
-	var/temp_movespeed_duration = 50
-	var/temp_movespeed_cooldown = 200
-	var/bonus_damage_shotgun_trapped = 7.5
 
-	// State
-	var/temp_movespeed_time_used = 0
-	var/temp_movespeed_usable = FALSE
-	var/temp_movespeed_messaged = FALSE
+	// state
+	var/ultimate_active = FALSE

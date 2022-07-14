@@ -86,6 +86,24 @@
 	var/mob/living/carbon/Xenomorph/X = owner
 	if(!X.check_state(1))
 		return
+	for(var/i in 1 to X.spit_types.len)
+		if(X.ammo == GLOB.ammo_list[X.spit_types[i]])
+			if(i == X.spit_types.len)
+				X.ammo = GLOB.ammo_list[X.spit_types[1]]
+			else
+				X.ammo = GLOB.ammo_list[X.spit_types[i+1]]
+			break
+	to_chat(X, SPAN_NOTICE("You will now spit [X.ammo.name] ([X.ammo.spit_cost] plasma)."))
+	button.overlays.Cut()
+	button.overlays += image('icons/mob/hud/actions.dmi', button, "shift_spit_[X.ammo.icon_state]")
+	..()
+	return
+
+// Snowflake spit shifter for the strain because its actually fucking retarded
+/datum/action/xeno_action/onclick/shift_spits_strain/use_ability(atom/A)
+	var/mob/living/carbon/Xenomorph/X = owner
+	if(!X.check_state(1))
+		return
 	for(var/i in 1 to X.caste.spit_types.len)
 		if(X.ammo == GLOB.ammo_list[X.caste.spit_types[i]])
 			if(i == X.caste.spit_types.len)
