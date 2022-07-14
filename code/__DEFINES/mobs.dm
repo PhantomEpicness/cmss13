@@ -321,6 +321,7 @@
 // Boiler strain flags
 #define BOILER_NORMAL		"Normal"
 #define BOILER_TRAPPER 		"Trapper"
+#define BOILER_STRIKER		"Striker"
 
 // Runner strain flags
 #define RUNNER_NORMAL		"Normal"

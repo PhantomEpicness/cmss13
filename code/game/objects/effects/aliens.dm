@@ -196,6 +196,31 @@
 	time_to_live = 3 SECONDS
 	// Stuns for 2 seconds, lives for 3 seconds. Seems to stun longer than it lives for at 2 seconds
 
+/obj/effect/xenomorph/spray/slime // Slowdown instead of damage
+	time_to_live = 6 SECONDS
+	damage_amount = 5
+	fire_level_to_extinguish = 25
+	color = COLOR_PINK
+
+
+/obj/effect/xenomorph/spray/slime/apply_spray(mob/living/carbon/M)
+	if(ishuman(M))
+		var/mob/living/carbon/human/H = M
+
+		to_chat(H, SPAN_DANGER("The slime tangles your legs and slows you down!"))
+		H.emote("pain")
+		H.last_damage_data = cause_data
+		H.apply_armoured_damage(damage_amount, ARMOR_BIO, BURN, "l_foot", 50)
+		H.apply_armoured_damage(damage_amount, ARMOR_BIO, BURN, "r_foot", 50)
+		H.Superslow(5.0)
+		H.visible_message(SPAN_DANGER("[H]'s movements are slowed."))
+		H.UpdateDamageIcon()
+		H.updatehealth()
+	else if (isXeno(M))
+		..(M, FALSE)
+
+
+
 /obj/effect/xenomorph/spray/strong/no_stun
 	stun_duration = 0
 

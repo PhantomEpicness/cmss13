@@ -685,7 +685,10 @@
 		return
 
 	xeno_cooldown = X.caste.spit_delay + X.ammo.added_spit_delay
-
+	if(X.ammo.spit_windup)
+		if (!do_after(X, X.ammo.spit_windup, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_HOSTILE))
+			to_chat(X, SPAN_XENODANGER("You decide to cancel your spit."))
+			return FALSE
 	X.visible_message(SPAN_XENOWARNING("[X] spits at [A]!"), \
 	SPAN_XENOWARNING("You spit at [A]!") )
 	var/sound_to_play = pick(1, 2) == 1 ? 'sound/voice/alien_spitacid.ogg' : 'sound/voice/alien_spitacid2.ogg'

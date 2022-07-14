@@ -2312,6 +2312,7 @@
 	flags_ammo_behavior = AMMO_XENO_ACID
 	var/added_spit_delay = 0 //used to make cooldown of the different spits vary.
 	var/spit_cost
+	var/spit_windup = FALSE
 
 	accuracy = HIT_ACCURACY_TIER_8*2
 	max_range = 12
@@ -2541,8 +2542,82 @@
 	shell_speed = AMMO_SPEED_TIER_2
 	added_spit_delay = 0
 
+/datum/ammo/xeno/acid/railgun
+	name = "heavy acid shot"
+
+	accuracy = HIT_ACCURACY_TIER_10
+	max_range = 24
+	damage = 50
+	shell_speed = AMMO_SPEED_TIER_3
+	added_spit_delay = 6 SECONDS
+	spit_windup = 5 SECONDS
+	spit_cost = 75
+
+/datum/ammo/xeno/acid/railgun/on_hit_mob(mob/M, obj/item/projectile/P)
+	. = ..()
+	M.KnockDown(5)
+
+
+/datum/ammo/xeno/acid/fragmenting_shot
+	name = "fragmentation acid glob"
+
+	accuracy = HIT_ACCURACY_TIER_10
+	max_range = 24
+	shell_speed = AMMO_SPEED_TIER_3
+	added_spit_delay = 6 SECONDS
+	spit_windup = 5 SECONDS
+	spit_cost = 100
+	var/fragmentations =  /datum/ammo/xeno/acid/acidsplash
+
+/datum/ammo/xeno/acid/fragmenting_shot/on_hit_mob(mob/M, obj/item/projectile/P)
+	create_shrapnel(M.loc, rand(8,12), , , fragmentations)
+	M.KnockDown(1)
+	..()
+/datum/ammo/xeno/acid/fragmenting_shot/on_hit_turf(turf/T, obj/item/projectile/P)
+	. = ..()
+	create_shrapnel(T.loc, rand(8,12), , , fragmentations)
+
+/datum/ammo/xeno/acid/fragmenting_shot/on_hit_obj(obj/O, obj/item/projectile/P)
+	create_shrapnel(O.loc, rand(8,12), , , fragmentations)
+	. = ..()
+
+/datum/ammo/xeno/acid/fragmenting_shot/neuro
+	name = "fragmentation acid glob"
+
+	accuracy = HIT_ACCURACY_TIER_10
+	max_range = 24
+	shell_speed = AMMO_SPEED_TIER_3
+	added_spit_delay = 6 SECONDS
+	spit_windup = 5 SECONDS
+	spit_cost = 100
+	fragmentations =  /datum/ammo/xeno/toxin
+
 /datum/ammo/xeno/acid/dot
 	name = "acid spit"
+
+/datum/ammo/xeno/acid/acidsplash
+	name = "acid splash"
+	damage = 25
+	flags_ammo_behavior = AMMO_STOPPED_BY_COVER
+	accuracy = HIT_ACCURACY_TIER_4
+	accurate_range = 4
+	max_range = 5
+	damage = 30
+	shell_speed = AMMO_SPEED_TIER_1
+	scatter = SCATTER_AMOUNT_TIER_6
+	apply_delegate = FALSE
+
+///datum/ammo/xeno/acid/acidsplash/on_hit_mob(atom/A)
+	//if (ishuman(A))
+	//	var/mob/living/carbon/human/H = A
+	//	return
+	//	if (H.stat == DEAD)
+	//		return
+	//new /datum/effects/acid/siege(A)
+
+
+
+
 
 /datum/ammo/xeno/acid/prae_nade // Used by base prae's acid nade
 	name = "acid spatter"
