@@ -76,6 +76,7 @@
 		to_chat(X, SPAN_XENOHIGHDANGER("You have charged your acid lance to maximum!"))
 		return
 
+
 /datum/action/xeno_action/activable/acid_lance/proc/remove_stack_effects(message = null)
 	var/mob/living/carbon/Xenomorph/X = owner
 
@@ -216,6 +217,33 @@
 	..()
 	return
 
+
+/datum/action/xeno_action/activable/xeno_spit_rapid/use_ability(atom/A)
+	var/mob/living/carbon/Xenomorph/X = owner
+	if (!istype(X))
+		return
+
+	if (!action_cooldown_check())
+		return
+
+	if(!A || A.layer >= FLY_LAYER || !isturf(X.loc) || !X.check_state())
+		return
+
+	X.visible_message(SPAN_XENOWARNING("The [X] fires a blast of acid at [A]!"), SPAN_XENOWARNING("You fire a blast of acid at [A]!"))
+
+	var/turf/target = locate(A.x, A.y, A.z)
+	var/obj/item/projectile/P = new /obj/item/projectile(X.loc, create_cause_data(initial(X.caste_type), X))
+
+
+	if (!do_after(X, spit_windup, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_HOSTILE))
+		return
+	var/datum/ammo/ammoDatum = new ammo_type()
+	for (i=0,i<amount, i++)
+		P.generate_bullet(ammoDatum)
+		P.fire_at(target, X, X, ammoDatum.max_range, ammoDatum.shell_speed)
+	apply_cooldown()
+	return
+	..()
 
 /datum/action/xeno_action/activable/acid_mine/use_ability(atom/A)
 	var/mob/living/carbon/Xenomorph/X = owner

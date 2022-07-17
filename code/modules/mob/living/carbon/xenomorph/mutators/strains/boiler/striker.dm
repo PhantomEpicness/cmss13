@@ -1,7 +1,7 @@
 /datum/xeno_mutator/striker
 	name = "STRAIN: Boiler - Striker"
 	description = "You trade your globs and some health for a long ranged high damage shot, long ranged fragmentation acid, and the spit in quick succession if you manage to hit three hosts in a row. You will also be granted the ability to spray slime."
-	flavor_description = "We can do it, yes we can!."
+	flavor_description = "We can do it, yes we can!"
 	cost = MUTATOR_COST_EXPENSIVE
 	individual_only = TRUE
 	caste_whitelist = list(XENO_CASTE_BOILER) //Only boiler.
@@ -13,6 +13,7 @@
 	mutator_actions_to_add = list(
 		/datum/action/xeno_action/activable/xeno_spit,
 		/datum/action/xeno_action/onclick/shift_spits,
+		/datum/action/xeno_action/activable/xeno_spit_rapid,
 		/datum/action/xeno_action/onclick/toggle_long_range/boiler
 	)
 	keystone = TRUE

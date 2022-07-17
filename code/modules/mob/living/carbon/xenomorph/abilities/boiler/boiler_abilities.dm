@@ -98,3 +98,18 @@
 	handles_movement = FALSE
 	should_delay = FALSE
 	ability_primacy = XENO_PRIMARY_ACTION_4
+
+
+/datum/action/xeno_action/activable/xeno_spit_rapid
+	name = "Rapid Spit"
+	ability_name = "rapid spit"
+	action_icon_state = "acid_shotgun"
+	plasma_cost = 120
+	macro_path = /datum/action/xeno_action/verb/verb_acid_shotgun
+	action_type = XENO_ACTION_CLICK
+	ability_primacy = XENO_PRIMARY_ACTION_3
+	xeno_cooldown = 130
+	var/amount = 20
+	var/ammo_type = /datum/ammo/xeno/acid/medium
+	var/spit_delay = 3 SECONDS
+	var/spit_windup = 3 SECONDS
