@@ -2543,14 +2543,6 @@
 	added_spit_delay = 0
 
 
-/datum/ammo/xeno/acid/rapid
-	accuracy = HIT_ACCURACY_TIER_5
-	max_range = 8
-	damage = 25
-	shell_speed = AMMO_SPEED_TIER_2
-	added_spit_delay = 0
-	scatter = SCATTER_AMOUNT_RAPIDSPIT
-
 /datum/ammo/xeno/acid/railgun
 	name = "heavy acid shot"
 

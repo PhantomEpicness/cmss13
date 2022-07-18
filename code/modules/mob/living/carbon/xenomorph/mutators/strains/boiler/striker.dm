@@ -48,7 +48,15 @@
 	// config
 	var/row_hits = 0 // Tracks the amount of hits for the Ultimate
 	var/hits_threshold = 3 // amount of hits before ultimate is avalible
-
-
 	// state
-	var/ultimate_active = FALSE
+	var/empower_active = FALSE
+
+	// Barrage spit config
+
+	var/empower_level = 1
+
+	var/barrage_ammo_type = /datum/ammo/xeno/acid/rapidfire
+	// These are default values if the empower level is 1, these are crunched in the use_ability proc
+	var/spit_barrage_amount = 5
+	var/spit_barrage_duration = 3 SECONDS
+	var/spit_barrage_windup = 3 SECONDS

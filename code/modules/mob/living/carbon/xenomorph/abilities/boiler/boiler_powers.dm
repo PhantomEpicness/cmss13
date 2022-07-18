@@ -218,33 +218,6 @@
 	return
 
 
-/datum/action/xeno_action/activable/xeno_spit_rapid/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/X = owner
-	if (!istype(X))
-		return
-
-	if (!action_cooldown_check())
-		return
-
-	if(!A || A.layer >= FLY_LAYER || !isturf(X.loc) || !X.check_state())
-		return
-
-	X.visible_message(SPAN_XENOWARNING("The [X] fires a blast of acid at [A]!"), SPAN_XENOWARNING("You fire a blast of acid at [A]!"))
-
-	var/turf/target = locate(A.x, A.y, A.z)
-	var/obj/item/projectile/P = new /obj/item/projectile(X.loc, create_cause_data(initial(X.caste_type), X))
-
-
-	if (!do_after(X, spit_windup, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_HOSTILE))
-		return
-	var/datum/ammo/ammoDatum = new ammo_type()
-	for (i=0,i<amount, i++)
-		P.generate_bullet(ammoDatum)
-		P.fire_at(target, X, X, ammoDatum.max_range, ammoDatum.shell_speed)
-	apply_cooldown()
-	return
-	..()
-
 /datum/action/xeno_action/activable/acid_mine/use_ability(atom/A)
 	var/mob/living/carbon/Xenomorph/X = owner
 
@@ -285,6 +258,7 @@
 	apply_cooldown()
 	..()
 	return
+
 
 /datum/action/xeno_action/activable/acid_shotgun/use_ability(atom/A)
 	var/mob/living/carbon/Xenomorph/X = owner
@@ -339,3 +313,159 @@
 	scatter = SCATTER_AMOUNT_TIER_1
 	bonus_projectiles_amount = 0
 	max_range = 4
+
+
+//// Striker abilites
+
+/datum/action/xeno_action/activable/striker_spit/use_ability(atom/A)
+	var/mob/living/carbon/Xenomorph/X = owner
+	var/datum/behavior_delegate/boiler_striker/BD = X.behavior_delegate
+	if(!X.check_state())
+		return
+
+	if(!isturf(X.loc))
+		to_chat(src, SPAN_WARNING("You can't spit from here!"))
+		return
+
+	if(!action_cooldown_check())
+		to_chat(src, SPAN_WARNING("You must wait for your spit glands to refill."))
+		return
+
+	var/turf/current_turf = get_turf(X)
+
+	if(!current_turf)
+		return
+
+	plasma_cost = X.ammo.spit_cost
+
+	if(!check_and_use_plasma_owner())
+		return
+
+	xeno_cooldown = X.caste.spit_delay + X.ammo.added_spit_delay
+	if(BD.empower_active)
+		empowered_barrage()
+		return
+	if(X.ammo.spit_barrage_windup)
+		if (!do_after(X, X.ammo.spit_barrage_windup, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_HOSTILE))
+			to_chat(X, SPAN_XENODANGER("You decide to cancel your spit."))
+			return FALSE
+	X.visible_message(SPAN_XENOWARNING("[X] spits at [A]!"), \
+	SPAN_XENOWARNING("You spit at [A]!") )
+	var/sound_to_play = pick(1, 2) == 1 ? 'sound/voice/alien_spitacid.ogg' : 'sound/voice/alien_spitacid2.ogg'
+	playsound(X.loc, sound_to_play, 25, 1)
+
+	var/obj/item/projectile/P = new /obj/item/projectile(current_turf, create_cause_data(initial(X.caste_type), X))
+	P.generate_bullet(X.ammo)
+	P.permutated += X
+	P.def_zone = X.get_limbzone_target()
+	P.fire_at(A, X, X, X.ammo.max_range, X.ammo.shell_speed)
+
+	apply_cooldown()
+	..()
+
+
+/datum/action/xeno_action/activable/striker_spit/empowered_barrage(atom/A))
+
+	var/mob/living/carbon/Xenomorph/X = owner
+	var/datum/behavior_delegate/boiler_striker/BD = X.behavior_delegate
+
+
+	/* Number Crunching
+
+	Empower level is the factor in which spit amount, duration and windup get multiplied by
+
+	The time between shots equals spit duration divided by spit amount
+
+	So if you have a 5 second duration for a 20 shot barrage, it will wait 0.25 seconds between each spit, creating a 20 spit barage that is equally seperated over 5 seconds
+
+	*/
+	var/barrage_amount = BD.spit_barrage_amount * empower_level
+	var/barrage_duaration = BD.spit_barrage_duration * empower_level
+	var/barrage_windup = BD.spit_barrage_windup * empower_level
+	var/timeBetweenShot = barrage_windup/barrage_amount
+
+	if (!istype(X))
+		return
+
+	if (!action_cooldown_check())
+		return
+
+	if(!A || A.layer >= FLY_LAYER || !isturf(X.loc) || !X.check_state())
+		return
+
+	X.visible_message(SPAN_XENOWARNING("The [X] prepares a massive barrage!"), SPAN_XENOWARNING("You being preparing a massive barrage at [A]!"))
+
+	var/turf/target = locate(A.x, A.y, A.z)
+	var/obj/item/projectile/P = new /obj/item/projectile(X.loc, create_cause_data(initial(X.caste_type), X))
+	if (!do_after(X, barrage_windup, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_HOSTILE))
+		return
+	var/datum/ammo/ammoDatum = new barrage_ammo_type()
+	P.generate_bullet(ammoDatum)
+	P.fire_at(target, X, ammoDatum.max_range, ammoDatum.shell_speed)
+
+	var/index = 0
+	while(index < barrage_amount && !X.check_state)
+		repeat_spit(target, X, ammoDatum.max_range, ammoDatum.shell_speed, ammoDatum)
+		sleep(timeBetweenShot)
+		index++
+	apply_cooldown()
+	empower_level = 1
+	..()
+	return
+
+
+/datum/action/xeno_action/activable/striker_spit/proc/repeat_spit(target, var/mob/living/carbon/Xenomorph/X, var/ammoDatumRange, var/ammoDatumSpeed, var/datum/ammo/ammoDatum)
+	var/obj/item/projectile/additonalP = new /obj/item/projectile(X.loc, create_cause_data(initial(X.caste_type), X))
+	additonalP.generate_bullet(ammoDatum)
+	additonalP.fire_at(target, X, X, ammoDatumRange, ammoDatumSpeed)
+	to_chat_forced(world, "FIRE REPEAT!")
+	return
+
+/datum/ammo/xeno/acid/rapidfire
+	name = "acid spatter"
+	icon_state = "buckshot"
+	flags_ammo_behavior = AMMO_SKIPS_ALIENS|AMMO_STOPPED_BY_COVER
+	damage = 20
+	shell_speed = AMMO_SPEED_TIER_2
+	accuracy = HIT_ACCURACY_TIER_5
+	max_range = 8
+	scatter = SCATTER_AMOUNT_TIER_3
+
+/datum/ammo/xeno/acid/rapidfire/New()
+	accuracy_var_low = PROJECTILE_VARIANCE_TIER_2
+	accuracy_var_high = PROJECTILE_VARIANCE_TIER_6
+
+
+/datum/action/xeno_action/activable/xeno_spit_rapid()
+	var/mob/living/carbon/Xenomorph/X = owner
+	var/datum/behavior_delegate/boiler_striker/BD = X.behavior_delegate
+	BD.empower_active = TRUE
+	var/power_verb
+	// todo: DISABLE SWITCHING SPITS
+	X.ammo = GLOB.ammo_list[BD.barrage_ammo_type]
+	switch(BD.empower_level)
+		if(1)
+			power_verb = "small"
+		if(2)
+			power_verb = "Medium"
+		if(3)
+			power_verb = "FULL POWERED"
+		else to_chat(world, "INVALD EMPOWER LEVEL ASSIGNED! AAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
+	to_chat(X, SPAN_XENODANGER("You prepare for a [power_verb] barrage for your next strike!"))
+	apply_cooldown()
+	addtimer(CALLBACK(src, .proc/unempower), buff_duration)
+
+/datum/action/xeno_action/activable/xeno_spit_rapid/proc/unempower()
+	var/mob/living/carbon/Xenomorph/X = owner
+	if (!istype(X))
+		return
+	var/datum/behavior_delegate/sentinel_base/BD = X.behavior_delegate
+	if (istype(BD))
+		// In case slash has already landed
+		if (!BD.empower_active)
+			return
+		BD.empower_active = FALSE
+		BD.empower_level = 1
+	apply_cooldown()// cooldown applied twice
+	X.ammo = GLOB.ammo_list[/datum/ammo/xeno/acid/railgun]
+	to_chat(X, SPAN_XENODANGER("You have waited too long! The spit barrage and your built up enpowerment has been wasted!"))

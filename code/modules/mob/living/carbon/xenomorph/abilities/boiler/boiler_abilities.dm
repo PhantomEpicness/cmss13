@@ -108,8 +108,18 @@
 	macro_path = /datum/action/xeno_action/verb/verb_acid_shotgun
 	action_type = XENO_ACTION_CLICK
 	ability_primacy = XENO_PRIMARY_ACTION_3
-	xeno_cooldown = 130
-	var/amount = 20
-	var/ammo_type = /datum/ammo/xeno/acid/medium
-	var/spit_delay = 3 SECONDS
-	var/spit_windup = 3 SECONDS
+	var/empower_duration = 10 SECONDS
+	xeno_cooldown = 80 SECONDS + empower_duration
+
+
+// STRIKER BOILER SPECIFIC ABILITIES
+/datum/action/xeno_action/activable/striker_spit
+	name = "Strike"
+	action_icon_state = "xeno_spit"
+	ability_name = "xeno spit"
+	macro_path = /datum/action/xeno_action/verb/verb_xeno_spit
+	action_type = XENO_ACTION_CLICK
+	ability_primacy = XENO_PRIMARY_ACTION_1
+	cooldown_message = "You are ready for another strike!."
+	var/datum/behavior_delegate/sentinel_base/BD = X.behavior_delegate
+	xeno_cooldown = 60 SECONDS
