@@ -364,7 +364,7 @@
 	..()
 
 
-/datum/action/xeno_action/activable/striker_spit/empowered_barrage(atom/A))
+/datum/action/xeno_action/activable/striker_spit/empowered_barrage(atom/A)
 
 	var/mob/living/carbon/Xenomorph/X = owner
 	var/datum/behavior_delegate/boiler_striker/BD = X.behavior_delegate
