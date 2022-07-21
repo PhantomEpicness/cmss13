@@ -345,8 +345,8 @@
 	if(BD.empower_active)
 		empowered_barrage()
 		return
-	if(X.ammo.spit_barrage_windup)
-		if (!do_after(X, X.ammo.spit_barrage_windup, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_HOSTILE))
+	if(X.ammo.spit_windup)
+		if (!do_after(X, X.ammo.spit_windup, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_HOSTILE))
 			to_chat(X, SPAN_XENODANGER("You decide to cancel your spit."))
 			return FALSE
 	X.visible_message(SPAN_XENOWARNING("[X] spits at [A]!"), \
@@ -364,7 +364,7 @@
 	..()
 
 
-/datum/action/xeno_action/activable/striker_spit/empowered_barrage(atom/A)
+/datum/action/xeno_action/activable/striker_spit/proc/empowered_barrage(atom/A)
 
 	var/mob/living/carbon/Xenomorph/X = owner
 	var/datum/behavior_delegate/boiler_striker/BD = X.behavior_delegate
@@ -379,10 +379,11 @@
 	So if you have a 5 second duration for a 20 shot barrage, it will wait 0.25 seconds between each spit, creating a 20 spit barage that is equally seperated over 5 seconds
 
 	*/
-	var/barrage_amount = BD.spit_barrage_amount * empower_level
-	var/barrage_duaration = BD.spit_barrage_duration * empower_level
-	var/barrage_windup = BD.spit_barrage_windup * empower_level
-	var/timeBetweenShot = barrage_windup/barrage_amount
+	var/empwr_lvl = BD.empower_level
+	var/barrage_amount = BD.spit_barrage_amount * empwr_lvl
+	var/barrage_duaration = BD.spit_barrage_duration * empwr_lvl
+	var/barrage_windup = BD.spit_barrage_windup * empwr_lvl
+	var/timeBetweenShot = barrage_duaration/barrage_amount
 
 	if (!istype(X))
 		return
@@ -399,18 +400,17 @@
 	var/obj/item/projectile/P = new /obj/item/projectile(X.loc, create_cause_data(initial(X.caste_type), X))
 	if (!do_after(X, barrage_windup, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_HOSTILE))
 		return
-	var/datum/ammo/ammoDatum = new barrage_ammo_type()
+	var/datum/ammo/ammoDatum = new BD.barrage_ammo_type()
 	P.generate_bullet(ammoDatum)
 	P.fire_at(target, X, ammoDatum.max_range, ammoDatum.shell_speed)
 
 	var/index = 0
-	while(index < barrage_amount && !X.check_state)
+	while(index < barrage_amount)
 		repeat_spit(target, X, ammoDatum.max_range, ammoDatum.shell_speed, ammoDatum)
 		sleep(timeBetweenShot)
 		index++
 	apply_cooldown()
-	empower_level = 1
-	..()
+	empwr_lvl = 1
 	return
 
 
@@ -436,7 +436,8 @@
 	accuracy_var_high = PROJECTILE_VARIANCE_TIER_6
 
 
-/datum/action/xeno_action/activable/xeno_spit_rapid()
+/datum/action/xeno_action/activable/xeno_spit_rapid/use_ability(atom/A)
+	. = ..()
 	var/mob/living/carbon/Xenomorph/X = owner
 	var/datum/behavior_delegate/boiler_striker/BD = X.behavior_delegate
 	BD.empower_active = TRUE
@@ -453,13 +454,17 @@
 		else to_chat(world, "INVALD EMPOWER LEVEL ASSIGNED! AAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
 	to_chat(X, SPAN_XENODANGER("You prepare for a [power_verb] barrage for your next strike!"))
 	apply_cooldown()
-	addtimer(CALLBACK(src, .proc/unempower), buff_duration)
+	addtimer(CALLBACK(src, .proc/unempower), timeout)
 
 /datum/action/xeno_action/activable/xeno_spit_rapid/proc/unempower()
 	var/mob/living/carbon/Xenomorph/X = owner
+	var/datum/behavior_delegate/boiler_striker/BD = X.behavior_delegate
 	if (!istype(X))
 		return
-	var/datum/behavior_delegate/sentinel_base/BD = X.behavior_delegate
+	if(BD.barrage_used)
+		BD.barrage_used = TRUE
+		to_chat(world, "racist ahh")
+		return
 	if (istype(BD))
 		// In case slash has already landed
 		if (!BD.empower_active)

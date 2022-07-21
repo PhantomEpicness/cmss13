@@ -54,7 +54,6 @@
 	// Barrage spit config
 
 	var/empower_level = 1
-
 	var/barrage_ammo_type = /datum/ammo/xeno/acid/rapidfire
 	// These are default values if the empower level is 1, these are crunched in the use_ability proc
 	var/spit_barrage_amount = 5

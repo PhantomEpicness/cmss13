@@ -108,8 +108,8 @@
 	macro_path = /datum/action/xeno_action/verb/verb_acid_shotgun
 	action_type = XENO_ACTION_CLICK
 	ability_primacy = XENO_PRIMARY_ACTION_3
-	var/empower_duration = 10 SECONDS
-	xeno_cooldown = 80 SECONDS + empower_duration
+	xeno_cooldown = 80 SECONDS
+	var/timeout = 20 SECONDS // Have to use the barrage within this timeframe
 
 
 // STRIKER BOILER SPECIFIC ABILITIES
@@ -121,5 +121,4 @@
 	action_type = XENO_ACTION_CLICK
 	ability_primacy = XENO_PRIMARY_ACTION_1
 	cooldown_message = "You are ready for another strike!."
-	var/datum/behavior_delegate/sentinel_base/BD = X.behavior_delegate
 	xeno_cooldown = 60 SECONDS
