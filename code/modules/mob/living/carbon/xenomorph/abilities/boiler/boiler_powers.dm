@@ -343,6 +343,7 @@
 
 	xeno_cooldown = X.caste.spit_delay + X.ammo.added_spit_delay
 	if(BD.empower_active)
+		to_chat(world, "racist ahh")
 		empowered_barrage()
 		return
 	if(X.ammo.spit_windup)
@@ -411,6 +412,7 @@
 		index++
 	apply_cooldown()
 	empwr_lvl = 1
+	addtimer(VARSET_CALLBACK(BD, barrage_used, FALSE), 60 SECONDS)
 	return
 
 
@@ -450,11 +452,12 @@
 		if(2)
 			power_verb = "Medium"
 		if(3)
-			power_verb = "FULL POWERED"
+			power_verb = SPAN_HIGHDANGER("FULL POWERED")
 		else to_chat(world, "INVALD EMPOWER LEVEL ASSIGNED! AAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
 	to_chat(X, SPAN_XENODANGER("You prepare for a [power_verb] barrage for your next strike!"))
 	apply_cooldown()
-	addtimer(CALLBACK(src, .proc/unempower), timeout)
+	addtimer(CALLBACK(src, .proc/unempower), xeno_cooldown)
+	BD.barrage_used = TRUE
 
 /datum/action/xeno_action/activable/xeno_spit_rapid/proc/unempower()
 	var/mob/living/carbon/Xenomorph/X = owner
@@ -462,7 +465,7 @@
 	if (!istype(X))
 		return
 	if(BD.barrage_used)
-		BD.barrage_used = TRUE
+		BD.barrage_used = FALSE
 		to_chat(world, "racist ahh")
 		return
 	if (istype(BD))

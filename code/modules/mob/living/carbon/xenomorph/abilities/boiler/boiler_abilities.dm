@@ -108,7 +108,7 @@
 	macro_path = /datum/action/xeno_action/verb/verb_acid_shotgun
 	action_type = XENO_ACTION_CLICK
 	ability_primacy = XENO_PRIMARY_ACTION_3
-	xeno_cooldown = 80 SECONDS
+	xeno_cooldown = 20 SECONDS
 	var/timeout = 20 SECONDS // Have to use the barrage within this timeframe
 
 
