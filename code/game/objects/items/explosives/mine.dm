@@ -26,8 +26,40 @@
 	var/triggered = FALSE
 	var/hard_iff_lock = FALSE
 	var/obj/effect/mine_tripwire/tripwire
-
+	var/direct_trip_only = FALSE
+	var/needs_digging = FALSE
 	var/map_deployed = FALSE
+	var/buried = FALSE
+	var/arming_time = FALSE
+
+
+/obj/item/explosive/mine/bury
+	name = "\improper M20 Claymore anti-personnel mine"
+	desc = "The M20 Claymore is a directional proximity-triggered anti-personnel mine designed by Armat Systems for use by the United States Colonial Marines. The mine is triggered by movement both on the mine itself, and on the space immediately in front of it. Detonation sprays shrapnel forwards in a 120-degree cone. The words \"FRONT TOWARD ENEMY\" are embossed on the front."
+	icon = 'icons/obj/items/weapons/grenade.dmi'
+	icon_state = "m20"
+	force = 5.0
+	w_class = SIZE_SMALL
+	//layer = MOB_LAYER - 0.1 //You can't just randomly hide claymores under boxes. Booby-trapping bodies is fine though
+	throwforce = 5.0
+	throw_range = 6
+	throw_speed = SPEED_VERY_FAST
+	unacidable = TRUE
+	flags_atom = FPRINT|CONDUCT
+	allowed_sensors = list(/obj/item/device/assembly/prox_sensor)
+	max_container_volume = 120
+	reaction_limits = list(	"max_ex_power" = 105,	"base_ex_falloff" = 60,	"max_ex_shards" = 32,
+							"max_fire_rad" = 5,		"max_fire_int" = 12,	"max_fire_dur" = 18,
+							"min_fire_rad" = 2,		"min_fire_int" = 3,		"min_fire_dur" = 3
+	)
+	angle = 60
+	use_dir = FALSE
+	direct_trip_only = TRUE
+	needs_digging = TRUE
+	map_deployed = FALSE
+	buried = FALSE
+	arming_time = 3 SECONDS
+
 
 /obj/item/explosive/mine/Initialize()
 	. = ..()
@@ -63,7 +95,9 @@
 /obj/item/explosive/mine/attack_self(mob/living/user)
 	if(!..())
 		return
-
+	if(needs_digging && user.loc && (user.loc.density || is_mainship_level(user.z)))
+		to_chat(user, SPAN_WARNING("You can't plant a mine here."))
+		return
 	if(check_for_obstacles(user))
 		return
 
@@ -85,13 +119,18 @@
 
 	user.visible_message(SPAN_NOTICE("[user] finishes deploying [src]."), \
 		SPAN_NOTICE("You finish deploying [src]."))
-
+	if(needs_digging)
+		user.visible_message(SPAN_NOTICE("[user] pulls the pin on \the [src]."), \
+			SPAN_NOTICE("You pull the activation pin and prepare it to be buried."))
+		playsound(loc, 'sound/weapons/handcuffs.ogg', 25, 1)
+		user.drop_inv_item_on_ground(src)
+		anchored = TRUE
+		return
 	deploy_mine(user)
 
 /obj/item/explosive/mine/proc/deploy_mine(var/mob/user)
 	if(!hard_iff_lock && user)
 		iff_signal = user.faction
-
 	cause_data = create_cause_data(initial(name), user)
 	anchored = TRUE
 	playsound(loc, 'sound/weapons/mine_armed.ogg', 25, 1)
@@ -99,11 +138,25 @@
 		user.drop_inv_item_on_ground(src)
 	setDir(user ? user.dir : dir) //The direction it is planted in is the direction the user faces at that time
 	activate_sensors()
-	update_icon()
+	if(buried)
+		update_icon()
 
 
 //Disarming
 /obj/item/explosive/mine/attackby(obj/item/W, mob/user)
+	if(needs_digging && istype(W, /obj/item/tool/shovel) && !active)
+		user.visible_message(SPAN_NOTICE("[user] starts burying \the [src]."), \
+			SPAN_NOTICE("You start burying \the [src]."))
+		playsound(user.loc, 'sound/effects/thud.ogg', 40, 1, 6)
+		if(!do_after(user, 30, INTERRUPT_NO_NEEDHAND, BUSY_ICON_BUILD))
+			user.visible_message(SPAN_WARNING("[user] stops burying \the [src]."), \
+			SPAN_WARNING("You stop burying [src]."))
+
+		user.visible_message(SPAN_NOTICE("[user] finished burying \the [src]."), \
+		SPAN_NOTICE("You finish burying \the [src]."))
+		update_icon()
+		buried = TRUE
+		addtimer(CALLBACK(src, .proc/deploy_mine, user), arming_time)
 	if(HAS_TRAIT(W, TRAIT_TOOL_MULTITOOL))
 		if(active)
 			if(user.action_busy)
@@ -167,6 +220,9 @@
 
 
 /obj/item/explosive/mine/proc/set_tripwire()
+	if(direct_trip_only)
+		active = TRUE
+		return
 	if(!active && !tripwire)
 		var/tripwire_loc = get_turf(get_step(loc, dir))
 		tripwire = new(tripwire_loc)
