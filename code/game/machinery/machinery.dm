@@ -288,3 +288,37 @@ Class Procs:
 
 /obj/structure/machinery/proc/get_repair_move_text(var/include_name = TRUE)
 	return
+
+
+/obj/structure/machinery/destructable
+	health = 200
+
+/obj/structure/machinery/destructable/proc/explode()
+	src.visible_message(SPAN_DANGER("<B> \The [src] blows apart!</B>"), null, null, 1)
+	var/turf/Tsec = get_turf(src)
+	new /obj/item/stack/sheet/metal(Tsec)
+	new /obj/item/stack/rods(Tsec)
+	new /obj/effect/spawner/gibspawner/robot(Tsec)
+	var/datum/effect_system/spark_spread/s = new
+	s.set_up(5, 1, loc)
+	s.start()
+	qdel(src)
+
+/obj/structure/machinery/destructable/proc/healthcheck()
+	if(health <= 0)
+		explode()
+
+/obj/structure/machinery/destructable/ex_act(severity)
+	switch(severity)
+		if(EXPLOSION_THRESHOLD_LOW to EXPLOSION_THRESHOLD_MEDIUM)
+			if(prob(50))
+				explode()
+		if(EXPLOSION_THRESHOLD_MEDIUM to INFINITY)
+			explode()
+
+/obj/structure/machinery/destructable/bullet_act(var/obj/item/projectile/P)
+	var/damage = P.damage
+	health -= damage
+	..()
+	healthcheck()
+	return 1

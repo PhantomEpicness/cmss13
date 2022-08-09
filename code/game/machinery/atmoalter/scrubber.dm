@@ -5,8 +5,50 @@
 	icon_state = "pscrubber:0"
 	density = 1
 
-
+	health = 250
 	var/on = 0
+
+/obj/structure/machinery/portable_atmospherics/powered/scrubber/proc/explode()
+	src.visible_message(SPAN_DANGER("<B>[src] blows apart!</B>"), null, null, 1)
+	var/turf/Tsec = get_turf(src)
+
+	new /obj/item/stack/sheet/metal(Tsec)
+	new /obj/item/stack/sheet/plasteel(Tsec)
+	new /obj/item/stack/rods(Tsec)
+	new /obj/item/stack/rods(Tsec)
+
+	new /obj/effect/spawner/gibspawner/robot(Tsec)
+
+	qdel(src)
+
+/obj/structure/machinery/portable_atmospherics/powered/scrubber/proc/healthcheck()
+	if(health <= 0)
+		explode()
+
+/obj/structure/machinery/portable_atmospherics/powered/scrubber/ex_act(severity)
+	switch(severity)
+		if(EXPLOSION_THRESHOLD_LOW to EXPLOSION_THRESHOLD_MEDIUM)
+			if(prob(50))
+				explode()
+		if(EXPLOSION_THRESHOLD_MEDIUM to INFINITY)
+			explode()
+
+/obj/structure/machinery/portable_atmospherics/powered/scrubber/bullet_act(var/obj/item/projectile/P)
+	var/damage = P.damage
+	health -= damage
+	..()
+	healthcheck()
+	return 1
+
+
+/obj/structure/machinery/portable_atmospherics/powered/scrubber/attack_alien(mob/living/carbon/Xenomorph/M)
+	M.animation_attack_on(src)
+	M.visible_message(SPAN_DANGER("[M] slashes \the [src]!"), \
+					  SPAN_DANGER("You slash \the [src]!"), 5, CHAT_TYPE_XENO_COMBAT)
+	health - M.melee_damage_upper
+	healthcheck()
+	return XENO_ATTACK_ACTION
+
 
 /obj/structure/machinery/portable_atmospherics/powered/scrubber/New()
 	..()
@@ -44,7 +86,7 @@
 	name = "Huge Air Scrubber"
 	icon_state = "scrubber:0"
 	anchored = 1
-
+	health = 300
 	chan
 	use_power = 0
 

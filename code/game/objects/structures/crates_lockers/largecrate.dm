@@ -5,6 +5,7 @@
 	icon_state = "densecrate"
 	density = 1
 	anchored = 0
+	health 100
 	var/parts_type = /obj/item/stack/sheet/wood
 	var/unpacking_sound = 'sound/effects/woodhit.ogg'
 
@@ -43,6 +44,21 @@
 /obj/structure/largecrate/ex_act(var/power)
 	if(power >= EXPLOSION_THRESHOLD_VLOW)
 		unpack()
+
+/obj/structure/largecrate/proc/healthcheck()
+	if(health <= 0)
+		if(prob(75)) // If the crate is destructively opened, the contents would likely be damaged aswell
+			qdel(src)
+		else
+			unpack()
+/obj/structure/largecrate/bullet_act(var/obj/item/projectile/P)
+	var/damage = P.damage
+	health -= damage
+	..()
+	healthcheck()
+	return TRUE // so true
+
+
 
 /obj/structure/largecrate/mule
 	icon_state = "mulecrate"
