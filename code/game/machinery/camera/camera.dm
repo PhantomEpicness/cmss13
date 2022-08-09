@@ -310,6 +310,7 @@
 	viewing_users += user
 	user.client?.eye = get_turf(src)
 	user.client?.perspective = EYE_PERSPECTIVE
+	ADD_TRAIT(user, trait, darkness_view)
 	give_action(user, /datum/action/human_action/cancel_view)
 	RegisterSignal(user, COMSIG_MOB_RESET_VIEW, .proc/remove_from_view)
 

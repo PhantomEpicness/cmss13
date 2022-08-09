@@ -143,6 +143,12 @@
 	icon_state = "thermal_hud"
 	appearance_flags = NONE
 
+/obj/screen/fullscreen/thermal/dropship
+	icon = 'icons/mob/hud/screen1.dmi'
+	screen_loc = "WEST,SOUTH to EAST,NORTH"
+	icon_state = "dropship_hud"
+	appearance_flags = NONE
+
 /obj/screen/fullscreen/meson
 	icon = 'icons/mob/hud/screen1.dmi'
 	screen_loc = "WEST,SOUTH to EAST,NORTH"
