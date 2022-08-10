@@ -18,6 +18,7 @@ The disruption monitor
 
 
 */
+
 #define DISRUPTION_CHECK 				10 SECONDS		//10 minutes in ticks (approx.)
 #define CLIENT_SLEEP_TIME 				1 MINUTES		// how long clients should be aslept in a disruption event
 #define DISRUPTION_THRESHOLD_FACTOR 	4  				// What fraction of the server's clients need to be disrupted before a major disruption is called.
@@ -35,21 +36,28 @@ SUBSYSTEM_DEF(disruption_moniter)
 
 /datum/controller/subsystem/disruption_moniter/fire(resumed = FALSE)
 	var/cur_count = 0
+	if(disable_check)
+		disable_check = FALSE
+		return
 	for(var/i in GLOB.clients) // if it hasn't changed, then recount
 		cur_count++
-	if((last_count / DISRUPTION_THRESHOLD_FACTOR) < (last_count - cur_count))
-
-
 	if(last_count <  DISRUPTION_POP_CUTOFF && cur_count <  DISRUPTION_POP_CUTOFF && disable_check = FALSE)
 		disable_check == TRUE
 		log_game("Disruption monitor pop threshold too low! Postponing next check for [(DISRUPTION_POP_CUTOFF_TIMER * 10)/60] minutes")
-	else
-		last_count = cur_count
-	var/client/C = i
-			if(C.admin_holder && C.admin_holder.rights & R_ADMIN) //Skip admins.
-				to_chat_forced(C, SPAN_HIGH_WARNING("Mass server disconnection detected! All clients have been slept for [CLIENT_SLEEP_TIME * 10] seconds in order to allow sufficient time to reconnect."))
+	if((last_count/DISRUPTION_THRESHOLD_FACTOR) < (last_count - cur_count))
 			if (C.is_afk(INACTIVITY_KICK))
 				if (!istype(C.mob, /mob/dead))
 					log_access("AFK: [key_name(C)]")
 					to_chat_immediate(world, SPAN_HIGH_WARNING("Mass server disconnection detected! In order to maintain minimum disruption for the game, all players have been slept for [CLIENT_SLEEP_TIME * 10] seconds in order to allow sufficient time to reconnect! Admins have been notified and may resume the game if needed. Please contact them if you were stuck in an unfortunate position (ea: fire) and were killed due to this."))
 					qdel(C)
+		for(var/mob/living/M in GLOB.clients) // if it hasn't changed, then recount
+			if(C.admin_holder && C.admin_holder.rights & R_ADMIN) //Skip admins.
+				to_chat_forced(C, SPAN_HIGH_WARNING("Mass server disconnection detected! All clients have been slept for [CLIENT_SLEEP_TIME * 10] seconds in order to allow sufficient time to reconnect."))
+				continue
+			M.KnockOut(3) // prevents them from exiting the screen range
+			M.sleeping = CLIENT_SLEEP_TIME //if they're not, sleep them and add the sleep icon, so other marines nearby know not to mess with them.
+			M.AddSleepingIcon()
+	else
+		last_count = cur_count
+
+var/client/C = i
