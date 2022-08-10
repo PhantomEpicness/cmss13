@@ -664,6 +664,38 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	flags_inventory = BLOCKSHARPOBJ
 	flags_inv_hide = HIDEEARS|HIDETOPHAIR
 	specialty = "M30 tactical"
+	var/nightvision = FALSE
+
+
+/obj/item/clothing/head/helmet/marine/pilot/proc/remove_nvg(var/mob/living/carbon/human/user)
+	SIGNAL_HANDLER
+
+	if(!user)
+		return
+
+	if(nightvision)
+		user.remove_client_color_matrix("nvg", 1 SECONDS)
+		user.clear_fullscreen("nvg", 0.5 SECONDS)
+		user.clear_fullscreen("nvg_blur", 0.5 SECONDS)
+		playsound(user, 'sound/handling/toggle_nv2.ogg', 25)
+		nightvision = FALSE
+
+		UnregisterSignal(usr, COMSIG_HUMAN_POST_UPDATE_SIGHT)
+
+		user.update_sight()
+
+/obj/item/clothing/head/helmet/marine/pilot/proc/enable_nvg(var/mob/living/carbon/human/user)
+	if(nightvision)
+		remove_nvg()
+
+	RegisterSignal(user, COMSIG_HUMAN_POST_UPDATE_SIGHT, .proc/update_sight)
+
+	user.add_client_color_matrix("nvg", 99, color_matrix_multiply(color_matrix_saturation(0), color_matrix_from_string("#c1c1c1")))
+	user.overlay_fullscreen("nvg", /obj/screen/fullscreen/flash/noise/nvg)
+	user.overlay_fullscreen("nvg_blur", /obj/screen/fullscreen/brute/nvg, 3)
+	playsound(user, 'sound/handling/toggle_nv1.ogg', 25)
+	nightvision = TRUE
+	user.update_sight()
 
 /obj/item/clothing/head/helmet/marine/pilottex
 	name = "\improper Tex's M30 tactical helmet"
