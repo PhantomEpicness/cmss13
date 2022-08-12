@@ -314,6 +314,10 @@
 	give_action(user, /datum/action/human_action/cancel_view)
 	RegisterSignal(user, COMSIG_MOB_RESET_VIEW, .proc/remove_from_view)
 	user?.heead
+		RegisterSignal(user, COMSIG_MOB_RESET_VIEW, .proc/remove_from_view)
+
+	if(istype(user.head, /obj/item/clothing/head/helmet/marine/pilot))
+		var/obj/item/clothing/head/helmet/marine/pilot/HEL = user.head
 
 /obj/structure/machinery/camera/cas/proc/remove_from_view(var/mob/living/carbon/human/user)
 	viewing_users -= user
