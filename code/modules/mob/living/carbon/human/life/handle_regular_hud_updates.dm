@@ -6,8 +6,8 @@
 		return FALSE
 
 	if(stat != DEAD) //the dead get zero fullscreens
-
 		if(stat == UNCONSCIOUS)
+			playsound_client(client,'sound/effects/Heart_Beat_Short.ogg', 30)
 			var/severity = 0
 			switch(health)
 				if(-20 to -10) severity = 1

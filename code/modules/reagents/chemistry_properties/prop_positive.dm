@@ -506,7 +506,7 @@
 	H.apply_damage(-H.getOxyLoss(), OXY)
 	if(H.check_tod() && H.is_revivable() && H.health > HEALTH_THRESHOLD_DEAD)
 		to_chat(H, SPAN_NOTICE("You feel your heart struggling as you suddenly feel a spark, making it desperately try to continue pumping."))
-		playsound_client(H.client, 'sound/effects/Heart Beat Short.ogg', 35)
+		playsound_client(H.client, 'sound/effects/Heart_Beat_Short.ogg', 35)
 		addtimer(CALLBACK(H, /mob/living/carbon/human.proc/handle_revive), 50, TIMER_UNIQUE)
 	return TRUE
 
