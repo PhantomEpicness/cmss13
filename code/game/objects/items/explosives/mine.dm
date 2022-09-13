@@ -413,9 +413,16 @@
 /obj/item/explosive/mine/bury/cluster/prime()
 	set waitfor = 0
 	sparks.start()
-	new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
-	new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
-	new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
+	//var/nade1 = new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
+	//var/nade2 = new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
+	//var/nade = new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
+	var/list/deploy_dirs = get_perpen_dir(src.dir)
+	var/throw_dir = pick(deploy_dirs)
+	for(var/i=0, i < nade_amount, ++i)
+		var/nade[i] = new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
+		step(nade[i], throw_dir,5)
+
+
 	/*var/list/ram_dirs = get_perpen_dir(src.dir)
 	var/ram_dir = pick(ram_dirs)
 	var/cur_turf = get_turf(src)

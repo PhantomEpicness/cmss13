@@ -37,6 +37,12 @@
 	icon_state = "plating"
 	},
 /area/event)
+"i" = (
+/turf/open/mars_dirt,
+/area/event)
+"j" = (
+/turf/open/mars_cave,
+/area/event)
 "k" = (
 /obj/effect/landmark/start/liaison,
 /turf/open/floor/almayer{
@@ -151,6 +157,9 @@
 	icon_state = "plating"
 	},
 /area/event)
+"M" = (
+/turf/open/mars,
+/area/event)
 "N" = (
 /obj/effect/landmark/start/nurse,
 /turf/open/floor/almayer{
@@ -216,12 +225,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (3,1,1) = {"
@@ -234,12 +243,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (4,1,1) = {"
@@ -252,12 +261,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (5,1,1) = {"
@@ -270,12 +279,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (6,1,1) = {"
@@ -288,12 +297,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (7,1,1) = {"
@@ -306,12 +315,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (8,1,1) = {"
@@ -324,12 +333,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+i
+M
+i
+M
 a
 "}
 (9,1,1) = {"
@@ -342,12 +351,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (10,1,1) = {"
@@ -360,12 +369,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (11,1,1) = {"
@@ -378,12 +387,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (12,1,1) = {"
@@ -396,12 +405,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (13,1,1) = {"
@@ -414,12 +423,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (14,1,1) = {"
@@ -432,12 +441,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (15,1,1) = {"
@@ -450,12 +459,12 @@ g
 g
 g
 g
-g
-g
-g
-g
-g
-g
+j
+M
+M
+M
+M
+M
 a
 "}
 (16,1,1) = {"
