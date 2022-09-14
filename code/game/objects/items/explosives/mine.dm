@@ -367,14 +367,8 @@
 	desc = "This older anti tank mine from the 21st century was rolled back into service simply due to the currently-used M307 EMP anti tank mines being too overkill for the minimally armored vehicles commonly used by CLF. Featuring a 250 pound minimum detonation threshold, it can be employed against all but the lightest of vehicles. Despite being outdated, it can still pack a punch against APCs and lighter vehicles, while its plastic construction prevents detection by simple methods."
 	icon_state = "antitank_mine"
 	w_class = SIZE_LARGE
-	//layer = MOB_LAYER - 0.1 //You can't just randomly hide claymores under boxes. Booby-trapping bodies is fine though
-	allowed_sensors = list(/obj/item/device/assembly/prox_sensor)
-	max_container_volume = 120
-	reaction_limits = list(	"max_ex_power" = 105,	"base_ex_falloff" = 60,	"max_ex_shards" = 32,
-							"max_fire_rad" = 5,		"max_fire_int" = 12,	"max_fire_dur" = 18,
-							"min_fire_rad" = 2,		"min_fire_int" = 3,		"min_fire_dur" = 3
-	)
-	explosive_power = 200
+	layer = MOB_LAYER - 0.1 //You can't just randomly hide claymores under boxes. Booby-trapping bodies is fine though
+	explosive_power = 150
 	heavy_trigger = TRUE
 
 /obj/item/explosive/mine/bury/antitank/prime()
@@ -386,7 +380,7 @@
 		M.AdjustStunned(4)
 		M.KnockDown(4)
 		to_chat(M, SPAN_HIGHDANGER("Molten copper rips through your lower body!"))
-		M.apply_damage(50,BURN)
+		//M.apply_damage(50,BURN)
 		if(ishuman(M))
 			sparks.start()
 			var/mob/living/carbon/human/H = M
@@ -412,15 +406,16 @@
 	w_class = SIZE_LARGE
 	var/list/nade_amount[8]
 
-/obj/item/explosive/mine/bury/cluster/prime()  // I spent way too much time on this
+/obj/item/explosive/mine/bury/cluster/prime()  // dynamically balancing system
 	set waitfor = 0
 	var/list/dirlist[]
 	if(nade_amount.len <= 4)
 		dirlist = cardinal
 	else
-		dirlist = alldirs
+		dirlist = alldirs		// note that alldirs has cardinals first, then diagonials
 	sparks.start()
-	for(var/i=1, i < nade_amount, ++i)
+	to_chat_immediate(world,"B")
+	for(var/i=1, i < nade_amount.len, ++i)
 		to_chat_immediate(world,"A")
 		nade_amount[i] = new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
 		var/throw_dir = get_ranged_target_turf(nade_amount[i],dirlist[i],2) // diff dir every time
@@ -437,22 +432,15 @@
 	desc = "An almost cute, if not deadly half-sized version of the M40 HEDP grenade meant to be used in close quarters enviorments and in cluster mutions. Despite only being designated for these purposes, they still show up at the frontline every now and then due to being mistaken with it's bigger brother, the M40."
 	icon_state = "grenade_micro"
 	item_state = "grenade_micro"
-	force = 10
-	det_time = 30
-	w_class = SIZE_SMALL
-	throwforce = 15
-	throw_speed = SPEED_FAST
+	det_time = 3 SECONDS
 	throw_range = 10
-	dangerous = 1
-	underslug_launchable = TRUE
 	explosion_power = 60
-	shrapnel_count = 3
-	falloff_mode = EXPLOSION_FALLOFF_SHAPE_LINEAR
 
 /obj/item/explosive/grenade/HE/micro/cluster
 	name = "\improper M43 cluster munition"
 	desc = "Aww what cute lil grenad- Oh shit it's angry!"
-	det_time = 2 SECONDS
+	det_time = 1 SECONDS
+	shrapnel_count = 3
 
 /obj/item/explosive/grenade/HE/micro/cluster/New()
 	..()
@@ -460,8 +448,8 @@
 		cause_data = create_cause_data("M43 Cluster Munition") // cause data bitching runtime moment
 	var/temploc = get_turf(src)
 	//scatter in all directions
-	walk_away(src,temploc,rand(1,2))
-	addtimer(CALLBACK(src, .proc/activate), rand(10,20))
+	pick(50,walk_away(src,temploc,rand(1,2)))
+	addtimer(CALLBACK(src, .proc/activate), rand(5,10)) // slight variation
 
 /obj/item/explosive/mine/pmc
 	name = "\improper M20P Claymore anti-personnel mine"
