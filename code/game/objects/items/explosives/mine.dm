@@ -1,3 +1,5 @@
+
+
 ///***MINES***///
 //Mines have an invisible "tripwire" atom that explodes when crossed
 //Stepping directly on the mine will also blow it up
@@ -408,33 +410,23 @@
 	icon = 'icons/obj/items/weapons/grenade.dmi'
 	icon_state = "antitank_mine"
 	w_class = SIZE_LARGE
-	var/nade_amount = 3
+	var/list/nade_amount[8]
 
-/obj/item/explosive/mine/bury/cluster/prime()
+/obj/item/explosive/mine/bury/cluster/prime()  // I spent way too much time on this
 	set waitfor = 0
+	var/list/dirlist[]
+	if(nade_amount.len <= 4)
+		dirlist = cardinal
+	else
+		dirlist = alldirs
 	sparks.start()
-	//var/nade1 = new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
-	//var/nade2 = new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
-	//var/nade = new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
-	var/list/deploy_dirs = get_perpen_dir(src.dir)
-	var/throw_dir = pick(deploy_dirs)
-	for(var/i=0, i < nade_amount, ++i)
-		var/nade[i] = new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
-		step(nade[i], throw_dir,5)
+	for(var/i=1, i < nade_amount, ++i)
+		to_chat_immediate(world,"A")
+		nade_amount[i] = new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
+		var/throw_dir = get_ranged_target_turf(nade_amount[i],dirlist[i],2) // diff dir every time
+		step(nade_amount[i], throw_dir,5)
 
-
-	/*var/list/ram_dirs = get_perpen_dir(src.dir)
-	var/ram_dir = pick(ram_dirs)
-	var/cur_turf = get_turf(src)
-	var/target_turf = get_step(src, ram_dir)
-		if(LinkBlocked(src, cur_turf, target_turf))
-			X.emote("roar")
-			X.visible_message(SPAN_DANGER("[X] flings [src] over to the side!"),SPAN_DANGER( "You fling [src] out of the way!"))
-			to_chat(src,SPAN_XENOHIGHDANGER("[src] flings you out of its way! Move it!"))
-			KnockDown(1) // brief flicker stun
-			src.throw_atom(src.loc,1,3,X,TRUE)
-		step(src, ram_dir, CCA.momentum * 0.5)
-	*/
+	sleep(5) // wait for nades to catch up
 	cell_explosion(loc, explosive_power, 25, EXPLOSION_FALLOFF_SHAPE_EXPONENTIAL_HALF, dir, cause_data) //Spread em out a lil
 	qdel(src)
 	if(!QDELETED(src))
@@ -442,7 +434,7 @@
 
 /obj/item/explosive/grenade/HE/micro
 	name = "\improper M43 HEDP grenade"
-	desc = "An almost cute, if not deadly half-sized version of the M40 HEDP grenade meant to be used in close quarters enviorments along with being used in cluster mutions. Despite only being designated for these purposes, they still show up at the frontline every now and then due to being mistaken with it's bigger brother, the M40."
+	desc = "An almost cute, if not deadly half-sized version of the M40 HEDP grenade meant to be used in close quarters enviorments and in cluster mutions. Despite only being designated for these purposes, they still show up at the frontline every now and then due to being mistaken with it's bigger brother, the M40."
 	icon_state = "grenade_micro"
 	item_state = "grenade_micro"
 	force = 10
@@ -450,7 +442,7 @@
 	w_class = SIZE_SMALL
 	throwforce = 15
 	throw_speed = SPEED_FAST
-	throw_range = 7
+	throw_range = 10
 	dangerous = 1
 	underslug_launchable = TRUE
 	explosion_power = 60
@@ -458,14 +450,18 @@
 	falloff_mode = EXPLOSION_FALLOFF_SHAPE_LINEAR
 
 /obj/item/explosive/grenade/HE/micro/cluster
+	name = "\improper M43 cluster munition"
 	desc = "Aww what cute lil grenad- Oh shit it's angry!"
 	det_time = 2 SECONDS
 
 /obj/item/explosive/grenade/HE/micro/cluster/New()
 	..()
 	if(!cause_data)
-		cause_data = create_cause_data("M43 Cluster Grenade") // cause data bitching runtime moment
-	activate()
+		cause_data = create_cause_data("M43 Cluster Munition") // cause data bitching runtime moment
+	var/temploc = get_turf(src)
+	//scatter in all directions
+	walk_away(src,temploc,rand(1,2))
+	addtimer(CALLBACK(src, .proc/activate), rand(10,20))
 
 /obj/item/explosive/mine/pmc
 	name = "\improper M20P Claymore anti-personnel mine"
