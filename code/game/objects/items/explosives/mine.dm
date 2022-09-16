@@ -414,14 +414,11 @@
 	else
 		dirlist = alldirs		// note that alldirs has cardinals first, then diagonials
 	sparks.start()
-	to_chat_immediate(world,"B")
 	for(var/i=1, i < nade_amount.len, ++i)
-		to_chat_immediate(world,"A")
 		nade_amount[i] = new /obj/item/explosive/grenade/HE/micro/cluster(src.loc)
 		var/throw_dir = get_ranged_target_turf(nade_amount[i],dirlist[i],2) // diff dir every time
 		step(nade_amount[i], throw_dir,5)
-
-	sleep(5) // wait for nades to catch up
+	sleep(1)// wait for nades to catch up
 	cell_explosion(loc, explosive_power, 25, EXPLOSION_FALLOFF_SHAPE_EXPONENTIAL_HALF, dir, cause_data) //Spread em out a lil
 	qdel(src)
 	if(!QDELETED(src))
@@ -448,8 +445,11 @@
 		cause_data = create_cause_data("M43 Cluster Munition") // cause data bitching runtime moment
 	var/temploc = get_turf(src)
 	//scatter in all directions
-	pick(50,walk_away(src,temploc,rand(1,2)))
-	addtimer(CALLBACK(src, .proc/activate), rand(5,10)) // slight variation
+	if(pick(50))
+		walk_away(src,temploc,rand(1,2))
+	if(pick(50))
+		det_time += rand(1,5) // minor time variation
+	activate()
 
 /obj/item/explosive/mine/pmc
 	name = "\improper M20P Claymore anti-personnel mine"
