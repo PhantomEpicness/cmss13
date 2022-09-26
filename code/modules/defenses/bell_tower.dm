@@ -51,9 +51,6 @@
 /obj/structure/machinery/defenses/bell_tower/proc/setup_tripwires()
 	clear_tripwires()
 	for(var/turf/T in orange(BELL_TOWER_RANGE, loc))
-		if(T.density)
-			continue
-
 		var/obj/effect/bell_tripwire/FE = new /obj/effect/bell_tripwire(T, faction_group)
 		FE.linked_bell = src
 		tripwires_placed += FE
@@ -74,7 +71,7 @@
 
 
 /obj/effect/bell_tripwire
-	name = "flag effect"
+	name = "bell tripwire"
 	anchored = TRUE
 	mouse_opacity = 0
 	invisibility = 101
@@ -105,7 +102,15 @@
 	if(M.get_target_lock(faction))
 		return
 
+	var/list/turf/path = getline2(src, linked_bell, include_from_atom = TRUE)
+	for(var/turf/PT in path)
+		if(PT.density)
+			return
+
 	if(linked_bell.last_mob_activated == M)
+		return
+	if(HAS_TRAIT(M, TRAIT_CHARGING))
+		to_chat(M, SPAN_WARNING("You ignore some weird noises as you charge."))
 		return
 
 	if(linked_bell.bell_cooldown > world.time)
@@ -137,7 +142,9 @@
 
 /obj/item/device/motiondetector/internal/apply_debuff(mob/target)
 	var/mob/living/to_apply = target
-
+	if(HAS_TRAIT(to_apply, TRAIT_CHARGING))
+		to_chat(to_apply, SPAN_WARNING("You ignore some weird noises as you charge."))
+		return
 	if(istype(to_apply))
 		to_apply.SetSuperslowed(2)
 		to_chat(to_apply, SPAN_WARNING("You feel very heavy."))

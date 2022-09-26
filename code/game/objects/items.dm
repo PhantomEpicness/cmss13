@@ -26,7 +26,24 @@
 	var/pry_capable = 0 //whether this item can be used to pry things open.
 	var/heat_source = 0 //whether this item is a source of heat, and how hot it is (in Kelvin).
 
-	var/hitsound = null
+	//SOUND VARS
+	///Sound to be played when item is picked up
+	var/pickupsound
+	///Volume of pickup sound
+	var/pickupvol = 15
+	///Whether the pickup sound will vary in pitch/frequency
+	var/pickup_vary = TRUE
+
+	///Sound to be played when item is dropped
+	var/dropsound
+	///Volume of drop sound
+	var/dropvol = 15
+	///Whether the drop sound will vary in pitch/frequency
+	var/drop_vary = TRUE
+
+	///Play this when you thwack someone with the item
+	var/hitsound
+
 	var/center_of_mass = "x=16;y=16"
 	///Adjusts the item's position in the HUD, currently only by guns with stock/barrel attachments.
 	var/hud_offset = 0
@@ -89,6 +106,8 @@
 	var/map_specific_decoration = FALSE
 	var/blood_color = "" //color of the blood on us if there's any.
 	appearance_flags = KEEP_TOGETHER //taken from blood.dm
+
+	var/is_objective = FALSE //lets us know if the item is an objective or not
 
 	var/list/inherent_traits
 
@@ -289,6 +308,8 @@ cases. Override_icon_state should be a list.*/
 		qdel(src)
 
 	SEND_SIGNAL(src, COMSIG_ITEM_DROPPED, user)
+	if(dropsound && (src.loc.z))
+		playsound(src, dropsound, dropvol, drop_vary)
 
 	appearance_flags &= ~NO_CLIENT_COLOR //So saturation/desaturation etc. effects affect it.
 
@@ -297,7 +318,8 @@ cases. Override_icon_state should be a list.*/
 	SHOULD_CALL_PARENT(TRUE)
 	SEND_SIGNAL(src, COMSIG_ITEM_PICKUP, user)
 	setDir(SOUTH)//Always rotate it south. This resets it to default position, so you wouldn't be putting things on backwards
-	return
+	if((pickupsound) && src.loc.z)
+		playsound(src, pickupsound, pickupvol, pickup_vary)
 
 // called when this item is removed from a storage item, which is passed on as S. The loc variable is already set to the new destination before this is called.
 /obj/item/proc/on_exit_storage(obj/item/storage/S as obj)
@@ -437,10 +459,16 @@ cases. Override_icon_state should be a list.*/
 			if(WEAR_L_HAND)
 				if(H.l_hand)
 					return FALSE
+				if(H.lying)
+					to_chat(H, SPAN_WARNING("You can't equip that while lying down."))
+					return
 				return TRUE
 			if(WEAR_R_HAND)
 				if(H.r_hand)
 					return FALSE
+				if(H.lying)
+					to_chat(H, SPAN_WARNING("You can't equip that while lying down."))
+					return
 				return TRUE
 			if(WEAR_FACE)
 				if(H.wear_mask)
@@ -828,5 +856,4 @@ cases. Override_icon_state should be a list.*/
 
 /obj/item/proc/drop_to_floor(mob/wearer)
 	SIGNAL_HANDLER
-
 	wearer.drop_inv_item_on_ground(src)

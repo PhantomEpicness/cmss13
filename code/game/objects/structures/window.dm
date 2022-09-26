@@ -105,7 +105,7 @@
 			if(is_mainship_level(z))
 				SSclues.create_print(get_turf(user), user, "A small glass piece is found on the fingerprint.")
 		if(make_shatter_sound)
-			playsound(src, "shatter", 50, 1)
+			playsound(src, "windowshatter", 50, 1)
 		shatter_window(create_debris)
 	else
 		if(make_hit_sound)
@@ -136,7 +136,7 @@
 
 	if(health >= -2000)
 		var/location = get_turf(src)
-		playsound(src, "shatter", 50, 1)
+		playsound(src, "windowshatter", 50, 1)
 		create_shrapnel(location, rand(1,5), explosion_direction, shrapnel_type = /datum/ammo/bullet/shrapnel/light/glass, cause_data = cause_data)
 
 	if(M)
@@ -185,7 +185,7 @@
 		if(windowknock_cooldown > world.time)
 			return
 
-		playsound(loc, 'sound/effects/glassknock.ogg', 25, 1)
+		playsound(loc, 'sound/effects/glassbash.ogg', 25, 1)
 		user.visible_message(SPAN_WARNING("[user] bangs against [src]!"),
 		SPAN_WARNING("You bang against [src]!"),
 		SPAN_WARNING("You hear a banging sound."))
@@ -249,9 +249,14 @@
 	if(HAS_TRAIT(W, TRAIT_TOOL_SCREWDRIVER) && !not_deconstructable)
 		if(!anchored)
 			var/turf/open/T = loc
+			var/obj/structure/blocker/anti_cade/AC = locate(/obj/structure/blocker/anti_cade) in T // for M2C HMG, look at smartgun_mount.dm
 			if(!(istype(T) && T.allow_construction))
-				to_chat(user, SPAN_WARNING("[src] must be fastened on a proper surface!"))
+				to_chat(user, SPAN_WARNING("\The [src] must be fastened on a proper surface!"))
 				return
+			if(AC)
+				to_chat(usr, SPAN_WARNING("\The [src] cannot be fastened here!"))  //might cause some friendly fire regarding other items like barbed wire, shouldn't be a problem?
+				return
+
 		if(reinf && state >= 1)
 			state = 3 - state
 			playsound(loc, 'sound/items/Screwdriver.ogg', 25, 1)
@@ -300,6 +305,12 @@
 		handle_debris()
 	qdel(src)
 
+/obj/structure/window/clicked(mob/user, list/mods)
+	if(mods["alt"])
+		revrotate(user)
+		return TRUE
+
+	return ..()
 
 /obj/structure/window/verb/rotate()
 	set name = "Rotate Window Counter-Clockwise"
@@ -513,7 +524,7 @@
 
 	if(health >= -3000)
 		var/location = get_turf(src)
-		playsound(src, "shatter", 50, 1)
+		playsound(src, "windowshatter", 50, 1)
 		handle_debris(severity, explosion_direction)
 		shatter_window(0)
 		create_shrapnel(location, rand(1,5), explosion_direction, , /datum/ammo/bullet/shrapnel/light/glass, cause_data)
@@ -768,6 +779,10 @@
 	unslashable = TRUE
 	unacidable = TRUE
 	health = 1000000
+
+/obj/structure/window/framed/solaris/reinforced/tinted
+	desc = "A tinted glass window. It looks rather strong and opaque. Might take a few good hits to shatter it."
+	opacity = 1
 
 //GREYBOX DEV WINDOWS
 

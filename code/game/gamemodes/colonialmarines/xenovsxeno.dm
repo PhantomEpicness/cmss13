@@ -135,6 +135,9 @@
 		original.apply_damage(50, BRUTE)
 		original.spawned_corpse = TRUE
 
+		for(var/obj/item/device/radio/radio in original.contents_recursive())
+			radio.listening = FALSE
+
 		var/obj/structure/bed/nest/start_nest = new /obj/structure/bed/nest(original.loc) //Create a new nest for the host
 		original.statistic_exempt = TRUE
 		original.buckled = start_nest
@@ -179,7 +182,7 @@
 		if(++round_checkwin >= 5) //Only check win conditions every 5 ticks.
 			if(world.time > round_time_larva_interval)
 				for(var/hive in hives)
-					GLOB.hive_datum[hive].stored_larva += 1
+					GLOB.hive_datum[hive].stored_larva++
 					GLOB.hive_datum[hive].hive_ui.update_pooled_larva()
 
 				round_time_larva_interval = world.time + hive_larva_interval_gain

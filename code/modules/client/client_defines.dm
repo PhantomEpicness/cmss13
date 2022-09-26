@@ -30,7 +30,7 @@
 	var/donator = 0
 	var/adminhelped = 0
 
-	var/obj/screen/click_catcher/void
+	var/atom/movable/screen/click_catcher/void
 
 	var/country
 
@@ -116,3 +116,7 @@
 	var/next_move_dir_add
 	/// On next move, subtract this dir from the move that would otherwise be done
 	var/next_move_dir_sub
+
+	//screen_text vars
+	///lazylist of screen_texts for this client, first in this list is the one playing
+	var/list/atom/movable/screen/text/screen_text/screen_texts

@@ -410,6 +410,46 @@
 	for(var/i = 1 to storage_slots)
 		new /obj/item/ammo_magazine/rifle/m16/ap (src)
 
+// Outer Rim Weapon Belts
+
+/obj/item/storage/belt/marine/m16/fill_preset_inventory() // M16
+	for(var/i = 1 to storage_slots)
+		new /obj/item/ammo_magazine/rifle/m16 (src)
+
+/obj/item/storage/belt/marine/m16/ap/fill_preset_inventory()
+	for(var/i = 1 to storage_slots)
+		new /obj/item/ammo_magazine/rifle/m16/ap (src)
+
+/obj/item/storage/belt/marine/mar40/fill_preset_inventory() // Mar40
+	for(var/i = 1 to storage_slots)
+		new /obj/item/ammo_magazine/rifle/mar40 (src)
+
+/obj/item/storage/belt/marine/mar40/drum/fill_preset_inventory()
+	for(var/i = 1 to storage_slots)
+		new /obj/item/ammo_magazine/rifle/mar40/lmg (src)
+
+/obj/item/storage/belt/marine/mar40/extended/fill_preset_inventory()
+	for(var/i = 1 to storage_slots)
+		new /obj/item/ammo_magazine/rifle/mar40/extended (src)
+
+/obj/item/storage/belt/marine/mp5/fill_preset_inventory() // MP5
+	for(var/i = 1 to storage_slots)
+		new /obj/item/ammo_magazine/smg/mp5 (src)
+
+/obj/item/storage/belt/marine/hunting/fill_preset_inventory() // Hunting Rifle
+	for(var/i = 1 to storage_slots)
+		new /obj/item/ammo_magazine/rifle/hunting(src)
+
+/obj/item/storage/belt/marine/fp9000/fill_preset_inventory() // FP9000
+	for(var/i = 1 to storage_slots)
+		new /obj/item/ammo_magazine/smg/fp9000(src)
+
+/obj/item/storage/belt/marine/nsg23/fill_preset_inventory() // NSG23
+	for(var/i = 1 to storage_slots)
+		new /obj/item/ammo_magazine/rifle/nsg23(src)
+
+
+
 /obj/item/storage/belt/marine/smartgunner
 	name = "\improper M280 pattern smartgunner drum belt"
 	desc = "Despite the fact that 1. drum magazines are incredibly non-ergonomical, and 2. require incredibly precise machining in order to fit universally (spoiler, they don't, adding further to the myth of 'Smartgun Personalities'), the USCM decided to issue a modified marine belt (more formally known by the designation M280) with hooks and dust covers (overly complex for the average jarhead) for the M56B system's drum munitions. When the carry catch on the drum isn't getting stuck in the oiled up velcro, the rig actually does do a decent job at holding a plentiful amount of drums. But at the end of the day, compared to standard rigs... it sucks, but isn't that what being a Marine is all about?"
@@ -517,7 +557,7 @@
 
 /obj/item/storage/belt/shotgun/full/random/fill_preset_inventory()
 	for(var/i = 1 to storage_slots)
-		var/random_shell_type = pick(shotgun_shells_12g)
+		var/random_shell_type = pick(shotgun_handfuls_12g)
 		new random_shell_type(src)
 
 /obj/item/storage/belt/shotgun/attackby(obj/item/W, mob/user)
@@ -577,6 +617,7 @@
 	for(var/i in 1 to max_storage_space * 0.5)
 		new /obj/item/ammo_magazine/handful/shotgun/twobore(src)
 
+
 /obj/item/storage/belt/shotgun/lever_action
 	name = "\improper M276 pattern 45-70 loading rig"
 	desc = "An ammunition belt designed to hold the large 45-70 Govt. caliber bullets for the R4T lever-action rifle."
@@ -603,6 +644,24 @@
 		qdel(src)
 		user.put_in_hands(new_belt)
 		update_icon(user)
+	else
+		return ..()
+
+/obj/item/storage/belt/shotgun/xm88
+	name = "\improper M300 pattern .458 SOCOM loading rig"
+	desc = "An ammunition belt designed to hold the large .458 SOCOM caliber bullets for the XM88 heavy rifle."
+	icon_state = "boomslang-belt"
+	item_state = "marinebelt"
+	w_class = SIZE_LARGE
+	storage_slots = 14
+	max_w_class = SIZE_SMALL
+	max_storage_space = 28
+	can_hold = list(/obj/item/ammo_magazine/handful)
+
+/obj/item/storage/belt/shotgun/xm88/attackby(obj/item/W, mob/user)
+	if(istype(W, /obj/item/ammo_magazine/lever_action/xm88))
+		var/obj/item/ammo_magazine/lever_action/xm88/B = W
+		dump_ammo_to(B, user, B.transfer_handful_amount)
 	else
 		return ..()
 
@@ -806,7 +865,7 @@
 		correctly without having to rotate anything. Preloading weapon icons also makes
 		sure that we don't have to do any extra calculations.
 		*/
-		playsound(src, drawSound, 15, TRUE)
+		playsound(src, drawSound, 7, TRUE)
 		var/image/gun_underlay = image(icon, current_gun.base_gun_icon)
 		gun_underlay.pixel_x = holster_slots[slot]["icon_x"]
 		gun_underlay.pixel_y = holster_slots[slot]["icon_y"]
@@ -818,7 +877,7 @@
 		icon_state += "_g"
 		item_state = icon_state
 	else
-		playsound(src, sheatheSound, 15, TRUE)
+		playsound(src, sheatheSound, 7, TRUE)
 		underlays -= holster_slots[slot]["underlay_sprite"]
 		holster_slots[slot]["underlay_sprite"] = null
 
@@ -1132,8 +1191,8 @@ obj/item/storage/belt/gun/m44/lever_action/verb/detach_holster()
 	new /obj/item/ammo_magazine/revolver/mateba(src)
 	new /obj/item/ammo_magazine/revolver/mateba(src)
 
-/obj/item/storage/belt/gun/mateba/commodore
-	name = "commodore's M276 pattern Mateba holster rig"
+/obj/item/storage/belt/gun/mateba/council
+	name = "colonel's M276 pattern Mateba holster rig"
 	desc = "The M276 is the standard load-bearing equipment of the USCM. \
 	It consists of a modular belt with various clips. This version is for the powerful Mateba magnum revolver, \
 	along with five small pouches for speedloaders. This specific one is tinted black and engraved with gold, heavily customized for a high-ranking official."
@@ -1141,7 +1200,7 @@ obj/item/storage/belt/gun/m44/lever_action/verb/detach_holster()
 	icon_state = "amateba_holster"
 	item_state = "s_marinebelt"
 
-/obj/item/storage/belt/gun/mateba/commodore/full/fill_preset_inventory()
+/obj/item/storage/belt/gun/mateba/council/full/fill_preset_inventory()
 	handle_item_insertion(new /obj/item/weapon/gun/revolver/mateba/engraved())
 	new /obj/item/ammo_magazine/revolver/mateba/highimpact(src)
 	new /obj/item/ammo_magazine/revolver/mateba/highimpact(src)

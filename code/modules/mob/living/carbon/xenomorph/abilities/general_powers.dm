@@ -31,6 +31,11 @@
 		to_chat(X, SPAN_WARNING("There's a pod here already!"))
 		return
 
+	var/obj/effect/alien/resin/trap/resin_trap = locate() in T
+	if(resin_trap)
+		to_chat(X, SPAN_WARNING("You can't weed on top of a trap!"))
+		return
+
 	var/list/to_convert
 	if(N)
 		to_convert = N.children.Copy()
@@ -81,9 +86,10 @@
 
 	return ..()
 
-/datum/action/xeno_action/onclick/xeno_resting/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/X = owner
-	X.lay_down()
+/datum/action/xeno_action/onclick/xeno_resting/use_ability(atom/target)
+	var/mob/living/carbon/Xenomorph/xeno = owner
+	xeno.lay_down()
+	button.icon_state = xeno.resting ? "template_active" : "template"
 
 // Shift spits
 /datum/action/xeno_action/onclick/shift_spits/use_ability(atom/A)
@@ -99,7 +105,7 @@
 			break
 	to_chat(X, SPAN_NOTICE("You will now spit [X.ammo.name] ([X.ammo.spit_cost] plasma)."))
 	button.overlays.Cut()
-	button.overlays += image('icons/mob/hud/actions.dmi', button, "shift_spit_[X.ammo.icon_state]")
+	button.overlays += image('icons/mob/hud/actions_xeno.dmi', button, "shift_spit_[X.ammo.icon_state]")
 	..()
 	return
 
@@ -193,24 +199,29 @@
 			var/selected_type = text2path(params["type"])
 			if(!(selected_type in X.resin_build_order))
 				return
-
-			var/datum/resin_construction/RC = GLOB.resin_constructions_list[selected_type]
-			to_chat(X, SPAN_NOTICE("You will now build <b>[RC.construction_name]\s</b> when secreting resin."))
 			//update the button's overlay with new choice
-			button.overlays.Cut()
-			button.overlays += image('icons/mob/hud/actions.dmi', button, RC.construction_name)
+			update_button_icon(selected_type, to_chat=TRUE)
 			X.selected_resin = selected_type
 			. = TRUE
 		if("refresh_ui")
 			. = TRUE
 
+/datum/action/xeno_action/onclick/choose_resin/update_button_icon(var/selected_type, var/to_chat = FALSE)
+	. = ..()
+	if(!selected_type)
+		return
+	var/datum/resin_construction/resin_construction = GLOB.resin_constructions_list[selected_type]
+	if(to_chat)
+		to_chat(usr, SPAN_NOTICE("You will now build <b>[resin_construction.construction_name]\s</b> when secreting resin."))
+	button.overlays.Cut()
+	button.overlays += image('icons/mob/hud/actions_xeno.dmi', button, resin_construction.construction_name)
 
 // Resin
 /datum/action/xeno_action/activable/secrete_resin/use_ability(atom/A)
 	if(!..())
 		return FALSE
 	var/mob/living/carbon/Xenomorph/X = owner
-	if(isstorage(A.loc) || X.contains(A) || istype(A, /obj/screen)) return FALSE
+	if(isstorage(A.loc) || X.contains(A) || istype(A, /atom/movable/screen)) return FALSE
 	if(A.z != X.z)
 		to_chat(owner, SPAN_XENOWARNING("This area is too far away to affect!"))
 		return
@@ -246,7 +257,7 @@
 		to_chat(X, SPAN_XENOWARNING("You can't place resin markers on living things!"))
 		return FALSE //this is because xenos have thermal vision and can see mobs through walls - which would negate not being able to place them through walls
 
-	if(isstorage(A.loc) || X.contains(A) || istype(A, /obj/screen)) return FALSE
+	if(isstorage(A.loc) || X.contains(A) || istype(A, /atom/movable/screen)) return FALSE
 	var/turf/target_turf = get_turf(A)
 
 	if(target_turf.z != X.z)
@@ -269,7 +280,7 @@
 		for(var/i=1, i<=length(X.hive.resin_marks))
 			Goober = X.hive.resin_marks[i]
 			if(Goober.createdby == X.nicknumber)
-				promptuser = tgui_input_list(X, "Remove oldest placed mark: '[Goober.mark_meaning.name]!'?", "Mark limit reached.", promptlist)
+				promptuser = tgui_input_list(X, "Remove oldest placed mark: '[Goober.mark_meaning.name]!'?", "Mark limit reached.", promptlist, theme="hive_status")
 				break
 			i++
 		if(promptuser == "No")
@@ -316,7 +327,7 @@
 				to_chat(src, SPAN_XENOWARNING("You do not have enough plasma!"))
 				return
 			if(client.prefs && client.prefs.no_radials_preference)
-				pheromone = tgui_input_list(src, "Choose a pheromone", "Pheromone Menu", caste.aura_allowed + "help" + "cancel")
+				pheromone = tgui_input_list(src, "Choose a pheromone", "Pheromone Menu", caste.aura_allowed + "help" + "cancel", theme="hive_status")
 				if(pheromone == "help")
 					to_chat(src, SPAN_NOTICE("<br>Pheromones provide a buff to all Xenos in range at the cost of some stored plasma every second, as follows:<br><B>Frenzy</B> - Increased run speed, damage and chance to knock off headhunter masks.<br><B>Warding</B> - While in critical state, increased maximum negative health and slower off weed bleedout.<br><B>Recovery</B> - Increased plasma and health regeneration.<br>"))
 					return
@@ -324,7 +335,7 @@
 					return
 			else
 				var/static/list/phero_selections = list("Help" = image(icon = 'icons/mob/radial.dmi', icon_state = "radial_help"), "Frenzy" = image(icon = 'icons/mob/radial.dmi', icon_state = "phero_frenzy"), "Warding" = image(icon = 'icons/mob/radial.dmi', icon_state = "phero_warding"), "Recovery" = image(icon = 'icons/mob/radial.dmi', icon_state = "phero_recov"))
-				pheromone = lowertext(show_radial_menu(src, src, phero_selections))
+				pheromone = lowertext(show_radial_menu(src, src.client?.eye, phero_selections))
 				if(pheromone == "help")
 					to_chat(src, SPAN_XENONOTICE("<br>Pheromones provide a buff to all Xenos in range at the cost of some stored plasma every second, as follows:<br><B>Frenzy (Red)</B> - Increased run speed, damage and chance to knock off headhunter masks.<br><B>Warding (Green)</B> - While in critical state, increased maximum negative health and slower off weed bleedout.<br><B>Recovery (Blue)</B> - Increased plasma and health regeneration.<br>"))
 					return
@@ -353,7 +364,8 @@
 	if(!action_cooldown_check())
 		return
 
-	if(!A) return
+	if(!A)
+		return
 
 	if(A.layer >= FLY_LAYER)//anything above that shouldn't be pounceable (hud stuff)
 		return
@@ -409,10 +421,6 @@
 
 	X.visible_message(SPAN_XENOWARNING("\The [X] [ability_name][findtext(ability_name, "e", -1) ? "s" : "es"] at [A]!"), SPAN_XENOWARNING("You [ability_name] at [A]!"))
 
-	// ok so basically the way this code works is godawful
-	// what happens next is if we hit anything
-	// a callback occurs to either the mob_launch_collision or obj_launch_collision procs.
-	// those procs poll our action to see if we are 'pouncing'
 	var/datum/launch_metadata/LM = new()
 	LM.target = A
 	LM.range = distance
@@ -422,7 +430,7 @@
 	LM.pass_flags = pounce_pass_flags
 	LM.collision_callbacks = pounce_callbacks
 
-	X.launch_towards(LM) //Victim, distance, speed
+	X.launch_towards(LM)
 
 	additional_effects_always()
 	..()
@@ -477,18 +485,19 @@
 	..()
 	return
 
-/datum/action/xeno_action/onclick/xenohide/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/X = owner
-	if(!X.check_state(1))
+/datum/action/xeno_action/onclick/xenohide/use_ability(atom/target)
+	var/mob/living/carbon/Xenomorph/xeno = owner
+	if(!xeno.check_state(1))
 		return
-	if(X.layer != XENO_HIDING_LAYER)
-		X.layer = XENO_HIDING_LAYER
-		to_chat(X, SPAN_NOTICE("You are now hiding."))
+	if(xeno.layer != XENO_HIDING_LAYER)
+		xeno.layer = XENO_HIDING_LAYER
+		to_chat(xeno, SPAN_NOTICE("You are now hiding."))
+		button.icon_state = "template_active"
 	else
-		X.layer = initial(X.layer)
-		to_chat(X, SPAN_NOTICE("You have stopped hiding."))
-	X.update_wounds()
-
+		xeno.layer = initial(xeno.layer)
+		to_chat(xeno, SPAN_NOTICE("You have stopped hiding."))
+		button.icon_state = "template"
+	xeno.update_wounds()
 
 /datum/action/xeno_action/onclick/place_trap/use_ability(atom/A)
 	var/mob/living/carbon/Xenomorph/X = owner
@@ -515,13 +524,16 @@
 		return
 
 	var/obj/effect/alien/weeds/alien_weeds = locate() in T
-
 	if(!alien_weeds)
 		to_chat(X, SPAN_WARNING("You can only shape on weeds. Find some resin before you start building!"))
 		return
 
 	if(alien_weeds.linked_hive.hivenumber != X.hivenumber)
 		to_chat(X, SPAN_WARNING("These weeds don't belong to your hive!"))
+		return
+
+	if(istype(alien_weeds, /obj/effect/alien/weeds/node))
+		to_chat(X, SPAN_WARNING("You can't place a resin hole on a resin node!"))
 		return
 
 	if(!X.check_alien_construction(T))
@@ -545,7 +557,7 @@
 	if(!X.check_state())
 		return FALSE
 
-	if(isstorage(A.loc) || X.contains(A) || istype(A, /obj/screen)) return FALSE
+	if(isstorage(A.loc) || X.contains(A) || istype(A, /atom/movable/screen)) return FALSE
 
 	//Make sure construction is unrestricted
 	if(X.hive && X.hive.construction_allowed == XENO_LEADER && X.hive_pos == NORMAL_XENO)
@@ -575,7 +587,7 @@
 		to_chat(X, SPAN_WARNING("The weeds are still recovering from the death of the hive core, wait until the weeds have recovered!"))
 		return FALSE
 	if(X.hive.has_structure(XENO_STRUCTURE_CORE) || !X.hive.can_build_structure(XENO_STRUCTURE_CORE))
-		choice = tgui_input_list(X, "Choose a structure to build", "Build structure", X.hive.hive_structure_types + "help")
+		choice = tgui_input_list(X, "Choose a structure to build", "Build structure", X.hive.hive_structure_types + "help", theme="hive_status")
 		if(!choice)
 			return
 		if(choice == "help")
@@ -636,7 +648,7 @@
 		return FALSE
 
 	var/obj/effect/alien/weeds/weeds = locate() in T
-	if(weeds?.block_special_structures)
+	if(weeds?.block_structures >= BLOCK_SPECIAL_STRUCTURES)
 		to_chat(X, SPAN_WARNING("\The [weeds] block the construction of any special structures!"))
 		qdel(structure_template)
 		return FALSE

@@ -18,19 +18,24 @@
 	)
 	keystone = TRUE
 
-/datum/xeno_mutator/gardener/apply_mutator(datum/mutator_set/individual_mutators/MS)
+/datum/xeno_mutator/gardener/apply_mutator(datum/mutator_set/individual_mutators/mutator)
 	. = ..()
 	if (. == 0)
 		return
 
-	var/mob/living/carbon/Xenomorph/Drone/D = MS.xeno
-	D.mutation_type = DRONE_GARDENER
-	D.available_fruits = list(/obj/effect/alien/resin/fruit/greater, /obj/effect/alien/resin/fruit/unstable, /obj/effect/alien/resin/fruit/spore, /obj/effect/alien/resin/fruit/speed, /obj/effect/alien/resin/fruit/plasma)
-	D.selected_fruit = /obj/effect/alien/resin/fruit/greater
-	D.max_placeable = 6
-	mutator_update_actions(D)
-	MS.recalculate_actions(description, flavor_description)
-	D.regeneration_multiplier = XENO_REGEN_MULTIPLIER_TIER_1
+	var/mob/living/carbon/Xenomorph/Drone/drone = mutator.xeno
+	drone.mutation_type = DRONE_GARDENER
+	drone.available_fruits = list(/obj/effect/alien/resin/fruit/greater, /obj/effect/alien/resin/fruit/unstable, /obj/effect/alien/resin/fruit/spore, /obj/effect/alien/resin/fruit/speed, /obj/effect/alien/resin/fruit/plasma)
+	drone.selected_fruit = /obj/effect/alien/resin/fruit/greater
+	drone.max_placeable = 6
+	mutator_update_actions(drone)
+	// Also change the primacy value for our place construction ability (because we want it in the same place but have another primacy ability)
+	for(var/datum/action/xeno_action/action in drone.actions)
+		if(istype(action, /datum/action/xeno_action/activable/place_construction))
+			action.ability_primacy = XENO_NOT_PRIMARY_ACTION
+			break // Don't need to keep looking
+	mutator.recalculate_actions(description, flavor_description)
+	drone.regeneration_multiplier = XENO_REGEN_MULTIPLIER_TIER_1
 
 /datum/action/xeno_action/onclick/plant_resin_fruit
 	name = "Plant Resin Fruit (50)"
@@ -118,17 +123,19 @@
 
 /datum/action/xeno_action/onclick/change_fruit
 	name = "Change Fruit"
-	action_icon_state = "fruit_greater"
+	action_icon_state = "blank"
 	ability_name = "change fruit"
 	plasma_cost = 0
 	xeno_cooldown = 0
 	macro_path = /datum/action/xeno_action/verb/verb_resin_surge
 	action_type = XENO_ACTION_CLICK
+	ability_primacy = XENO_PRIMARY_ACTION_5
 
 /datum/action/xeno_action/onclick/change_fruit/give_to(mob/living/carbon/Xenomorph/xeno)
 	. = ..()
 
 	button.overlays.Cut()
+	button.overlays += image(icon_file, button, action_icon_state)
 	button.overlays += image('icons/mob/hostiles/fruits.dmi', button, initial(xeno.selected_fruit.mature_icon_state))
 
 /datum/action/xeno_action/onclick/change_fruit/use_ability(atom/A)
@@ -203,6 +210,7 @@
 			to_chat(X, SPAN_NOTICE("You will now build <b>[initial(fruit.name)]\s</b> when secreting resin."))
 			//update the button's overlay with new choice
 			button.overlays.Cut()
+			button.overlays += image(icon_file, button, action_icon_state)
 			button.overlays += image('icons/mob/hostiles/fruits.dmi', button, initial(fruit.mature_icon_state))
 			X.selected_fruit = selected_type
 			. = TRUE
@@ -337,13 +345,11 @@
 	xeno_cooldown = 2 MINUTES
 	action_type = XENO_ACTION_CLICK
 	ability_primacy = XENO_PRIMARY_ACTION_2
-
-	plant_on_semiweedable = TRUE
 	node_type = /obj/effect/alien/weeds/node/gardener
 
 /obj/effect/alien/weeds/node/gardener
 	spread_on_semiweedable = TRUE
-	block_special_structures = TRUE
+	block_structures = BLOCK_SPECIAL_STRUCTURES
 	fruit_growth_multiplier = 0.8
 
 /datum/action/xeno_action/verb/verb_plant_gardening_weeds()

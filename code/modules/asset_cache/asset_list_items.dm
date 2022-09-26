@@ -17,10 +17,9 @@
 /datum/asset/simple/fontawesome
 	keep_local_name = TRUE
 	assets = list(
-		"fa-regular-400.eot"  = 'html/font-awesome/webfonts/fa-regular-400.eot',
-		"fa-regular-400.woff" = 'html/font-awesome/webfonts/fa-regular-400.woff',
-		"fa-solid-900.eot"    = 'html/font-awesome/webfonts/fa-solid-900.eot',
-		"fa-solid-900.woff"   = 'html/font-awesome/webfonts/fa-solid-900.woff',
+		"fa-regular-400.ttf" = 'html/font-awesome/webfonts/fa-regular-400.ttf',
+		"fa-solid-900.ttf" = 'html/font-awesome/webfonts/fa-solid-900.ttf',
+		"fa-v4compatibility.ttf" = 'html/font-awesome/webfonts/fa-v4compatibility.ttf',
 		"font-awesome.css" = 'html/font-awesome/css/all.min.css',
 		"v4shim.css" = 'html/font-awesome/css/v4-shims.min.css',
 	)
@@ -72,6 +71,10 @@
 			SSassets.transport.register_asset(filename, fcopy_rsc(path + filename))
 
 /datum/asset/nanoui/send(client, uncommon, var/send_only_temp = FALSE)
+	if(!client)
+		log_debug("Warning! Tried to send nanoui data with a null client! (asset_list_items.dm line 76)")
+		return
+
 	if(!islist(uncommon))
 		uncommon = list(uncommon)
 
@@ -89,6 +92,9 @@
 	uncommon_dirs = list()
 
 /datum/asset/nanoui/weapons/send(client)
+	if(!client)
+		log_debug("Warning! Tried to send nanoui weapon data with a null client! (asset_list_items.dm line 93)")
+		return
 	SSassets.transport.send_assets(client, common)
 
 
@@ -162,7 +168,7 @@
 	for (var/k in GLOB.resin_constructions_list)
 		var/datum/resin_construction/RC = k
 
-		var/icon_file = 'icons/mob/hud/actions.dmi'
+		var/icon_file = 'icons/mob/hud/actions_xeno.dmi'
 		var/icon_state = initial(RC.construction_name)
 		var/icon_name = replacetext(icon_state, " ", "-")
 

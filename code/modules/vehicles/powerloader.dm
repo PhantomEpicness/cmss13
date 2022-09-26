@@ -250,7 +250,7 @@
 					chair_stack.update_overlays()
 					//skill reduces the chance of collapse
 					if(chair_stack.stacked_size > 8 && prob(50 / user.skills.get_skill_level(SKILL_POWERLOADER)))
-						chair_stack.stack_collapse(user)
+						chair_stack.stack_collapse()
 
 				loaded = null
 				update_icon()
@@ -315,7 +315,7 @@
 		qdel(src)
 		return
 	loaded = target
-	loaded.forceMove(linked_powerloader)
+	loaded.forceMove(src)
 	playsound(src, sound, 40, 1)
 	update_icon(target_tag)
 	target.update_icon()

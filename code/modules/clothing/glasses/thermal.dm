@@ -13,7 +13,7 @@
 	invisa_view = 2
 	eye_protection = -1
 	deactive_state = "goggles_off"
-	fullscreen_vision = /obj/screen/fullscreen/thermal
+	fullscreen_vision = /atom/movable/screen/fullscreen/thermal
 	var/blinds_on_emp = TRUE
 
 /obj/item/clothing/glasses/thermal/emp_act(severity)
@@ -37,6 +37,12 @@
 	icon_state = "meson"
 	deactive_state = "degoggles"
 	actions_types = list(/datum/action/item_action/toggle)
+
+/obj/item/clothing/glasses/thermal/syndi/bug_b_gone
+	name = "Bug-B Gone Thermal Goggles"
+	desc = "For all your bug hunting needs!"
+	icon_state = "rwelding-g"
+	deactive_state = "rwelding-gup"
 
 /obj/item/clothing/glasses/thermal/monocle
 	name = "Thermoncle"

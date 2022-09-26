@@ -239,8 +239,8 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 
 
 	///// EYEWEAR
-	/obj/item/clothing/glasses/mgoggles = "goggles-h",
-	/obj/item/clothing/glasses/mgoggles/prescription = "goggles-h",
+	/obj/item/clothing/glasses/mgoggles = HELMET_GARB_RELAY_ICON_STATE,
+	/obj/item/clothing/glasses/mgoggles/prescription = HELMET_GARB_RELAY_ICON_STATE,
 	/obj/item/clothing/glasses/sunglasses = "sunglasses",
 	/obj/item/clothing/glasses/sunglasses/prescription = "sunglasses",
 	/obj/item/clothing/glasses/sunglasses/aviator = "aviator",
@@ -569,6 +569,20 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	armor_rad = CLOTHING_ARMOR_LOW
 	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
 	specialty = "M12 pattern"
+
+/obj/item/clothing/head/helmet/marine/intel
+	name = "\improper XM12 pattern intelligence helmet"
+	desc = "An experimental brain-bucket. A dust ruffle hangs from back. Moderately better at deflecting blunt objects at the cost of humiliation. But who will be laughing at the memorial? Not you, you'll be busy getting medals for your intel work."
+	icon_state = "io"
+	item_state = "io"
+	armor_melee = CLOTHING_ARMOR_MEDIUMHIGH
+	armor_bullet = CLOTHING_ARMOR_MEDIUM
+	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
+	armor_bomb = CLOTHING_ARMOR_LOW
+	armor_bio = CLOTHING_ARMOR_MEDIUMHIGH
+	armor_rad = CLOTHING_ARMOR_LOW
+	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
+	specialty = "XM12 pattern intel"
 
 /obj/item/clothing/head/helmet/marine/specialist
 	name = "\improper B18 helmet"

@@ -53,6 +53,7 @@ type OrbitData = {
   ghosts: OrbitList[],
   misc: OrbitList[],
   npcs: OrbitList[],
+  vehicles: OrbitList[],
 }
 
 type BasicSectionProps = {
@@ -128,6 +129,7 @@ export const Orbit = (props: any, context: any) => {
     ghosts,
     misc,
     npcs,
+    vehicles,
   } = data;
 
   const [searchText, setSearchText] = useLocalState(context, "searchText", "");
@@ -152,7 +154,7 @@ export const Orbit = (props: any, context: any) => {
   return (
     <Window
       title="Orbit"
-      width={350}
+      width={500}
       height={700}>
       <Window.Content scrollable>
         <Section>
@@ -171,122 +173,169 @@ export const Orbit = (props: any, context: any) => {
                 onInput={(_: any, value: string) => setSearchText(value)}
                 onEnter={(_: any, value: string) => orbitMostRelevant(value)} />
             </Flex.Item>
+            <Flex.Item>
+              <Button
+                inline
+                color="transparent"
+                tooltip="Refresh"
+                tooltipPosition="bottom-start"
+                icon="sync-alt"
+                onClick={() => act('refresh')}
+              />
+            </Flex.Item>
           </Flex>
         </Section>
 
-        <Section title={`Marines - (${marines.length})`}>
-          {marines
-            .filter(searchFor(searchText))
-            .sort(compareNumberedText)
-            .map(thing => (
-              <OrbitedButton
-                key={thing.name}
-                color="good"
-                thing={thing} />
-            ))}
-        </Section>
+        {!!marines.length && (
+          <Section title={`Marines - (${marines.length})`}>
+            {marines
+              .filter(searchFor(searchText))
+              .sort(compareNumberedText)
+              .map(thing => (
+                <OrbitedButton
+                  key={thing.name}
+                  color="good"
+                  thing={thing} />
+              ))}
+          </Section>
+        )}
 
-        <Section title={`Xenos - (${xenos.length})`}>
-          {xenos
-            .filter(searchFor(searchText))
-            .sort(compareNumberedText)
-            .map(thing => (
-              <OrbitedButton
-                key={thing.name}
-                color="good"
-                thing={thing} />
-            ))}
-        </Section>
+        {!!xenos.length && (
+          <Section title={`Xenos - (${xenos.length})`}>
+            {xenos
+              .filter(searchFor(searchText))
+              .sort(compareNumberedText)
+              .map(thing => (
+                <OrbitedButton
+                  key={thing.name}
+                  color="good"
+                  thing={thing} />
+              ))}
+          </Section>
+        )}
 
-        <Section title={`Survivors - (${survivors.length})`}>
-          {survivors
-            .filter(searchFor(searchText))
-            .sort(compareNumberedText)
-            .map(thing => (
-              <OrbitedButton
-                key={thing.name}
-                color="good"
-                thing={thing} />
-            ))}
-        </Section>
+        {!!survivors.length && (
+          <Section title={`Survivors - (${survivors.length})`}>
+            {survivors
+              .filter(searchFor(searchText))
+              .sort(compareNumberedText)
+              .map(thing => (
+                <OrbitedButton
+                  key={thing.name}
+                  color="good"
+                  thing={thing} />
+              ))}
+          </Section>
+        )}
 
-        <Section title={`ERT Members - (${ert_members.length})`}>
-          {ert_members
-            .filter(searchFor(searchText))
-            .sort(compareNumberedText)
-            .map(thing => (
-              <OrbitedButton
-                key={thing.name}
-                color="good"
-                thing={thing} />
-            ))}
-        </Section>
+        {!!ert_members.length && (
+          <Section title={`ERT Members - (${ert_members.length})`}>
+            {ert_members
+              .filter(searchFor(searchText))
+              .sort(compareNumberedText)
+              .map(thing => (
+                <OrbitedButton
+                  key={thing.name}
+                  color="good"
+                  thing={thing} />
+              ))}
+          </Section>
+        )}
 
-        <Section title={`Synthetics - (${synthetics.length})`}>
-          {synthetics
-            .filter(searchFor(searchText))
-            .sort(compareNumberedText)
-            .map(thing => (
-              <OrbitedButton
-                key={thing.name}
-                color="good"
-                thing={thing} />
-            ))}
-        </Section>
+        {!!synthetics.length && (
+          <Section title={`Synthetics - (${synthetics.length})`}>
+            {synthetics
+              .filter(searchFor(searchText))
+              .sort(compareNumberedText)
+              .map(thing => (
+                <OrbitedButton
+                  key={thing.name}
+                  color="good"
+                  thing={thing} />
+              ))}
+          </Section>
+        )}
 
-        <Section title={`Predators - (${predators.length})`}>
-          {predators
-            .filter(searchFor(searchText))
-            .sort(compareNumberedText)
-            .map(thing => (
-              <OrbitedButton
-                key={thing.name}
-                color="good"
-                thing={thing} />
-            ))}
-        </Section>
+        {!!predators.length && (
+          <Section title={`Predators - (${predators.length})`}>
+            {predators
+              .filter(searchFor(searchText))
+              .sort(compareNumberedText)
+              .map(thing => (
+                <OrbitedButton
+                  key={thing.name}
+                  color="good"
+                  thing={thing} />
+              ))}
+          </Section>
+        )}
 
-        <Section title={`Humans - (${humans.length})`}>
-          {humans
-            .filter(searchFor(searchText))
-            .sort(compareNumberedText)
-            .map(thing => (
-              <OrbitedButton
-                key={thing.name}
-                color="good"
-                thing={thing} />
-            ))}
-        </Section>
+        {!!humans.length && (
+          <Section title={`Humans - (${humans.length})`}>
+            {humans
+              .filter(searchFor(searchText))
+              .sort(compareNumberedText)
+              .map(thing => (
+                <OrbitedButton
+                  key={thing.name}
+                  color="good"
+                  thing={thing} />
+              ))}
+          </Section>
+        )}
 
-        <Section title={`Ghosts - (${ghosts.length})`}>
-          {ghosts
-            .filter(searchFor(searchText))
-            .sort(compareNumberedText)
-            .map(thing => (
-              <OrbitedButton
-                key={thing.name}
-                color="grey"
-                thing={thing} />
-            ))}
-        </Section>
+        {!!vehicles.length && (
+          <Section title={`Vehicles - (${vehicles.length})`}>
+            {vehicles
+              .filter(searchFor(searchText))
+              .sort(compareNumberedText)
+              .map(thing => (
+                <OrbitedButton
+                  key={thing.name}
+                  color="blue"
+                  thing={thing} />
+              ))}
+          </Section>
+        )}
 
-        <BasicSection
-          title="NPCs"
-          source={npcs}
-          searchText={searchText}
-        />
+        {!!ghosts.length && (
+          <Section title={`Ghosts - (${ghosts.length})`}>
+            {ghosts
+              .filter(searchFor(searchText))
+              .sort(compareNumberedText)
+              .map(thing => (
+                <OrbitedButton
+                  key={thing.name}
+                  color="grey"
+                  thing={thing} />
+              ))}
+          </Section>
+        )}
 
-        <BasicSection
-          title="Dead"
-          source={dead}
-          searchText={searchText}
-        />
+        {!!npcs.length && (
+          <BasicSection
+            title="NPCs"
+            source={npcs}
+            searchText={searchText}
+          />
+        )}
 
-        <BasicSection
-          title="Misc"
-          source={misc}
-          searchText={searchText}
-        />
+        {!!dead.length && (
+          <BasicSection
+            title="Dead"
+            source={dead}
+            searchText={searchText}
+          />
+        )}
+
+        {!!misc.length && (
+          <BasicSection
+            title="Misc"
+            source={misc}
+            searchText={searchText}
+          />
+        )}
+
       </Window.Content>
     </Window>
   );

@@ -27,6 +27,8 @@
 	total_health = 150 //more health than regular humans, makes up for hardcrit reintroduction
 	timed_hug = FALSE
 
+	bloodsplatter_type = /obj/effect/temp_visual/dir_setting/bloodsplatter/yautjasplatter
+
 	heat_level_1 = 500
 	heat_level_2 = 700
 	heat_level_3 = 1000
@@ -108,7 +110,7 @@
 		hive.hive_structures_limit[XENO_STRUCTURE_NEST] = 0
 
 	hive.hive_structure_types[XENO_STRUCTURE_NEST] = /datum/construction_template/xenomorph/nest
-	hive.hive_structures_limit[XENO_STRUCTURE_NEST] += 1
+	hive.hive_structures_limit[XENO_STRUCTURE_NEST]++
 
 /datum/species/yautja/handle_death(var/mob/living/carbon/human/H, gibbed)
 	if(gibbed)

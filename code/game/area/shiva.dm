@@ -60,6 +60,47 @@
 	flags_area = AREA_NOTUNNEL
 	icon_state = "shiva"
 
+//telecomms areas - exterior
+/area/shiva/exterior/telecomm
+	name = "Shiva's Snowball - Communications Relay"
+	icon_state = "ass_line"
+	is_resin_allowed = FALSE
+
+/area/shiva/exterior/telecomm/lz1_north
+	name = "Shiva's Snowball - North LZ1 Communications Relay"
+
+/area/shiva/exterior/telecomm/lz2_southeast
+	name = "Shiva's Snowball - South-East LZ2 Communications Relay"
+
+/area/shiva/exterior/telecomm/lz2_northeast
+	name = "Shiva's Snowball - North-East LZ2 Communications Relay"
+
+
+//telecomms areas - interior
+/area/shiva/interior/telecomm
+	name = "Shiva's Snowball - Communications Relay"
+	icon_state = "ass_line"
+	is_resin_allowed = FALSE
+
+/area/shiva/interior/telecomm/lz1_biceps
+	name = "Shiva's Snowball - Fort Biceps Communications Relay"
+	icon_state = "hangars0"
+
+/area/shiva/interior/telecomm/lz1_flight
+	name = "Shiva's Snowball - LZ1 Aerodrome Communications Relay"
+
+/area/shiva/interior/telecomm/lz2_research
+	name = "Shiva's Snowball - Argentinian Communications Relay"
+
+//telecomms areas - caves
+/area/shiva/caves/telecomm
+	name = "Shiva's Snowball - Communications Relay"
+	icon_state = "ass_line"
+	is_resin_allowed = FALSE
+
+/area/shiva/caves/telecomm/lz2_south
+	name = "Shiva's Snowball - Backup Communications Relay"
+
 //exterior areas
 
 /area/shiva/exterior/lz1_valley
@@ -89,7 +130,6 @@
 /area/shiva/exterior/junkyard/fortbiceps
 	name = "Shiva's Snowball - Fort Biceps"
 	icon_state = "junkyard1"
-	requires_power = FALSE
 
 /area/shiva/exterior/junkyard/cp_bar
 	name = "Shiva's Snowball - Bar Grounds"
@@ -123,7 +163,6 @@
 /area/shiva/interior/caves/left_spiders
 	name = "Shiva's Snowball - Crevice Passage"
 	icon_state = "caves2"
-	requires_power = FALSE
 
 /area/shiva/interior/caves/s_lz2
 	name = "Shiva's Snowball - South LZ2 Caves"
@@ -140,7 +179,6 @@
 /area/shiva/interior/caves/medseceng_caves
 	name = "Shiva's Snowball - South Med-Sec-Eng Complex Caves"
 	icon_state = "caves3"
-	requires_power = FALSE
 
 /area/shiva/interior/colony
 	name = "Shiva's Snowball - Colony MegaStruct(TM)"

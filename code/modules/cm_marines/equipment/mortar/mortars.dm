@@ -148,8 +148,8 @@
 
 /obj/structure/mortar/proc/handle_target(mob/user, temp_targ_x = 0, temp_targ_y = 0, manual = FALSE)
 	if(manual)
-		temp_targ_x = input("Input the longitude of the target.") as num
-		temp_targ_y = input("Input the latitude of the target.") as num
+		temp_targ_x = tgui_input_real_number(user, "Input the longitude of the target.")
+		temp_targ_y = tgui_input_real_number(user, "Input the latitude of the target.")
 
 	if(!can_fire_at(user, test_targ_x = deobfuscate_x(temp_targ_x), test_targ_y = deobfuscate_y(temp_targ_y)))
 		return
@@ -180,8 +180,8 @@
 
 /obj/structure/mortar/proc/handle_dial(mob/user, temp_dial_x = 0, temp_dial_y = 0, manual = FALSE)
 	if(manual)
-		temp_dial_x = input("Set longitude adjustement from -10 to 10.") as num
-		temp_dial_y = input("Set latitude adjustement from -10 to 10.") as num
+		temp_dial_x = tgui_input_number(user, "Set longitude adjustement from -10 to 10.", "Longitude", 0, 10, -10)
+		temp_dial_y = tgui_input_number(user, "Set latitude adjustement from -10 to 10.", "Latitude", 0, 10, -10)
 
 	if(!can_fire_at(user, test_dial_x = temp_dial_x, test_dial_y = temp_dial_y))
 		return
@@ -311,17 +311,23 @@
 	playsound(target, 'sound/weapons/gun_mortar_travel.ogg', 50, 1)
 	var/relative_dir
 	for(var/mob/M in range(15, target))
-		relative_dir = get_dir(M, target)
+		if(get_turf(M) == target)
+			relative_dir = 0
+		else
+			relative_dir = get_dir(M, target)
 		M.show_message( \
-			SPAN_DANGER("A SHELL IS COMING DOWN TOWARDS THE [SPAN_UNDERLINE(uppertext(dir2text(relative_dir)))]!"), 1, \
-			SPAN_DANGER("YOU HEAR SOMETHING COMING DOWN TOWARDS THE [SPAN_UNDERLINE(uppertext(dir2text(relative_dir)))]!"), 2 \
+			SPAN_DANGER("A SHELL IS COMING DOWN TOWARDS THE [SPAN_UNDERLINE(relative_dir ? uppertext(("TO YOUR " + dir2text(relative_dir))) : uppertext("right above you"))]!"), 1, \
+			SPAN_DANGER("YOU HEAR SOMETHING COMING DOWN TOWARDS THE [SPAN_UNDERLINE(relative_dir ? uppertext(("TO YOUR " + dir2text(relative_dir))) : uppertext("right above you"))]!"), 2 \
 		)
 	sleep(2.5 SECONDS) // Sleep a bit to give a message
 	for(var/mob/M in range(10, target))
-		relative_dir = get_dir(M, target)
+		if(get_turf(M) == target)
+			relative_dir = 0
+		else
+			relative_dir = get_dir(M, target)
 		M.show_message( \
-			SPAN_HIGHDANGER("A SHELL IS ABOUT TO IMPACT TOWARDS THE [SPAN_UNDERLINE(uppertext(dir2text(relative_dir)))]!"), 1, \
-			SPAN_HIGHDANGER("YOU HEAR SOMETHING VERY CLOSE COMING DOWN TOWARDS THE [SPAN_UNDERLINE(uppertext(dir2text(relative_dir)))]!"), 2 \
+			SPAN_HIGHDANGER("A SHELL IS ABOUT TO IMPACT TOWARDS THE [SPAN_UNDERLINE(relative_dir ? uppertext(("TO YOUR " + dir2text(relative_dir))) : uppertext("right above you"))]!"), 1, \
+			SPAN_HIGHDANGER("YOU HEAR SOMETHING VERY CLOSE COMING DOWN TOWARDS THE [SPAN_UNDERLINE(relative_dir ? uppertext(("TO YOUR " + dir2text(relative_dir))) : uppertext("right above you"))]!"), 2 \
 		)
 	sleep(2 SECONDS) // Wait out the rest of the landing time
 	target.ceiling_debris_check(2)

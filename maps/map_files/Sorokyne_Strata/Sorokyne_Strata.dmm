@@ -48,7 +48,7 @@
 /area/strata/ag/interior/paths/cabin_area/central)
 "aal" = (
 /obj/structure/bed/nest,
-/obj/effect/landmark/corpsespawner/PMC,
+/obj/effect/landmark/corpsespawner/pmc,
 /turf/open/auto_turf/snow/brown_base/layer0,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "aam" = (
@@ -118,7 +118,7 @@
 "aax" = (
 /obj/structure/bed/nest,
 /obj/effect/decal/cleanable/blood/gibs/core,
-/obj/effect/landmark/corpsespawner/PMC,
+/obj/effect/landmark/corpsespawner/pmc,
 /turf/open/auto_turf/snow/brown_base/layer0,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "aay" = (
@@ -236,7 +236,7 @@
 	dir = 1;
 	pixel_y = 20
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/ice/layer1,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "aaQ" = (
@@ -338,6 +338,7 @@
 /obj/structure/closet/secure_closet/chemical{
 	req_access = null
 	},
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/interior/plastic,
 /area/strata/ag/interior/paths/cabin_area/central)
 "abi" = (
@@ -355,7 +356,7 @@
 "abk" = (
 /obj/structure/bed/nest,
 /obj/effect/decal/cleanable/blood/gibs/core,
-/obj/effect/landmark/corpsespawner/security/cmb,
+/obj/effect/landmark/corpsespawner/russian,
 /turf/open/auto_turf/snow/brown_base/layer0,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "abl" = (
@@ -379,6 +380,7 @@
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "abs" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/auto_turf/snow/brown_base/layer0,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "abt" = (
@@ -392,6 +394,7 @@
 "abu" = (
 /obj/structure/surface/rack,
 /obj/item/tank/emergency_oxygen/engi,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -434,7 +437,7 @@
 /area/strata/ag/exterior)
 "abB" = (
 /obj/structure/bed/nest,
-/obj/effect/landmark/corpsespawner/PMC,
+/obj/effect/landmark/corpsespawner/pmc,
 /turf/open/floor/strata{
 	icon_state = "fake_wood"
 	},
@@ -507,6 +510,7 @@
 /obj/effect/landmark/wo_supplies/storage/mines,
 /obj/effect/landmark/wo_supplies/storage/mines,
 /obj/item/storage/pill_bottle/ultrazine/skillless,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -516,7 +520,7 @@
 /obj/item/ammo_magazine/rifle/type71,
 /obj/item/ammo_magazine/rifle/type71,
 /obj/structure/surface/rack,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -525,7 +529,7 @@
 "abM" = (
 /obj/item/stack/rods,
 /obj/effect/decal/cleanable/blood/gibs/core,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -953,7 +957,7 @@
 	dir = 1;
 	pixel_y = 20
 	},
-/obj/effect/landmark/corpsespawner/security,
+/obj/effect/landmark/corpsespawner/russian,
 /obj/structure/bed/roller,
 /turf/open/floor/strata{
 	icon_state = "floor3"
@@ -1001,6 +1005,7 @@
 /obj/structure/window/reinforced/tinted{
 	dir = 1
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "floor2"
 	},
@@ -1017,7 +1022,7 @@
 "acW" = (
 /obj/structure/bed/nest,
 /obj/effect/decal/cleanable/blood/gibs/core,
-/obj/effect/landmark/corpsespawner/PMC,
+/obj/effect/landmark/corpsespawner/pmc,
 /turf/open/auto_turf/snow/brown_base/layer1,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "acX" = (
@@ -1151,7 +1156,7 @@
 	pixel_x = -18;
 	pixel_y = 10
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/closed/wall/wood,
 /area/strata/ug/interior/jungle/deep/minehead)
 "ads" = (
@@ -1175,6 +1180,7 @@
 /area/strata/ug/interior/jungle/deep/minehead)
 "adx" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "floor2"
 	},
@@ -1207,6 +1213,7 @@
 /area/strata/ug/interior/jungle/deep/structures/res)
 "adB" = (
 /obj/structure/closet/basketball,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "cyan1"
@@ -1305,7 +1312,7 @@
 "adM" = (
 /obj/structure/inflatable/popped/door,
 /obj/effect/decal/cleanable/dirt,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/floor/strata{
 	icon_state = "fake_wood"
 	},
@@ -1371,6 +1378,7 @@
 "adV" = (
 /obj/structure/filingcabinet,
 /obj/structure/window/reinforced/tinted,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "floor2"
 	},
@@ -1450,11 +1458,16 @@
 /area/strata/ag/interior/outpost/gen/bball)
 "aef" = (
 /obj/structure/inflatable/door,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/floor/strata{
 	icon_state = "fake_wood"
 	},
 /area/strata/ug/interior/jungle/deep/minehead)
+"aeg" = (
+/obj/effect/decal/cleanable/blood/gibs/core,
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata,
+/area/strata/ug/interior/outpost/jung/dorms/admin1)
 "aeh" = (
 /obj/structure/surface/table/reinforced/prison,
 /obj/structure/machinery/computer/security{
@@ -1539,6 +1552,7 @@
 /area/strata/ag/interior/dorms/hive)
 "aet" = (
 /obj/structure/closet/secure_closet/personal,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "cyan1"
@@ -1556,7 +1570,7 @@
 	},
 /area/strata/ag/interior/outpost/gen/bball)
 "aev" = (
-/obj/effect/landmark/corpsespawner/PMC,
+/obj/effect/landmark/corpsespawner/pmc,
 /turf/open/auto_turf/snow/brown_base/layer0,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "aex" = (
@@ -1696,6 +1710,7 @@
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "aeV" = (
 /obj/structure/surface/table/reinforced/prison,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/interior/plastic,
 /area/strata/ag/interior/paths/cabin_area/central)
 "aeW" = (
@@ -1834,7 +1849,7 @@
 	},
 /area/strata/ag/interior/outpost/gen/bball)
 "afk" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/closed/wall/wood,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "afl" = (
@@ -2608,6 +2623,7 @@
 /area/strata/ug/interior/jungle/deep/structures/res)
 "ahq" = (
 /obj/structure/closet,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	icon_state = "floor3"
 	},
@@ -2629,7 +2645,7 @@
 	pixel_y = -4
 	},
 /obj/effect/decal/cleanable/blood/gibs/core,
-/obj/effect/landmark/corpsespawner/security/cmb,
+/obj/effect/landmark/corpsespawner/russian,
 /turf/open/floor/strata{
 	icon_state = "multi_tiles"
 	},
@@ -2761,6 +2777,7 @@
 	dir = 1;
 	pixel_y = 20
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -2791,7 +2808,7 @@
 /area/strata/ag/interior/dorms/hive)
 "ahS" = (
 /obj/item/stack/rods,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/snow/brown_base/layer1,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "ahT" = (
@@ -3203,6 +3220,7 @@
 /area/strata/ag/exterior/paths/cabin_area)
 "ajd" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "blue1"
 	},
@@ -3289,6 +3307,7 @@
 /obj/structure/surface/table/reinforced/prison,
 /obj/item/reagent_container/food/snacks/eggplantparm,
 /obj/structure/pipes/standard/simple/hidden/cyan,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "cyan2"
@@ -3653,6 +3672,7 @@
 /area/strata/ag/interior/dorms/flight_control)
 "akp" = (
 /obj/structure/filingcabinet/chestdrawer,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -3798,6 +3818,7 @@
 /area/strata/ug/interior/jungle/deep/structures/res)
 "akM" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "floor3"
@@ -3925,6 +3946,7 @@
 "alc" = (
 /obj/structure/surface/table/reinforced/prison,
 /obj/item/reagent_container/food/snacks/meatballspagetti,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "cyan1"
@@ -4271,6 +4293,7 @@
 /obj/effect/decal/cleanable/blood{
 	layer = 3
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 8;
 	icon_state = "white_cyan2"
@@ -4421,7 +4444,7 @@
 /area/strata/ag/exterior/research_decks)
 "amA" = (
 /obj/effect/landmark/structure_spawner/setup/distress/xeno_weed_node,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/snow/brown_base/layer0,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "amF" = (
@@ -4432,7 +4455,7 @@
 /obj/structure/platform_decoration/strata/metal{
 	dir = 8
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/deep/south_dorms)
 "amK" = (
@@ -4657,6 +4680,7 @@
 	dir = 1;
 	pixel_y = 20
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -4727,6 +4751,7 @@
 /obj/structure/closet/secure_closet/security,
 /obj/item/reagent_container/food/snacks/carpmeat,
 /obj/effect/landmark/costume/commie,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -5272,6 +5297,9 @@
 "apu" = (
 /obj/structure/surface/table/reinforced/prison,
 /obj/item/reagent_container/food/drinks/bottle/sake,
+/obj/structure/machinery/computer/objective{
+	dir = 8
+	},
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -5437,6 +5465,7 @@
 "apU" = (
 /obj/structure/surface/table/reinforced/almayer_B,
 /obj/item/tool/kitchen/knife,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	icon_state = "white_cyan1"
 	},
@@ -5697,6 +5726,7 @@
 /area/strata/ag/interior/outpost/security)
 "aqE" = (
 /obj/structure/closet/secure_closet/personal,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "floor3"
 	},
@@ -5838,6 +5868,7 @@
 /area/strata/ug/interior/jungle/deep/structures/res)
 "ara" = (
 /obj/structure/closet/secure_closet/personal,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "floor2"
 	},
@@ -5967,19 +5998,21 @@
 /obj/structure/machinery/light/small{
 	dir = 8
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
 /area/strata/ag/interior/outpost/security)
 "arw" = (
 /obj/structure/bed/chair/office/light,
-/obj/effect/landmark/corpsespawner/security/cmb,
+/obj/effect/landmark/corpsespawner/russian,
 /turf/open/floor/strata{
 	icon_state = "floor3"
 	},
 /area/strata/ag/interior/outpost/security)
 "arx" = (
 /obj/structure/pipes/vents/pump,
+/obj/effect/landmark/objective_landmark/far,
 /turf/open/floor/strata{
 	icon_state = "floor3"
 	},
@@ -6042,6 +6075,7 @@
 	},
 /area/strata/ag/interior/outpost/security)
 "arF" = (
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	dir = 8;
 	icon_state = "white_cyan2"
@@ -6595,7 +6629,7 @@
 	dir = 1
 	},
 /obj/item/device/megaphone,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/asphalt/cement{
 	icon_state = "cement4"
 	},
@@ -6804,6 +6838,7 @@
 	dir = 8
 	},
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	icon_state = "floor3"
 	},
@@ -6897,7 +6932,7 @@
 	},
 /area/strata/ag/interior/outpost/canteen)
 "atY" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/asphalt/cement,
 /area/strata/ug/interior/jungle/deep/minehead)
 "atZ" = (
@@ -7276,7 +7311,7 @@
 /area/strata/ag/interior/outpost/canteen)
 "ave" = (
 /obj/structure/barricade/handrail/strata,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/asphalt/cement{
 	icon_state = "cement12"
 	},
@@ -7604,6 +7639,7 @@
 /area/strata/ag/interior/outpost/security)
 "avZ" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "floor3"
 	},
@@ -8353,6 +8389,7 @@
 /area/strata/ug/interior/jungle/deep/structures/res)
 "aye" = (
 /obj/structure/surface/rack,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -8844,7 +8881,7 @@
 /area/strata/ag/interior/dorms)
 "azH" = (
 /obj/structure/machinery/optable,
-/obj/effect/landmark/corpsespawner/security,
+/obj/effect/landmark/corpsespawner/russian,
 /obj/effect/decal/cleanable/blood,
 /obj/effect/decal/cleanable/blood{
 	icon_state = "xgib2";
@@ -8985,6 +9022,7 @@
 /area/strata/ag/interior/outpost/engi)
 "aAh" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/prison{
 	icon_state = "darkyellowfull2"
 	},
@@ -10041,6 +10079,7 @@
 "aDD" = (
 /obj/structure/closet,
 /obj/item/storage/pill_bottle/kelotane/skillless,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "multi_tiles"
 	},
@@ -11328,6 +11367,7 @@
 	tag = "icon-xgib2"
 	},
 /obj/item/tool/kitchen/utensil/pknife,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "white_cyan1"
 	},
@@ -11821,6 +11861,7 @@
 	dir = 4
 	},
 /obj/item/stack/sheet/plasteel/medium_stack,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	icon_state = "floor3"
 	},
@@ -11911,6 +11952,7 @@
 	dir = 1;
 	pixel_y = 20
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "blue1"
 	},
@@ -11958,6 +12000,7 @@
 	dir = 4;
 	tag = "icon-bulb1 (EAST)"
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 8;
 	icon_state = "white_cyan2"
@@ -12622,6 +12665,7 @@
 	pixel_y = 2
 	},
 /obj/structure/surface/table/almayer,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/asphalt/cement,
 /area/strata/ag/exterior/paths/adminext)
 "aLw" = (
@@ -13462,6 +13506,7 @@
 /area/strata/ag/exterior/research_decks)
 "aNW" = (
 /obj/structure/closet/emcloset,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "floor3"
@@ -13727,6 +13772,7 @@
 "aOG" = (
 /obj/structure/surface/table/reinforced/prison,
 /obj/item/reagent_container/food/drinks/cans/sodawater,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/prison{
 	icon_state = "darkyellowfull2"
 	},
@@ -13749,6 +13795,7 @@
 /area/strata/ag/interior/outpost/canteen)
 "aOL" = (
 /obj/structure/closet/crate/science,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -13844,6 +13891,7 @@
 /area/strata/ag/interior/dorms/south)
 "aPb" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "floor3"
 	},
@@ -13912,6 +13960,7 @@
 /obj/item/explosive/grenade/phosphorus,
 /obj/item/folder/red,
 /obj/item/ammo_box/magazine/shotgun/buckshot,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -14922,6 +14971,7 @@
 	dir = 8
 	},
 /obj/effect/decal/cleanable/blood/gibs/core,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -15594,6 +15644,7 @@
 "aUK" = (
 /obj/structure/closet/firecloset/full,
 /obj/structure/machinery/light/small,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/asphalt/cement,
 /area/strata/ag/interior/outpost/gen/foyer)
 "aUM" = (
@@ -15603,6 +15654,7 @@
 	pixel_x = -24;
 	start_charge = 0
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 8;
 	icon_state = "multi_tiles"
@@ -15664,6 +15716,7 @@
 "aUY" = (
 /obj/structure/filingcabinet,
 /obj/structure/barricade/handrail/strata,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	icon_state = "blue1"
 	},
@@ -15805,6 +15858,7 @@
 /obj/structure/barricade/handrail/strata{
 	dir = 8
 	},
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	icon_state = "blue1"
 	},
@@ -16097,6 +16151,7 @@
 /area/strata/ag/exterior/paths/adminext)
 "aWB" = (
 /obj/structure/closet/secure_closet/personal,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "cyan1"
@@ -16209,6 +16264,7 @@
 	dir = 1;
 	pixel_y = 24
 	},
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/interior/plastic,
 /area/strata/ag/interior/paths/cabin_area/central)
 "aXa" = (
@@ -16879,6 +16935,7 @@
 /obj/structure/surface/rack,
 /obj/item/book/manual/engineering_construction,
 /obj/item/book/manual/engineering_hacking,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "orange_cover"
 	},
@@ -17275,7 +17332,7 @@
 /obj/structure/bed/chair{
 	dir = 1
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/ice/layer1,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "baN" = (
@@ -17586,6 +17643,7 @@
 	dir = 1;
 	pixel_y = 24
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata,
 /area/strata/ug/interior/outpost/jung/dorms/admin4)
 "bbN" = (
@@ -17969,7 +18027,7 @@
 /turf/open/asphalt/cement,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "bdm" = (
-/obj/effect/landmark/corpsespawner/security,
+/obj/effect/landmark/corpsespawner/russian,
 /obj/structure/bed/roller,
 /turf/open/floor/strata{
 	icon_state = "floor3"
@@ -19585,6 +19643,8 @@
 	icon_state = "floor3"
 	},
 /area/strata/ag/interior/outpost/admin)
+"biM" = (
+)
 "biN" = (
 /obj/structure/platform/strata,
 /obj/structure/platform/strata{
@@ -20370,6 +20430,7 @@
 	dir = 1;
 	pixel_y = 20
 	},
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/interior/plastic,
 /area/strata/ag/interior/paths/cabin_area/central)
 "blE" = (
@@ -20629,6 +20690,7 @@
 /obj/structure/closet/bodybag,
 /obj/effect/landmark/corpsespawner/scientist,
 /obj/effect/decal/cleanable/blood,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/auto_turf/snow/brown_base/layer3,
 /area/strata/ag/exterior/paths/southresearch)
 "bmH" = (
@@ -20765,6 +20827,7 @@
 /area/strata/ag/exterior/marsh/river)
 "bnq" = (
 /obj/structure/largecrate/random,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/asphalt/cement,
 /area/strata/ag/exterior/research_decks)
 "bnr" = (
@@ -20797,6 +20860,7 @@
 /area/strata/ag/exterior/north_lz_caves)
 "bnw" = (
 /obj/structure/closet/secure_closet/engineering_electrical,
+/obj/effect/landmark/objective_landmark/far,
 /turf/open/floor/strata{
 	icon_state = "orange_cover"
 	},
@@ -20981,6 +21045,7 @@
 "bob" = (
 /obj/structure/closet/secure_closet/medical2,
 /obj/item/clothing/gloves/latex,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/interior/plastic,
 /area/strata/ag/interior/paths/cabin_area/central)
 "boc" = (
@@ -21071,6 +21136,7 @@
 	dir = 4;
 	tag = "icon-bulb1 (EAST)"
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "blue1"
 	},
@@ -21266,6 +21332,7 @@
 "boQ" = (
 /obj/effect/decal/cleanable/blood/gibs/limb,
 /obj/structure/surface/rack,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "floor3"
@@ -21942,6 +22009,7 @@
 /area/strata/ag/exterior/paths/southresearch)
 "brr" = (
 /obj/structure/closet,
+/obj/effect/landmark/objective_landmark/far,
 /turf/open/floor/strata{
 	dir = 8;
 	icon_state = "white_cyan2"
@@ -21972,6 +22040,7 @@
 /area/strata/ag/interior/administration)
 "brw" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "blue1"
 	},
@@ -22391,6 +22460,11 @@
 /obj/structure/platform/strata{
 	dir = 8
 	},
+/obj/structure/machinery/power/apc{
+	dir = 1;
+	start_charge = 0;
+	pixel_x = -29
+	},
 /turf/open/auto_turf/snow/brown_base/layer2,
 /area/strata/ag/exterior/marsh/crash)
 "bsU" = (
@@ -22537,6 +22611,7 @@
 /area/strata/ag/exterior/paths/southresearch)
 "btx" = (
 /obj/effect/decal/cleanable/blood,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/auto_turf/snow/brown_base/layer1,
 /area/strata/ag/exterior/paths/southresearch)
 "bty" = (
@@ -22629,7 +22704,7 @@
 /obj/structure/platform/strata/metal{
 	dir = 8
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "btO" = (
@@ -23027,6 +23102,7 @@
 /area/strata/ag/interior/outpost/med)
 "bvj" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "cyan1"
@@ -23991,6 +24067,7 @@
 /obj/structure/closet/secure_closet/medical3{
 	req_access = null
 	},
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "cyan1"
@@ -24357,7 +24434,7 @@
 /area/strata/ag/interior/outpost/gen/bball)
 "bBr" = (
 /obj/structure/flora/bush/ausbushes/genericbush,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "bBB" = (
@@ -24463,6 +24540,7 @@
 /obj/structure/machinery/light/small{
 	dir = 1
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "floor2"
 	},
@@ -24679,6 +24757,7 @@
 "bDt" = (
 /obj/structure/filingcabinet,
 /obj/structure/machinery/light/small,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "orange_cover"
 	},
@@ -24734,7 +24813,7 @@
 /obj/structure/platform_decoration/strata/metal{
 	dir = 1
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "bDE" = (
@@ -24935,6 +25014,7 @@
 	dir = 4;
 	pixel_x = -24
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "blue1"
 	},
@@ -25063,6 +25143,7 @@
 /area/strata/ag/interior/outpost/med)
 "bGy" = (
 /obj/structure/surface/rack,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	icon_state = "floor2"
 	},
@@ -25496,11 +25577,13 @@
 /area/strata/ug/interior/jungle/deep/minehead)
 "bJE" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata,
 /area/strata/ag/interior/administration)
 "bJF" = (
 /obj/structure/filingcabinet,
 /obj/item/pamphlet/skill/medical,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata,
 /area/strata/ag/interior/administration)
 "bJG" = (
@@ -25644,12 +25727,13 @@
 /area/strata/ag/interior/outpost/med)
 "bKM" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	icon_state = "floor2"
 	},
 /area/strata/ag/interior/outpost/med)
 "bKN" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/closed/wall/wood,
 /area/strata/ag/interior/paths/cabin_area/central)
 "bKO" = (
@@ -25685,6 +25769,7 @@
 	dir = 4;
 	tag = "icon-bulb1 (EAST)"
 	},
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	icon_state = "floor2"
 	},
@@ -25862,6 +25947,7 @@
 	dir = 8;
 	pixel_x = -24
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "floor3"
@@ -26026,6 +26112,7 @@
 	dir = 8
 	},
 /obj/item/storage/pill_bottle/antitox/skillless,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 8;
 	icon_state = "multi_tiles"
@@ -26073,6 +26160,7 @@
 	dir = 4;
 	tag = "icon-bulb1 (EAST)"
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "floor2"
 	},
@@ -26571,7 +26659,7 @@
 /obj/structure/toilet{
 	dir = 4
 	},
-/obj/effect/landmark/corpsespawner/security,
+/obj/effect/landmark/corpsespawner/russian,
 /turf/open/floor/strata{
 	dir = 8;
 	icon_state = "white_cyan2"
@@ -26734,7 +26822,7 @@
 	},
 /area/strata/ag/interior/research_decks/security)
 "bUX" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/closed/wall/strata_outpost/reinforced/hull,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "bUY" = (
@@ -27258,6 +27346,7 @@
 /area/strata/ag/exterior/research_decks)
 "bYR" = (
 /obj/structure/surface/table/reinforced/prison,
+/obj/structure/machinery/computer/objective,
 /turf/open/floor/strata{
 	icon_state = "floor3"
 	},
@@ -27644,6 +27733,9 @@
 /obj/item/reagent_container/food/drinks/cans/waterbottle,
 /obj/item/reagent_container/food/drinks/cans/waterbottle,
 /obj/item/reagent_container/food/drinks/cans/waterbottle,
+/obj/structure/machinery/computer/objective{
+	dir = 8
+	},
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "cyan1"
@@ -27879,6 +27971,7 @@
 /obj/structure/machinery/light/small{
 	dir = 8
 	},
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -28122,6 +28215,7 @@
 /area/strata/ag/interior/outpost/med)
 "ceZ" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -28390,6 +28484,7 @@
 /obj/item/dogtag,
 /obj/item/clothing/suit/armor/riot,
 /obj/item/weapon/gun/rifle/type71/carbine,
+/obj/effect/landmark/objective_landmark/far,
 /turf/open/floor/strata{
 	dir = 8;
 	icon_state = "white_cyan2"
@@ -29108,6 +29203,7 @@
 	pixel_x = 8;
 	pixel_y = 6
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/almayer{
 	icon_state = "plate";
 	tag = "icon-sterile"
@@ -29190,6 +29286,7 @@
 /area/strata/ag/interior/outpost/canteen)
 "clU" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata,
 /area/strata/ag/interior/dorms/south)
 "clW" = (
@@ -29495,6 +29592,7 @@
 /area/strata/ag/interior/dorms/flight_control)
 "coa" = (
 /obj/structure/filingcabinet/filingcabinet,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -29716,6 +29814,7 @@
 "cpE" = (
 /obj/structure/filingcabinet/chestdrawer,
 /obj/structure/pipes/standard/simple/hidden/cyan,
+/obj/effect/landmark/objective_landmark/far,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -29980,7 +30079,7 @@
 	},
 /area/strata/ug/interior/outpost/jung/dorms/admin4)
 "csk" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -30094,6 +30193,7 @@
 /area/strata/ag/interior/outpost/engi/drome)
 "csT" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	icon_state = "fake_wood"
 	},
@@ -30145,7 +30245,7 @@
 /obj/structure/platform/strata/metal{
 	dir = 8
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "ctl" = (
@@ -30248,7 +30348,7 @@
 /obj/structure/platform_decoration/strata/metal{
 	dir = 4
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "ctI" = (
@@ -30275,14 +30375,14 @@
 /obj/structure/platform_decoration/strata/metal{
 	dir = 8
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "cuc" = (
 /obj/structure/platform/strata/metal{
 	dir = 1
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "cui" = (
@@ -30453,7 +30553,7 @@
 /obj/structure/platform_decoration/strata/metal{
 	dir = 4
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "cwd" = (
@@ -30652,6 +30752,12 @@
 	},
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/east_engi)
+"cDt" = (
+/obj/effect/landmark/objective_landmark/science,
+/turf/open/floor/strata{
+	icon_state = "purp2"
+	},
+/area/strata/ug/interior/jungle/deep/structures/engi)
 "cDL" = (
 /obj/item/lightstick/red{
 	anchored = 1;
@@ -30696,6 +30802,14 @@
 /obj/structure/largecrate/random/barrel/yellow,
 /turf/open/floor/strata,
 /area/strata/ag/interior/tcomms)
+"cGL" = (
+/obj/structure/closet/bodybag,
+/obj/effect/landmark/objective_landmark/medium,
+/turf/open/floor/strata{
+	dir = 4;
+	icon_state = "cyan3"
+	},
+/area/strata/ag/interior/outpost/med)
 "cIM" = (
 /obj/structure/machinery/door/airlock/prison{
 	dir = 1;
@@ -30811,6 +30925,9 @@
 /area/strata/ag/interior/outpost/engi/drome)
 "cTN" = (
 /obj/structure/surface/table/reinforced/prison,
+/obj/structure/machinery/computer/objective{
+	dir = 8
+	},
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -30907,6 +31024,14 @@
 	},
 /turf/open/floor/strata,
 /area/strata/ug/interior/outpost/jung/dorms/admin1)
+"dcX" = (
+/obj/structure/surface/rack,
+/obj/item/stack/folding_barricade,
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata{
+	icon_state = "red1"
+	},
+/area/strata/ag/interior/research_decks/security)
 "ddp" = (
 /turf/closed/wall/strata_outpost/reinforced,
 /area/strata/ag/interior/dorms/hive)
@@ -31170,6 +31295,14 @@
 	},
 /turf/open/auto_turf/ice/layer1,
 /area/strata/ag/exterior/marsh)
+"dDr" = (
+/obj/structure/bed/chair,
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata{
+	dir = 4;
+	icon_state = "white_cyan1"
+	},
+/area/strata/ag/interior/outpost/canteen/lower_cafeteria)
 "dDW" = (
 /obj/structure/platform/strata{
 	dir = 8
@@ -31192,6 +31325,7 @@
 /obj/structure/machinery/light/small{
 	dir = 1
 	},
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -31384,6 +31518,10 @@
 "dWm" = (
 /turf/closed/wall/strata_outpost/reinforced,
 /area/strata/ag/interior/outpost/gen/bball)
+"dXc" = (
+/obj/effect/landmark/static_comms/net_one,
+/turf/open/auto_turf/snow/brown_base/layer0,
+/area/strata/ag/exterior/paths/dorms_quad)
 "dXQ" = (
 /turf/open/floor/strata,
 /area/strata/ug/interior/outpost/jung/dorms/med1)
@@ -31420,7 +31558,7 @@
 	icon_state = "p_stair_ew_full_cap";
 	layer = 3.5
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "eaO" = (
@@ -31591,6 +31729,9 @@
 	icon_state = "darkyellowfull2"
 	},
 /area/strata/ag/exterior/research_decks)
+"eqV" = (
+/turf/closed/wall/wood,
+/area/strata/ag/exterior)
 "era" = (
 /obj/structure/machinery/power/apc{
 	dir = 1;
@@ -31610,6 +31751,9 @@
 /obj/structure/barricade/snow,
 /turf/open/auto_turf/ice/layer2,
 /area/strata/ag/exterior/north_lz_caves)
+"esJ" = (
+/turf/open/auto_turf/snow/brown_base/layer4,
+/area/strata/ag/exterior)
 "euc" = (
 /obj/structure/platform_decoration/strata{
 	dir = 4
@@ -31636,6 +31780,14 @@
 /obj/structure/machinery/camera/autoname/lz_camera,
 /turf/open/floor/plating,
 /area/strata/ag/exterior/landingzone_2)
+"exx" = (
+/obj/structure/pipes/standard/simple/hidden/cyan,
+/obj/effect/landmark/objective_landmark/medium,
+/turf/open/floor/strata{
+	dir = 10;
+	icon_state = "multi_tiles"
+	},
+/area/strata/ag/exterior/research_decks)
 "exO" = (
 /turf/open/floor/strata{
 	icon_state = "multi_tiles"
@@ -31647,6 +31799,7 @@
 	},
 /obj/structure/surface/table/reinforced/prison,
 /obj/item/storage/fancy/vials,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	icon_state = "purp2"
 	},
@@ -31850,6 +32003,7 @@
 	dir = 1;
 	pixel_y = 20
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -32014,6 +32168,12 @@
 	icon_state = "orange_cover"
 	},
 /area/strata/ag/interior/tcomms)
+"fbG" = (
+/obj/effect/landmark/objective_landmark/science,
+/turf/open/floor/strata{
+	icon_state = "floor2"
+	},
+/area/strata/ag/interior/outpost/med)
 "fch" = (
 /obj/structure/largecrate/random,
 /turf/open/auto_turf/snow/brown_base/layer0,
@@ -32099,7 +32259,7 @@
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/platform/east/scrub)
 "fln" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/closed/wall/strata_outpost/reinforced,
 /area/strata/ag/interior/outpost/gen/bball/nest)
 "flK" = (
@@ -32128,7 +32288,7 @@
 /obj/structure/flora/grass/tallgrass/ice/corner{
 	dir = 9
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/snow/brown_base/layer1,
 /area/strata/ag/exterior/paths/cabin_area)
 "fre" = (
@@ -32183,6 +32343,17 @@
 /obj/structure/flora/grass/tallgrass/ice,
 /turf/open/auto_turf/ice/layer1,
 /area/strata/ag/exterior/marsh/center)
+"ftO" = (
+/obj/structure/filingcabinet/filingcabinet,
+/obj/structure/machinery/light/small{
+	dir = 1;
+	pixel_y = 20
+	},
+/obj/effect/landmark/objective_landmark/far,
+/turf/open/floor/strata{
+	icon_state = "red1"
+	},
+/area/strata/ag/interior/dorms/flight_control)
 "fuX" = (
 /obj/effect/decal/cleanable/blood/gibs/limb,
 /turf/open/auto_turf/strata_grass/layer0,
@@ -32228,7 +32399,7 @@
 	},
 /area/strata/ug/interior/outpost/jung/dorms/admin3)
 "fyP" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/closed/wall/strata_outpost,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "fzn" = (
@@ -32332,11 +32503,12 @@
 /turf/open/auto_turf/ice/layer1,
 /area/strata/ag/exterior/marsh/crash)
 "fDG" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/snow/brown_base/layer1,
 /area/strata/ag/exterior/paths/cabin_area)
 "fEW" = (
 /obj/effect/decal/cleanable/blood/oil,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/asphalt/cement,
 /area/strata/ag/exterior/shed_five_caves)
 "fFy" = (
@@ -32397,6 +32569,7 @@
 /obj/item/explosive/grenade/custom/cleaner,
 /obj/item/explosive/grenade/custom/cleaner,
 /obj/item/storage/pill_bottle/bicaridine/skillless,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -32502,6 +32675,13 @@
 	icon_state = "orange_tile"
 	},
 /area/strata/ag/interior/dorms)
+"fXU" = (
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/almayer{
+	icon_state = "plate";
+	tag = "icon-sterile"
+	},
+/area/strata/ag/exterior/marsh/crash)
 "fXV" = (
 /obj/structure/pipes/vents/pump{
 	dir = 1
@@ -32546,12 +32726,9 @@
 /obj/structure/largecrate/random,
 /turf/open/auto_turf/snow/brown_base/layer1,
 /area/strata/ag/interior/outpost/engi/drome)
-"gbI" = (
-/obj/effect/blocker/sorokyne_cold_water,
-/obj/effect/blocker/sorokyne_cold_water,
-/obj/structure/platform_decoration/strata,
-/turf/open/gm/river,
-/area/strata/ag/exterior/nearlz2)
+"gaV" = (
+/turf/closed/wall/strata_outpost/reinforced/hull,
+/area/strata/ag/exterior/marsh/crash)
 "gbS" = (
 /obj/structure/machinery/light/small{
 	dir = 4;
@@ -32613,6 +32790,7 @@
 /area/strata/ug/interior/jungle/deep/south_dorms)
 "ggr" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "floor3"
@@ -32791,6 +32969,10 @@
 	},
 /turf/open/auto_turf/ice/layer0,
 /area/strata/ag/exterior/marsh)
+"gpr" = (
+/obj/effect/landmark/objective_landmark/medium,
+/turf/open/asphalt/cement,
+/area/strata/ag/interior/tcomms)
 "gpO" = (
 /obj/structure/bed/chair/office/light{
 	dir = 1
@@ -32853,7 +33035,7 @@
 	},
 /area/strata/ug/interior/outpost/jung/dorms/med2)
 "grP" = (
-/obj/effect/landmark/corpsespawner/security/lawyer,
+/obj/effect/landmark/corpsespawner/security/liaison,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "white_cyan1"
@@ -33094,6 +33276,9 @@
 /obj/structure/sign/nosmoking_1,
 /turf/closed/wall/strata_outpost/reinforced,
 /area/strata/ag/interior/tcomms)
+"gSz" = (
+/turf/open/floor/plating,
+/area/strata/ag/exterior/marsh/center)
 "gSR" = (
 /turf/open/gm/coast{
 	dir = 1;
@@ -33140,6 +33325,11 @@
 	icon_state = "multi_tiles"
 	},
 /area/strata/ag/interior/outpost/engi/drome)
+"gTZ" = (
+/obj/effect/decal/strata_decals/catwalk/prison,
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/greengrid,
+/area/strata/ag/interior/outpost/engi)
 "gUj" = (
 /obj/item/storage/toolbox/electrical,
 /obj/structure/surface/rack,
@@ -33223,6 +33413,14 @@
 	icon_state = "darkyellowfull2"
 	},
 /area/strata/ag/interior/outpost/engi)
+"haU" = (
+/obj/structure/machinery/power/apc{
+	dir = 4;
+	pixel_x = 28;
+	start_charge = 0
+	},
+/turf/open/auto_turf/snow/brown_base/layer1,
+/area/strata/ag/exterior/marsh/crash)
 "haZ" = (
 /obj/structure/surface/table/reinforced/prison,
 /obj/structure/machinery/microwave,
@@ -33281,6 +33479,7 @@
 /obj/structure/mirror{
 	pixel_x = -29
 	},
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	dir = 8;
 	icon_state = "white_cyan2"
@@ -33347,9 +33546,17 @@
 /turf/open/auto_turf/ice/layer1,
 /area/strata/ag/exterior/nearlz2)
 "hmw" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/ice/layer1,
 /area/strata/ag/interior/outpost/gen/bball/nest)
+"hmA" = (
+/obj/structure/closet/secure_closet/personal,
+/obj/item/storage/secure/briefcase,
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata{
+	icon_state = "red1"
+	},
+/area/strata/ug/interior/outpost/jung/dorms/sec2)
 "hni" = (
 /obj/structure/surface/table/reinforced/prison,
 /obj/item/storage/large_holster/machete/full,
@@ -33437,7 +33644,7 @@
 /obj/structure/platform/strata/metal{
 	dir = 1
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/deep/south_dorms)
 "hwI" = (
@@ -33455,7 +33662,7 @@
 	},
 /area/strata/ag/interior/outpost/canteen)
 "hyu" = (
-/obj/effect/landmark/corpsespawner/security,
+/obj/effect/landmark/corpsespawner/russian,
 /turf/open/auto_turf/strata_grass/layer0_mud,
 /area/strata/ug/interior/jungle/deep/east_engi)
 "hzb" = (
@@ -33538,7 +33745,7 @@
 /area/strata/ag/exterior/marsh/water)
 "hHm" = (
 /obj/item/stack/rods,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -33548,6 +33755,15 @@
 /obj/effect/landmark/structure_spawner/xvx_hive/xeno_core,
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/tearlake)
+"hHO" = (
+/obj/structure/barricade/handrail/strata{
+	dir = 1
+	},
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata{
+	icon_state = "floor3"
+	},
+/area/strata/ag/interior/outpost/engi)
 "hIb" = (
 /obj/structure/largecrate/random/secure,
 /turf/open/floor/almayer{
@@ -33627,6 +33843,10 @@
 /obj/structure/pipes/standard/simple/hidden/cyan,
 /turf/open/floor/greengrid,
 /area/strata/ag/exterior/research_decks)
+"hQP" = (
+/obj/effect/landmark/static_comms/net_one,
+/turf/open/auto_turf/snow/brown_base/layer0,
+/area/strata/ag/exterior/marsh/crash)
 "hTU" = (
 /obj/structure/reagent_dispensers/water_cooler/stacks,
 /turf/open/floor/strata{
@@ -33685,6 +33905,17 @@
 	},
 /turf/open/auto_turf/ice/layer2,
 /area/strata/ag/exterior/nearlz2)
+"ibE" = (
+/obj/structure/machinery/power/apc{
+	dir = 8;
+	pixel_x = -23;
+	start_charge = 0
+	},
+/turf/open/floor/strata{
+	dir = 4;
+	icon_state = "floor3"
+	},
+/area/strata/ag/exterior/vanyard)
 "ibH" = (
 /obj/item/trash/pistachios,
 /obj/effect/decal/cleanable/blood/gibs/core,
@@ -33808,7 +34039,7 @@
 "ioz" = (
 /obj/structure/bed/nest,
 /obj/effect/decal/cleanable/blood/gibs/core,
-/obj/effect/landmark/corpsespawner/PMC,
+/obj/effect/landmark/corpsespawner/pmc,
 /turf/open/floor/strata{
 	icon_state = "multi_tiles"
 	},
@@ -34000,7 +34231,7 @@
 "izc" = (
 /obj/structure/bed/nest,
 /obj/effect/decal/cleanable/blood/gibs/core,
-/obj/effect/landmark/corpsespawner/security/cmb,
+/obj/effect/landmark/corpsespawner/russian,
 /turf/open/floor/strata{
 	icon_state = "multi_tiles"
 	},
@@ -34039,6 +34270,10 @@
 	tag = "icon-sterile"
 	},
 /area/strata/ag/interior/outpost/engi/drome/shuttle)
+"iBZ" = (
+/obj/effect/landmark/objective_landmark/medium,
+/turf/open/floor/interior/plastic,
+/area/strata/ag/interior/paths/cabin_area/central)
 "iCt" = (
 /obj/effect/decal/strata_decals/catwalk/prison,
 /obj/structure/machinery/light/small{
@@ -34078,7 +34313,7 @@
 /turf/open/floor/strata,
 /area/strata/ug/interior/outpost/jung/dorms/admin2)
 "iHZ" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/deep/south_dorms)
 "iIz" = (
@@ -34091,7 +34326,7 @@
 /turf/open/gm/river,
 /area/strata/ag/exterior/marsh/center)
 "iJh" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/snow/brown_base/layer3,
 /area/strata/ag/exterior/paths/cabin_area)
 "iJp" = (
@@ -34112,7 +34347,7 @@
 /turf/open/gm/river,
 /area/strata/ag/exterior/marsh/center)
 "iKI" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/snow/brown_base/layer0,
 /area/strata/ag/exterior/paths/cabin_area)
 "iKW" = (
@@ -34199,6 +34434,13 @@
 	icon_state = "orange_cover"
 	},
 /area/strata/ag/exterior/vanyard)
+"iQt" = (
+/obj/structure/surface/table/reinforced/prison,
+/obj/effect/landmark/objective_landmark/science,
+/turf/open/floor/strata{
+	icon_state = "blue1"
+	},
+/area/strata/ag/interior/outpost/admin)
 "iQS" = (
 /obj/effect/blocker/sorokyne_cold_water,
 /obj/structure/barricade/handrail/strata{
@@ -34234,6 +34476,16 @@
 "iUK" = (
 /turf/open/floor/plating,
 /area/shuttle/drop2/strata)
+"iUN" = (
+/obj/structure/filingcabinet,
+/obj/structure/barricade/handrail/strata{
+	dir = 8
+	},
+/obj/effect/landmark/objective_landmark/far,
+/turf/open/floor/strata{
+	icon_state = "blue1"
+	},
+/area/strata/ag/interior/outpost/admin)
 "iVZ" = (
 /obj/structure/surface/table/reinforced/prison,
 /obj/structure/machinery/computer/security{
@@ -34274,7 +34526,7 @@
 	dir = 4;
 	icon_state = "p_stair_full"
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "iZa" = (
@@ -34283,6 +34535,7 @@
 	dir = 8
 	},
 /obj/item/storage/fancy/vials,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "cyan1"
@@ -34295,6 +34548,7 @@
 /area/strata/ug/interior/jungle/platform/east/scrub)
 "iZw" = (
 /obj/structure/closet/firecloset/full,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -34346,6 +34600,14 @@
 	icon_state = "red1"
 	},
 /area/strata/ug/interior/jungle/deep/structures/engi)
+"jeZ" = (
+/obj/structure/surface/rack,
+/obj/effect/landmark/objective_landmark/medium,
+/turf/open/floor/strata{
+	dir = 10;
+	icon_state = "multi_tiles"
+	},
+/area/strata/ug/interior/jungle/deep/structures/res)
 "jgX" = (
 /obj/effect/decal/strata_decals/catwalk/prison,
 /obj/structure/barricade/handrail/strata{
@@ -34421,6 +34683,7 @@
 	},
 /obj/item/storage/pill_bottle/imidazoline,
 /obj/item/storage/pill_bottle/imidazoline,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -34471,7 +34734,7 @@
 /turf/open/auto_turf/ice/layer1,
 /area/strata/ag/exterior/paths/southresearch)
 "jrA" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/snow/brown_base/layer4,
 /area/strata/ag/exterior/paths/cabin_area)
 "jrU" = (
@@ -34479,6 +34742,12 @@
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "floor3"
+	},
+/area/strata/ag/interior/outpost/med)
+"jsd" = (
+/obj/structure/machinery/cm_vending/sorted/medical/no_access,
+/turf/open/floor/strata{
+	icon_state = "floor2"
 	},
 /area/strata/ag/interior/outpost/med)
 "jso" = (
@@ -34650,6 +34919,10 @@
 	icon_state = "cyan1"
 	},
 /area/strata/ag/interior/outpost/engi/drome)
+"jFO" = (
+/obj/effect/landmark/static_comms/net_two,
+/turf/open/auto_turf/snow/brown_base/layer0,
+/area/strata/ag/exterior/marsh/center)
 "jIz" = (
 /obj/structure/machinery/weather_siren{
 	dir = 1;
@@ -35017,6 +35290,7 @@
 /obj/item/reagent_container/food/drinks/cans/waterbottle,
 /obj/item/reagent_container/food/drinks/cans/waterbottle,
 /obj/item/reagent_container/food/drinks/cans/waterbottle,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	icon_state = "blue1"
 	},
@@ -35098,9 +35372,30 @@
 /obj/structure/flora/bush/ausbushes/grassybush,
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/exterior/jungle/deep/carplake_center)
+"kwu" = (
+/obj/structure/pipes/standard/simple/hidden/cyan,
+/obj/effect/landmark/static_comms/net_two,
+/turf/open/asphalt/cement{
+	icon_state = "cement3"
+	},
+/area/strata/ag/exterior/tcomms/tcomms_deck)
+"kwU" = (
+/obj/structure/platform/strata/metal{
+	dir = 1
+	},
+/obj/structure/machinery/power/apc{
+	dir = 1;
+	pixel_y = 24;
+	start_charge = 0
+	},
+/turf/open/floor/plating,
+/area/strata/ag/exterior/paths/dorms_quad)
 "kxF" = (
 /obj/effect/blocker/sorokyne_cold_water,
 /obj/effect/blocker/sorokyne_cold_water,
+/obj/structure/platform_decoration/strata{
+	dir = 4
+	},
 /turf/open/gm/river,
 /area/strata/ag/exterior/nearlz2)
 "kxN" = (
@@ -35175,6 +35470,7 @@
 	icon_state = "xgib6";
 	tag = "icon-xgib6"
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "blue1"
 	},
@@ -35392,7 +35688,7 @@
 /obj/structure/flora/grass/tallgrass/ice/corner{
 	dir = 4
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/snow/brown_base/layer3,
 /area/strata/ag/exterior/paths/cabin_area)
 "kXR" = (
@@ -35411,7 +35707,7 @@
 /area/strata/ag/exterior/marsh)
 "kYl" = (
 /obj/structure/flora/grass/tallgrass/ice,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/snow/brown_base/layer3,
 /area/strata/ag/exterior/paths/cabin_area)
 "kYx" = (
@@ -35540,12 +35836,13 @@
 /area/strata/ug/interior/outpost/jung/dorms/admin3)
 "lkl" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/far,
 /turf/open/floor/strata{
 	icon_state = "purp1"
 	},
 /area/strata/ug/interior/jungle/deep/structures/engi)
 "lkB" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/closed/wall/wood,
 /area/strata/ug/interior/jungle/deep/minehead)
 "llC" = (
@@ -35568,7 +35865,7 @@
 	},
 /area/strata/ug/interior/outpost/jung/dorms/sec1)
 "lmv" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "lmV" = (
@@ -35577,6 +35874,12 @@
 "lno" = (
 /turf/closed/wall/strata_outpost,
 /area/strata/ug/interior/jungle/deep/south_engi)
+"loN" = (
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata{
+	icon_state = "fake_wood"
+	},
+/area/strata/ug/interior/jungle/deep/minehead)
 "loP" = (
 /obj/structure/filingcabinet,
 /turf/open/floor/strata{
@@ -35896,6 +36199,7 @@
 /area/strata/ag/exterior/marsh)
 "lPk" = (
 /obj/structure/closet/secure_closet/security,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -36069,6 +36373,14 @@
 	icon_state = "orange_cover"
 	},
 /area/strata/ag/interior/tcomms)
+"mdK" = (
+/obj/structure/closet/secure_closet/security_empty,
+/obj/item/storage/belt/security,
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata{
+	icon_state = "floor2"
+	},
+/area/strata/ug/interior/jungle/deep/structures/res)
 "mem" = (
 /obj/structure/stairs/perspective{
 	color = "#6e6e6e";
@@ -36338,6 +36650,7 @@
 /area/strata/ag/exterior/paths/north_outpost)
 "msC" = (
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "floor3"
@@ -36591,6 +36904,19 @@
 	icon_state = "multi_tiles"
 	},
 /area/strata/ug/interior/jungle/platform/east/scrub)
+"mOj" = (
+/obj/structure/surface/rack,
+/obj/item/ammo_magazine/rifle/type71,
+/obj/structure/machinery/light/small{
+	dir = 4;
+	tag = "icon-bulb1 (EAST)"
+	},
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata{
+	dir = 10;
+	icon_state = "multi_tiles"
+	},
+/area/strata/ug/interior/jungle/deep/structures/res)
 "mOR" = (
 /obj/effect/landmark/structure_spawner/xvx_hive/xeno_core,
 /turf/open/auto_turf/strata_grass/layer1,
@@ -36673,6 +36999,7 @@
 	pixel_y = 24
 	},
 /obj/effect/decal/cleanable/blood,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	dir = 8;
 	icon_state = "white_cyan2"
@@ -36819,6 +37146,16 @@
 	icon_state = "beachcorner"
 	},
 /area/strata/ug/interior/jungle/deep/east_dorms)
+"npy" = (
+/obj/structure/closet/secure_closet/medical3{
+	req_access = null
+	},
+/obj/effect/landmark/objective_landmark/science,
+/turf/open/floor/strata{
+	dir = 10;
+	icon_state = "multi_tiles"
+	},
+/area/strata/ag/interior/outpost/admin)
 "npS" = (
 /turf/open/floor/strata{
 	icon_state = "orange_cover"
@@ -36844,7 +37181,7 @@
 /turf/open/floor/plating,
 /area/strata/ag/interior/tcomms)
 "nqX" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/minehead)
 "nrc" = (
@@ -36961,6 +37298,7 @@
 /obj/structure/machinery/light/small{
 	dir = 8
 	},
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "floor3"
@@ -37016,6 +37354,14 @@
 	},
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/east_dorms)
+"nOE" = (
+/obj/structure/closet/secure_closet/personal,
+/obj/effect/landmark/objective_landmark/far,
+/turf/open/floor/strata{
+	dir = 4;
+	icon_state = "cyan1"
+	},
+/area/strata/ag/interior/outpost/gen/bball)
 "nPb" = (
 /turf/open/gm/coast{
 	dir = 1;
@@ -37235,6 +37581,15 @@
 /obj/structure/pipes/standard/simple/hidden/cyan,
 /turf/open/floor/strata,
 /area/strata/ag/interior/landingzone_checkpoint)
+"ogL" = (
+/obj/structure/surface/rack,
+/obj/item/storage/firstaid/regular,
+/obj/item/storage/firstaid/regular,
+/obj/effect/landmark/objective_landmark/science,
+/turf/open/floor/strata{
+	icon_state = "purp2"
+	},
+/area/strata/ug/interior/jungle/deep/structures/engi)
 "oiF" = (
 /obj/structure/machinery/light/small{
 	dir = 1
@@ -37413,7 +37768,7 @@
 /obj/structure/flora/grass/tallgrass/jungle/corner{
 	dir = 1
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/south_dorms)
 "oFG" = (
@@ -37440,11 +37795,19 @@
 "oIi" = (
 /obj/structure/filingcabinet,
 /obj/structure/pipes/standard/simple/hidden/cyan,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "floor3"
 	},
 /area/strata/ag/interior/tcomms)
+"oIv" = (
+/obj/structure/closet/secure_closet/engineering_personal,
+/obj/effect/landmark/objective_landmark/medium,
+/turf/open/floor/strata{
+	icon_state = "orange_cover"
+	},
+/area/strata/ag/interior/outpost/engi/drome)
 "oIx" = (
 /obj/structure/closet/secure_closet/personal,
 /obj/effect/spawner/random/tool,
@@ -37503,6 +37866,7 @@
 	dir = 8;
 	tag = "icon-toilet00 (WEST)"
 	},
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	icon_state = "orange_cover"
 	},
@@ -37650,6 +38014,7 @@
 /obj/structure/surface/table/reinforced/prison,
 /obj/effect/decal/cleanable/blood,
 /obj/effect/decal/cleanable/blood/gibs/core,
+/obj/effect/landmark/objective_landmark/science,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "cyan1"
@@ -38134,6 +38499,14 @@
 	icon_state = "platebot"
 	},
 /area/strata/ag/interior/outpost/engi/drome/shuttle)
+"pGf" = (
+/obj/structure/machinery/power/apc{
+	dir = 8;
+	pixel_x = -23;
+	start_charge = 0
+	},
+/turf/open/auto_turf/snow/brown_base/layer2,
+/area/strata/ag/exterior/tcomms/tcomms_deck)
 "pGt" = (
 /turf/closed/shuttle/ert{
 	icon_state = "rightengine_3";
@@ -38257,11 +38630,11 @@
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/deep/east_engi)
 "pPk" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0_mud_alt,
 /area/strata/ug/interior/jungle/deep/minehead)
 "pQH" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/closed/wall/strata_outpost,
 /area/strata/ug/interior/jungle/platform/east/scrub)
 "pRj" = (
@@ -38562,6 +38935,11 @@
 	icon_state = "cement3"
 	},
 /area/strata/ug/interior/jungle/platform/east/scrub)
+"qsI" = (
+/obj/effect/decal/strata_decals/catwalk/prison,
+/obj/effect/landmark/objective_landmark/far,
+/turf/open/floor/greengrid,
+/area/strata/ug/interior/jungle/deep/structures/engi)
 "qsZ" = (
 /turf/open/floor/strata{
 	dir = 4;
@@ -38628,6 +39006,13 @@
 	tag = "icon-beach (SOUTHEAST)"
 	},
 /area/strata/ug/interior/jungle/deep/tearlake)
+"qxt" = (
+/obj/structure/machinery/cm_vending/sorted/medical/no_access,
+/turf/open/floor/strata{
+	dir = 4;
+	icon_state = "white_cyan3"
+	},
+/area/strata/ag/interior/outpost/med)
 "qxD" = (
 /obj/structure/machinery/weather_siren{
 	dir = 4;
@@ -38827,7 +39212,7 @@
 	dir = 1;
 	pixel_y = 20
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -38849,8 +39234,19 @@
 /obj/effect/decal/cleanable/blood/gibs/down,
 /obj/effect/decal/cleanable/blood/gibs/body,
 /obj/effect/decal/cleanable/blood/gibs/core,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata,
 /area/strata/ag/exterior/research_decks)
+"qRj" = (
+/obj/structure/filingcabinet,
+/obj/structure/barricade/handrail/strata{
+	dir = 8
+	},
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata{
+	icon_state = "blue1"
+	},
+/area/strata/ag/interior/outpost/admin)
 "qSo" = (
 /turf/closed/shuttle/ert{
 	icon_state = "upp4"
@@ -38922,6 +39318,17 @@
 	icon_state = "floor2"
 	},
 /area/strata/ag/interior/restricted/devroom)
+"qWD" = (
+/turf/closed/wall/strata_ice/dirty,
+/area/strata/ag/interior/restricted)
+"qWQ" = (
+/obj/structure/surface/rack,
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata{
+	dir = 10;
+	icon_state = "multi_tiles"
+	},
+/area/strata/ug/interior/jungle/deep/structures/res)
 "qXN" = (
 /obj/structure/platform/strata/metal{
 	dir = 4
@@ -38960,6 +39367,13 @@
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/strata,
 /area/strata/ag/exterior/research_decks)
+"rba" = (
+/obj/structure/closet,
+/obj/effect/landmark/objective_landmark/far,
+/turf/open/floor/strata{
+	icon_state = "floor3"
+	},
+/area/strata/ag/interior/dorms/flight_control)
 "rbi" = (
 /obj/structure/pipes/standard/simple/hidden/cyan{
 	dir = 6
@@ -39135,7 +39549,7 @@
 /area/strata/ag/interior/tcomms)
 "rok" = (
 /obj/effect/landmark/structure_spawner/setup/distress/xeno_weed_node,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0_mud_alt,
 /area/strata/ug/interior/jungle/deep/minehead)
 "roI" = (
@@ -39186,6 +39600,11 @@
 "rtW" = (
 /turf/closed/wall/strata_outpost/reinforced,
 /area/strata/ag/interior/nearlz1)
+"rtX" = (
+/obj/effect/decal/strata_decals/catwalk/prison,
+/obj/effect/landmark/static_comms/net_one,
+/turf/open/floor/greengrid,
+/area/strata/ag/interior/disposals)
 "ruM" = (
 /turf/open/gm/coast{
 	dir = 4;
@@ -39370,6 +39789,13 @@
 	icon_state = "blue1"
 	},
 /area/strata/ug/interior/outpost/jung/dorms/admin1)
+"rMP" = (
+/obj/structure/closet/coffin,
+/obj/effect/landmark/objective_landmark/science,
+/turf/open/floor/strata{
+	icon_state = "floor2"
+	},
+/area/strata/ag/interior/outpost/med)
 "rNI" = (
 /turf/open/auto_turf/ice/layer1,
 /area/strata/ag/exterior/nearlz2)
@@ -39383,7 +39809,7 @@
 /area/strata/ag/exterior/vanyard)
 "rPA" = (
 /obj/structure/platform/strata/metal,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0_mud_alt,
 /area/strata/ug/interior/jungle/deep/minehead)
 "rQV" = (
@@ -39409,8 +39835,17 @@
 /obj/effect/landmark/structure_spawner/setup/distress/xeno_weed_node,
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/east_engi)
+"rRx" = (
+/obj/structure/pipes/standard/simple/hidden/cyan{
+	dir = 4
+	},
+/obj/effect/landmark/objective_landmark/science,
+/turf/open/floor/strata{
+	icon_state = "multi_tiles"
+	},
+/area/strata/ag/interior/dorms/hive)
 "rSl" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/south_dorms)
 "rSE" = (
@@ -39474,6 +39909,14 @@
 /obj/effect/decal/cleanable/blood/oil,
 /turf/open/floor/strata,
 /area/strata/ag/interior/tcomms)
+"rXQ" = (
+/obj/structure/machinery/power/apc{
+	dir = 1;
+	start_charge = 0;
+	pixel_x = 29
+	},
+/turf/open/auto_turf/snow/brown_base/layer2,
+/area/strata/ag/exterior/marsh/center)
 "sau" = (
 /obj/structure/machinery/power/terminal{
 	dir = 8;
@@ -39773,9 +40216,7 @@
 	},
 /area/strata/ag/exterior/landingzone_2)
 "sCa" = (
-/obj/structure/machinery/computer/secure_data{
-	req_one_access = null
-	},
+/obj/structure/machinery/computer/secure_data,
 /obj/structure/surface/table/reinforced/prison,
 /turf/open/floor/strata{
 	icon_state = "purp2"
@@ -40023,6 +40464,14 @@
 	icon_state = "orange_cover"
 	},
 /area/strata/ag/interior/tcomms)
+"taa" = (
+/obj/structure/filingcabinet,
+/obj/structure/barricade/handrail/strata,
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata{
+	icon_state = "blue1"
+	},
+/area/strata/ag/interior/outpost/admin)
 "taL" = (
 /obj/structure/flora/pottedplant{
 	icon_state = "pottedplant_22";
@@ -40073,6 +40522,13 @@
 	},
 /turf/open/auto_turf/ice/layer1,
 /area/strata/ag/exterior/paths/southresearch)
+"tfB" = (
+/obj/structure/closet/secure_closet/engineering_electrical,
+/obj/effect/landmark/objective_landmark/medium,
+/turf/open/floor/strata{
+	icon_state = "orange_cover"
+	},
+/area/strata/ag/exterior/north_lz_caves)
 "tgr" = (
 /obj/structure/stairs/perspective{
 	color = "#6e6e6e";
@@ -40270,7 +40726,7 @@
 /obj/structure/platform/strata/metal{
 	dir = 1
 	},
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer0_mud_alt,
 /area/strata/ug/interior/jungle/deep/minehead)
 "twa" = (
@@ -40371,11 +40827,16 @@
 	icon_state = "multi_tiles"
 	},
 /area/strata/ug/interior/jungle/deep/structures/engi)
+"tHv" = (
+/obj/effect/landmark/static_comms/net_two,
+/turf/open/auto_turf/snow/brown_base/layer2,
+/area/strata/ag/exterior/vanyard)
 "tHx" = (
 /obj/structure/filingcabinet,
 /obj/structure/pipes/standard/simple/hidden/cyan{
 	dir = 6
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "floor3"
@@ -40496,6 +40957,7 @@
 /obj/structure/toilet{
 	dir = 1
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 8;
 	icon_state = "white_cyan2"
@@ -40726,6 +41188,7 @@
 /obj/structure/closet/secure_closet/personal,
 /obj/item/lightstick,
 /obj/item/lightstick,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	icon_state = "red1"
 	},
@@ -40854,6 +41317,7 @@
 /area/strata/ag/exterior/vanyard)
 "unO" = (
 /obj/structure/closet/secure_closet/personal,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "cyan1"
@@ -40892,6 +41356,7 @@
 	},
 /area/strata/ag/interior/tcomms)
 "urF" = (
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 8;
 	icon_state = "white_cyan2"
@@ -40943,6 +41408,10 @@
 "uux" = (
 /turf/closed/wall/strata_outpost,
 /area/strata/ug/interior/jungle/deep/structures/res)
+"uvm" = (
+/obj/effect/landmark/static_comms/net_two,
+/turf/open/auto_turf/snow/brown_base/layer0,
+/area/strata/ag/exterior/marsh/crash)
 "uvw" = (
 /turf/open/auto_turf/strata_grass/layer0,
 /area/strata/ug/interior/jungle/deep/west_engi)
@@ -41232,6 +41701,13 @@
 	},
 /turf/open/floor/strata,
 /area/strata/ag/interior/outpost/engi)
+"uWO" = (
+/obj/structure/closet/basketball,
+/obj/effect/landmark/objective_landmark/science,
+/turf/open/floor/strata{
+	icon_state = "blue1"
+	},
+/area/strata/ag/interior/outpost/gen/bball)
 "uWP" = (
 /obj/structure/pipes/standard/simple/hidden/cyan,
 /turf/open/floor/strata{
@@ -41259,6 +41735,13 @@
 	icon_state = "multi_tiles"
 	},
 /area/strata/ag/interior/outpost/gen/bball)
+"vaq" = (
+/obj/structure/surface/table/reinforced/prison,
+/obj/effect/landmark/objective_landmark/medium,
+/turf/open/floor/strata{
+	icon_state = "red1"
+	},
+/area/strata/ug/interior/jungle/deep/structures/res)
 "vaW" = (
 /obj/structure/platform_decoration/strata,
 /turf/open/auto_turf/ice/layer1,
@@ -41392,6 +41875,13 @@
 	icon_state = "orange_cover"
 	},
 /area/strata/ag/interior/tcomms)
+"vlH" = (
+/obj/structure/machinery/weather_siren{
+	pixel_y = -8;
+	pixel_x = 10
+	},
+/turf/closed/wall/strata_outpost/reinforced,
+/area/strata/ag/exterior)
 "vmm" = (
 /obj/structure/surface/table/reinforced/prison,
 /obj/structure/machinery/light/small{
@@ -41605,6 +42095,7 @@
 /obj/structure/machinery/light/small{
 	dir = 1
 	},
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -41732,7 +42223,7 @@
 	},
 /area/strata/ug/interior/outpost/jung/dorms/sec1)
 "vDm" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/floor/strata{
 	dir = 10;
 	icon_state = "multi_tiles"
@@ -41805,6 +42296,13 @@
 	icon_state = "darkredfull2"
 	},
 /area/strata/ag/interior/landingzone_checkpoint)
+"vMr" = (
+/obj/structure/filingcabinet/filingcabinet,
+/obj/effect/landmark/objective_landmark/medium,
+/turf/open/floor/strata{
+	icon_state = "red1"
+	},
+/area/strata/ag/interior/dorms/flight_control)
 "vNG" = (
 /obj/structure/reagent_dispensers/watertank,
 /turf/open/floor/strata{
@@ -41832,7 +42330,7 @@
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/south_dorms)
 "vPY" = (
-/obj/effect/landmark/corpsespawner/PMC,
+/obj/effect/landmark/corpsespawner/pmc,
 /turf/open/floor/strata,
 /area/strata/ug/interior/outpost/jung/dorms/admin1)
 "vQo" = (
@@ -41977,6 +42475,11 @@
 /obj/item/tank/anesthetic,
 /turf/open/floor/strata,
 /area/strata/ag/exterior)
+"whO" = (
+/obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/medium,
+/turf/open/floor/strata,
+/area/strata/ag/interior/dorms/south)
 "wij" = (
 /obj/structure/flora/bush/ausbushes/grassybush,
 /turf/open/auto_turf/strata_grass/layer1,
@@ -42106,6 +42609,7 @@
 	},
 /obj/structure/barricade/handrail/strata,
 /obj/structure/filingcabinet,
+/obj/effect/landmark/objective_landmark/far,
 /turf/open/floor/strata{
 	icon_state = "blue1"
 	},
@@ -42117,7 +42621,7 @@
 	},
 /area/strata/ug/interior/jungle/deep/east_carp)
 "wvt" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/closed/wall/strata_ice/jungle,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "wvF" = (
@@ -42183,6 +42687,14 @@
 /obj/structure/pipes/standard/simple/hidden/cyan,
 /turf/open/floor/strata,
 /area/strata/ag/interior/tcomms)
+"wBj" = (
+/obj/structure/closet/secure_closet/personal,
+/obj/effect/landmark/crap_item,
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata{
+	icon_state = "blue1"
+	},
+/area/strata/ug/interior/outpost/jung/dorms/admin1)
 "wBI" = (
 /obj/structure/bed{
 	icon_state = "abed"
@@ -42251,7 +42763,7 @@
 	},
 /area/strata/ug/interior/jungle/platform/east/scrub)
 "wLv" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/east_dorms)
 "wMy" = (
@@ -42290,6 +42802,7 @@
 /area/strata/ug/interior/jungle/platform/east/scrub)
 "wUa" = (
 /obj/structure/surface/rack,
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor/strata{
 	dir = 4;
 	icon_state = "floor3"
@@ -42789,9 +43302,16 @@
 /area/strata/ag/exterior/paths/adminext)
 "xId" = (
 /obj/structure/flora/bush/ausbushes/grassybush,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/auto_turf/strata_grass/layer1,
 /area/strata/ug/interior/jungle/deep/east_dorms)
+"xJb" = (
+/obj/effect/landmark/objective_landmark/science,
+/turf/open/floor/strata{
+	dir = 4;
+	icon_state = "floor3"
+	},
+/area/strata/ag/exterior/vanyard)
 "xJD" = (
 /obj/structure/closet/bodybag,
 /obj/effect/decal/cleanable/blood/gibs/core,
@@ -42812,6 +43332,12 @@
 	icon_state = "floor3"
 	},
 /area/strata/ag/interior/tcomms)
+"xKs" = (
+/obj/structure/closet/bodybag,
+/obj/effect/decal/cleanable/blood/gibs/core,
+/obj/effect/landmark/objective_landmark/medium,
+/turf/open/floor/strata,
+/area/strata/ag/exterior/research_decks)
 "xKw" = (
 /obj/structure/pipes/standard/simple/hidden/cyan{
 	dir = 4
@@ -43092,6 +43618,13 @@
 "ygq" = (
 /turf/closed/wall/strata_outpost,
 /area/strata/ug/interior/outpost/jung/dorms/admin2)
+"ygz" = (
+/obj/structure/closet,
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/floor/strata{
+	icon_state = "floor3"
+	},
+/area/strata/ag/interior/dorms/flight_control)
 "yhJ" = (
 /obj/structure/largecrate/random,
 /obj/structure/pipes/standard/simple/hidden/cyan,
@@ -43333,6 +43866,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (2,1,1) = {"
 aaa
@@ -43526,6 +44061,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (3,1,1) = {"
 aaa
@@ -43719,6 +44256,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (4,1,1) = {"
 aaa
@@ -43762,8 +44301,8 @@ aac
 aac
 aac
 kSU
-ahO
-coa
+ftO
+vMr
 coO
 coO
 ako
@@ -43912,6 +44451,8 @@ aab
 aab
 aab
 aab
+biM
+biM
 "}
 (5,1,1) = {"
 aaa
@@ -44105,6 +44646,8 @@ aac
 aac
 aac
 aac
+biM
+biM
 "}
 (6,1,1) = {"
 aaa
@@ -44147,7 +44690,7 @@ aac
 aac
 aac
 kSU
-ahq
+ygz
 ahP
 aiw
 cof
@@ -44298,6 +44841,8 @@ ttQ
 ttQ
 ttQ
 ttQ
+biM
+biM
 "}
 (7,1,1) = {"
 aaa
@@ -44491,6 +45036,8 @@ eOI
 eOI
 eOI
 eOI
+biM
+biM
 "}
 (8,1,1) = {"
 aaa
@@ -44684,6 +45231,8 @@ vgb
 vgb
 vgb
 vgb
+biM
+biM
 "}
 (9,1,1) = {"
 aaa
@@ -44877,6 +45426,8 @@ vgb
 vgb
 vgb
 vgb
+biM
+biM
 "}
 (10,1,1) = {"
 aaa
@@ -45070,6 +45621,8 @@ vgb
 vgb
 vgb
 vgb
+biM
+biM
 "}
 (11,1,1) = {"
 aaa
@@ -45193,8 +45746,8 @@ bgS
 bhN
 bqN
 brF
-fCI
-sqT
+xzR
+gaV
 bkd
 bgS
 bgS
@@ -45263,6 +45816,8 @@ vgb
 vgb
 vgb
 vgb
+biM
+biM
 "}
 (12,1,1) = {"
 aaa
@@ -45456,6 +46011,8 @@ vgb
 vgb
 vgb
 vgb
+biM
+biM
 "}
 (13,1,1) = {"
 aaa
@@ -45649,6 +46206,8 @@ wdN
 wdN
 wdN
 wdN
+biM
+biM
 "}
 (14,1,1) = {"
 aaa
@@ -45842,6 +46401,8 @@ ttQ
 ttQ
 ttQ
 ttQ
+biM
+biM
 "}
 (15,1,1) = {"
 aaa
@@ -45951,10 +46512,10 @@ aZx
 bhO
 bhO
 bhO
-bhO
+hQP
 bhO
 mpk
-oeA
+fXU
 oeA
 oeA
 oeA
@@ -45963,7 +46524,7 @@ cXU
 bhO
 bgS
 bhO
-bhO
+uvm
 bhO
 bhO
 bhO
@@ -46035,6 +46596,8 @@ aac
 aac
 aac
 aac
+biM
+biM
 "}
 (16,1,1) = {"
 aaa
@@ -46077,7 +46640,7 @@ aac
 aac
 aac
 kSU
-ahq
+rba
 ahP
 aiA
 qwM
@@ -46228,6 +46791,8 @@ aab
 aab
 aab
 aab
+biM
+biM
 "}
 (17,1,1) = {"
 aaa
@@ -46421,6 +46986,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (18,1,1) = {"
 aaa
@@ -46614,6 +47181,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (19,1,1) = {"
 aaa
@@ -46721,8 +47290,8 @@ aVq
 aVq
 aVq
 bgS
-bsU
 bgS
+haU
 bgS
 bgS
 bhO
@@ -46744,7 +47313,7 @@ bhN
 bgS
 bgS
 bgS
-ble
+bhO
 aac
 ben
 bdL
@@ -46807,6 +47376,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (20,1,1) = {"
 aaa
@@ -46915,7 +47486,8 @@ aVq
 aVq
 bhN
 bgS
-aac
+gaV
+gaV
 bgS
 bgS
 bgS
@@ -46936,8 +47508,7 @@ bhN
 bhN
 bgS
 bhO
-bme
-ble
+bgS
 aac
 aac
 bdL
@@ -46951,7 +47522,7 @@ cwS
 cwS
 ben
 cwS
-aac
+cwS
 aac
 aac
 aac
@@ -46974,14 +47545,16 @@ aac
 aac
 aac
 aac
-byi
-lAc
+esJ
+eqV
 mhc
 qxi
 wfE
 lAc
-aac
+qWD
 aab
+agO
+agO
 aaa
 aaa
 aaa
@@ -47108,8 +47681,8 @@ aVq
 aVq
 bgS
 bgS
-fCI
-fCI
+xzR
+xzR
 bgS
 bhN
 bgS
@@ -47193,6 +47766,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (22,1,1) = {"
 aaa
@@ -47386,6 +47961,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (23,1,1) = {"
 aaa
@@ -47579,6 +48156,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (24,1,1) = {"
 aaa
@@ -47772,6 +48351,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (25,1,1) = {"
 aaa
@@ -47965,6 +48546,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (26,1,1) = {"
 aaa
@@ -48055,7 +48638,7 @@ crN
 brj
 ctd
 ctd
-ctd
+rtX
 ctd
 brj
 aZY
@@ -48158,6 +48741,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (27,1,1) = {"
 aaa
@@ -48199,7 +48784,7 @@ aac
 crA
 cnO
 bjY
-afE
+rRx
 cnO
 cnO
 kRb
@@ -48351,6 +48936,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (28,1,1) = {"
 aaa
@@ -48544,6 +49131,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (29,1,1) = {"
 aaa
@@ -48737,6 +49326,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (30,1,1) = {"
 aaa
@@ -48893,7 +49484,7 @@ kkL
 gIY
 gIY
 kxF
-gbI
+ksA
 psl
 xxS
 pKq
@@ -48930,6 +49521,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (31,1,1) = {"
 aaa
@@ -49123,6 +49716,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (32,1,1) = {"
 aaa
@@ -49316,6 +49911,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (33,1,1) = {"
 aaa
@@ -49509,6 +50106,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (34,1,1) = {"
 aaa
@@ -49702,6 +50301,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (35,1,1) = {"
 aaa
@@ -49895,6 +50496,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (36,1,1) = {"
 aaa
@@ -50088,6 +50691,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (37,1,1) = {"
 aaa
@@ -50281,6 +50886,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (38,1,1) = {"
 aaa
@@ -50474,6 +51081,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (39,1,1) = {"
 aaa
@@ -50541,7 +51150,7 @@ cbW
 cbW
 cbW
 ctC
-aMV
+kwU
 aNl
 aNo
 aNl
@@ -50667,6 +51276,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (40,1,1) = {"
 aaa
@@ -50737,7 +51348,7 @@ aEM
 aMG
 aNm
 aNo
-aNo
+dXc
 aNl
 aPX
 cjx
@@ -50860,6 +51471,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (41,1,1) = {"
 aaa
@@ -51053,6 +51666,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (42,1,1) = {"
 aaa
@@ -51246,6 +51861,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (43,1,1) = {"
 aaa
@@ -51332,7 +51949,7 @@ aac
 aac
 aac
 aac
-bnw
+tfB
 brn
 aYX
 aWp
@@ -51439,6 +52056,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (44,1,1) = {"
 aaa
@@ -51632,6 +52251,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (45,1,1) = {"
 aaa
@@ -51825,6 +52446,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (46,1,1) = {"
 aaa
@@ -51904,7 +52527,7 @@ aQA
 aRK
 ckX
 cnA
-clU
+whO
 aXJ
 cjw
 aac
@@ -52018,6 +52641,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (47,1,1) = {"
 aaa
@@ -52211,6 +52836,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (48,1,1) = {"
 aaa
@@ -52404,6 +53031,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (49,1,1) = {"
 aaa
@@ -52597,6 +53226,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (50,1,1) = {"
 aaa
@@ -52790,6 +53421,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (51,1,1) = {"
 aaa
@@ -52983,6 +53616,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (52,1,1) = {"
 aaa
@@ -53176,6 +53811,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (53,1,1) = {"
 aaa
@@ -53299,7 +53936,7 @@ bur
 bur
 bme
 bme
-ble
+jFO
 aac
 aac
 aac
@@ -53369,6 +54006,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (54,1,1) = {"
 aaa
@@ -53562,6 +54201,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (55,1,1) = {"
 aaa
@@ -53681,7 +54322,7 @@ aac
 aac
 aac
 bnj
-bnj
+rXQ
 bnj
 ble
 ble
@@ -53755,6 +54396,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (56,1,1) = {"
 aaa
@@ -53874,8 +54517,8 @@ aac
 aac
 aac
 aac
-bLR
-bnj
+vlH
+gSz
 ble
 bme
 aac
@@ -53948,6 +54591,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (57,1,1) = {"
 aaa
@@ -54141,6 +54786,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (58,1,1) = {"
 aaa
@@ -54334,6 +54981,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (59,1,1) = {"
 aaa
@@ -54527,6 +55176,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (60,1,1) = {"
 aaa
@@ -54720,6 +55371,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (61,1,1) = {"
 aaa
@@ -54913,6 +55566,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (62,1,1) = {"
 aaa
@@ -55106,6 +55761,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (63,1,1) = {"
 aaa
@@ -55299,6 +55956,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (64,1,1) = {"
 aaa
@@ -55413,7 +56072,7 @@ bkh
 bkq
 biR
 biw
-biw
+tHv
 bhS
 bhf
 bdV
@@ -55492,6 +56151,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (65,1,1) = {"
 aaa
@@ -55685,6 +56346,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (66,1,1) = {"
 aaa
@@ -55831,7 +56494,7 @@ aac
 aac
 sgG
 cIQ
-ubN
+gpr
 tRC
 sgG
 nJK
@@ -55878,6 +56541,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (67,1,1) = {"
 aaa
@@ -56071,6 +56736,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (68,1,1) = {"
 aaa
@@ -56186,7 +56853,7 @@ eBr
 dOO
 qTV
 qKx
-vtl
+ibE
 sbW
 boG
 blJ
@@ -56264,6 +56931,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (69,1,1) = {"
 aaa
@@ -56315,7 +56984,7 @@ aac
 aac
 aac
 adS
-bRw
+dcX
 bUV
 bRw
 vPi
@@ -56379,7 +57048,7 @@ bFv
 dOO
 vtl
 opg
-vtl
+xJb
 dOO
 boH
 blJ
@@ -56457,6 +57126,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (70,1,1) = {"
 aaa
@@ -56650,6 +57321,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (71,1,1) = {"
 aaa
@@ -56843,6 +57516,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (72,1,1) = {"
 aaa
@@ -57036,6 +57711,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (73,1,1) = {"
 aaa
@@ -57229,6 +57906,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (74,1,1) = {"
 aaa
@@ -57422,6 +58101,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (75,1,1) = {"
 aaa
@@ -57548,7 +58229,7 @@ bsu
 aac
 aac
 aac
-btp
+pGf
 btv
 btq
 btp
@@ -57615,6 +58296,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (76,1,1) = {"
 aaa
@@ -57808,6 +58491,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (77,1,1) = {"
 aaa
@@ -58001,6 +58686,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (78,1,1) = {"
 aaa
@@ -58128,7 +58815,7 @@ mFh
 gAv
 rjG
 lTX
-lTX
+kwu
 lTX
 uXI
 aDQ
@@ -58194,6 +58881,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (79,1,1) = {"
 aaa
@@ -58387,6 +59076,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (80,1,1) = {"
 aaa
@@ -58580,6 +59271,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (81,1,1) = {"
 aaa
@@ -58773,6 +59466,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (82,1,1) = {"
 aaa
@@ -58966,6 +59661,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (83,1,1) = {"
 aaa
@@ -59159,6 +59856,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (84,1,1) = {"
 aaa
@@ -59352,6 +60051,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (85,1,1) = {"
 aaa
@@ -59545,6 +60246,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (86,1,1) = {"
 aaa
@@ -59738,6 +60441,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (87,1,1) = {"
 aaa
@@ -59835,7 +60540,7 @@ bYJ
 bRZ
 bNS
 eFG
-eFG
+exx
 cuX
 frf
 iNf
@@ -59931,6 +60636,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (88,1,1) = {"
 aaa
@@ -60124,6 +60831,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (89,1,1) = {"
 aaa
@@ -60317,6 +61026,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (90,1,1) = {"
 aaa
@@ -60510,6 +61221,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (91,1,1) = {"
 aaa
@@ -60703,6 +61416,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (92,1,1) = {"
 aaa
@@ -60896,6 +61611,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (93,1,1) = {"
 aaa
@@ -61089,6 +61806,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (94,1,1) = {"
 aaa
@@ -61282,6 +62001,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (95,1,1) = {"
 aaa
@@ -61475,6 +62196,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (96,1,1) = {"
 aaa
@@ -61668,6 +62391,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (97,1,1) = {"
 aab
@@ -61861,6 +62586,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (98,1,1) = {"
 aab
@@ -62054,6 +62781,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (99,1,1) = {"
 aab
@@ -62247,6 +62976,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (100,1,1) = {"
 aab
@@ -62440,6 +63171,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (101,1,1) = {"
 aab
@@ -62633,6 +63366,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (102,1,1) = {"
 aab
@@ -62826,6 +63561,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (103,1,1) = {"
 aab
@@ -63019,6 +63756,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (104,1,1) = {"
 aab
@@ -63212,6 +63951,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (105,1,1) = {"
 aab
@@ -63405,6 +64146,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (106,1,1) = {"
 aab
@@ -63510,7 +64253,7 @@ vlm
 oOB
 qOt
 uRy
-xJD
+xKs
 cuP
 hmf
 wsh
@@ -63598,6 +64341,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (107,1,1) = {"
 aab
@@ -63636,7 +64381,7 @@ cdA
 bDU
 aet
 aet
-aet
+nOE
 afM
 cck
 akR
@@ -63672,7 +64417,7 @@ oKo
 aLQ
 aMX
 aOd
-aPC
+hHO
 aQQ
 aSc
 aTA
@@ -63686,7 +64431,7 @@ bsy
 blh
 boY
 bsA
-bTF
+fbG
 byY
 bBY
 ryK
@@ -63791,6 +64536,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (108,1,1) = {"
 aab
@@ -63984,6 +64731,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (109,1,1) = {"
 aab
@@ -64177,6 +64926,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (110,1,1) = {"
 aab
@@ -64267,7 +65018,7 @@ blN
 bsB
 bvd
 bzb
-bTF
+jsd
 bGy
 bKL
 bOA
@@ -64370,6 +65121,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (111,1,1) = {"
 aab
@@ -64563,6 +65316,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (112,1,1) = {"
 aab
@@ -64756,6 +65511,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (113,1,1) = {"
 aab
@@ -64949,6 +65706,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (114,1,1) = {"
 aab
@@ -65142,6 +65901,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (115,1,1) = {"
 aab
@@ -65335,6 +66096,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (116,1,1) = {"
 aab
@@ -65388,7 +66151,7 @@ ayw
 ayw
 ayw
 xvy
-bVM
+gTZ
 bVM
 bVM
 ast
@@ -65528,6 +66291,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (117,1,1) = {"
 aab
@@ -65721,6 +66486,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (118,1,1) = {"
 aab
@@ -65793,10 +66560,10 @@ cik
 aVn
 aKD
 aLT
-aVn
+iUN
 aKD
 aPK
-aVn
+qRj
 aKD
 aTG
 wuE
@@ -65914,6 +66681,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (119,1,1) = {"
 aab
@@ -65992,7 +66761,7 @@ blN
 blN
 aSg
 blN
-aUY
+taa
 aWR
 bll
 oSV
@@ -66107,6 +66876,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (120,1,1) = {"
 aab
@@ -66300,6 +67071,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (121,1,1) = {"
 aab
@@ -66493,6 +67266,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (122,1,1) = {"
 aab
@@ -66579,7 +67354,7 @@ bds
 bfS
 biV
 blU
-bpF
+npy
 mnq
 bvj
 bzg
@@ -66608,7 +67383,7 @@ vtp
 vYD
 vtp
 ykU
-ykU
+cGL
 vYD
 vtp
 sip
@@ -66686,6 +67461,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (123,1,1) = {"
 aab
@@ -66879,6 +67656,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (124,1,1) = {"
 aab
@@ -66976,7 +67755,7 @@ bOH
 bVF
 ceG
 ckz
-cnk
+qxt
 cnk
 cnk
 jAE
@@ -67072,6 +67851,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (125,1,1) = {"
 aab
@@ -67265,6 +68046,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (126,1,1) = {"
 aab
@@ -67458,6 +68241,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (127,1,1) = {"
 aab
@@ -67573,7 +68358,7 @@ nEU
 xmR
 vlm
 mCx
-nsB
+rMP
 vlm
 gbU
 hGd
@@ -67651,6 +68436,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (128,1,1) = {"
 aab
@@ -67844,6 +68631,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (129,1,1) = {"
 aab
@@ -67913,7 +68702,7 @@ cdX
 ceI
 cfv
 cgg
-cgS
+iQt
 oSV
 aMb
 bfV
@@ -67973,7 +68762,7 @@ aad
 aad
 aad
 iwH
-mrz
+wBj
 wXb
 hwI
 atI
@@ -68037,6 +68826,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (130,1,1) = {"
 aab
@@ -68230,6 +69021,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (131,1,1) = {"
 aab
@@ -68264,7 +69057,7 @@ aac
 aac
 akR
 cdA
-adG
+uWO
 dEa
 dEa
 dEa
@@ -68423,6 +69216,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (132,1,1) = {"
 aab
@@ -68616,6 +69411,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (133,1,1) = {"
 aab
@@ -68809,6 +69606,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (134,1,1) = {"
 aab
@@ -68941,7 +69740,7 @@ iwH
 iwH
 dcc
 aYQ
-fZe
+aeg
 hwI
 ikG
 iwH
@@ -69002,6 +69801,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (135,1,1) = {"
 aab
@@ -69195,6 +69996,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (136,1,1) = {"
 aab
@@ -69388,6 +70191,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (137,1,1) = {"
 aab
@@ -69581,6 +70386,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (138,1,1) = {"
 aab
@@ -69774,6 +70581,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (139,1,1) = {"
 aab
@@ -69967,6 +70776,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (140,1,1) = {"
 aab
@@ -70160,6 +70971,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (141,1,1) = {"
 aab
@@ -70353,6 +71166,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (142,1,1) = {"
 aab
@@ -70546,6 +71361,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (143,1,1) = {"
 aab
@@ -70739,6 +71556,8 @@ aaa
 aaa
 aaa
 aaa
+biM
+biM
 "}
 (144,1,1) = {"
 aab
@@ -70932,6 +71751,8 @@ aab
 aab
 aab
 aab
+biM
+biM
 "}
 (145,1,1) = {"
 aab
@@ -71125,6 +71946,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (146,1,1) = {"
 aab
@@ -71318,6 +72141,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (147,1,1) = {"
 aab
@@ -71511,6 +72336,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (148,1,1) = {"
 aab
@@ -71578,7 +72405,7 @@ ccp
 aDk
 slL
 aFu
-cjl
+dDr
 ccp
 ccp
 awm
@@ -71704,6 +72531,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (149,1,1) = {"
 aab
@@ -71897,6 +72726,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (150,1,1) = {"
 aab
@@ -72090,6 +72921,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (151,1,1) = {"
 aab
@@ -72283,6 +73116,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (152,1,1) = {"
 aab
@@ -72476,6 +73311,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (153,1,1) = {"
 aab
@@ -72669,6 +73506,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (154,1,1) = {"
 aab
@@ -72862,6 +73701,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (155,1,1) = {"
 aab
@@ -73055,6 +73896,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (156,1,1) = {"
 aab
@@ -73248,6 +74091,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (157,1,1) = {"
 aab
@@ -73441,6 +74286,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (158,1,1) = {"
 aab
@@ -73531,7 +74378,7 @@ vOs
 bvL
 bHH
 bzt
-bWx
+oIv
 vOs
 oeQ
 baA
@@ -73634,6 +74481,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (159,1,1) = {"
 aab
@@ -73827,6 +74676,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (160,1,1) = {"
 aab
@@ -74020,6 +74871,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (161,1,1) = {"
 aab
@@ -74213,6 +75066,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (162,1,1) = {"
 aab
@@ -74406,6 +75261,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (163,1,1) = {"
 aab
@@ -74599,6 +75456,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (164,1,1) = {"
 aab
@@ -74792,6 +75651,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (165,1,1) = {"
 aab
@@ -74985,6 +75846,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (166,1,1) = {"
 aab
@@ -75178,6 +76041,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (167,1,1) = {"
 aab
@@ -75371,6 +76236,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (168,1,1) = {"
 aab
@@ -75382,7 +76249,7 @@ aac
 aac
 aUp
 aah
-bof
+iBZ
 aak
 ahZ
 ahZ
@@ -75564,6 +76431,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (169,1,1) = {"
 aab
@@ -75757,6 +76626,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (170,1,1) = {"
 aab
@@ -75950,6 +76821,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (171,1,1) = {"
 aab
@@ -76143,6 +77016,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (172,1,1) = {"
 aab
@@ -76336,6 +77211,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (173,1,1) = {"
 aab
@@ -76529,6 +77406,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (174,1,1) = {"
 aab
@@ -76722,6 +77601,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (175,1,1) = {"
 aab
@@ -76915,6 +77796,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (176,1,1) = {"
 aab
@@ -77108,6 +77991,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (177,1,1) = {"
 aab
@@ -77301,6 +78186,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (178,1,1) = {"
 aab
@@ -77410,7 +78297,7 @@ cFp
 cxK
 xkj
 cxW
-ugH
+hmA
 ekh
 ekh
 uzb
@@ -77494,6 +78381,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (179,1,1) = {"
 aab
@@ -77687,6 +78576,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (180,1,1) = {"
 aab
@@ -77880,6 +78771,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (181,1,1) = {"
 aab
@@ -78073,6 +78966,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (182,1,1) = {"
 aab
@@ -78266,6 +79161,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (183,1,1) = {"
 aab
@@ -78459,6 +79356,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (184,1,1) = {"
 aab
@@ -78652,6 +79551,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (185,1,1) = {"
 aab
@@ -78845,6 +79746,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (186,1,1) = {"
 aab
@@ -79038,6 +79941,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (187,1,1) = {"
 aab
@@ -79067,7 +79972,7 @@ aad
 aad
 bnd
 abC
-bDn
+loN
 abC
 acy
 abC
@@ -79231,6 +80136,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (188,1,1) = {"
 aab
@@ -79262,7 +80169,7 @@ bnd
 abD
 abS
 bDn
-bDn
+loN
 acR
 bDn
 bDn
@@ -79424,6 +80331,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (189,1,1) = {"
 aab
@@ -79617,6 +80526,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (190,1,1) = {"
 aab
@@ -79810,6 +80721,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (191,1,1) = {"
 aab
@@ -80003,6 +80916,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (192,1,1) = {"
 aab
@@ -80196,6 +81111,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (193,1,1) = {"
 aab
@@ -80389,6 +81306,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (194,1,1) = {"
 aab
@@ -80582,6 +81501,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (195,1,1) = {"
 aab
@@ -80775,6 +81696,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (196,1,1) = {"
 aab
@@ -80968,6 +81891,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (197,1,1) = {"
 aab
@@ -81161,6 +82086,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (198,1,1) = {"
 aab
@@ -81354,6 +82281,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (199,1,1) = {"
 aab
@@ -81547,6 +82476,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (200,1,1) = {"
 aab
@@ -81740,6 +82671,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (201,1,1) = {"
 aab
@@ -81933,6 +82866,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (202,1,1) = {"
 aab
@@ -82126,6 +83061,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (203,1,1) = {"
 aab
@@ -82319,6 +83256,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (204,1,1) = {"
 aab
@@ -82512,6 +83451,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (205,1,1) = {"
 aab
@@ -82627,7 +83568,7 @@ piY
 vsy
 gih
 khT
-kfm
+ogL
 kfm
 scb
 uLl
@@ -82705,6 +83646,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (206,1,1) = {"
 aab
@@ -82898,6 +83841,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (207,1,1) = {"
 aab
@@ -83091,6 +84036,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (208,1,1) = {"
 aab
@@ -83284,6 +84231,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (209,1,1) = {"
 aab
@@ -83411,7 +84360,7 @@ lZd
 gih
 vsy
 gdZ
-vsy
+cDt
 lZd
 gih
 sya
@@ -83477,6 +84426,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (210,1,1) = {"
 aab
@@ -83670,6 +84621,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (211,1,1) = {"
 aab
@@ -83863,6 +84816,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (212,1,1) = {"
 aab
@@ -84056,6 +85011,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (213,1,1) = {"
 aab
@@ -84249,6 +85206,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (214,1,1) = {"
 aab
@@ -84293,7 +85252,7 @@ bon
 bon
 adz
 aij
-aeB
+vaq
 ajD
 akf
 akK
@@ -84442,6 +85401,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (215,1,1) = {"
 aab
@@ -84635,6 +85596,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (216,1,1) = {"
 aab
@@ -84828,6 +85791,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (217,1,1) = {"
 aab
@@ -84947,7 +85912,7 @@ vsy
 vsy
 vsy
 vsy
-gih
+qsI
 ixD
 lZd
 tIv
@@ -85021,6 +85986,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (218,1,1) = {"
 aab
@@ -85214,6 +86181,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (219,1,1) = {"
 aab
@@ -85407,6 +86376,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (220,1,1) = {"
 aab
@@ -85466,7 +86437,7 @@ uux
 ati
 bAr
 uux
-aub
+qWQ
 axW
 uux
 aly
@@ -85600,6 +86571,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (221,1,1) = {"
 aab
@@ -85793,6 +86766,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (222,1,1) = {"
 aab
@@ -85986,6 +86961,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (223,1,1) = {"
 aab
@@ -86179,6 +87156,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (224,1,1) = {"
 aab
@@ -86207,7 +87186,7 @@ aad
 aad
 aad
 uux
-abF
+mOj
 abV
 abF
 aYz
@@ -86372,6 +87351,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (225,1,1) = {"
 aab
@@ -86565,6 +87546,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (226,1,1) = {"
 aab
@@ -86758,6 +87741,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (227,1,1) = {"
 aab
@@ -86951,6 +87936,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (228,1,1) = {"
 aab
@@ -87144,6 +88131,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (229,1,1) = {"
 aab
@@ -87337,6 +88326,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (230,1,1) = {"
 aab
@@ -87530,6 +88521,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (231,1,1) = {"
 aab
@@ -87723,6 +88716,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (232,1,1) = {"
 aab
@@ -87916,6 +88911,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (233,1,1) = {"
 aab
@@ -88109,6 +89106,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (234,1,1) = {"
 aab
@@ -88302,6 +89301,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (235,1,1) = {"
 aab
@@ -88495,6 +89496,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (236,1,1) = {"
 aab
@@ -88688,6 +89691,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (237,1,1) = {"
 aab
@@ -88881,6 +89886,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (238,1,1) = {"
 aab
@@ -89074,6 +90081,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (239,1,1) = {"
 aab
@@ -89267,6 +90276,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (240,1,1) = {"
 aab
@@ -89326,7 +90337,7 @@ acp
 bAr
 bAr
 uux
-aub
+jeZ
 bXQ
 uux
 aly
@@ -89460,6 +90471,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (241,1,1) = {"
 aab
@@ -89516,7 +90529,7 @@ bAr
 uux
 arb
 arb
-arb
+mdK
 arb
 uux
 uux
@@ -89653,6 +90666,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (242,1,1) = {"
 aab
@@ -89846,6 +90861,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (243,1,1) = {"
 aab
@@ -90039,6 +91056,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (244,1,1) = {"
 aab
@@ -90232,6 +91251,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (245,1,1) = {"
 aab
@@ -90425,6 +91446,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (246,1,1) = {"
 aab
@@ -90618,6 +91641,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (247,1,1) = {"
 aab
@@ -90811,6 +91836,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (248,1,1) = {"
 aab
@@ -91004,6 +92031,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (249,1,1) = {"
 aab
@@ -91197,6 +92226,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (250,1,1) = {"
 aab
@@ -91390,6 +92421,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (251,1,1) = {"
 aab
@@ -91583,6 +92616,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (252,1,1) = {"
 aab
@@ -91776,6 +92811,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (253,1,1) = {"
 aab
@@ -91969,6 +93006,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (254,1,1) = {"
 aab
@@ -92162,6 +93201,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (255,1,1) = {"
 aab
@@ -92355,6 +93396,8 @@ aad
 aad
 aad
 aab
+biM
+biM
 "}
 (256,1,1) = {"
 aab
@@ -92548,4 +93591,6 @@ aab
 aab
 aab
 aab
+biM
+biM
 "}

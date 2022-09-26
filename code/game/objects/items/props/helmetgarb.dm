@@ -300,8 +300,8 @@
 	RegisterSignal(user, COMSIG_HUMAN_POST_UPDATE_SIGHT, .proc/update_sight)
 
 	user.add_client_color_matrix("nvg", 99, color_matrix_multiply(color_matrix_saturation(0), color_matrix_from_string("#7aff7a")))
-	user.overlay_fullscreen("nvg", /obj/screen/fullscreen/flash/noise/nvg)
-	user.overlay_fullscreen("nvg_blur", /obj/screen/fullscreen/brute/nvg, 3)
+	user.overlay_fullscreen("nvg", /atom/movable/screen/fullscreen/flash/noise/nvg)
+	user.overlay_fullscreen("nvg_blur", /atom/movable/screen/fullscreen/brute/nvg, 3)
 	playsound(user, 'sound/handling/toggle_nv1.ogg', 25)
 	nightvision = TRUE
 	user.update_sight()
@@ -445,7 +445,7 @@
 		H.pockets.remove_from_storage(src, get_turf(H))
 
 /obj/item/prop/helmetgarb/helmet_nvg/cosmetic //for "custom loadout", purely cosmetic
-	name = "\improper old M2 night vision goggles"
+	name = "old M2 night vision goggles"
 	desc = "This pair has been gutted of all electronics and therefore not working. But hey, they make you feel tacticool, and that's all that matters, right?"
 	shape = NVG_SHAPE_COSMETIC
 
@@ -496,7 +496,7 @@
 	icon_state = "helmet_gasmask"
 
 /obj/item/prop/helmetgarb/trimmed_wire
-	name = "\improper trimmed barbed wire"
+	name = "trimmed barbed wire"
 	desc = "It is a length of barbed wire that's had most of the sharp points filed down so that it is safe to handle."
 	icon_state = "trimmed_wire"
 

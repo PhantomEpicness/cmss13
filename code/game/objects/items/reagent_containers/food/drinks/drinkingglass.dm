@@ -136,9 +136,9 @@
 					name = "Glass of Vermouth"
 					desc = "You wonder why you're even drinking this straight."
 					center_of_mass = "x=16;y=12"
-				if("tequilla")
-					icon_state = "tequillaglass"
-					name = "Glass of Tequilla"
+				if("tequila")
+					icon_state = "tequilaglass"
+					name = "Glass of tequila"
 					desc = "Now all that's missing is the weird colored shades!"
 					center_of_mass = "x=16;y=12"
 				if("patron")
@@ -194,11 +194,11 @@
 				if("bravebull")
 					icon_state = "bravebullglass"
 					name = "Brave Bull"
-					desc = "Tequilla and Coffee liquor, brought together in a mouthwatering mixture. Drink up."
+					desc = "tequila and Coffee liquor, brought together in a mouthwatering mixture. Drink up."
 					center_of_mass = "x=15;y=8"
-				if("tequillasunrise")
-					icon_state = "tequillasunriseglass"
-					name = "Tequilla Sunrise"
+				if("tequilasunrise")
+					icon_state = "tequilasunriseglass"
+					name = "tequila Sunrise"
 					desc = "Oh great, now you feel nostalgic about sunrises back on Terra..."
 					center_of_mass = "x=16;y=10"
 				if("phoronspecial")
@@ -631,6 +631,74 @@
 			desc = "Your standard drinking glass."
 			center_of_mass = "x=16;y=10"
 			return
+
+/obj/item/reagent_container/food/drinks/drinkingglass/attack(mob/living/target as mob, mob/living/user as mob)
+	if(!target)
+		return
+
+	if(user.a_intent != INTENT_HARM)
+		return ..()
+
+	force = 15
+
+	var/obj/limb/affecting = user.zone_selected
+	var/drowsy_threshold = 0
+
+	drowsy_threshold = CLOTHING_ARMOR_MEDIUM - target.getarmor(affecting, ARMOR_MELEE)
+
+	target.apply_damage(force, BRUTE, affecting, sharp=0)
+
+	if(affecting == "head" && iscarbon(target) && !isXeno(target))
+		for(var/mob/O in viewers(user, null))
+			if(target != user)
+				O.show_message(text(SPAN_DANGER("<B>[target] has been hit over the head with a glass of [name], by [user]!</B>")), 1)
+			else
+				O.show_message(text(SPAN_DANGER("<B>[target] hit \himself with a glass of [name] on the head!</B>")), 1)
+		if(drowsy_threshold > 0)
+			target.apply_effect(min(drowsy_threshold, 10) , DROWSY)
+
+	else //Regular attack text
+		for(var/mob/O in viewers(user, null))
+			if(target != user)
+				O.show_message(text(SPAN_DANGER("<B>[target] has been attacked with a glass of [name], by [user]!</B>")), 1)
+			else
+				O.show_message(text(SPAN_DANGER("<B>[target] has attacked \himself with a glass of [name]!</B>")), 1)
+
+	user.attack_log += text("\[[time_stamp()]\] <font color='red'>Has attacked [target.name] ([target.ckey]) with a glass!</font>")
+	target.attack_log += text("\[[time_stamp()]\] <font color='orange'>Has been smashed with a glass by [user.name] ([user.ckey])</font>")
+	msg_admin_attack("[user.name] ([user.ckey]) attacked [target.name] ([target.ckey]) with a glass (INTENT: [uppertext(intent_text(user.a_intent))]) in [get_area(user)] ([user.loc.x],[user.loc.y],[user.loc.z]).", user.loc.x, user.loc.y, user.loc.z)
+
+	if(reagents)
+		for(var/mob/O in viewers(user, null))
+			O.show_message(text(SPAN_NOTICE("<B>The contents of \the [src] splashes all over [target]!</B>")), 1)
+		reagents.reaction(target, TOUCH)
+
+	smash(target, user)
+
+	return
+
+/obj/item/reagent_container/food/drinks/drinkingglass/bullet_act(obj/item/projectile/P)
+	. = ..()
+	smash()
+
+/obj/item/reagent_container/food/drinks/drinkingglass/proc/smash(mob/living/target, mob/living/user)
+	var/obj/item/weapon/melee/broken_glass/B
+	if(user)
+		user.temp_drop_inv_item(src)
+		B = new /obj/item/weapon/melee/broken_glass(user.loc)
+		user.put_in_active_hand(B)
+	else
+		B = new /obj/item/weapon/melee/broken_glass(src.loc)
+	if(prob(33))
+		if(target)
+			new/obj/item/shard(target.loc) // Create a glass shard at the target's location!
+		else
+			new/obj/item/shard(src.loc)
+
+	playsound(src, "shatter", 25, 1)
+	transfer_fingerprints_to(B)
+
+	qdel(src)
 
 // for /obj/structure/machinery/vending/sovietsoda
 /obj/item/reagent_container/food/drinks/drinkingglass/soda

@@ -15,7 +15,7 @@
 	var/chatWarn = 0 //Tracks how many times someone has spammed and gives them a no-no timer
 	var/talked = 0 //Won't let someone say something again in under a second.
 
-	var/obj/screen/hands = null //robot
+	var/atom/movable/screen/hands = null //robot
 
 	var/adminhelp_marked = 0 // Prevents marking an Adminhelp more than once. Making this a client define will cause runtimes and break some Adminhelps
 	var/adminhelp_marked_admin = "" // Ckey of last marking admin
@@ -44,6 +44,8 @@
 	var/next_move_slowdown = 0	// Amount added during the next movement_delay(), then is reset.
 	var/speed = 0 //Speed that modifies the movement delay of a given mob
 	var/recalculate_move_delay = TRUE // Whether move delay needs to be recalculated, on by default so that new mobs actually get movement delay calculated upon creation
+	var/crawling = FALSE
+	var/can_crawl = TRUE
 	var/monkeyizing = null	//Carbon
 	var/hand = null
 	var/eye_blind = null	//Carbon

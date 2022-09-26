@@ -10,7 +10,8 @@
 /datum/orbit_menu/ui_state(mob/user)
 	return GLOB.observer_state
 
-/datum/orbit_menu/proc/ui_interact(mob/user, datum/tgui/ui)
+/datum/orbit_menu/tgui_interact(mob/user, datum/tgui/ui)
+	. = ..()
 	ui = SStgui.try_update_ui(user, src, ui)
 	if (!ui)
 		ui = new(user, src, "Orbit")
@@ -25,15 +26,17 @@
 			var/ref = params["ref"]
 			var/atom/movable/poi = locate(ref) in GLOB.mob_list
 			if (poi == null)
-				. = TRUE
-				return
+				poi = locate(ref) in GLOB.all_multi_vehicles
+				if (poi == null)
+					. = TRUE
+					return
 			owner.ManualFollow(poi)
 			owner.reset_perspective(null)
 			if(auto_observe)
 				owner.do_observe(poi)
 			. = TRUE
 		if("refresh")
-			update_static_data()
+			update_static_data(owner)
 			. = TRUE
 		if("toggle_observe")
 			auto_observe = !auto_observe
@@ -41,6 +44,7 @@
 				owner.do_observe(owner.orbit_target)
 			else
 				owner.reset_perspective(null)
+			. = TRUE
 
 
 
@@ -63,6 +67,7 @@
 	var/list/ghosts = list()
 	var/list/misc = list()
 	var/list/npcs = list()
+	var/list/vehicles = list()
 
 	var/is_admin = check_other_rights(user.client, R_ADMIN, FALSE)
 	var/list/pois = getpois(skip_mindless = !is_admin, specify_dead_role = FALSE)
@@ -76,7 +81,10 @@
 
 		var/mob/M = poi
 		if(!istype(M))
-			misc += list(serialized)
+			if(isVehicleMultitile(M))
+				vehicles += list(serialized)
+			else
+				misc += list(serialized)
 			continue
 
 		var/number_of_orbiters = length(M.get_all_orbiters())
@@ -119,6 +127,7 @@
 	data["ghosts"] = ghosts
 	data["misc"] = misc
 	data["npcs"] = npcs
+	data["vehicles"] = vehicles
 
 	return data
 

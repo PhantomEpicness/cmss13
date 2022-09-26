@@ -117,6 +117,15 @@
 
 	return ..()
 
+/obj/item/hardpoint/ex_act(severity)
+	if(owner || indestructible)
+		return
+
+	health = max(0, health - severity / 2)
+	if(health <= 0)
+		visible_message(SPAN_WARNING("\The [src] disintegrates into useless pile of scrap under the damage it suffered."))
+		qdel(src)
+
 /// Populate traits_to_give in this proc
 /obj/item/hardpoint/proc/set_bullet_traits()
 	return
@@ -385,6 +394,9 @@ obj/item/hardpoint/proc/remove_buff(var/obj/vehicle/multitile/V)
 
 /obj/item/hardpoint/attackby(var/obj/item/O, var/mob/user)
 	if(iswelder(O))
+		if(!HAS_TRAIT(O, TRAIT_TOOL_BLOWTORCH))
+			to_chat(user, SPAN_WARNING("You need a stronger blowtorch!"))
+			return
 		handle_repair(O, user)
 		return
 	..()
@@ -623,3 +635,6 @@ obj/item/hardpoint/proc/remove_buff(var/obj/vehicle/multitile/V)
 // debug proc
 /obj/item/hardpoint/proc/set_mf_use_trt(var/use)
 	use_mz_trt_offsets = use
+
+obj/item/hardpoint/get_applying_acid_time()
+	return 10 SECONDS //you are not supposed to be able to easily combat-melt irreplaceable things.

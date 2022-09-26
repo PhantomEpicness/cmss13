@@ -72,9 +72,9 @@
 	fire_delay = FIRE_DELAY_TIER_10
 	burst_amount = BURST_AMOUNT_TIER_3
 	burst_delay = FIRE_DELAY_TIER_9
-	fa_delay = FIRE_DELAY_TIER_10
-	fa_scatter_peak = FULL_AUTO_SCATTER_PEAK_TIER_10
-	fa_max_scatter = SCATTER_AMOUNT_NONE
+	fa_delay = FIRE_DELAY_TIER_SG
+	fa_scatter_peak = FULL_AUTO_SCATTER_PEAK_TIER_8
+	fa_max_scatter = SCATTER_AMOUNT_TIER_3
 	if(accuracy_improvement)
 		accuracy_mult += HIT_ACCURACY_MULT_TIER_3
 	else
@@ -155,6 +155,9 @@
 	if(!G.powerpack)
 		G.link_powerpack(usr)
 
+/datum/action/item_action/smartgun/update_button_icon()
+	return
+
 /datum/action/item_action/smartgun/toggle_motion_detector/New(Target, obj/item/holder)
 	. = ..()
 	name = "Toggle Motion Detector"
@@ -167,6 +170,11 @@
 	. = ..()
 	var/obj/item/weapon/gun/smartgun/G = holder_item
 	G.toggle_motion_detector(usr)
+
+/datum/action/item_action/smartgun/toggle_motion_detector/proc/update_icon()
+	if(!holder_item)
+		return
+	var/obj/item/weapon/gun/smartgun/G = holder_item
 	if(G.motion_detector)
 		button.icon_state = "template_on"
 	else
@@ -184,6 +192,11 @@
 	. = ..()
 	var/obj/item/weapon/gun/smartgun/G = holder_item
 	G.toggle_auto_fire(usr)
+
+/datum/action/item_action/smartgun/toggle_auto_fire/proc/update_icon()
+	if(!holder_item)
+		return
+	var/obj/item/weapon/gun/smartgun/G = holder_item
 	if(G.auto_fire)
 		button.icon_state = "template_on"
 	else
@@ -382,6 +395,8 @@
 	to_chat(user, "[icon2html(src, usr)] You [auto_fire? "<B>disable</b>" : "<B>enable</b>"] \the [src]'s auto fire mode.")
 	playsound(loc,'sound/machines/click.ogg', 25, 1)
 	auto_fire = !auto_fire
+	var/datum/action/item_action/smartgun/toggle_auto_fire/TAF = locate(/datum/action/item_action/smartgun/toggle_auto_fire) in actions
+	TAF.update_icon()
 	auto_fire()
 
 /obj/item/weapon/gun/smartgun/proc/auto_fire()
@@ -418,6 +433,8 @@
 		process_shot(human_user, warned)
 	else
 		auto_fire = FALSE
+		var/datum/action/item_action/smartgun/toggle_auto_fire/TAF = locate(/datum/action/item_action/smartgun/toggle_auto_fire) in actions
+		TAF.update_icon()
 		auto_fire()
 
 /obj/item/weapon/gun/smartgun/proc/get_target(var/mob/living/user)
@@ -511,6 +528,8 @@
 	to_chat(user, "[icon2html(src, usr)] You [motion_detector? "<B>disable</b>" : "<B>enable</b>"] \the [src]'s motion detector.")
 	playsound(loc,'sound/machines/click.ogg', 25, 1)
 	motion_detector = !motion_detector
+	var/datum/action/item_action/smartgun/toggle_motion_detector/TMD = locate(/datum/action/item_action/smartgun/toggle_motion_detector) in actions
+	TMD.update_icon()
 	motion_detector()
 
 /obj/item/weapon/gun/smartgun/proc/motion_detector()
@@ -588,7 +607,7 @@
 	ammo = /obj/item/ammo_magazine/smartgun/dirty
 	ammo_primary = /datum/ammo/bullet/smartgun/dirty//Toggled ammo type
 	ammo_secondary = /datum/ammo/bullet/smartgun/dirty/armor_piercing///Toggled ammo type
-	flags_gun_features = GUN_WY_RESTRICTED|GUN_SPECIALIST|GUN_WIELDED_FIRING_ONLY|GUN_HAS_FULL_AUTO
+	flags_gun_features = GUN_WY_RESTRICTED|GUN_SPECIALIST|GUN_WIELDED_FIRING_ONLY|GUN_HAS_FULL_AUTO|GUN_FULL_AUTO_ON|GUN_FULL_AUTO_ONLY
 
 /obj/item/weapon/gun/smartgun/dirty/Initialize(mapload, ...)
 	. = ..()
@@ -611,6 +630,9 @@
 	if(!recoil_compensation)
 		scatter = SCATTER_AMOUNT_TIER_8
 	burst_scatter_mult = SCATTER_AMOUNT_TIER_10
+	fa_delay = FIRE_DELAY_TIER_10
+	fa_scatter_peak = FULL_AUTO_SCATTER_PEAK_TIER_10
+	fa_max_scatter = SCATTER_AMOUNT_NONE
 
 
 // CLF SMARTGUN
