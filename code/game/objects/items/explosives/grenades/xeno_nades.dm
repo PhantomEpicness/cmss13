@@ -17,7 +17,7 @@
 	..()
 // Grenadier boiler glob
 // Splashes acid in a radius and melts cades in a radius aswell
-/obj/item/explosive/grenade/grenadier_acid_glob
+/obj/item/explosive/grenade/grenadier_acid_nade
 	name = "acid ball"
 	desc = "A bulging, pulsating ball of gas."
 	icon_state = "neuro_nade"
@@ -33,8 +33,9 @@
 	//var/spray_type = /obj/effect/xenomorph/spray
 	var/range = 3
 	var/hivenumber = XENO_HIVE_NORMAL
+	var/cade_acidType = /obj/effect/xenomorph/acid
 
-/obj/item/explosive/grenade/grenadier_acid_glob/prime()
+/obj/item/explosive/grenade/grenadier_acid_nade/prime()
 	create_shrapnel(loc, shrapnel_count, , ,shrapnel_type, cause_data)
 	//new spray_type(loc, cause_data, hivenumber)
 	var/datum/automata_cell/acid/boiler/E = new /datum/automata_cell/acid/boiler(get_turf(loc))
@@ -45,7 +46,7 @@
 	if(QDELETED(E))
 		return
 
-
+	addtimer(CALLBACK(src, .proc/acidCades, src, range, cade_acidType), 1 SECONDS) // Let acid spread first
 	// trapper warning below
 
 	//for(var/turf/T in orange(range, loc)/*range(range,loc)*/)
@@ -58,8 +59,12 @@
 	..()
 
 
-
-/obj/item/explosive/grenade/grenadier_slime_glob
+/obj/item/explosive/grenade/grenadier_acid_nade/proc/acidCades(nade,range,acidtype)
+	for(var/O in view(nade, range))
+		if(istype(O, /obj/structure/barricade))
+			new acidtype(get_turf(O), O)
+	return
+/obj/item/explosive/grenade/grenadier_slime_nade
 	name = "slime ball"
 	desc = "A bulging, pulsating ball of slime."
 	icon_state = "neuro_nade"
@@ -71,10 +76,10 @@
 	rebounds = FALSE
 	var/shrapnel_count = 1
 	var/shrapnel_type = /datum/ammo/xeno/toxin
-	var/range = 1
+	var/range = 3
 	var/hivenumber = XENO_HIVE_NORMAL
 
-/obj/item/explosive/grenade/grenadier_slime_glob/prime()
+/obj/item/explosive/grenade/grenadier_slime_nade/prime()
 	create_shrapnel(loc, shrapnel_count, , ,shrapnel_type, cause_data)
 	var/datum/automata_cell/acid/slime/E = new /datum/automata_cell/acid/slime(get_turf(loc))
 	E.source = initial(name)
@@ -88,4 +93,3 @@
 
 	playsound(loc, 'sound/effects/blobattack.ogg', 25, 1)
 	qdel(src)
-	..()

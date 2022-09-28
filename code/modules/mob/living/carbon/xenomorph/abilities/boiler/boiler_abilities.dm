@@ -103,7 +103,28 @@
 
 //////////////////////////// acid grenadier abilities
 
-/datum/action/xeno_action/activable/grenadier_acid_glob
+/datum/action/xeno_action/onclick/shift_chemicals
+	name = "Switch Chemicals"
+	action_icon_state = "shift_spit_neurotoxin"
+	plasma_cost = 0
+	macro_path = /datum/action/xeno_action/verb/verb_toggle_spit_type
+	action_type = XENO_ACTION_CLICK
+	ability_primacy = XENO_PRIMARY_ACTION_2
+	xeno_cooldown = 5 SECONDS
+	var/action_types_to_cd = list(  	// copypasted from dump acid
+		/datum/action/xeno_action/activable/grenadier_lob,
+		/datum/action/xeno_action/onclick/shift_chemicals,
+		/datum/action/xeno_action/activable/spray_acid/grenadier)
+
+	var/cooldown_duration = 5 SECONDS
+
+/datum/action/xeno_action/onclick/shift_chemicals/can_use_action()
+	var/mob/living/carbon/Xenomorph/X = owner
+	if(X && !X.buckled && !X.is_mob_incapacitated())
+		return TRUE
+
+
+/datum/action/xeno_action/activable/grenadier_lob
 	name = "Acid Glob"
 	action_icon_state = "prae_acid_ball"
 	ability_name = "acid glob"
@@ -117,20 +138,39 @@
 	var/prime_delay = 1 SECONDS
 	// throw range in tiles
 	var/throw_range = 10
-	var/globtype = /obj/item/explosive/grenade/grenadier_acid_glob
+	var/globtype = /obj/item/explosive/grenade/grenadier_acid_nade //placeholder
 
-/datum/action/xeno_action/activable/grenadier_acid_glob/slime
-	name = "Slime Glob"
-	action_icon_state = "prae_acid_ball"
-	ability_name = "acid glob"
-	macro_path = /datum/action/xeno_action/verb/verb_acid_ball
+/datum/action/xeno_action/activable/spray_acid/grenadier
+	name = "Spray"
+	action_icon_state = "spray_acid"
+	ability_name = "spray acid"
+	macro_path = /datum/action/xeno_action/verb/verb_spray_acid
 	action_type = XENO_ACTION_CLICK
-	ability_primacy = XENO_PRIMARY_ACTION_1
-	xeno_cooldown = 20 SECONDS
-	plasma_cost = 200
-	// activation delay is warmup
-	activation_delay = 5 SECONDS
-	prime_delay = 1 SECONDS
-	throw_range = 5
-	globtype = /obj/item/explosive/grenade/grenadier_slime_glob
+
+	plasma_cost = 40
+	xeno_cooldown = 10 SECONDS
+
+
+	// Configurable options
+
+	spray_type = ACID_SPRAY_CONE	// Enum for the shape of spray to do
+	spray_distance = 3 				// Distance to spray
+	spray_effect_type = /obj/effect/xenomorph/spray
+
+	activation_delay = FALSE		// These are placeholders
+	activation_delay_length = 0		// These are placeholders
+
+/datum/action/xeno_action/activable/spray_acid/grenadier/use_ability(atom/A)
+	var/mob/living/carbon/Xenomorph/X = owner
+	var/datum/behavior_delegate/boiler_grenadier/BD = X.behavior_delegate
+	switch(BD.curr_chem)
+		if("acid")
+			spray_effect_type = /obj/effect/xenomorph/spray
+			activation_delay = TRUE
+		if("slime")
+			spray_effect_type = /obj/effect/xenomorph/spray/slime
+			activation_delay = FALSE
+		else
+			CRASH("Invalid grenadier chemical")
+	..()
 

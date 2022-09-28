@@ -320,13 +320,39 @@
 
 /// acid grenadier powers
 
-
-/datum/action/xeno_action/activable/grenadier_acid_glob/use_ability(atom/A)
+/datum/action/xeno_action/onclick/shift_chemicals/use_ability(atom/A)
 	var/mob/living/carbon/Xenomorph/X = owner
-	to_chat(X, SPAN_XENODANGER("You prepare to lob a massive acid glob!"))
+	var/datum/behavior_delegate/boiler_grenadier/BD = X.behavior_delegate
+
+	for (var/action_type in action_types_to_cd)
+		var/datum/action/xeno_action/XA = get_xeno_action_by_type(X, action_type)
+		if (!istype(XA))
+			continue
+
+		XA.apply_cooldown_override(cooldown_duration)
+
+	if(!X.check_state())
+		return
+	for(var/i in 1 to BD.chems.len)
+		if(BD.curr_chem == BD.chems[i])
+			if(i == BD.chems.len)
+				BD.curr_chem  = BD.chems[1]
+			else
+				BD.curr_chem = BD.chems[i+1]
+			break
+	to_chat(X, SPAN_NOTICE("You start preparing [BD.curr_chem]."))
+	button.overlays.Cut()
+	button.overlays += image('icons/mob/hud/actions_xeno.dmi', button, "shift_spit_[X.ammo.icon_state]")
+	..()
+	return
+
+
+/datum/action/xeno_action/activable/grenadier_lob/use_ability(atom/A)
+	var/mob/living/carbon/Xenomorph/X = owner
+	var/datum/behavior_delegate/boiler_grenadier/BD = X.behavior_delegate
+	to_chat(X, SPAN_XENODANGER("You prepare to lob a massive [BD.curr_chem] glob!"))
 	if (!X.check_state() || X.action_busy)
 		return
-
 	if (!action_cooldown_check() && check_and_use_plasma_owner())
 		return
 
@@ -342,47 +368,17 @@
 	if (!action_cooldown_check())
 		return
 
+	//globtype =  /obj/item/explosive/grenade/grenadier_[BD.curr_chem]_nade
 	apply_cooldown()
+	switch(BD.curr_chem)
+		if("acid")
+			globtype = /obj/item/explosive/grenade/grenadier_acid_nade
+		if("slime")
+			globtype = /obj/item/explosive/grenade/grenadier_slime_nade
+		else
+			CRASH("Invalid grenadier chemical")
 
 	to_chat(X, SPAN_XENOWARNING("You lob a massive ball of acid into the air!"))
-// throw_atom(target, range, speed, ? , ?)
-	var/obj/item/explosive/grenade/grenade = new globtype
-	grenade.cause_data = create_cause_data(initial(X.caste_type), X)
-	grenade.forceMove(get_turf(X))
-	// 2nd var is range
-	// TODO: PLEASE MAKE THIS A FUCKING VARIABLE THAT YOU CAN CHANGE IN THE ACID SPLASH DELEGATES!!!1
-	grenade.throw_atom(A, throw_range, SPEED_SLOW, X, TRUE)
-
-	addtimer(CALLBACK(grenade, /obj/item/explosive.proc/prime), prime_delay)
-
-	..()
-	return
-
-
-/datum/action/xeno_action/activable/grenadier_acid_glob/slime/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/X = owner
-	to_chat(X, SPAN_XENODANGER("You prepare to lob a massive slime glob!"))
-	if (!X.check_state() || X.action_busy)
-		return
-
-	if (!action_cooldown_check() && check_and_use_plasma_owner())
-		return
-
-	var/turf/current_turf = get_turf(X)
-
-	if (!current_turf)
-		return
-
-	if (!do_after(X, activation_delay, INTERRUPT_ALL | BEHAVIOR_IMMOBILE, BUSY_ICON_HOSTILE))
-		to_chat(X, SPAN_XENODANGER("You cancel your slime glob."))
-		return
-
-	if (!action_cooldown_check())
-		return
-
-	apply_cooldown()
-
-	to_chat(X, SPAN_XENOWARNING("You lob a massive ball of slime into the air!"))
 // throw_atom(target, range, speed, ? , ?)
 	var/obj/item/explosive/grenade/grenade = new globtype
 	grenade.cause_data = create_cause_data(initial(X.caste_type), X)

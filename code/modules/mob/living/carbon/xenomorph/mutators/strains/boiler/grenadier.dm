@@ -56,15 +56,14 @@ BASICALLY
 	individual_only = TRUE
 	caste_whitelist = list(XENO_CASTE_BOILER) //Only boiler.
 	mutator_actions_to_remove = list( ////// todo: remove actions
-	//	/datum/action/xeno_action/activable/bombard,
+		/datum/action/xeno_action/activable/bombard,
 		/datum/action/xeno_action/activable/acid_lance,
 		/datum/action/xeno_action/onclick/dump_acid,
 	) /////////////// todo: put the actions you want here
 	mutator_actions_to_add = list(
-		/datum/action/xeno_action/activable/grenadier_acid_glob,
-		/datum/action/xeno_action/activable/grenadier_acid_glob/slime,
-		///datum/action/xeno_action/activable/acid_mine,
-		/datum/action/xeno_action/activable/acid_shotgun,
+		/datum/action/xeno_action/activable/grenadier_lob,
+		/datum/action/xeno_action/onclick/shift_chemicals,
+		/datum/action/xeno_action/activable/spray_acid/grenadier
 	)
 	keystone = TRUE
 
@@ -93,7 +92,10 @@ BASICALLY
 
 /datum/behavior_delegate/boiler_grenadier
 	name = "Boiler Grenadier Behavior Delegate"
-
+	var/curr_chem = "acid"
+	var/list/chems = list("acid","slime")
+	//var/list/sprays = list(/obj/effect/xenomorph/spray,/obj/effect/xenomorph/spray/slime)
+	//var/list/nades = list(/obj/item/explosive/grenade/grenadier_acid_nade,/obj/item/explosive/grenade/grenadier_slime_nade)
 	// Config
 	var/temp_movespeed_amount = 1.25
 	var/temp_movespeed_duration = 50
@@ -104,51 +106,3 @@ BASICALLY
 	var/temp_movespeed_time_used = 0
 	var/temp_movespeed_usable = FALSE
 	var/temp_movespeed_messaged = FALSE
-
-
-// the fuck does this do
-//were not using this shit
-/*
-/datum/behavior_delegate/boiler_grenadier/on_hitby_projectile(ammo)
-	if (temp_movespeed_usable)
-		temp_movespeed_time_used = world.time
-		temp_movespeed_usable = FALSE
-
-
-/datum/behavior_delegate/boiler_grenadier/ranged_attack_additional_effects_target(atom/A)
-	if (!ishuman(A))
-		return
-	if (!istype(bound_xeno))
-		return
-
-	var/mob/living/carbon/human/H = A
-	var/datum/effects/boiler_trap/found = null
-	for (var/datum/effects/boiler_trap/F in H.effects_list)
-		if (F.cause_data?.resolve_mob() == bound_xeno)
-			found = F
-			break
-// this is some sort of snowflake powerup when using traps
-	var/datum/action/xeno_action/activable/boiler_trap/trap_ability = get_xeno_action_by_type(bound_xeno, /datum/action/xeno_action/activable/boiler_trap)
-	if (found)
-		H.apply_armoured_damage(bonus_damage_shotgun_trapped, ARMOR_BIO, BURN)
-		trap_ability.empowering_charge_counter = trap_ability.empower_charge_max
-	else
-		H.AdjustSlowed(2)
-		trap_ability.empowering_charge_counter += 1
-
-	if(!trap_ability.empowered && trap_ability.empowering_charge_counter >= trap_ability.empower_charge_max)
-		trap_ability.empowered = TRUE
-		trap_ability.button.overlays += "+empowered"
-		to_chat(bound_xeno, SPAN_XENODANGER("You have gained sufficient insight in your prey to empower your next [trap_ability.name]."))
-
-	if(trap_ability.empowering_charge_counter > trap_ability.empower_charge_max)
-		trap_ability.empowering_charge_counter = trap_ability.empower_charge_max
-
-/datum/behavior_delegate/boiler_grenadier/on_life() // use this for cooldowns
-	if ((temp_movespeed_time_used + temp_movespeed_cooldown) < world.time)
-		if (!temp_movespeed_messaged)
-			to_chat(bound_xeno, SPAN_XENODANGER("You feel your adrenaline glands refill! Your speedboost will activate again."))
-			temp_movespeed_messaged = TRUE
-		temp_movespeed_usable = TRUE
-		return
-*/
