@@ -32,7 +32,42 @@
 
 /obj/ovipositor/proc/autoplant()
 	for(var/turf/Turf in range(OVI_AUTOPLANT_RANGE, src.loc) )
+	if(!X.check_state())
+		return FALSE
 
+	if(isstorage(A.loc) || X.contains(A) || istype(A, /atom/movable/screen)) return FALSE
+
+	//Make sure construction is unrestricted
+	if(X.hive && X.hive.construction_allowed == XENO_LEADER && X.hive_pos == NORMAL_XENO)
+		to_chat(X, SPAN_WARNING("Construction is currently restricted to Leaders only!"))
+		return FALSE
+	else if(X.hive && X.hive.construction_allowed == XENO_QUEEN && !istype(X.caste, /datum/caste_datum/queen))
+		to_chat(X, SPAN_WARNING("Construction is currently restricted to Queen only!"))
+		return FALSE
+
+	var/turf/T = get_turf(A)
+
+	var/area/AR = get_area(T)
+	if(isnull(AR) || !(AR.is_resin_allowed))
+		to_chat(X, SPAN_XENOWARNING("It's too early to spread the hive this far."))
+		return FALSE
+
+	if(T.z != X.z)
+		to_chat(X, SPAN_XENOWARNING("This area is too far away to affect!"))
+		return FALSE
+
+	if(GLOB.interior_manager.interior_z == X.z)
+		to_chat(X, SPAN_XENOWARNING("It's too tight in here to build."))
+		return FALSE
+
+	if(!spacecheck(X,T,structure_template))
+		return FALSE
+
+	if(!do_after(X, XENO_STRUCTURE_BUILD_TIME, INTERRUPT_NO_NEEDHAND|BEHAVIOR_IMMOBILE, BUSY_ICON_BUILD))
+		return FALSE
+
+	if(!spacecheck(X,T,structure_template)) //doublechecking
+		return FALSE
 
 /obj/ovipositor/proc/process_decay()
 	set background = 1
