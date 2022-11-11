@@ -1,5 +1,5 @@
 #define QUEEN_OVIPOSITOR_DECAY_TIME 500
-
+#define OVI_AUTOPLANT_RANGE 7
 /obj/ovipositor
 	name = "Egg Sac"
 	icon_state = "ovipositor"
@@ -9,12 +9,30 @@
 	var/decay_ready = 0
 	var/decayed = 0		// This is here so later on we can use the ovpositor molt for research. ~BMC777
 	var/destroyed = 0
+	var/queen_mounted
+	var/stored_eggs
+	var/hivenumber
+	var/autoplant = TRUE
 
 /obj/ovipositor/Initialize(mapload, ...)
 	. = ..()
 	icon = get_icon_from_source(CONFIG_GET(string/alien_queen_ovipositor))
 	begin_decay_time = world.timeofday + QUEEN_OVIPOSITOR_DECAY_TIME
 	process_decay()
+
+/obj/ovipositor/proc/create_egg(loc,hivenumber, var/mob/living/carbon/Xenomorph/Queen)
+	var/obj/effect/alien/egg/Egg
+	if(!Queen.check_state())
+		return
+	stored_eggs ++
+	if(autoplant)
+		autoplant()
+	else
+	new /obj/item/xeno_egg(loc, hivenumber)
+
+/obj/ovipositor/proc/autoplant()
+	for(var/turf/Turf in range(OVI_AUTOPLANT_RANGE, src.loc) )
+
 
 /obj/ovipositor/proc/process_decay()
 	set background = 1

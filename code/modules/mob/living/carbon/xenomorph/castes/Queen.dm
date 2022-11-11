@@ -471,7 +471,7 @@
 
 	return ..()
 
-/mob/living/carbon/Xenomorph/Queen/Life(delta_time)
+/mob/living/carbon/Xenomorph/Queen/Life(delta_time) // of intrest
 	..()
 
 	if(stat != DEAD)
@@ -482,7 +482,6 @@
 		if(observed_xeno)
 			if(observed_xeno.stat == DEAD || QDELETED(observed_xeno))
 				overwatch(observed_xeno, TRUE)
-
 		if(ovipositor && !is_mob_incapacitated(TRUE))
 			egg_amount += 0.07 * mutators.egg_laying_multiplier //one egg approximately every 30 seconds
 			if(egg_amount >= 1)
@@ -490,7 +489,7 @@
 					var/turf/T = loc
 					if(T.contents.len <= 25) //so we don't end up with a million object on that turf.
 						egg_amount--
-						new /obj/item/xeno_egg(loc, hivenumber)
+						XQ.ovipositor.create_egg(loc,hivenumber)
 
 /mob/living/carbon/Xenomorph/Queen/Stat()
 	..()
@@ -820,12 +819,16 @@
 		leader.handle_xeno_leader_pheromones()
 
 	xeno_message(SPAN_XENOANNOUNCE("The Queen has grown an ovipositor, evolution progress resumed."), 3, hivenumber)
-
+	new /obj/ovipositor(loc)
 	START_PROCESSING(SShive_status, hive.hive_ui)
 
 	SEND_SIGNAL(src, COMSIG_QUEEN_MOUNT_OVIPOSITOR)
 
 /mob/living/carbon/Xenomorph/Queen/proc/dismount_ovipositor(instant_dismount)
+	/*
+	send detach command to ovipositor
+
+	*/
 	set waitfor = 0
 	if(!instant_dismount)
 		if(observed_xeno)

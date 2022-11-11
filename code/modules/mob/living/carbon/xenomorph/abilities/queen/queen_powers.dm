@@ -133,7 +133,7 @@
 	..()
 	return
 
-/datum/action/xeno_action/onclick/remove_eggsac/use_ability(atom/A)
+/datum/action/xeno_action/onclick/remove_eggsac/use_ability(atom/A)  //intrest
 	var/mob/living/carbon/Xenomorph/Queen/X = owner
 	if(!X.check_state())
 		return
