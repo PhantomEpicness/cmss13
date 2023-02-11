@@ -42,7 +42,7 @@
 			to_chat(user, SPAN_NOTICE("You add \the [W.name] to [(src.name == "paper bundle") ? "the paper bundle" : src.name]."))
 			qdel(W)
 	else
-		if(istype(W, /obj/item/tool/pen) || istype(W, /obj/item/toy/crayon))
+		if(HAS_TRAIT(W, TRAIT_TOOL_PEN) || istype(W, /obj/item/toy/crayon))
 			close_browser(usr, name) //Closes the dialog
 		if(page < contents.len)
 			page = contents.len
@@ -77,12 +77,12 @@
 			else
 				to_chat(user, SPAN_DANGER("You must hold \the [P] steady to burn \the [src]."))
 
-/obj/item/paper_bundle/examine(mob/user)
-	to_chat(usr, desc)
+/obj/item/paper_bundle/get_examine_text(mob/user)
+	. = list(desc)
 	if(in_range(user, src) || isobserver(user))
 		src.attack_self(user)
 	else
-		to_chat(user, SPAN_NOTICE("It is too far away."))
+		. += SPAN_NOTICE("It is too far away.")
 
 /obj/item/paper_bundle/attack_self(mob/user)
 	..()

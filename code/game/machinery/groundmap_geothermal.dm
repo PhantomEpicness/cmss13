@@ -3,11 +3,11 @@
 	icon = 'icons/obj/structures/machinery/geothermal.dmi'
 	icon_state = "weld"
 	desc = "A thermoelectric generator sitting atop a plasma-filled borehole. This one is heavily damaged. Use a blowtorch, wirecutters, then wrench to repair it."
-	anchored = 1
-	density = 1
-	directwired = 0     //Requires a cable directly underneath
+	anchored = TRUE
+	density = TRUE
+	directwired = 0  //Requires a cable directly underneath
 	unslashable = TRUE
-	unacidable = TRUE      //NOPE.jpg
+	unacidable = TRUE   //NOPE.jpg
 	var/power_gen_percent = 0 //100,000W at full capacity
 	var/power_generation_max = 100000 //Full capacity
 	var/powernet_connection_failed = 0 //Logic checking for powernets
@@ -133,8 +133,11 @@
 	start_processing()
 	return 1
 
-/obj/structure/machinery/power/geothermal/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/structure/machinery/power/geothermal/attackby(obj/item/O as obj, mob/user as mob)
 	if(iswelder(O))
+		if(!HAS_TRAIT(O, TRAIT_TOOL_BLOWTORCH))
+			to_chat(user, SPAN_WARNING("You need a stronger blowtorch!"))
+			return
 		if(buildstate == 1 && !is_on)
 			if(!skillcheck(user, SKILL_ENGINEER, SKILL_ENGINEER_ENGI))
 				to_chat(user, SPAN_WARNING("You have no clue how to repair this thing."))
@@ -201,11 +204,11 @@
 	icon = 'icons/turf/ground_map.dmi'
 	icon_state = "panelnopower"
 	desc = "This switch controls the floodlights surrounding the archaeology complex. It only functions when there is power."
-	density = 0
-	anchored = 1
-	var/ispowered = 0
+	density = FALSE
+	anchored = TRUE
+	var/ispowered = FALSE
 	var/turned_on = 0 //has to be toggled in engineering
-	use_power = 1
+	use_power = USE_POWER_IDLE
 	unslashable = TRUE
 	unacidable = TRUE
 	var/list/floodlist = list() // This will save our list of floodlights on the map
@@ -243,11 +246,11 @@
 	if((stat & NOPOWER))
 		if(ispowered && turned_on)
 			toggle_lights()
-		ispowered = 0
+		ispowered = FALSE
 		turned_on = 0
 		update_icon()
 	else
-		ispowered = 1
+		ispowered = TRUE
 		update_icon()
 
 /obj/structure/machinery/colony_floodlight_switch/proc/toggle_lights()
@@ -277,25 +280,25 @@
 	return 1
 
 
-#define FLOODLIGHT_REPAIR_UNSCREW 	0
-#define FLOODLIGHT_REPAIR_CROWBAR 	1
-#define FLOODLIGHT_REPAIR_WELD 		2
-#define FLOODLIGHT_REPAIR_CABLE 	3
-#define FLOODLIGHT_REPAIR_SCREW 	4
+#define FLOODLIGHT_REPAIR_UNSCREW 0
+#define FLOODLIGHT_REPAIR_CROWBAR 1
+#define FLOODLIGHT_REPAIR_WELD 2
+#define FLOODLIGHT_REPAIR_CABLE 3
+#define FLOODLIGHT_REPAIR_SCREW 4
 
 /obj/structure/machinery/colony_floodlight
 	name = "Colony Floodlight"
 	icon = 'icons/obj/structures/machinery/big_floodlight.dmi'
 	icon_state = "flood_s_off"
-	density = 1
-	anchored = 1
+	density = TRUE
+	anchored = TRUE
 	layer = WINDOW_LAYER
 	var/damaged = 0 //Can be smashed by xenos
 	var/is_lit = 0 //whether the floodlight is switched to on or off. Does not necessarily mean it emits light.
 	unslashable = TRUE
 	unacidable = TRUE
 	var/power_tick = 50 // power each floodlight takes up per process
-	use_power = 0 //It's the switch that uses the actual power, not the lights
+	use_power = USE_POWER_NONE //It's the switch that uses the actual power, not the lights
 	var/obj/structure/machinery/colony_floodlight_switch/fswitch = null //Reverse lookup for power grabbing in area
 	var/lum_value = 7
 	var/repair_state = 0
@@ -372,6 +375,9 @@
 			return TRUE
 
 		else if(iswelder(I))
+			if(!HAS_TRAIT(I, TRAIT_TOOL_BLOWTORCH))
+				to_chat(user, SPAN_WARNING("You need a stronger blowtorch!"))
+				return
 			var/obj/item/tool/weldingtool/WT = I
 
 			if(!skillcheck(user, SKILL_ENGINEER, SKILL_ENGINEER_ENGI))
@@ -431,20 +437,20 @@
 		return 0
 	..()
 
-/obj/structure/machinery/colony_floodlight/examine(mob/user)
-	..()
+/obj/structure/machinery/colony_floodlight/get_examine_text(mob/user)
+	. = ..()
 	if(ishuman(user))
 		if(damaged)
-			to_chat(user, SPAN_WARNING("It is damaged."))
+			. += SPAN_WARNING("It is damaged.")
 			if(skillcheck(user, SKILL_ENGINEER, SKILL_ENGINEER_ENGI))
 				switch(repair_state)
-					if(FLOODLIGHT_REPAIR_UNSCREW) to_chat(user, SPAN_INFO("You must first unscrew its maintenance hatch."))
-					if(FLOODLIGHT_REPAIR_CROWBAR) to_chat(user, SPAN_INFO("You must crowbar its maintenance hatch open."))
-					if(FLOODLIGHT_REPAIR_WELD) to_chat(user, SPAN_INFO("You must weld the damage to it."))
-					if(FLOODLIGHT_REPAIR_CABLE) to_chat(user, SPAN_INFO("You must replace its damaged cables."))
-					if(FLOODLIGHT_REPAIR_SCREW) to_chat(user, SPAN_INFO("You must screw its maintenance hatch closed."))
+					if(FLOODLIGHT_REPAIR_UNSCREW) . += SPAN_INFO("You must first unscrew its maintenance hatch.")
+					if(FLOODLIGHT_REPAIR_CROWBAR) . += SPAN_INFO("You must crowbar its maintenance hatch open.")
+					if(FLOODLIGHT_REPAIR_WELD) . += SPAN_INFO("You must weld the damage to it.")
+					if(FLOODLIGHT_REPAIR_CABLE) . += SPAN_INFO("You must replace its damaged cables.")
+					if(FLOODLIGHT_REPAIR_SCREW) . += SPAN_INFO("You must screw its maintenance hatch closed.")
 		else if(!is_lit)
-			to_chat(user, SPAN_INFO("It doesn't seem powered."))
+			. += SPAN_INFO("It doesn't seem powered.")
 
 #undef FLOODLIGHT_REPAIR_UNSCREW
 #undef FLOODLIGHT_REPAIR_CROWBAR

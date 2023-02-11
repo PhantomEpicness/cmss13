@@ -4,7 +4,7 @@
 	var/back_icon = "card_back"
 	var/sort_index = 0
 
-/datum/playing_card/New(var/set_name, var/set_card_icon, var/set_back_icon, var/set_sort_index)
+/datum/playing_card/New(set_name, set_card_icon, set_back_icon, set_sort_index)
 	..()
 	if(set_name)
 		name = set_name
@@ -31,9 +31,9 @@
 	. = ..()
 	populate_deck()
 
-/obj/item/toy/deck/examine(mob/user)
+/obj/item/toy/deck/get_examine_text(mob/user)
 	. = ..()
-	to_chat(user, SPAN_NOTICE("There are <b>[length(cards)]</b> cards remaining in the deck."))
+	. += SPAN_NOTICE("There are <b>[length(cards)]</b> cards remaining in the deck.")
 
 /obj/item/toy/deck/proc/populate_deck()
 	var/card_id = 1
@@ -122,7 +122,7 @@
 
 	handle_draw_cards(usr)
 
-/obj/item/toy/deck/proc/handle_draw_cards(var/mob/mob)
+/obj/item/toy/deck/proc/handle_draw_cards(mob/mob)
 	if(mob.stat || !ishuman(mob) || !Adjacent(mob))
 		return
 
@@ -133,7 +133,7 @@
 		to_chat(user, SPAN_WARNING("There are no cards in the deck."))
 		return
 
-	var/num_cards = input(user, "How many cards do you want to draw? ([cards_length] remaining)", "Card Drawing") as null|num
+	var/num_cards = tgui_input_number(user, "How many cards do you want to draw? ([cards_length] remaining)", "Card Drawing", 1, cards_length, 1)
 	cards_length = length(cards)
 	if(!cards_length)
 		to_chat(user, SPAN_WARNING("There are no cards in the deck."))
@@ -234,7 +234,7 @@
 		user.visible_message(SPAN_NOTICE("\The [user] deals a card to \the [target]."), SPAN_NOTICE("You deal a card to \the [target]."))
 	H.throw_atom(get_step(target,target.dir), 10, SPEED_VERY_FAST, H)
 
-/obj/item/toy/deck/attack_self(var/mob/user)
+/obj/item/toy/deck/attack_self(mob/user)
 	..()
 	var/list/newcards = list()
 	for(var/i = 1 to length(cards))
@@ -268,7 +268,7 @@
 	var/pile_state = FALSE
 	var/list/datum/playing_card/cards = list()
 
-/obj/item/toy/handcard/get_examine_line()
+/obj/item/toy/handcard/get_examine_line(mob/user)
 	. = ..()
 	if(!concealed)
 		. += " ([length(cards)] card\s)"
@@ -279,19 +279,19 @@
 
 /obj/item/toy/handcard/uno_reverse_red
 	icon_state = "red_reverse"
-	desc = "Always handy to have one or three of these up your sleeve.."
+	desc = "Always handy to have one or three of these up your sleeve."
 
 /obj/item/toy/handcard/uno_reverse_blue
 	icon_state = "blue_reverse"
-	desc = "Always handy to have one or three of these up your sleeve.."
+	desc = "Always handy to have one or three of these up your sleeve."
 
 /obj/item/toy/handcard/uno_reverse_yellow
 	icon_state = "yellow_reverse"
-	desc = "Always handy to have one or three of these up your sleeve.."
+	desc = "Always handy to have one or three of these up your sleeve."
 
 /obj/item/toy/handcard/uno_reverse_purple
 	icon_state = "purple_reverse"
-	desc = "Always handy to have one or three of these up your sleeve.."
+	desc = "Always handy to have one or three of these up your sleeve."
 
 /obj/item/toy/handcard/verb/toggle_discard_state()
 	set name = "Toggle Pile State"
@@ -383,7 +383,7 @@
 		return
 	return ..()
 
-/obj/item/toy/handcard/attack_self(var/mob/user)
+/obj/item/toy/handcard/attack_self(mob/user)
 	..()
 	concealed = !concealed
 	update_icon()
@@ -394,21 +394,21 @@
 		return
 	usr.put_in_hands(src)
 
-/obj/item/toy/handcard/examine(mob/user)
-	..()
+/obj/item/toy/handcard/get_examine_text(mob/user)
+	. = ..()
 	if(length(cards))
-		to_chat(user, SPAN_NOTICE("It has <b>[length(cards)]</b> cards."))
+		. += SPAN_NOTICE("It has <b>[length(cards)]</b> cards.")
 		if(pile_state)
 			if(!concealed)
-				to_chat(user, SPAN_NOTICE("The top card is <b>[cards[length(cards)].name]</b>."))
+				. += SPAN_NOTICE("The top card is <b>[cards[length(cards)].name]</b>.")
 		else if(loc == user)
 			var/card_names = list()
 			for(var/datum/playing_card/P as anything in cards)
 				card_names += P.name
-			to_chat(user, SPAN_NOTICE("The cards are: [english_list(card_names)]"))
+			. += SPAN_NOTICE("The cards are: [english_list(card_names)]")
 
 
-/obj/item/toy/handcard/update_icon(var/direction = 0)
+/obj/item/toy/handcard/update_icon(direction = 0)
 	var/cards_length = length(cards)
 	if(pile_state)
 		if(concealed)
@@ -479,7 +479,7 @@
 	update_icon()
 
 
-/proc/get_or_make_user_hand(var/mob/living/user, var/obj/item/toy/handcard/ignore_hand)
+/proc/get_or_make_user_hand(mob/living/user, obj/item/toy/handcard/ignore_hand)
 	var/obj/item/toy/handcard/H
 	if(istype(user.l_hand, /obj/item/toy/handcard) && user.l_hand != ignore_hand)
 		H = user.l_hand

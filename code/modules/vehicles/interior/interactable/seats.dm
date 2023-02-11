@@ -29,11 +29,11 @@
 	if(buckled_mob)
 		buckled_mob.setDir(dir)
 
-/obj/structure/bed/chair/comfy/vehicle/afterbuckle(var/mob/M)
+/obj/structure/bed/chair/comfy/vehicle/afterbuckle(mob/M)
 	..()
 	handle_afterbuckle(M)
 
-/obj/structure/bed/chair/comfy/vehicle/proc/handle_afterbuckle(var/mob/M)
+/obj/structure/bed/chair/comfy/vehicle/proc/handle_afterbuckle(mob/M)
 
 	if(!vehicle)
 		return
@@ -42,7 +42,7 @@
 		vehicle.set_seated_mob(seat, null)
 		M.unset_interaction()
 		if(M.client)
-			M.client.change_view(world_view_size, src)
+			M.client.change_view(world_view_size, vehicle)
 			M.client.pixel_x = 0
 			M.client.pixel_y = 0
 			M.reset_view()
@@ -52,11 +52,11 @@
 			return
 		vehicle.set_seated_mob(seat, M)
 		if(M && M.client)
-			M.client.change_view(8, src)
+			M.client.change_view(8, vehicle)
 
 /obj/structure/bed/chair/comfy/vehicle/clicked(mob/user, list/mods) // If you're buckled, you can shift-click on the seat in order to return to camera-view
 	if(user == buckled_mob && mods["shift"] && !user.is_mob_incapacitated())
-		user.client.change_view(8, src)
+		user.client.change_view(8, vehicle)
 		vehicle.set_seated_mob(seat, user)
 		return TRUE
 	else
@@ -72,7 +72,7 @@
 	desc = "Comfortable seat for a driver."
 	seat = VEHICLE_DRIVER
 
-/obj/structure/bed/chair/comfy/vehicle/driver/do_buckle(var/mob/target, var/mob/user)
+/obj/structure/bed/chair/comfy/vehicle/driver/do_buckle(mob/target, mob/user)
 	required_skill = vehicle.required_skill
 	if(!skillcheck(target, SKILL_VEHICLE, required_skill))
 		if(target == user)
@@ -91,7 +91,7 @@
 	seat = VEHICLE_GUNNER
 	required_skill = SKILL_VEHICLE_CREWMAN
 
-/obj/structure/bed/chair/comfy/vehicle/gunner/do_buckle(var/mob/target, var/mob/user)
+/obj/structure/bed/chair/comfy/vehicle/gunner/do_buckle(mob/target, mob/user)
 	// Gunning always requires crewman-level skill
 	if(!skillcheck(target, SKILL_VEHICLE, required_skill))
 		if(target == user)
@@ -101,13 +101,13 @@
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(!H.allow_gun_usage)
-			if(isSynth(user))
+			if(issynth(user))
 				to_chat(user, SPAN_WARNING("Your programming does not allow you to use heavy weaponry."))
 			else
 				to_chat(user, SPAN_WARNING("You are unable to use heavy weaponry."))
 			return
 
-	for(var/obj/item/I in user.contents)		//prevents shooting while zoomed in, but zoom can still be activated and used without shooting
+	for(var/obj/item/I in user.contents) //prevents shooting while zoomed in, but zoom can still be activated and used without shooting
 		if(I.zoom)
 			I.zoom(user)
 
@@ -122,7 +122,7 @@
 /obj/structure/bed/chair/comfy/vehicle/attackby(obj/item/W, mob/living/user)
 	return
 
-/obj/structure/bed/chair/comfy/vehicle/attack_alien(var/mob/living/carbon/Xenomorph/X, var/dam_bonus)
+/obj/structure/bed/chair/comfy/vehicle/attack_alien(mob/living/carbon/xenomorph/X, dam_bonus)
 
 	if(X.is_mob_incapacitated() || !Adjacent(X))
 		return
@@ -144,7 +144,7 @@
 
 	return ..()
 
-/obj/structure/bed/chair/comfy/vehicle/driver/armor/do_buckle(var/mob/target, var/mob/user)
+/obj/structure/bed/chair/comfy/vehicle/driver/armor/do_buckle(mob/target, mob/user)
 	. = ..()
 	update_icon()
 
@@ -166,11 +166,11 @@
 
 	return ..()
 
-/obj/structure/bed/chair/comfy/vehicle/gunner/armor/do_buckle(var/mob/target, var/mob/user)
+/obj/structure/bed/chair/comfy/vehicle/gunner/armor/do_buckle(mob/target, mob/user)
 	. = ..()
 	update_icon()
 
-/obj/structure/bed/chair/comfy/vehicle/gunner/armor/handle_afterbuckle(var/mob/M)
+/obj/structure/bed/chair/comfy/vehicle/gunner/armor/handle_afterbuckle(mob/M)
 
 	if(!vehicle)
 		return
@@ -179,7 +179,7 @@
 		vehicle.set_seated_mob(seat, null)
 		M.unset_interaction()
 		if(M.client)
-			M.client.change_view(world_view_size, src)
+			M.client.change_view(world_view_size, vehicle)
 			M.client.pixel_x = 0
 			M.client.pixel_y = 0
 	else
@@ -190,9 +190,9 @@
 		if(M && M.client)
 			if(istype(vehicle, /obj/vehicle/multitile/apc))
 				var/obj/vehicle/multitile/apc/APC = vehicle
-				M.client.change_view(APC.gunner_view_buff, src)
+				M.client.change_view(APC.gunner_view_buff, vehicle)
 			else
-				M.client.change_view(8, src)
+				M.client.change_view(8, vehicle)
 
 /obj/structure/bed/chair/comfy/vehicle/gunner/armor/update_icon()
 	overlays.Cut()
@@ -227,11 +227,11 @@
 	return ..()
 
 
-/obj/structure/bed/chair/comfy/vehicle/support_gunner/do_buckle(var/mob/target, var/mob/user)
+/obj/structure/bed/chair/comfy/vehicle/support_gunner/do_buckle(mob/target, mob/user)
 	if(ishuman(user))
 		var/mob/living/carbon/human/H = user
 		if(!H.allow_gun_usage)
-			if(isSynth(user))
+			if(issynth(user))
 				to_chat(user, SPAN_WARNING("Your programming does not allow you to use firearms."))
 			else
 				to_chat(user, SPAN_WARNING("You are unable to use firearms."))
@@ -248,7 +248,7 @@
 	if(buckled_mob)
 		overlays += over_image
 
-/obj/structure/bed/chair/comfy/vehicle/support_gunner/handle_afterbuckle(var/mob/M)
+/obj/structure/bed/chair/comfy/vehicle/support_gunner/handle_afterbuckle(mob/M)
 
 	if(!vehicle)
 		return
@@ -257,7 +257,7 @@
 		vehicle.set_seated_mob(seat, null)
 		M.unset_interaction()
 		if(M.client)
-			M.client.change_view(world_view_size, src)
+			M.client.change_view(world_view_size, vehicle)
 			M.client.pixel_x = 0
 			M.client.pixel_y = 0
 			M.reset_view()
@@ -267,7 +267,7 @@
 			return
 		vehicle.set_seated_mob(seat, M)
 		if(M && M.client)
-			M.client.change_view(8, src)
+			M.client.change_view(8, vehicle)
 
 		if(vehicle.health < initial(vehicle.health) / 2)
 			to_chat(M, SPAN_WARNING("\The [vehicle] is too damaged to operate the Firing Port Weapon!"))
@@ -320,7 +320,7 @@
 	chairbar = image('icons/obj/vehicles/interiors/general.dmi', "vehicle_bars")
 	chairbar.layer = ABOVE_MOB_LAYER
 
-	addtimer(CALLBACK(src, .proc/setup_buckle_offsets), 1 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(setup_buckle_offsets)), 1 SECONDS)
 
 	handle_rotation()
 
@@ -410,7 +410,10 @@
 		break_seat()
 
 /obj/structure/bed/chair/vehicle/attackby(obj/item/W, mob/living/user)
-	if((istype(W, /obj/item/tool/weldingtool) && broken))
+	if((iswelder(W) && broken))
+		if(!HAS_TRAIT(W, TRAIT_TOOL_BLOWTORCH))
+			to_chat(user, SPAN_WARNING("You need a stronger blowtorch!"))
+			return
 		var/obj/item/tool/weldingtool/C = W
 		if(C.remove_fuel(0,user))
 			playsound(src.loc, 'sound/items/weldingtool_weld.ogg', 25)

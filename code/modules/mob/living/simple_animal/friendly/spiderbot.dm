@@ -36,11 +36,11 @@
 	response_harm   = "stomps on"
 
 	var/obj/item/held_item = null //Storage for single item they can hold.
-	speed = -1                    //Spiderbots gotta go fast.
+	speed = -1 //Spiderbots gotta go fast.
 	mob_size = MOB_SIZE_SMALL
 	speak_emote = list("beeps","clicks","chirps")
 
-/mob/living/simple_animal/spiderbot/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/mob/living/simple_animal/spiderbot/attackby(obj/item/O as obj, mob/user as mob)
 
 	if(istype(O, /obj/item/device/mmi))
 		var/obj/item/device/mmi/B = O
@@ -78,7 +78,10 @@
 		update_icon()
 		return 1
 
-	if (istype(O, /obj/item/tool/weldingtool))
+	if (iswelder(O))
+		if(!HAS_TRAIT(O, TRAIT_TOOL_BLOWTORCH))
+			to_chat(user, SPAN_WARNING("You need a stronger blowtorch!"))
+			return
 		var/obj/item/tool/weldingtool/WT = O
 		if (WT.remove_fuel(0))
 			if(health < maxHealth)
@@ -87,7 +90,7 @@
 					health = maxHealth
 				add_fingerprint(user)
 				for(var/mob/W in viewers(user, null))
-					W.show_message(text(SPAN_DANGER("[user] has spot-welded some of the damage to [src]!")), 1)
+					W.show_message(text(SPAN_DANGER("[user] has spot-welded some of the damage to [src]!")), SHOW_MESSAGE_VISIBLE)
 			else
 				to_chat(user, SPAN_NOTICE(" [src] is undamaged!"))
 		else
@@ -121,16 +124,16 @@
 			if (O.damtype == HALLOSS)
 				damage = 0
 			apply_damage(damage, BRUTE)
-			for(var/mob/M in viewers(src, null))
+			for(var/mob/M as anything in viewers(src, null))
 				if ((M.client && !( M.blinded )))
-					M.show_message(SPAN_DANGER("\b [src] has been attacked with the [O] by [user]. "))
+					M.show_message(SPAN_DANGER("[src] has been attacked with \the [O] by [user]."), SHOW_MESSAGE_VISIBLE)
 		else
 			to_chat(usr, SPAN_DANGER("This weapon is ineffective, it does no damage."))
-			for(var/mob/M in viewers(src, null))
+			for(var/mob/M as anything in viewers(src, null))
 				if ((M.client && !( M.blinded )))
-					M.show_message(SPAN_DANGER("[user] gently taps [src] with the [O]. "))
+					M.show_message(SPAN_DANGER("[user] gently taps [src] with \the [O]."), SHOW_MESSAGE_VISIBLE)
 
-/mob/living/simple_animal/spiderbot/proc/transfer_personality(var/obj/item/device/mmi/M as obj)
+/mob/living/simple_animal/spiderbot/proc/transfer_personality(obj/item/device/mmi/M as obj)
 
 		src.mind = M.brainmob.mind
 		src.mind.key = M.brainmob.key
@@ -138,10 +141,10 @@
 		if(client) client.change_view(world_view_size)
 		src.name = "Spider-bot ([M.brainmob.name])"
 
-/mob/living/simple_animal/spiderbot/proc/explode(var/cause = "exploding") //When emagged.
-	for(var/mob/M in viewers(src, null))
+/mob/living/simple_animal/spiderbot/proc/explode(cause = "exploding") //When emagged.
+	for(var/mob/M as anything in viewers(src, null))
 		if ((M.client && !( M.blinded )))
-			M.show_message(SPAN_DANGER("[src] makes an odd warbling noise, fizzles, and explodes."))
+			M.show_message(SPAN_DANGER("[src] makes an odd warbling noise, fizzles, and explodes."), SHOW_MESSAGE_VISIBLE)
 	explosion(get_turf(loc), -1, -1, 3, 5)
 	eject_brain()
 	death(cause)
@@ -160,7 +163,7 @@
 		var/turf/T = get_turf(loc)
 		if(T)
 			mmi.forceMove(T)
-		if(mind)	mind.transfer_to(mmi.brainmob)
+		if(mind) mind.transfer_to(mmi.brainmob)
 		mmi = null
 		src.name = "Spider-bot"
 		update_icon()
@@ -252,7 +255,7 @@
 	to_chat(src, SPAN_DANGER("There is nothing of interest to take."))
 	return 0
 
-/mob/living/simple_animal/spiderbot/examine(mob/user)
-	..()
+/mob/living/simple_animal/spiderbot/get_examine_text(mob/user)
+	. = ..()
 	if(held_item)
-		to_chat(user, "It is carrying \a [held_item] [icon2html(held_item, user)].")
+		. += "It is carrying \a [held_item] [icon2html(held_item, user)]."

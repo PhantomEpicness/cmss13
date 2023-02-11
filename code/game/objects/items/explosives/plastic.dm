@@ -9,9 +9,9 @@
 	w_class = SIZE_SMALL
 	allowed_sensors = list(/obj/item/device/assembly/prox_sensor, /obj/item/device/assembly/signaller, /obj/item/device/assembly/timer)
 	max_container_volume = 180
-	reaction_limits = list(	"max_ex_power" = 260,	"base_ex_falloff" = 90,	"max_ex_shards" = 64,
-							"max_fire_rad" = 6,		"max_fire_int" = 26,	"max_fire_dur" = 30,
-							"min_fire_rad" = 2,		"min_fire_int" = 4,		"min_fire_dur" = 5
+	reaction_limits = list( "max_ex_power" = 260, "base_ex_falloff" = 90, "max_ex_shards" = 64,
+							"max_fire_rad" = 6, "max_fire_int" = 26, "max_fire_dur" = 30,
+							"min_fire_rad" = 2, "min_fire_int" = 4, "min_fire_dur" = 5
 	)
 
 	var/deploying_time = 50
@@ -21,8 +21,8 @@
 	var/atom/plant_target = null //which atom the plstique explosive is planted on
 	var/overlay_image = "plastic-explosive2"
 	var/image/overlay
-	var/list/breachable = list(/obj/structure/window, /turf/closed, /obj/structure/machinery/door, /obj/structure/mineral_door)
-	antigrief_protection = TRUE	//Should it be checked by antigrief?
+	var/list/breachable = list(/obj/structure/window, /turf/closed, /obj/structure/machinery/door, /obj/structure/mineral_door , /obj/structure/cargo_container)
+	antigrief_protection = TRUE //Should it be checked by antigrief?
 
 /obj/item/explosive/plastic/Destroy()
 	disarm()
@@ -52,7 +52,7 @@
 		if(istimer(detonator.a_right) || istimer(detonator.a_left))
 			detonator.attack_self(user)
 		return
-	var/new_time = input(usr, "Please set the timer.", "Timer", min_timer) as num
+	var/new_time = tgui_input_number(usr, "Please set the timer.", "Timer", min_timer, 60, min_timer)
 	if(new_time < min_timer)
 		new_time = min_timer
 	else if(new_time > 60)
@@ -62,7 +62,7 @@
 
 /obj/item/explosive/plastic/afterattack(atom/target, mob/user, flag)
 	setDir(get_dir(user, target))
-	if(antigrief_protection && user.faction == FACTION_MARINE && explosive_grief_check(src))
+	if(antigrief_protection && user.faction == FACTION_MARINE && explosive_antigrief_check(src, user))
 		to_chat(user, SPAN_WARNING("\The [name]'s safe-area accident inhibitor prevents you from planting it!"))
 		msg_admin_niche("[key_name(user)] attempted to prime \a [name] in [get_area(src)] (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];adminplayerobservecoodjump=1;X=[src.loc.x];Y=[src.loc.y];Z=[src.loc.z]'>JMP</a>)")
 		return
@@ -121,7 +121,7 @@
 		user.visible_message(SPAN_WARNING("[user] plants [name] on [target]!"),
 		SPAN_WARNING("You plant [name] on [target]! Timer counting down from [timer]."))
 		active = TRUE
-		addtimer(CALLBACK(src, .proc/prime), timer * 10)
+		addtimer(CALLBACK(src, PROC_REF(prime)), timer * 10)
 
 /obj/item/explosive/plastic/attackby(obj/item/W, mob/user)
 	if(HAS_TRAIT(W, TRAIT_TOOL_MULTITOOL))
@@ -166,7 +166,7 @@
 	active = FALSE
 	update_icon()
 
-/obj/item/explosive/plastic/proc/can_place(var/mob/user, var/atom/target)
+/obj/item/explosive/plastic/proc/can_place(mob/user, atom/target)
 	if(istype(target, /obj/structure/ladder) || istype(target, /obj/item) || istype(target, /turf/open) || istype(target, /obj/structure/barricade) || istype(target, /obj/structure/closet/crate))
 		return FALSE
 
@@ -212,7 +212,7 @@
 
 	return TRUE
 
-/obj/item/explosive/plastic/breaching_charge/can_place(var/mob/user, var/atom/target)
+/obj/item/explosive/plastic/breaching_charge/can_place(mob/user, atom/target)
 	if(!is_type_in_list(target, breachable))//only items on the list are allowed
 		to_chat(user, SPAN_WARNING("You cannot plant \the [name] on \the [target]!"))
 		return FALSE
@@ -229,7 +229,7 @@
 
 	return TRUE
 
-/obj/item/explosive/plastic/proc/calculate_pixel_offset(var/mob/user, var/atom/target)
+/obj/item/explosive/plastic/proc/calculate_pixel_offset(mob/user, atom/target)
 	switch(get_dir(user, target))
 		if(NORTH)
 			pixel_y = 24
@@ -252,7 +252,7 @@
 			pixel_x = -24
 			pixel_y = 24
 
-/obj/item/explosive/plastic/prime(var/force = FALSE)
+/obj/item/explosive/plastic/prime(force = FALSE)
 	if(!force && (!plant_target || QDELETED(plant_target) || !active))
 		return
 	var/turf/target_turf
@@ -278,7 +278,7 @@
 		else if(issignaller(detonator.a_right) || issignaller(detonator.a_left))
 			overlays += new /obj/effect/overlay/danger
 			layer = INTERIOR_DOOR_LAYER
-			addtimer(CALLBACK(src, .proc/delayed_prime, target_turf), 3 SECONDS)
+			addtimer(CALLBACK(src, PROC_REF(delayed_prime), target_turf), 3 SECONDS)
 			return
 		else
 			. = ..()
@@ -288,7 +288,8 @@
 			qdel(src)
 		return
 
-	plant_target.ex_act(2000, dir, cause_data)
+	var/datum/cause_data/temp_cause = create_cause_data(cause_data.cause_name, cause_data.weak_mob.resolve())
+	plant_target.ex_act(2000, dir, temp_cause)
 
 	for(var/turf/closed/wall/W in orange(1, target_turf))
 		if(W.hull)
@@ -304,7 +305,7 @@
 	for(var/obj/structure/machinery/door/D in orange(1, target_turf))
 		D.ex_act(1000 * penetration, , cause_data)
 
-	handle_explosion(target_turf, dir, cause_data)
+	handle_explosion(target_turf, dir, temp_cause)
 
 /obj/item/explosive/plastic/proc/handle_explosion(turf/target_turf, dir, cause_data)
 	cell_explosion(target_turf, 120, 30, EXPLOSION_FALLOFF_SHAPE_LINEAR, null, cause_data)
@@ -317,7 +318,7 @@
 	cell_explosion(target_turf, 60, 60, EXPLOSION_FALLOFF_SHAPE_EXPONENTIAL, dir, cause_data)
 	qdel(src)
 
-/obj/item/explosive/plastic/proc/delayed_prime(var/turf/target_turf)
+/obj/item/explosive/plastic/proc/delayed_prime(turf/target_turf)
 	prime(TRUE)
 
 /obj/item/explosive/plastic/custom

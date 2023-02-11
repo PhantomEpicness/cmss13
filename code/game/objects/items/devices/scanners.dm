@@ -81,61 +81,66 @@ FORENSIC SCANNER
 	throw_range = 10
 	matter = list("metal" = 200)
 
-	var/mode = 1
-	var/hud_mode = 1
+	var/popup_window = TRUE
 	var/last_scan
+	var/datum/health_scan/last_health_display
 	var/alien = FALSE
 
+/obj/item/device/healthanalyzer/Destroy()
+	QDEL_NULL(last_health_display)
+	return ..()
+
 /obj/item/device/healthanalyzer/attack(mob/living/M, mob/living/user)
-	last_scan = M.health_scan(user, FALSE, mode, hud_mode, alien)
+	if(!popup_window)
+		last_scan = M.health_scan(user, FALSE, TRUE, popup_window, alien)
+	else
+		if (!last_health_display)
+			last_health_display = new(M)
+		else
+			last_health_display.target_mob = M
+		SStgui.close_user_uis(user, src)
+		last_scan = last_health_display.ui_data(user, DETAIL_LEVEL_HEALTHANALYSER)
+		last_health_display.look_at(user, DETAIL_LEVEL_HEALTHANALYSER, bypass_checks = FALSE, ignore_delay = FALSE, alien = alien)
+	to_chat(user, SPAN_NOTICE("[user] has analyzed [M]'s vitals."))
+	playsound(src.loc, 'sound/items/healthanalyzer.ogg', 50)
 	src.add_fingerprint(user)
 	return
 
 /obj/item/device/healthanalyzer/attack_self(mob/user)
 	..()
 
-	if (!last_scan)
+	if(!last_scan)
 		user.show_message("No previous scan found.")
 		return
 
-	switch (hud_mode)
-		if (1)
-			var/dat = last_scan
-			dat = replacetext(dat, "\n", "<br>")
-			dat = replacetext(dat, "\t", "&emsp;")
-			dat = replacetext(dat, "class='warning'", "class='[INTERFACE_RED]'")
-			dat = replacetext(dat, "class='scanner'", "class='[INTERFACE_RED]'")
-			dat = replacetext(dat, "class='scannerb'", "style='font-weight: bold;' class='[INTERFACE_RED]'")
-			dat = replacetext(dat, "class='scannerburn'", "class='[INTERFACE_ORANGE]'")
-			dat = replacetext(dat, "class='scannerburnb'", "style='font-weight: bold;' class='[INTERFACE_ORANGE]'")
-			show_browser(user, dat, name, "handscanner", "size=500x400")
-		if (0)
-			user.show_message(last_scan)
+	if(popup_window)
+		tgui_interact(user)
+	else
+		user.show_message(last_scan)
 
 	return
 
+/obj/item/device/healthanalyzer/tgui_interact(mob/user, datum/tgui/ui)
+	if(!last_scan)
+		return
 
-/obj/item/device/healthanalyzer/verb/toggle_mode()
-	set name = "Switch Verbosity"
-	set category = "Object"
-	set src in usr
-	mode = !mode
-	switch (mode)
-		if(1)
-			to_chat(usr, "The scanner now shows specific limb damage.")
-		if(0)
-			to_chat(usr, "The scanner no longer shows limb damage.")
+	SStgui.close_user_uis(user, last_health_display)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "HealthScan", "Stored Health Scan")
+		ui.open()
+		ui.set_autoupdate(FALSE)
+
+/obj/item/device/healthanalyzer/ui_data(mob/user)
+	return last_scan
 
 /obj/item/device/healthanalyzer/verb/toggle_hud_mode()
-	set name = "Switch Hud"
+	set name = "Switch Hud Mode"
 	set category = "Object"
 	set src in usr
-	hud_mode = !hud_mode
-	switch (hud_mode)
-		if(1)
-			to_chat(usr, "The scanner now shows results on the hud.")
-		if(0)
-			to_chat(usr, "The scanner no longer shows results on the hud.")
+	popup_window = !popup_window
+	last_scan = null // reset the data
+	to_chat(usr, "The scanner [popup_window ? "now" : "no longer"] shows results on the hud.")
 
 /obj/item/device/healthanalyzer/alien
 	name = "\improper YMX scanner"
@@ -144,6 +149,7 @@ FORENSIC SCANNER
 	item_state = "analyzer"
 	desc = "An alien design hand-held body scanner able to distinguish vital signs of the subject. The front panel is able to provide the basic readout of the subject's status."
 	alien = TRUE
+	black_market_value = 35
 
 /obj/item/device/analyzer
 	desc = "A hand-held environmental scanner which reports current gas levels."
@@ -372,7 +378,7 @@ FORENSIC SCANNER
 		to_chat(user, SPAN_NOTICE("No active chemical agents found in [O]."))
 	return
 
-/obj/item/device/demo_scanner/proc/scan(var/obj/O)
+/obj/item/device/demo_scanner/proc/scan(obj/O)
 	if(QDELETED(O.reagents))
 		return
 	if(O.reagents.reagent_list.len > 0)
@@ -396,3 +402,55 @@ FORENSIC SCANNER
 		printing.name = scan_name
 		printing.info = "Chemicals found: [dat]"
 		user.put_in_hands(printing)
+
+/obj/item/device/black_market_scanner
+	name = "suspicious device"
+	desc = "This is... seemingly a makeshift combination between an autopsy scanner, an ancient t-ray scanner, and some sort of robotic clamp, but you can see a lightbulb inside it. What the hell is this?"
+	icon_state = "mendoza_scanner"
+	item_state = "analyzer"
+	w_class = SIZE_SMALL
+	flags_atom = FPRINT|CONDUCT
+	flags_equip_slot = SLOT_WAIST
+	throwforce = 5
+	throw_speed = SPEED_VERY_FAST
+	throw_range = 20
+	matter = list("metal" = 60, "glass" = 30)
+
+/obj/item/device/black_market_scanner/Initialize()
+	. = ..()
+	update_icon()
+
+/obj/item/device/black_market_scanner/update_icon(scan_value = 0, scanning = FALSE)
+	. = ..()
+	overlays.Cut()
+	overlays += image('icons/obj/items/devices.dmi', "+mendoza_scanner_value_flash")
+	if(scanning)
+		overlays += image('icons/obj/items/devices.dmi', "+mendoza_scanner_clamp_on")
+		switch(scan_value)
+			if(0)
+				overlays += image('icons/obj/items/devices.dmi', "+mendoza_scanner_value_red")
+			if(1 to 15)
+				overlays += image('icons/obj/items/devices.dmi', "+mendoza_scanner_value_orange")
+			if(15 to 20)
+				overlays += image('icons/obj/items/devices.dmi', "+mendoza_scanner_value_yellow")
+			if(25 to 30)
+				overlays += image('icons/obj/items/devices.dmi', "+mendoza_scanner_value_green")
+			if(35 to 49)
+				overlays += image('icons/obj/items/devices.dmi', "+mendoza_scanner_value_cyan")
+			else
+				overlays += image('icons/obj/items/devices.dmi', "+mendoza_scanner_value_white")
+		addtimer(CALLBACK(src, PROC_REF(update_icon)), 1 SECONDS)
+	else
+		overlays += image('icons/obj/items/devices.dmi', "+mendoza_scanner_clamp_off")
+
+/obj/item/device/black_market_scanner/afterattack(atom/hit_atom, mob/user, proximity)
+	if(!proximity)
+		return
+	var/market_value = get_black_market_value(hit_atom)
+	if(isnull(market_value))
+		return ..()
+	market_value = POSITIVE(market_value)
+	user.visible_message(SPAN_WARNING("[user] presses a button on [src] and holds it over [hit_atom]..."), SPAN_WARNING("You scan [hit_atom]..."))
+	update_icon(market_value, TRUE)
+	playsound(user, 'sound/machines/twobeep.ogg', 15, TRUE)
+	to_chat(user, SPAN_NOTICE("You scan [hit_atom] and notice a reading on [src]'s pad, it says:<b> ITEM HAS [market_value] VALUE <b>"))

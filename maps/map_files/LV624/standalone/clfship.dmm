@@ -165,6 +165,20 @@
 	icon_state = "platingdmg1"
 	},
 /area/lv624/lazarus/crashed_ship)
+"fA" = (
+/obj/structure/transmitter/colony_net{
+	pixel_y = 32;
+	phone_category = "CR-116";
+	phone_id = "Armoury";
+	network_receive = "CLF";
+	networks_transmit = list("CLF")
+	},
+/turf/open/floor/almayer{
+	dir = 1;
+	icon_state = "bluecorner";
+	tag = "icon-bluecorner (NORTH)"
+	},
+/area/lv624/lazarus/crashed_ship)
 "fX" = (
 /obj/item/stool,
 /obj/effect/landmark/survivor_spawner/lv624_crashed_clf,
@@ -298,7 +312,7 @@
 	},
 /area/lv624/lazarus/crashed_ship)
 "iF" = (
-/obj/effect/landmark/corpsespawner/security,
+/obj/effect/landmark/corpsespawner/wysec,
 /turf/open/floor{
 	dir = 8;
 	icon_state = "damaged3"
@@ -319,6 +333,16 @@
 /turf/open/floor/almayer{
 	icon_state = "bluecorner";
 	tag = "icon-bluecorner"
+	},
+/area/lv624/lazarus/crashed_ship)
+"ju" = (
+/obj/structure/transmitter/colony_net{
+	pixel_y = 32;
+	phone_category = "Lazarus Landing";
+	phone_id = "Cargo"
+	},
+/turf/closed/shuttle/ert{
+	icon_state = "stan_inner_w_1"
 	},
 /area/lv624/lazarus/crashed_ship)
 "jx" = (
@@ -366,6 +390,7 @@
 /area/lv624/lazarus/crashed_ship)
 "jR" = (
 /obj/item/stack/rods,
+/obj/effect/landmark/corpsespawner/clf,
 /turf/open/floor/plating,
 /area/lv624/lazarus/crashed_ship)
 "jS" = (
@@ -554,6 +579,14 @@
 	tag = "icon-green (NORTHWEST)"
 	},
 /area/lv624/lazarus/crashed_ship)
+"oI" = (
+/obj/item/stack/rods,
+/obj/effect/landmark/corpsespawner/clf,
+/turf/open/floor{
+	dir = 8;
+	icon_state = "damaged3"
+	},
+/area/lv624/lazarus/crashed_ship)
 "oO" = (
 /obj/structure/barricade/plasteel/wired{
 	icon_state = "plasteel_3"
@@ -655,6 +688,13 @@
 "sI" = (
 /obj/structure/surface/table/reinforced/prison,
 /obj/effect/spawner/random/toolbox,
+/obj/structure/transmitter/colony_net/rotary{
+	phone_category = "CR-116";
+	phone_id = "Engineering";
+	phone_color = "yellow";
+	network_receive = "CLF";
+	networks_transmit = list("CLF")
+	},
 /turf/open/floor/almayer{
 	icon_state = "orangecorner";
 	tag = "icon-orangecorner"
@@ -663,7 +703,7 @@
 "sO" = (
 /obj/effect/landmark/structure_spawner/xvx_hive/xeno_door,
 /obj/effect/landmark/structure_spawner/setup/distress/xeno_door,
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/gm/dirt,
 /area/lv624/ground/caves/south_west_caves)
 "sT" = (
@@ -824,7 +864,7 @@
 	icon_state = "casing_9_1"
 	},
 /obj/structure/machinery/defenses/sentry/premade/dumb{
-	dir = 4;
+	dir = 8;
 	faction_group = list("CLF")
 	},
 /turf/open/floor{
@@ -840,7 +880,7 @@
 /turf/open/floor/almayer,
 /area/lv624/lazarus/crashed_ship)
 "xs" = (
-/obj/effect/landmark/corpsespawner/security,
+/obj/effect/landmark/corpsespawner/wysec,
 /turf/open/gm/dirt,
 /area/lv624/lazarus/crashed_ship)
 "xu" = (
@@ -1138,13 +1178,13 @@
 /area/lv624/lazarus/crashed_ship)
 "DY" = (
 /obj/structure/surface/rack,
-/obj/item/weapon/gun/shotgun/pump/cmb{
+/obj/item/weapon/gun/shotgun/pump/dual_tube/cmb{
 	pixel_y = -3
 	},
-/obj/item/weapon/gun/shotgun/pump/cmb{
+/obj/item/weapon/gun/shotgun/pump/dual_tube/cmb{
 	pixel_y = 3
 	},
-/obj/item/weapon/gun/shotgun/pump/cmb{
+/obj/item/weapon/gun/shotgun/pump/dual_tube/cmb{
 	pixel_y = 9
 	},
 /turf/open/floor/almayer{
@@ -1378,7 +1418,7 @@
 	dir = 1;
 	pixel_y = 20
 	},
-/obj/structure/machinery/bodyscanner,
+/obj/structure/machinery/medical_pod/bodyscanner,
 /turf/open/floor/almayer{
 	dir = 1;
 	icon_state = "emerald";
@@ -1441,7 +1481,7 @@
 	},
 /area/lv624/lazarus/crashed_ship)
 "LV" = (
-/obj/structure/blocker/forcefield/vehicles,
+/obj/structure/blocker/forcefield/multitile_vehicles,
 /turf/open/gm/dirt,
 /area/lv624/ground/caves/west_caves)
 "Mm" = (
@@ -1557,7 +1597,7 @@
 	},
 /area/lv624/lazarus/crashed_ship)
 "Oc" = (
-/obj/effect/landmark/corpsespawner/colonist,
+/obj/effect/landmark/corpsespawner/colonist/random,
 /obj/effect/decal/cleanable/blood,
 /turf/open/floor/almayer{
 	dir = 8;
@@ -1612,6 +1652,12 @@
 /obj/structure/machinery/floodlight,
 /turf/open/gm/dirt,
 /area/lv624/ground/caves/south_west_caves)
+"Pu" = (
+/obj/effect/landmark/corpsespawner/clf,
+/turf/open/floor{
+	icon_state = "platingdmg1"
+	},
+/area/lv624/lazarus/crashed_ship)
 "Px" = (
 /obj/structure/machinery/power/apc{
 	dir = 1;
@@ -1679,6 +1725,14 @@
 /area/lv624/lazarus/crashed_ship)
 "Qj" = (
 /obj/structure/machinery/body_scanconsole,
+/obj/structure/transmitter/colony_net{
+	pixel_y = 32;
+	phone_category = "CR-116";
+	phone_id = "Medical Bay";
+	network_receive = "CLF";
+	networks_transmit = list("CLF");
+	phone_color = "green"
+	},
 /turf/open/floor/almayer{
 	dir = 1;
 	icon_state = "emerald";
@@ -2008,6 +2062,19 @@
 /turf/open/floor/plating{
 	dir = 1;
 	icon_state = "warnplate"
+	},
+/area/lv624/lazarus/crashed_ship)
+"XM" = (
+/obj/structure/transmitter/colony_net{
+	pixel_y = 32;
+	phone_category = "CR-116";
+	phone_id = "Cargo Bay";
+	network_receive = "CLF";
+	networks_transmit = list("CLF")
+	},
+/turf/open/floor{
+	dir = 8;
+	icon_state = "damaged3"
 	},
 /area/lv624/lazarus/crashed_ship)
 "XX" = (
@@ -2693,7 +2760,7 @@ lr
 lr
 lr
 dN
-Qf
+Pu
 JC
 GQ
 hw
@@ -2928,7 +2995,7 @@ NI
 jr
 vO
 dN
-Xx
+oI
 rX
 mS
 oO
@@ -2974,7 +3041,7 @@ ag
 gD
 QQ
 Xq
-Bc
+XM
 dN
 dN
 Bc
@@ -3016,7 +3083,7 @@ Ar
 Ar
 Ar
 Xq
-xI
+fA
 OL
 fe
 jr
@@ -3117,7 +3184,7 @@ jr
 zb
 dN
 ok
-Qf
+Pu
 qU
 Bc
 yK
@@ -3167,7 +3234,7 @@ Qf
 Ya
 Bc
 BY
-Qf
+Pu
 lC
 Dm
 VX
@@ -3393,7 +3460,7 @@ GY
 IP
 Xq
 Nw
-Xq
+ju
 Dm
 VX
 iq

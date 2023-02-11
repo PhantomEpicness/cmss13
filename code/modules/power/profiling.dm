@@ -13,12 +13,12 @@ var/global/list/power_update_requests_by_area = list()
 
 	var/machine_type = "[M.type]"
 	if (machine_type in power_update_requests_by_machine)
-		power_update_requests_by_machine[machine_type] += 1
+		power_update_requests_by_machine[machine_type]++
 	else
 		power_update_requests_by_machine[machine_type] = 1
 
 	if (A.name in power_update_requests_by_area)
-		power_update_requests_by_area[A.name] += 1
+		power_update_requests_by_area[A.name]++
 	else
 		power_update_requests_by_area[A.name] = 1
 
@@ -29,8 +29,8 @@ var/global/list/power_update_requests_by_area = list()
 	set name = "Toggle Area Power Update Profiling"
 	set desc = "Toggles the recording of area power update requests."
 	set category = "Debug.Profiling"
-	if(!check_rights(R_DEBUG))	return
-	if(!ishost(usr) || alert("Are you sure you want to do this?",, "Yes", "No") == "No") return
+	if(!check_rights(R_DEBUG)) return
+	if(!ishost(usr) || alert("Are you sure you want to do this?",, "Yes", "No") != "Yes") return
 	if(enable_power_update_profiling)
 		enable_power_update_profiling = 0
 
@@ -50,7 +50,7 @@ var/global/list/power_update_requests_by_area = list()
 	set desc = "See which types of machines are triggering area power updates."
 	set category = "Debug.Profiling"
 
-	if(!check_rights(R_DEBUG))	return
+	if(!check_rights(R_DEBUG)) return
 
 	to_chat(usr, "Total profiling time: [power_profiled_time] ticks")
 	for (var/M in power_update_requests_by_machine)
@@ -61,7 +61,7 @@ var/global/list/power_update_requests_by_area = list()
 	set desc = "See which areas are having area power updates."
 	set category = "Debug.Profiling"
 
-	if(!check_rights(R_DEBUG))	return
+	if(!check_rights(R_DEBUG)) return
 
 	to_chat(usr, "Total profiling time: [power_profiled_time] ticks")
 	to_chat(usr, "Total profiling time: [power_profiled_time] ticks")

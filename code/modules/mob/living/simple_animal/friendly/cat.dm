@@ -1,6 +1,7 @@
 //Cat
 /mob/living/simple_animal/cat
 	name = "cat"
+	real_name = "cat"
 	desc = "A domesticated, feline pet. Has a tendency to adopt crewmembers."
 	icon_state = "cat2"
 	icon_living = "cat2"
@@ -18,16 +19,18 @@
 	var/turns_since_scan = 0
 	var/mob/living/simple_animal/mouse/movement_target
 	min_oxy = 16 //Require atleast 16kPA oxygen
-	minbodytemp = 223		//Below -50 Degrees Celcius
-	maxbodytemp = 323	//Above 50 Degrees Celcius
+	minbodytemp = 223 //Below -50 Degrees Celcius
+	maxbodytemp = 323 //Above 50 Degrees Celcius
 	holder_type = /obj/item/holder/cat
 	mob_size = MOB_SIZE_SMALL
 	sight = SEE_MOBS
 	see_in_dark = 8
 	see_invisible = 15
+	black_market_value = 50
+	dead_black_market_value = 0
 	var/miaow_counter = 0
 
-/mob/living/simple_animal/cat/initialize_pass_flags(var/datum/pass_flags_container/PF)
+/mob/living/simple_animal/cat/initialize_pass_flags(datum/pass_flags_container/PF)
 	..()
 	if (PF)
 		PF.flags_pass = PASS_FLAGS_CRAWLER
@@ -43,7 +46,7 @@
 			for(var/mob/living/simple_animal/mouse/M in view(1,src))
 				if(!M.stat)
 					M.splat()
-					INVOKE_ASYNC(src, .proc/emote, pick("bites \the [M]!","toys with \the [M].","chomps on \the [M]!"))
+					INVOKE_ASYNC(src, PROC_REF(emote), pick("bites \the [M]!","toys with \the [M].","chomps on \the [M]!"))
 					movement_target = null
 					stop_automated_movement = 0
 					break
@@ -52,7 +55,7 @@
 
 	for(var/mob/living/simple_animal/mouse/snack in oview(src, 3))
 		if(prob(15))
-			INVOKE_ASYNC(src, .proc/emote, pick("hisses and spits!","mrowls fiercely!","eyes [snack] hungrily."))
+			INVOKE_ASYNC(src, PROC_REF(emote), pick("hisses and spits!","mrowls fiercely!","eyes [snack] hungrily."))
 		break
 
 	if(!stat && !resting && !buckled)
@@ -60,7 +63,7 @@
 
 /mob/living/simple_animal/cat/death()
 	. = ..()
-	if(!.)	return //was already dead
+	if(!.) return //was already dead
 	if(last_damage_data)
 		var/mob/user = last_damage_data.resolve_mob()
 		if(user)
@@ -98,7 +101,7 @@
 	else
 		return ..()
 
-/mob/living/simple_animal/cat/get_scooped(var/mob/living/carbon/grabber)
+/mob/living/simple_animal/cat/get_scooped(mob/living/carbon/grabber)
 	if (stat >= DEAD)
 		return
 	..()
@@ -110,9 +113,11 @@
 	icon_state = "cat"
 	icon_living = "cat"
 	icon_dead = "cat_dead"
+	holder_type = /obj/item/holder/blackcat
 
 /mob/living/simple_animal/cat/Jones
 	name = "Jones"
+	real_name = "Jones"
 	desc = "A tough, old stray whose origin no one seems to know."
 	icon_state = "cat2"
 	icon_living = "cat2"
@@ -127,4 +132,5 @@
 	icon_state = "kitten"
 	icon_living = "kitten"
 	icon_dead = "kitten_dead"
+	holder_type = /obj/item/holder/kitten
 	gender = NEUTER

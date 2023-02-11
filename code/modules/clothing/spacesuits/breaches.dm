@@ -3,21 +3,21 @@
 //They can be healed with plastic or metal sheeting.
 
 /datum/breach
-	var/class = 0                           // Size. Lower is smaller.
-	var/descriptor                          // 'gaping hole' etc.
-	var/damtype = BURN                      // Punctured or melted
+	var/class = 0    // Size. Lower is smaller.
+	var/descriptor   // 'gaping hole' etc.
+	var/damtype = BURN   // Punctured or melted
 	var/obj/item/clothing/suit/space/holder // Suit containing the list of breaches holding this instance.
 
 /obj/item/clothing/suit/space
 
-	var/can_breach = 1                      // Set to 0 to disregard all breaching.
-	var/list/breaches = list()              // Breach datum container.
-	var/resilience = 0.2                    // Multiplier that turns damage into breach class. 1 is 100% of damage to breach, 0.1 is 10%.
-	var/breach_threshold = 3                // Min damage before a breach is possible.
-	var/damage = 0                          // Current total damage
-	var/brute_damage = 0                    // Specifically brute damage.
-	var/burn_damage = 0                     // Specifically burn damage.
-	var/base_name                           // Used to keep the original name safe while we apply modifiers.
+	var/can_breach = 1   // Set to 0 to disregard all breaching.
+	var/list/breaches = list()   // Breach datum container.
+	var/resilience = 0.2 // Multiplier that turns damage into breach class. 1 is 100% of damage to breach, 0.1 is 10%.
+	var/breach_threshold = 3 // Min damage before a breach is possible.
+	var/damage = 0   // Current total damage
+	var/brute_damage = 0 // Specifically brute damage.
+	var/burn_damage = 0  // Specifically burn damage.
+	var/base_name    // Used to keep the original name safe while we apply modifiers.
 
 /obj/item/clothing/suit/space/Initialize()
 	. = ..()
@@ -52,7 +52,7 @@ var/global/list/breach_burn_descriptors = list(
 		descriptor = breach_brute_descriptors[class]
 
 //Repair a certain amount of brute or burn damage to the suit.
-/obj/item/clothing/suit/space/proc/repair_breaches(var/damtype, var/amount, var/mob/user)
+/obj/item/clothing/suit/space/proc/repair_breaches(damtype, amount, mob/user)
 
 	if(!can_breach || !breaches || !breaches.len || !damage)
 		to_chat(user, "There are no breaches to repair on \the [src].")
@@ -77,14 +77,14 @@ var/global/list/breach_burn_descriptors = list(
 			valid_breaches -= B
 			breaches -= B
 		else
-			B.class	-= amount_left
+			B.class -= amount_left
 			amount_left = 0
 			B.update_descriptor()
 
 	user.visible_message("<b>[user]</b> patches some of the damage on \the [src].")
 	calc_breach_damage()
 
-/obj/item/clothing/suit/space/proc/create_breaches(var/damtype, var/amount)
+/obj/item/clothing/suit/space/proc/create_breaches(damtype, amount)
 
 	if(!can_breach || !amount)
 		return
@@ -194,7 +194,11 @@ var/global/list/breach_burn_descriptors = list(
 			repair_breaches(BURN, ( istype(P,/obj/item/stack/sheet/mineral/plastic) ? 3 : 5), user)
 		return
 
-	else if(istype(W, /obj/item/tool/weldingtool))
+	else if(iswelder(W))
+
+		if(!HAS_TRAIT(W, TRAIT_TOOL_BLOWTORCH))
+			to_chat(user, SPAN_WARNING("You need a stronger blowtorch!"))
+			return
 
 		if(istype(src.loc,/mob/living))
 			to_chat(user, SPAN_DANGER("How do you intend to patch a hardsuit while someone is wearing it?"))
@@ -214,8 +218,8 @@ var/global/list/breach_burn_descriptors = list(
 
 	..()
 
-/obj/item/clothing/suit/space/examine(mob/user)
-	..()
+/obj/item/clothing/suit/space/get_examine_text(mob/user)
+	. = ..()
 	if(can_breach && breaches && breaches.len)
 		for(var/datum/breach/B in breaches)
-			to_chat(user, SPAN_DANGER("It has \a [B.descriptor]."))
+			. += SPAN_DANGER("It has \a [B.descriptor].")

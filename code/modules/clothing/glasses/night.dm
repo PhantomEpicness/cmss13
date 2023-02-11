@@ -2,6 +2,7 @@
 
 /obj/item/clothing/glasses/night
 	name = "\improper TV1 night vision goggles"
+	gender = PLURAL
 	desc = "A neat looking pair of civilian grade night vision goggles."
 	icon_state = "night"
 	item_state = "night"
@@ -26,6 +27,7 @@
 
 /obj/item/clothing/glasses/night/M4RA
 	name = "\improper M4RA Battle sight"
+	gender = NEUTER
 	desc = "A headset and night vision goggles system for the M4RA Battle Rifle. Allows highlighted imaging of surroundings, as well as the ability to view the suit sensor health status readouts of other marines. Click it to toggle."
 	icon = 'icons/obj/items/clothing/glasses.dmi'
 	icon_state = "m4ra_goggles"
@@ -39,6 +41,7 @@
 
 /obj/item/clothing/glasses/night/medhud
 	name = "\improper Mark 4 Battle Medic sight"
+	gender = NEUTER
 	desc = "A headset and night vision goggles system for the M4RA Battle Rifle. Allows highlighted imaging of surroundings, as well as the ability to view the health statuses of others. Click it to toggle."
 	icon = 'icons/obj/items/clothing/glasses.dmi'
 	icon_state = "m4_goggles"
@@ -51,6 +54,7 @@
 
 /obj/item/clothing/glasses/night/m42_night_goggles
 	name = "\improper M42 scout sight"
+	gender = NEUTER
 	desc = "A headset and night vision goggles system for the M42 Scout Rifle. Allows highlighted imaging of surroundings. Click it to toggle."
 	icon = 'icons/obj/items/clothing/glasses.dmi'
 	icon_state = "m42_goggles"
@@ -61,6 +65,10 @@
 	actions_types = list(/datum/action/item_action/toggle)
 	flags_item = MOB_LOCK_ON_EQUIP|NO_CRYO_STORE
 
+/obj/item/clothing/glasses/night/m42_night_goggles/spotter
+	name = "\improper M42 spotter sight"
+	desc = "A companion headset and night vision goggles system for USCM spotters. Allows highlighted imaging of surroundings. Click it to toggle."
+
 /obj/item/clothing/glasses/night/m42_night_goggles/m42c
 	name = "\improper M42C special operations sight"
 	desc = "A specialized variation of the M42 scout sight system, intended for use with the high-power M42C anti-tank sniper rifle. Allows for highlighted imaging of surroundings, as well as detection of thermal signatures even from a great distance. Click it to toggle."
@@ -70,6 +78,7 @@
 
 /obj/item/clothing/glasses/night/m42_night_goggles/upp
 	name = "\improper Type 9 commando goggles"
+	gender = PLURAL
 	desc = "A headset and night vision goggles system used by UPP forces. Allows highlighted imaging of surroundings. Click it to toggle."
 	icon_state = "upp_goggles"
 	deactive_state = "upp_goggles_0"
@@ -78,7 +87,8 @@
 
 /obj/item/clothing/glasses/night/m56_goggles
 	name = "\improper M56 head mounted sight"
-	desc = "A headset and goggles system for the M56 Smartgun. Has a low-res short range imager, allowing for view of terrain."
+	gender = NEUTER
+	desc = "A headset and goggles system for the M56 Smartgun. Has a low-res short-range imager, allowing for view of terrain."
 	icon = 'icons/obj/items/clothing/glasses.dmi'
 	icon_state = "m56_goggles"
 	deactive_state = "m56_goggles_0"
@@ -97,7 +107,7 @@
 	disable_far_sight()
 	return ..()
 
-/obj/item/clothing/glasses/night/m56_goggles/proc/link_powerpack(var/mob/user)
+/obj/item/clothing/glasses/night/m56_goggles/proc/link_powerpack(mob/user)
 	if(!QDELETED(user) && !QDELETED(user.back))
 		if(istype(user.back, /obj/item/smartgun_powerpack))
 			powerpack = user.back
@@ -122,7 +132,7 @@
 	disable_far_sight(user)
 	return ..()
 
-/obj/item/clothing/glasses/night/m56_goggles/proc/set_far_sight(mob/living/carbon/human/user, var/set_to_state = TRUE)
+/obj/item/clothing/glasses/night/m56_goggles/proc/set_far_sight(mob/living/carbon/human/user, set_to_state = TRUE)
 	if(set_to_state)
 		if(user.glasses != src)
 			to_chat(user, SPAN_WARNING("You can't activate far sight without wearing \the [src]!"))
@@ -134,7 +144,6 @@
 		if(user)
 			if(user.client)
 				user.client.change_view(8, src)
-			to_chat(user, SPAN_NOTICE("You enable the far sight system."))
 		START_PROCESSING(SSobj, src)
 	else
 		powerpack = null
@@ -142,8 +151,11 @@
 		if(user)
 			if(user.client)
 				user.client.change_view(world_view_size, src)
-			to_chat(user, SPAN_NOTICE("You disable the far sight system."))
 		STOP_PROCESSING(SSobj, src)
+
+	var/datum/action/item_action/m56_goggles/far_sight/FT = locate(/datum/action/item_action/m56_goggles/far_sight) in actions
+	FT.update_button_icon()
+
 
 /obj/item/clothing/glasses/night/m56_goggles/proc/disable_far_sight(mob/living/carbon/human/user)
 	if(!istype(user))
@@ -178,14 +190,25 @@
 	if(target)
 		var/obj/item/clothing/glasses/night/m56_goggles/G = target
 		G.set_far_sight(owner, !G.far_sight)
-		if(G.far_sight)
-			button.icon_state = "template_on"
-		else
-			button.icon_state = "template"
-		to_chat(owner, "[icon2html(G, owner)] You changed the [G.name]'s sight setting to <b>[G.far_sight ? "far" : "normal"]</b>.")
+		to_chat(owner, SPAN_NOTICE("You [G.far_sight ? "enable" : "disable"] \the [src]'s far sight system."))
+
+/datum/action/item_action/m56_goggles/far_sight/update_button_icon()
+	if(!target)
+		return
+	var/obj/item/clothing/glasses/night/m56_goggles/G = target
+	if(G.far_sight)
+		button.icon_state = "template_on"
+	else
+		button.icon_state = "template"
+
+/obj/item/clothing/glasses/night/m56_goggles/whiteout
+	name = "\improper M56T head mounted sight"
+	desc = "A headset and goggles system for the M56T 'Terminator' Smartgun. Has a low-light vision processor as well as a system allowing detection of thermal signatures though solid surfaces."
+	vision_flags = SEE_TURFS|SEE_MOBS
 
 /obj/item/clothing/glasses/night/yautja
 	name = "bio-mask nightvision"
+	gender = NEUTER
 	desc = "A vision overlay generated by the Bio-Mask. Used for low-light conditions."
 	icon = 'icons/obj/items/hunter/pred_gear.dmi'
 	icon_state = "visor_nvg"
@@ -193,6 +216,7 @@
 	flags_inventory = COVEREYES
 	flags_item = NODROP|DELONDROP
 	fullscreen_vision = null
+	actions_types = null
 
 /obj/item/clothing/glasses/night/cultist
 	name = "\improper unusual thermal imaging goggles"
@@ -225,7 +249,7 @@
 
 /obj/item/clothing/glasses/night/experimental_mesons/mob_can_equip(mob/user, slot)
 	if(slot == WEAR_EYES)
-		if(!isSynth(user))
+		if(!issynth(user))
 			to_chat(user, "The experimental meson goggles start probing at your eyes, searching for an attachment point, and you immediately take them off.")
 			return FALSE
 	return ..()

@@ -4,13 +4,7 @@
 	can_build_special = TRUE
 	powernet_name = "ground"
 	ambience_exterior = AMBIENCE_JUNGLE
-
-/area/lv624/Initialize()
-	. = ..()
-	if(SSticker.current_state > GAME_STATE_SETTING_UP)
-		add_thunder()
-	else
-		LAZYADD(GLOB.thunder_setup_areas, src)
+	minimap_color = MINIMAP_AREA_COLONY
 
 /area/lv624/ground
 	name = "Ground"
@@ -18,6 +12,9 @@
 	always_unpowered = 1 //Will this mess things up? God only knows
 
 //Jungle
+/area/lv624/ground/jungle
+	minimap_color = MINIMAP_AREA_JUNGLE
+
 /area/lv624/ground/jungle/south_east_jungle
 	name ="\improper Southeast Jungle"
 	icon_state = "southeast"
@@ -113,31 +110,31 @@
 /area/lv624/ground/barrens/south_eastern_barrens
 	name = "\improper South Eastern Barrens"
 	icon_state = "southeast"
-//	ambience = list('sound/ambience/ambimine.ogg','sound/ambience/ambigen10.ogg','sound/ambience/ambigen4.ogg','sound/ambience/ambisin4.ogg')
+// ambience = list('sound/ambience/ambimine.ogg','sound/ambience/ambigen10.ogg','sound/ambience/ambigen4.ogg','sound/ambience/ambisin4.ogg')
 
 /area/lv624/ground/barrens/south_eastern_jungle_barrens
 	name = "\improper South East Jungle Barrens"
 	icon_state = "southeast"
-//	ambience = list('sound/ambience/ambimine.ogg','sound/ambience/ambigen10.ogg','sound/ambience/ambigen4.ogg','sound/ambience/ambisin4.ogg')
+// ambience = list('sound/ambience/ambimine.ogg','sound/ambience/ambigen10.ogg','sound/ambience/ambigen4.ogg','sound/ambience/ambisin4.ogg')
 
 /area/lv624/ground/river
 	name = "\improper River"
 	icon_state = "blueold"
-//	ambience = list('sound/ambience/jungle_amb1.ogg')
+// ambience = list('sound/ambience/jungle_amb1.ogg')
 
 /area/lv624/ground/river/west_river
 	name = "\improper Western River"
 	icon_state = "blueold"
-//	ambience = list('sound/ambience/jungle_amb1.ogg')
+// ambience = list('sound/ambience/jungle_amb1.ogg')
 /area/lv624/ground/river/central_river
 	name = "\improper Central River"
 	icon_state = "purple"
-//	ambience = list('sound/ambience/jungle_amb1.ogg')
+// ambience = list('sound/ambience/jungle_amb1.ogg')
 
 /area/lv624/ground/river/east_river
 	name = "\improper Eastern River"
 	icon_state = "bluenew"
-//	ambience = list('sound/ambience/jungle_amb1.ogg')
+// ambience = list('sound/ambience/jungle_amb1.ogg')
 
 
 //Colony Areas
@@ -169,7 +166,35 @@
 	name = "\improper West T-Comms Road"
 	icon_state = "west"
 
-//	ambience = list('sound/ambience/jungle_amb1.ogg')
+/area/lv624/ground/colony/telecomm
+	name = "\improper LZ1 Communications Relay"
+	icon_state = "ass_line"
+	ceiling = CEILING_UNDERGROUND_METAL_ALLOW_CAS
+	is_resin_allowed = FALSE
+	ceiling_muffle = FALSE
+	base_muffle = MUFFLE_LOW
+	always_unpowered = FALSE
+
+/area/lv624/ground/colony/telecomm/cargo
+	name = "\improper Far North Storage Dome Communications Relay"
+
+
+/area/lv624/ground/colony/telecomm/sw_lz1
+	name = "\improper South-West LZ1 Communications Relay"
+	ceiling = CEILING_NONE
+
+/area/lv624/ground/colony/telecomm/tcommdome
+	name = "\improper Telecomms Dome Communications Relay"
+
+/area/lv624/ground/colony/telecomm/tcommdome/south
+	name = "\improper South Telecomms Dome Communications Relay"
+	ceiling = CEILING_NONE
+
+/area/lv624/ground/colony/telecomm/sw_lz2
+	name = "\improper South-West LZ2 Communications Relay"
+	ceiling = CEILING_NONE
+
+// ambience = list('sound/ambience/jungle_amb1.ogg')
 
 
 //The Caves
@@ -182,6 +207,7 @@
 	soundscape_interval = 25
 	ceiling = CEILING_UNDERGROUND_BLOCK_CAS
 	sound_environment = SOUND_ENVIRONMENT_AUDITORIUM
+	minimap_color = MINIMAP_AREA_CAVES
 
 /area/lv624/ground/caves/west_caves
 	name ="\improper Western Caves"
@@ -262,22 +288,27 @@
 /area/lv624/lazarus/medbay
 	name = "\improper Medbay"
 	icon_state = "medbay"
+	minimap_color = MINIMAP_AREA_MEDBAY
 
 /area/lv624/lazarus/armory
 	name = "\improper Armory"
 	icon_state = "armory"
+	minimap_color = MINIMAP_AREA_SEC
 
 /area/lv624/lazarus/security
 	name = "\improper Security"
 	icon_state = "security"
+	minimap_color = MINIMAP_AREA_SEC
 
 /area/lv624/lazarus/captain
 	name = "\improper Commandant's Quarters"
 	icon_state = "captain"
+	minimap_color = MINIMAP_AREA_COMMAND
 
 /area/lv624/lazarus/hop
 	name = "\improper Head of Personnel's Office"
 	icon_state = "head_quarters"
+	minimap_color = MINIMAP_AREA_COMMAND
 
 /area/lv624/lazarus/kitchen
 	name = "\improper Kitchen"
@@ -331,6 +362,7 @@
 	icon_state = "purple"
 	ceiling = CEILING_NONE
 	is_resin_allowed = FALSE
+	always_unpowered = TRUE
 
 /area/lv624/lazarus/engineering
 	name = "\improper Engineering"

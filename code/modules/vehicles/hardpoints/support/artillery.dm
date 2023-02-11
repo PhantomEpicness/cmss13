@@ -14,12 +14,12 @@
 	var/view_buff = 10 //This way you can VV for more or less fun
 	var/view_tile_offset = 7
 
-/obj/item/hardpoint/support/artillery_module/activate(var/mob/user, var/atom/A)
+/obj/item/hardpoint/support/artillery_module/activate(mob/user, atom/A)
 	if(!user.client)
 		return
 
 	if(is_active)
-		user.client.change_view(8, src)
+		user.client.change_view(8, owner)
 		user.client.pixel_x = 0
 		user.client.pixel_y = 0
 		is_active = FALSE
@@ -30,7 +30,7 @@
 		holder = T
 		break
 
-	user.client.change_view(view_buff, src)
+	user.client.change_view(view_buff, owner)
 	is_active = TRUE
 
 	switch(holder.dir)
@@ -57,7 +57,7 @@
 			continue
 		var/mob/user = C.seats[seat]
 		if(!user.client) continue
-		user.client.change_view(world_view_size, src)
+		user.client.change_view(world_view_size, owner)
 		user.client.pixel_x = 0
 		user.client.pixel_y = 0
 	is_active = FALSE

@@ -9,6 +9,7 @@
 	w_class = SIZE_HUGE
 
 	matter = list("metal" = 10000,"glass" = 2500)
+	black_market_value = 20
 
 	var/code = 2
 	var/mob_move_time = 0
@@ -45,14 +46,14 @@
 			if(istype(loc, /mob))
 				attack_self(loc)
 			else
-				for(var/mob/M in viewers(1, src))
+				for(var/mob/M as anything in viewers(1, src))
 					if(M.client)
 						attack_self(M)
 		else
 			if(istype(master.loc, /mob))
 				attack_self(master.loc)
 			else
-				for(var/mob/M in viewers(1, master))
+				for(var/mob/M as anything in viewers(1, master))
 					if(M.client)
 						attack_self(M)
 	else
@@ -76,7 +77,7 @@
 		s.set_up(3, 1, M)
 		s.start()
 
-		M.KnockDown(10)
+		M.apply_effect(10, WEAKEN)
 
 	if(master && wires & 1)
 		master.receive_signal()
@@ -91,7 +92,7 @@
 	var/dat = {"<TT>
 <A href='?src=\ref[src];power=1'>Turn [on ? "Off" : "On"]</A><BR>
 <B>Frequency/Code</B> for electropack:<BR>
-Frequency: [format_frequency(frequency)]<BR>
+Frequency: [format_frequency(frequency)] kHz<BR>
 
 Code:
 <A href='byond://?src=\ref[src];code=-5'>-</A>

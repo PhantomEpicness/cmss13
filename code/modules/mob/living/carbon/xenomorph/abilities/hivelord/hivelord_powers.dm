@@ -1,17 +1,32 @@
-/datum/action/xeno_action/onclick/toggle_speed/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/Hivelord/X = owner
-	if(!X.check_state())
+/datum/action/xeno_action/active_toggle/toggle_speed/enable_toggle()
+	. = ..()
+	update_weedwalking()
+
+/datum/action/xeno_action/active_toggle/toggle_speed/disable_toggle()
+	. = ..()
+	update_weedwalking()
+
+/datum/action/xeno_action/active_toggle/toggle_speed/proc/update_weedwalking()
+	var/mob/living/carbon/xenomorph/hivelord/xeno = owner
+	if(!xeno.check_state())
 		return
 
-	X.recalculate_move_delay = TRUE
+	var/datum/behavior_delegate/hivelord_base/hivelord_delegate = xeno.behavior_delegate
 
-	if(X.weedwalking_activated)
-		to_chat(X, SPAN_WARNING("You feel less in tune with the resin."))
-		X.weedwalking_activated = 0
+	if(!istype(hivelord_delegate))
 		return
 
-	if(!X.check_plasma(plasma_cost))
+	if(hivelord_delegate.toggle_resin_walker() == TRUE)
+		if(!check_and_use_plasma_owner(plasma_cost))
+			to_chat(xeno, SPAN_WARNING("Not enough plasma!"))
+			return
+		to_chat(xeno, SPAN_NOTICE("You become one with the resin. You feel the urge to run!"))
+		button.icon_state = "template_active"
+		action_active = TRUE
+	else
+		to_chat(xeno, SPAN_WARNING("You feel less in tune with the resin."))
+		button.icon_state = "template"
+		action_active = FALSE
 		return
-	X.weedwalking_activated = 1
-	X.use_plasma(plasma_cost)
-	to_chat(X, SPAN_NOTICE("You become one with the resin. You feel the urge to run!"))
+
+	xeno.recalculate_move_delay = TRUE

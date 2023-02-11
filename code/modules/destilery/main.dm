@@ -13,15 +13,15 @@
 	var/list/obj/item/reagent_container/food/input = list()
 	var/list/obj/item/reagent_container/food/output = list()
 	var/obj/item/reagent_container/food/milled_item
-	var/busy = 0
+	var/busy = FALSE
 	var/progress = 0
 	var/error = 0
 	name = "\improper Mill"
 	desc = "It is a machine that grinds produce."
 	icon_state = "autolathe"
-	density = 1
-	anchored = 1
-	use_power = 1
+	density = TRUE
+	anchored = TRUE
+	use_power = USE_POWER_IDLE
 	idle_power_usage = 10
 	active_power_usage = 1000
 
@@ -34,40 +34,40 @@
 		return
 
 	if(!busy)
-		update_use_power(1)
+		update_use_power(USE_POWER_IDLE)
 		if(input.len)
 			milled_item = input[1]
 			input -= milled_item
 			progress = 0
-			busy = 1
-			update_use_power(2)
+			busy = TRUE
+			update_use_power(USE_POWER_ACTIVE)
 		return
 
 	progress++
-	if(progress < 10)	//Edit this value to make milling faster or slower
-		return	//Not done yet.
+	if(progress < 10) //Edit this value to make milling faster or slower
+		return //Not done yet.
 
 	switch(milled_item.type)
-		if(/obj/item/reagent_container/food/snacks/grown/wheat)	//Wheat becomes flour
+		if(/obj/item/reagent_container/food/snacks/grown/wheat) //Wheat becomes flour
 			var/obj/item/reagent_container/food/snacks/flour/F = new(src)
 			output += F
-		if(/obj/item/reagent_container/food/snacks/flour)	//Flour is still flour
+		if(/obj/item/reagent_container/food/snacks/flour) //Flour is still flour
 			var/obj/item/reagent_container/food/snacks/flour/F = new(src)
 			output += F
 		else
 			error = 1
 
 	QDEL_NULL(milled_item)
-	busy = 0
+	busy = FALSE
 
-/obj/structure/machinery/mill/attackby(var/obj/item/W as obj, mob/user as mob)
+/obj/structure/machinery/mill/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/reagent_container/food))
 		if(user.drop_inv_item_to_loc(W, src))
 			input += W
 	else
 		..()
 
-/obj/structure/machinery/mill/attack_hand(var/mob/user as mob)
+/obj/structure/machinery/mill/attack_hand(mob/user as mob)
 	for(var/obj/item/reagent_container/food/F in output)
 		F.forceMove(loc)
 		output -= F
@@ -84,15 +84,15 @@
 	var/list/obj/item/reagent_container/food/output = list()
 	var/obj/item/reagent_container/food/fermenting_item
 	var/water_level = 0
-	var/busy = 0
+	var/busy = FALSE
 	var/progress = 0
 	var/error = 0
 	name = "\improper Fermenter"
 	desc = "It is a machine that ferments produce into alcoholic drinks."
 	icon_state = "autolathe"
-	density = 1
-	anchored = 1
-	use_power = 1
+	density = TRUE
+	anchored = TRUE
+	use_power = USE_POWER_IDLE
 	idle_power_usage = 10
 	active_power_usage = 500
 
@@ -105,13 +105,13 @@
 		return
 
 	if(!busy)
-		update_use_power(1)
+		update_use_power(USE_POWER_IDLE)
 		if(input.len)
 			fermenting_item = input[1]
 			input -= fermenting_item
 			progress = 0
-			busy = 1
-			update_use_power(2)
+			busy = TRUE
+			update_use_power(USE_POWER_ACTIVE)
 		return
 
 	if(!water_level)
@@ -120,27 +120,27 @@
 	water_level--
 
 	progress++
-	if(progress < 10)	//Edit this value to make milling faster or slower
-		return	//Not done yet.
+	if(progress < 10) //Edit this value to make milling faster or slower
+		return //Not done yet.
 
 	switch(fermenting_item.type)
-		if(/obj/item/reagent_container/food/snacks/flour)	//Flour is still flour
+		if(/obj/item/reagent_container/food/snacks/flour) //Flour is still flour
 			var/obj/item/reagent_container/food/drinks/cans/beer/B = new(src)
 			output += B
 		else
 			error = 1
 
 	QDEL_NULL(fermenting_item)
-	busy = 0
+	busy = FALSE
 
-/obj/structure/machinery/fermenter/attackby(var/obj/item/W as obj, mob/user as mob)
+/obj/structure/machinery/fermenter/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/reagent_container/food))
 		if(user.drop_inv_item_to_loc(W, src))
 			input += W
 	else
 		..()
 
-/obj/structure/machinery/fermenter/attack_hand(var/mob/user as mob)
+/obj/structure/machinery/fermenter/attack_hand(mob/user as mob)
 	for(var/obj/item/reagent_container/food/F in output)
 		F.forceMove(loc)
 		output -= F
@@ -153,15 +153,15 @@
 	var/list/obj/item/reagent_container/food/input = list()
 	var/list/obj/item/reagent_container/food/output = list()
 	var/obj/item/reagent_container/food/destilling_item
-	var/busy = 0
+	var/busy = FALSE
 	var/progress = 0
 	var/error = 0
 	name = "\improper Still"
 	desc = "It is a machine that produces hard liquor from alcoholic drinks."
 	icon_state = "autolathe"
-	density = 1
-	anchored = 1
-	use_power = 1
+	density = TRUE
+	anchored = TRUE
+	use_power = USE_POWER_IDLE
 	idle_power_usage = 10
 	active_power_usage = 10000
 
@@ -174,37 +174,37 @@
 		return
 
 	if(!busy)
-		update_use_power(1)
+		update_use_power(USE_POWER_IDLE)
 		if(input.len)
 			destilling_item = input[1]
 			input -= destilling_item
 			progress = 0
-			busy = 1
-			update_use_power(2)
+			busy = TRUE
+			update_use_power(USE_POWER_ACTIVE)
 		return
 
 	progress++
-	if(progress < 10)	//Edit this value to make distilling faster or slower
-		return	//Not done yet.
+	if(progress < 10) //Edit this value to make distilling faster or slower
+		return //Not done yet.
 
 	switch(destilling_item.type)
-		if(/obj/item/reagent_container/food/drinks/cans/beer)	//Flour is still flour
+		if(/obj/item/reagent_container/food/drinks/cans/beer) //Flour is still flour
 			var/obj/item/reagent_container/food/drinks/bottle/vodka/V = new(src)
 			output += V
 		else
 			error = 1
 
 	QDEL_NULL(destilling_item)
-	busy = 0
+	busy = FALSE
 
-/obj/structure/machinery/still/attackby(var/obj/item/W as obj, mob/user as mob)
+/obj/structure/machinery/still/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/reagent_container/food))
 		if(user.drop_inv_item_to_loc(W, loc))
 			input += W
 	else
 		..()
 
-/obj/structure/machinery/still/attack_hand(var/mob/user as mob)
+/obj/structure/machinery/still/attack_hand(mob/user as mob)
 	for(var/obj/item/reagent_container/food/F in output)
 		F.forceMove(loc)
 		output -= F
@@ -218,15 +218,15 @@
 	var/list/obj/item/reagent_container/food/input = list()
 	var/obj/item/reagent_container/food/squeezed_item
 	var/water_level = 0
-	var/busy = 0
+	var/busy = FALSE
 	var/progress = 0
 	var/error = 0
 	name = "\improper Squeezer"
 	desc = "It is a machine that squeezes extracts from produce."
 	icon_state = "autolathe"
-	density = 1
-	anchored = 1
-	use_power = 1
+	density = TRUE
+	anchored = TRUE
+	use_power = USE_POWER_IDLE
 	idle_power_usage = 10
 	active_power_usage = 500
 
@@ -240,7 +240,7 @@
 	var/list/obj/item/reagent_container/food/input = list()
 	var/list/obj/item/reagent_container/food/output = list()
 	var/obj/item/reagent_container/food/spinning_item
-	var/busy = 0
+	var/busy = FALSE
 	var/progress = 0
 	var/error = 0
 	var/enzymes = 0
@@ -248,9 +248,9 @@
 	name = "\improper Centrifuge"
 	desc = "It is a machine that spins produce."
 	icon_state = "autolathe"
-	density = 1
-	anchored = 1
-	use_power = 1
+	density = TRUE
+	anchored = TRUE
+	use_power = USE_POWER_IDLE
 	idle_power_usage = 10
 	active_power_usage = 10000
 
@@ -259,18 +259,18 @@
 		return
 
 	if(!busy)
-		update_use_power(1)
+		update_use_power(USE_POWER_IDLE)
 		if(input.len)
 			spinning_item = input[1]
 			input -= spinning_item
 			progress = 0
-			busy = 1
-			update_use_power(2)
+			busy = TRUE
+			update_use_power(USE_POWER_ACTIVE)
 		return
 
 	progress++
-	if(progress < 10)	//Edit this value to make milling faster or slower
-		return	//Not done yet.
+	if(progress < 10) //Edit this value to make milling faster or slower
+		return //Not done yet.
 
 	var/transfer_enzymes = spinning_item.reagents.get_reagent_amount("enzyme")
 
@@ -279,16 +279,16 @@
 		spinning_item.reagents.remove_reagent("enzyme",transfer_enzymes)
 
 	output += spinning_item
-	busy = 0
+	busy = FALSE
 
-/obj/structure/machinery/centrifuge/attackby(var/obj/item/W as obj, mob/user as mob)
+/obj/structure/machinery/centrifuge/attackby(obj/item/W as obj, mob/user as mob)
 	if(istype(W,/obj/item/reagent_container/food))
 		if(user.drop_inv_item_to_loc(W, src))
 			input += W
 	else
 		..()
 
-/obj/structure/machinery/centrifuge/attack_hand(var/mob/user as mob)
+/obj/structure/machinery/centrifuge/attack_hand(mob/user as mob)
 	for(var/obj/item/reagent_container/food/F in output)
 		F.forceMove(loc)
 		output -= F

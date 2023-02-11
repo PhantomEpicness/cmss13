@@ -4,11 +4,11 @@
 	icon = 'icons/obj/structures/machinery/monitors.dmi'
 	icon_state = "cameracase"
 	w_class = SIZE_SMALL
-	anchored = 0
+	anchored = FALSE
 
 	matter = list("metal" = 700,"glass" = 300)
 
-	//	Motion, EMP-Proof, X-Ray
+	// Motion, EMP-Proof, X-Ray
 	var/list/obj/item/possible_upgrades = list(/obj/item/device/assembly/prox_sensor, /obj/item/stack/sheet/mineral/osmium, /obj/item/stock_parts/scanning_module)
 	var/list/upgrades = list()
 	var/state = 0
@@ -30,7 +30,7 @@
 			if(HAS_TRAIT(W, TRAIT_TOOL_WRENCH) && isturf(src.loc))
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 25, 1)
 				to_chat(user, "You wrench the assembly into place.")
-				anchored = 1
+				anchored = TRUE
 				state = 1
 				update_icon()
 				auto_turn()
@@ -39,16 +39,19 @@
 		if(1)
 			// State 1
 			if(iswelder(W))
+				if(!HAS_TRAIT(W, TRAIT_TOOL_BLOWTORCH))
+					to_chat(user, SPAN_WARNING("You need a stronger blowtorch!"))
+					return
 				if(weld(W, user))
 					to_chat(user, "You weld the assembly securely into place.")
-					anchored = 1
+					anchored = TRUE
 					state = 2
 				return
 
 			else if(HAS_TRAIT(W, TRAIT_TOOL_WRENCH))
 				playsound(src.loc, 'sound/items/Ratchet.ogg', 25, 1)
 				to_chat(user, "You unattach the assembly from it's place.")
-				anchored = 0
+				anchored = FALSE
 				update_icon()
 				state = 0
 				return
@@ -65,11 +68,13 @@
 				return
 
 			else if(iswelder(W))
-
+				if(!HAS_TRAIT(W, TRAIT_TOOL_BLOWTORCH))
+					to_chat(user, SPAN_WARNING("You need a stronger blowtorch!"))
+					return
 				if(weld(W, user))
 					to_chat(user, "You unweld the assembly from it's place.")
 					state = 1
-					anchored = 1
+					anchored = TRUE
 				return
 
 
@@ -78,7 +83,7 @@
 			if(HAS_TRAIT(W, TRAIT_TOOL_SCREWDRIVER))
 				playsound(src.loc, 'sound/items/Screwdriver.ogg', 25, 1)
 
-				var/input = strip_html(input(usr, "Which networks would you like to connect this camera to? Seperate networks with a comma. No Spaces!\nFor example: military, Security,Secret ", "Set Network", "military"))
+				var/input = strip_html(input(usr, "Which networks would you like to connect this camera to? Separate networks with a comma. No Spaces!\nFor example: military, Security,Secret ", "Set Network", "military"))
 				if(!input)
 					to_chat(usr, "No input found please hang up and try your call again.")
 					return
@@ -154,7 +159,7 @@
 	if(!anchored)
 		..()
 
-/obj/item/frame/camera/proc/weld(var/obj/item/tool/weldingtool/WT, var/mob/user)
+/obj/item/frame/camera/proc/weld(obj/item/tool/weldingtool/WT, mob/user)
 
 	if(user.action_busy)
 		return 0

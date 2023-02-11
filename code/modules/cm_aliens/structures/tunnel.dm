@@ -5,15 +5,16 @@
 /obj/structure/tunnel
 	name = "tunnel"
 	desc = "A tunnel entrance. Looks like it was dug by some kind of clawed beast."
-	icon = 'icons/mob/hostiles/Effects.dmi'
+	icon = 'icons/mob/xenos/effects.dmi'
 	icon_state = "hole"
 
-	density = 0
-	opacity = 0
-	anchored = 1
+	density = FALSE
+	opacity = FALSE
+	anchored = TRUE
 	unslashable = TRUE
 	unacidable = TRUE
 	layer = RESIN_STRUCTURE_LAYER
+	plane = FLOOR_PLANE
 
 	var/tunnel_desc = "" //description added by the hivelord.
 
@@ -23,7 +24,7 @@
 	health = 140
 	var/id = null //For mapping
 
-/obj/structure/tunnel/Initialize(mapload, var/h_number)
+/obj/structure/tunnel/Initialize(mapload, h_number)
 	. = ..()
 	var/turf/L = get_turf(src)
 	tunnel_desc = L.loc.name + " ([loc.x], [loc.y]) [pick(greek_letters)]"//Default tunnel desc is the <area name> (x, y) <Greek letter>
@@ -41,34 +42,39 @@
 
 		hive.tunnels += src
 
+	var/obj/effect/alien/resin/trap/resin_trap = locate() in L
+	if(resin_trap)
+		qdel(resin_trap)
+
+	SSminimaps.add_marker(src, z, MINIMAP_FLAG_XENO, "xenotunnel")
 
 /obj/structure/tunnel/Destroy()
 	if(hive)
 		hive.tunnels -= src
 
-	for(var/mob/living/carbon/Xenomorph/X in contents)
+	for(var/mob/living/carbon/xenomorph/X in contents)
 		X.forceMove(loc)
 		to_chat(X, SPAN_DANGER("[src] suddenly collapses, forcing you out!"))
 	. = ..()
 
-/obj/structure/tunnel/proc/isfriendly(var/mob/target)
+/obj/structure/tunnel/proc/isfriendly(mob/target)
 	var/mob/living/carbon/C = target
 	if(istype(C) && C.ally_of_hivenumber(hivenumber))
 		return TRUE
 
 	return FALSE
 
-/obj/structure/tunnel/examine(mob/user)
-	..()
+/obj/structure/tunnel/get_examine_text(mob/user)
+	. = ..()
 	if(tunnel_desc && (isfriendly(user) || isobserver(user)))
-		to_chat(user, SPAN_INFO("The pheromone scent reads: \'[tunnel_desc]\'"))
+		. += SPAN_INFO("The pheromone scent reads: \'[tunnel_desc]\'")
 
 /obj/structure/tunnel/proc/healthcheck()
 	if(health <= 0)
 		visible_message(SPAN_DANGER("[src] suddenly collapses!"))
 		qdel(src)
 
-/obj/structure/tunnel/bullet_act(var/obj/item/projectile/Proj)
+/obj/structure/tunnel/bullet_act(obj/item/projectile/Proj)
 	return FALSE
 
 /obj/structure/tunnel/ex_act(severity)
@@ -76,7 +82,7 @@
 	healthcheck()
 
 /obj/structure/tunnel/attackby(obj/item/W as obj, mob/user as mob)
-	if(!isXeno(user))
+	if(!isxeno(user))
 		return ..()
 	return attack_alien(user)
 
@@ -85,7 +91,7 @@
 	set category = "Object"
 	set src in view(1)
 
-	if(isXeno(usr) && isfriendly(usr) && (usr.loc == src))
+	if(isxeno(usr) && isfriendly(usr) && (usr.loc == src))
 		pick_tunnel(usr)
 	else
 		to_chat(usr, "You stare into the dark abyss" + "[contents.len ? ", making out what appears to be two little lights... almost like something is watching." : "."]")
@@ -95,11 +101,11 @@
 	set category = "Object"
 	set src in view(0)
 
-	if(isXeno(usr) && (usr.loc == src))
+	if(isxeno(usr) && (usr.loc == src))
 		exit_tunnel(usr)
 
-/obj/structure/tunnel/proc/pick_tunnel(mob/living/carbon/Xenomorph/X)
-	. = FALSE	//For peace of mind when it comes to dealing with unintended proc failures
+/obj/structure/tunnel/proc/pick_tunnel(mob/living/carbon/xenomorph/X)
+	. = FALSE //For peace of mind when it comes to dealing with unintended proc failures
 	if(!istype(X) || X.stat || X.lying || !isfriendly(X) || !hive)
 		return FALSE
 	if(X in contents)
@@ -111,7 +117,7 @@
 				continue
 
 			tunnels += list(T.tunnel_desc = T)
-		var/pick = tgui_input_list(usr, "Which tunnel would you like to move to?", "Tunnel", tunnels)
+		var/pick = tgui_input_list(usr, "Which tunnel would you like to move to?", "Tunnel", tunnels, theme="hive_status")
 		if(!pick)
 			return FALSE
 
@@ -126,7 +132,7 @@
 
 		if(X.mob_size >= MOB_SIZE_BIG) //Big xenos take WAY longer
 			tunnel_time = TUNNEL_MOVEMENT_BIG_XENO_DELAY
-		else if(isXenoLarva(X)) //Larva can zip through near-instantly, they are wormlike after all
+		else if(islarva(X)) //Larva can zip through near-instantly, they are wormlike after all
 			tunnel_time = TUNNEL_MOVEMENT_LARVA_DELAY
 
 		if(!do_after(X, tunnel_time, INTERRUPT_NO_NEEDHAND, 0))
@@ -145,7 +151,7 @@
 		to_chat(X, SPAN_XENONOTICE("You have reached your destination."))
 		return TRUE
 
-/obj/structure/tunnel/proc/exit_tunnel(mob/living/carbon/Xenomorph/X)
+/obj/structure/tunnel/proc/exit_tunnel(mob/living/carbon/xenomorph/X)
 	. = FALSE //For peace of mind when it comes to dealing with unintended proc failures
 	if(X in contents)
 		X.forceMove(loc)
@@ -154,20 +160,20 @@
 		return TRUE
 
 //Used for controling tunnel exiting and returning
-/obj/structure/tunnel/clicked(var/mob/user, var/list/mods)
-	if(!isXeno(user) || !isfriendly(user))
+/obj/structure/tunnel/clicked(mob/user, list/mods)
+	if(!isxeno(user) || !isfriendly(user))
 		return ..()
-	var/mob/living/carbon/Xenomorph/X = user
+	var/mob/living/carbon/xenomorph/X = user
 	if(mods["ctrl"] && pick_tunnel(X))//Returning to original tunnel
 		return TRUE
 	else if(mods["alt"] && exit_tunnel(X))//Exiting the tunnel
 		return TRUE
 	. = ..()
 
-/obj/structure/tunnel/attack_larva(mob/living/carbon/Xenomorph/M)
+/obj/structure/tunnel/attack_larva(mob/living/carbon/xenomorph/M)
 	. = attack_alien(M)
 
-/obj/structure/tunnel/attack_alien(mob/living/carbon/Xenomorph/M)
+/obj/structure/tunnel/attack_alien(mob/living/carbon/xenomorph/M)
 	if(!istype(M) || M.stat || M.lying)
 		return XENO_NO_DELAY_ACTION
 
@@ -205,7 +211,7 @@
 
 	if(M.mob_size >= MOB_SIZE_BIG) //Big xenos take WAY longer
 		tunnel_time = TUNNEL_ENTER_BIG_XENO_DELAY
-	else if(isXenoLarva(M)) //Larva can zip through near-instantly, they are wormlike after all
+	else if(islarva(M)) //Larva can zip through near-instantly, they are wormlike after all
 		tunnel_time = TUNNEL_ENTER_LARVA_DELAY
 
 	if(M.mob_size >= MOB_SIZE_BIG)

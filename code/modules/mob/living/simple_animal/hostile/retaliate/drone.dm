@@ -21,7 +21,7 @@
 	maxHealth = 300
 	speed = 8
 	projectiletype = /obj/item/projectile/beam/drone
-	projectilesound = 'sound/weapons/laser3.ogg'
+	projectilesound = 'sound/weapons/Laser3.ogg'
 	destroy_surroundings = 0
 	var/datum/effect_system/ion_trail_follow/ion_trail
 
@@ -58,7 +58,7 @@
 	ion_trail.set_up(src)
 	ion_trail.start()
 
-/mob/living/simple_animal/hostile/retaliate/malf_drone/Process_Spacemove(var/check_drift = 0)
+/mob/living/simple_animal/hostile/retaliate/malf_drone/Process_Spacemove(check_drift = 0)
 	return 1
 
 /mob/living/simple_animal/hostile/retaliate/malf_drone/ListTargets()
@@ -72,13 +72,13 @@
 
 	//emps and lots of damage can temporarily shut us down
 	if(disabled > 0)
-		stat = UNCONSCIOUS
+		set_stat(UNCONSCIOUS)
 		icon_state = "drone_dead"
 		disabled--
 		wander = 0
 		speak_chance = 0
 		if(disabled <= 0)
-			stat = CONSCIOUS
+			set_stat(CONSCIOUS)
 			icon_state = "drone0"
 			wander = 1
 			speak_chance = 5
@@ -97,13 +97,13 @@
 		s.set_up(3, 1, src)
 		s.start()
 
-	//sometimes our targetting sensors malfunction, and we attack anyone nearby
+	//sometimes our targeting sensors malfunction, and we attack anyone nearby
 	if(prob(disabled ? 0 : 1))
 		if(hostile_drone)
-			src.visible_message(SPAN_NOTICE("[icon2html(src, viewers(src))] [src] retracts several targetting vanes, and dulls it's running lights."))
+			src.visible_message(SPAN_NOTICE("[icon2html(src, viewers(src))] [src] retracts several targeting vanes, and dulls it's running lights."))
 			hostile_drone = 0
 		else
-			src.visible_message(SPAN_DANGER("[icon2html(src, viewers(src))] [src] suddenly lights up, and additional targetting vanes slide into place."))
+			src.visible_message(SPAN_DANGER("[icon2html(src, viewers(src))] [src] suddenly lights up, and additional targeting vanes slide into place."))
 			hostile_drone = 1
 
 	if(health / maxHealth > 0.9)
@@ -141,7 +141,7 @@
 
 	if(!exploding && !disabled && prob(explode_chance))
 		exploding = 1
-		stat = UNCONSCIOUS
+		set_stat(UNCONSCIOUS)
 		wander = 1
 		walk(src,0)
 		spawn(rand(50,150))

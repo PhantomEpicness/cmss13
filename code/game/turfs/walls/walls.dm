@@ -1,9 +1,9 @@
 /turf/closed/wall
 	name = "wall"
-	desc = "A huge chunk of metal used to seperate rooms."
+	desc = "A huge chunk of metal used to separate rooms."
 	icon = 'icons/turf/walls/walls.dmi'
 	icon_state = "0"
-	opacity = 1
+	opacity = TRUE
 	var/hull = 0 //1 = Can't be deconstructed by tools or thermite. Used for Sulaco walls
 	var/walltype = WALL_METAL
 	var/junctiontype //when walls smooth with one another, the type of junction each wall is.
@@ -16,7 +16,8 @@
 		/obj/structure/window/framed,
 		/obj/structure/window_frame,
 		/obj/structure/girder,
-		/obj/structure/machinery/door)
+		/obj/structure/machinery/door,
+	)
 
 	var/damage = 0
 	var/damage_cap = HEALTH_WALL //Wall will break down to girders if damage reaches this point
@@ -60,6 +61,11 @@
 	update_icon()
 
 
+/turf/closed/wall/setDir(newDir)
+	..()
+	update_connections(FALSE)
+	update_icon()
+
 /turf/closed/wall/ChangeTurf(newtype, ...)
 	QDEL_NULL(acided_hole)
 
@@ -86,12 +92,12 @@
 
 /turf/closed/wall/MouseDrop_T(mob/M, mob/user)
 	if(acided_hole)
-		if(M == user && isXeno(user))
+		if(M == user && isxeno(user))
 			acided_hole.use_wall_hole(user)
 			return
 	..()
 
-/turf/closed/wall/attack_alien(mob/living/carbon/Xenomorph/user)
+/turf/closed/wall/attack_alien(mob/living/carbon/xenomorph/user)
 	if(acided_hole && user.mob_size >= MOB_SIZE_BIG)
 		acided_hole.expand_hole(user) //This proc applies the attack delay itself.
 		return XENO_NO_DELAY_ACTION
@@ -126,40 +132,44 @@
 	. = ..()
 
 //Appearance
-/turf/closed/wall/examine(mob/user)
+/turf/closed/wall/get_examine_text(mob/user)
 	. = ..()
+
+	if(hull)
+		.+= SPAN_WARNING("You don't think you have any tools able to even scratch this.")
+		return //If it's indestructable, we don't want to give the wrong impression by saying "you can decon it with a welder"
 
 	if(!damage)
 		if (acided_hole)
-			to_chat(user, SPAN_WARNING("It looks fully intact, except there's a large hole that could've been caused by some sort of acid."))
+			. += SPAN_WARNING("It looks fully intact, except there's a large hole that could've been caused by some sort of acid.")
 		else
-			to_chat(user, SPAN_NOTICE("It looks fully intact."))
+			. += SPAN_NOTICE("It looks fully intact.")
 	else
 		var/dam = damage / damage_cap
 		if(dam <= 0.3)
-			to_chat(user, SPAN_WARNING("It looks slightly damaged."))
+			. += SPAN_WARNING("It looks slightly damaged.")
 		else if(dam <= 0.6)
-			to_chat(user, SPAN_WARNING("It looks moderately damaged."))
+			. += SPAN_WARNING("It looks moderately damaged.")
 		else
-			to_chat(user, SPAN_DANGER("It looks heavily damaged."))
+			. += SPAN_DANGER("It looks heavily damaged.")
 
 		if (acided_hole)
-			to_chat(user, SPAN_WARNING("There's a large hole in the wall that could've been caused by some sort of acid."))
+			. += SPAN_WARNING("There's a large hole in the wall that could've been caused by some sort of acid.")
 
 	switch(d_state)
 		if(WALL_STATE_WELD)
-			to_chat(user, SPAN_INFO("The outer plating is intact. A blowtorch should slice it open."))
+			. += SPAN_INFO("The outer plating is intact. A blowtorch should slice it open.")
 		if(WALL_STATE_SCREW)
-			to_chat(user, SPAN_INFO("The outer plating has been sliced open. A screwdriver should remove the support lines."))
+			. += SPAN_INFO("The outer plating has been sliced open. A screwdriver should remove the support lines.")
 		if(WALL_STATE_WIRECUTTER)
-			to_chat(user, SPAN_INFO("The support lines have been removed. Wirecutters will take care of the hydraulic lines."))
+			. += SPAN_INFO("The support lines have been removed. Wirecutters will take care of the hydraulic lines.")
 		if(WALL_STATE_WRENCH)
-			to_chat(user, SPAN_INFO("The hydralic lines have been cut. A wrench will remove the anchor bolts."))
+			. += SPAN_INFO("The hydralic lines have been cut. A wrench will remove the anchor bolts.")
 		if(WALL_STATE_CROWBAR)
-			to_chat(user, SPAN_INFO("The anchor bolts have been removed. A crowbar will pry apart the connecting rods."))
+			. += SPAN_INFO("The anchor bolts have been removed. A crowbar will pry apart the connecting rods.")
 
 //Damage
-/turf/closed/wall/proc/take_damage(dam, var/mob/M)
+/turf/closed/wall/proc/take_damage(dam, mob/M)
 	if(hull) //Hull is literally invincible
 		return
 	if(!dam)
@@ -210,11 +220,13 @@
 		return
 	var/location = get_step(get_turf(src), explosion_direction) // shrapnel will just collide with the wall otherwise
 	var/exp_damage = severity*EXPLOSION_DAMAGE_MULTIPLIER_WALL
-	var/mob/M = cause_data.resolve_mob()
+	var/mob/mob
+	if(cause_data)
+		mob = cause_data.resolve_mob()
 
-	if ( damage + exp_damage > damage_cap*2 )
-		if(M)
-			SEND_SIGNAL(M, COMSIG_MOB_EXPLODED_WALL, src)
+	if (damage + exp_damage > damage_cap*2)
+		if(mob)
+			SEND_SIGNAL(mob, COMSIG_MOB_EXPLODED_WALL, src)
 		dismantle_wall(FALSE, TRUE)
 		if(!istype(src, /turf/closed/wall/resin))
 			create_shrapnel(location, rand(2,5), explosion_direction, , /datum/ammo/bullet/shrapnel/light, cause_data)
@@ -225,7 +237,7 @@
 			if(prob(50)) // prevents spam in close corridors etc
 				src.visible_message(SPAN_WARNING("The explosion causes shards to spall off of [src]!"))
 			create_shrapnel(location, rand(2,5), explosion_direction, , /datum/ammo/bullet/shrapnel/spall, cause_data)
-		take_damage(exp_damage, M)
+		take_damage(exp_damage, mob)
 
 	return
 
@@ -248,8 +260,8 @@
 	O.desc = "Looks hot."
 	O.icon = 'icons/effects/fire.dmi'
 	O.icon_state = "red_3"
-	O.anchored = 1
-	O.density = 1
+	O.anchored = TRUE
+	O.density = TRUE
 	O.layer = FLY_LAYER
 
 	to_chat(user, SPAN_WARNING("The thermite starts melting through [src]."))
@@ -259,7 +271,7 @@
 		if(!istype(src, /turf/closed/wall) || QDELETED(src))
 			break
 
-		thermite -= 1
+		thermite--
 		take_damage(100, user)
 
 		if(!istype(src, /turf/closed/wall) || QDELETED(src))
@@ -312,17 +324,21 @@
 			if(hull)
 				to_chat(user, SPAN_WARNING("[src] is much too tough for you to do anything to it with [W]."))
 			else
-				if(istype(W, /obj/item/tool/weldingtool))
+				if(iswelder(W))
 					var/obj/item/tool/weldingtool/WT = W
 					WT.remove_fuel(0,user)
 				thermitemelt(user)
 			return
 
 	if(istype(W, /obj/item/weapon/melee/twohanded/breacher))
+		var/obj/item/weapon/melee/twohanded/breacher/current_hammer = W
 		if(user.action_busy)
 			return
-		if(!HAS_TRAIT(user, TRAIT_SUPER_STRONG))
-			to_chat(user, SPAN_WARNING("You can't use \the [W] properly!"))
+		if(!(HAS_TRAIT(user, TRAIT_SUPER_STRONG) || !current_hammer.really_heavy))
+			to_chat(user, SPAN_WARNING("You can't use \the [current_hammer] properly!"))
+			return
+		if(hull)
+			to_chat(user, SPAN_WARNING("Even with your immense strength, you can't bring down \the [src]."))
 			return
 
 		to_chat(user, SPAN_NOTICE("You start taking down \the [src]."))
@@ -381,6 +397,9 @@
 	switch(d_state)
 		if(WALL_STATE_WELD)
 			if(iswelder(W))
+				if(!HAS_TRAIT(W, TRAIT_TOOL_BLOWTORCH))
+					to_chat(user, SPAN_WARNING("You need a stronger blowtorch!"))
+					return
 				var/obj/item/tool/weldingtool/WT = W
 				try_weldingtool_deconstruction(WT, user)
 
@@ -432,7 +451,7 @@
 	return attack_hand(user)
 
 /turf/closed/wall/proc/try_weldingtool_usage(obj/item/W, mob/user)
-	if(!damage || !istype(W, /obj/item/tool/weldingtool))
+	if(!damage || !iswelder(W))
 		return FALSE
 
 	var/obj/item/tool/weldingtool/WT = W

@@ -13,13 +13,13 @@
 /// Called when the transport is loaded by the config controller, not called on the default transport unless it gets loaded by a config change.
 /datum/asset_transport/proc/Load()
 	for(var/client/C in GLOB.clients)
-		addtimer(CALLBACK(src, .proc/send_assets_slow, C, preload), 1 SECONDS)
+		addtimer(CALLBACK(src, PROC_REF(send_assets_slow), C, preload), 1 SECONDS)
 
 /// Initialize - Called when SSassets initializes.
 /datum/asset_transport/proc/Initialize(list/assets)
 	preload = assets.Copy()
 	for(var/client/C in GLOB.clients)
-		addtimer(CALLBACK(src, .proc/send_assets_slow, C, preload), 1 SECONDS)
+		addtimer(CALLBACK(src, PROC_REF(send_assets_slow), C, preload), 1 SECONDS)
 
 
 /// Register a browser asset with the asset cache system
@@ -72,10 +72,10 @@
 /// asset_list - A list of asset filenames to be sent to the client. Can optionally be assoicated with the asset's asset_cache_item datum.
 /// Returns TRUE if any assets were sent.
 /datum/asset_transport/proc/send_assets(client/client, list/asset_list)
-	if (!istype(client))
-		if (ismob(client))
+	if(!istype(client))
+		if(ismob(client))
 			var/mob/M = client
-			if (M.client)
+			if(M.client)
 				client = M.client
 			else //no stacktrace because this will mainly happen because the client went away
 				return

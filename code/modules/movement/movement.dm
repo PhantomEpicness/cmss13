@@ -8,14 +8,18 @@
 	return TRUE
 
 /*
- *	Checks whether an atom can pass through the calling atom into its target turf.
- *	Returns the blocking direction.
- *		If the atom's movement is not blocked, returns 0.
- *		If the object is completely solid, returns ALL
+ * Checks whether an atom can pass through the calling atom into its target turf.
+ * Returns the blocking direction.
+ * If the atom's movement is not blocked, returns 0.
+ * If the object is completely solid, returns ALL
  */
 /atom/proc/BlockedPassDirs(atom/movable/mover, target_dir)
 	var/reverse_dir = REVERSE_DIR(dir)
 	var/flags_can_pass = pass_flags.flags_can_pass_all|flags_can_pass_all_temp|pass_flags.flags_can_pass_front|flags_can_pass_front_temp
+
+	if(!mover || !mover.pass_flags)
+		return NO_BLOCKED_MOVEMENT
+
 	var/mover_flags_pass = mover.pass_flags.flags_pass|mover.flags_pass_temp
 
 	if (!density || (flags_can_pass & mover_flags_pass))
@@ -33,13 +37,17 @@
 		return BLOCKED_MOVEMENT
 
 /*
- *	Checks whether an atom can leave its current turf through the calling atom.
- *	Returns the blocking direction.
- *		If the atom's movement is not blocked, returns 0 (no directions)
- *		If the object is completely solid, returns all directions
+ * Checks whether an atom can leave its current turf through the calling atom.
+ * Returns the blocking direction.
+ * If the atom's movement is not blocked, returns 0 (no directions)
+ * If the object is completely solid, returns all directions
  */
 /atom/proc/BlockedExitDirs(atom/movable/mover, target_dir)
 	var/flags_can_pass = pass_flags.flags_can_pass_all|flags_can_pass_all_temp|pass_flags.flags_can_pass_behind|flags_can_pass_behind_temp
+
+	if(!mover || !mover.pass_flags)
+		return NO_BLOCKED_MOVEMENT
+
 	var/mover_flags_pass = mover.pass_flags.flags_pass|mover.flags_pass_temp
 
 	if(flags_atom & ON_BORDER && density && !(flags_can_pass & mover_flags_pass))
@@ -66,6 +74,7 @@
 	if (.)
 		Moved(oldloc, direct)
 
+/// Called when a movable atom has hit an atom via movement
 /atom/movable/proc/Collide(atom/A)
 	if (throwing)
 		launch_impact(A)
@@ -73,14 +82,13 @@
 	if (A && !QDELETED(A))
 		A.last_bumped = world.time
 		A.Collided(src)
-	return
 
+/// Called when an atom has been hit by a movable atom via movement
 /atom/movable/Collided(atom/movable/AM)
 	if(isliving(AM) && !anchored)
 		var/target_dir = get_dir(AM, src)
 		var/turf/target_turf = get_step(loc, target_dir)
 		Move(target_turf)
-	return
 
 /atom/movable/proc/Moved(atom/oldloc, direction, Forced = FALSE)
 	SEND_SIGNAL(src, COMSIG_MOVABLE_MOVED, oldloc, direction, Forced)
@@ -123,12 +131,12 @@
 					old_area.Exited(src, destination)
 			for(var/atom/movable/AM in oldloc)
 				AM.Uncrossed(src)
-//			var/turf/oldturf = get_turf(oldloc)  // TODO: maploader
-//			var/turf/destturf = get_turf(destination)
-//			var/old_z = (oldturf ? oldturf.z : null)
-//			var/dest_z = (destturf ? destturf.z : null)
-//			if(old_z != dest_z)
-//				onTransitZ(old_z, dest_z)
+			var/turf/oldturf = get_turf(oldloc)  // TODO: maploader
+			var/turf/destturf = get_turf(destination)
+			var/old_z = (oldturf ? oldturf.z : null)
+			var/dest_z = (destturf ? destturf.z : null)
+			if(old_z != dest_z)
+				onTransitZ(old_z, dest_z)
 			destination.Entered(src, oldloc)
 			if(destarea && old_area != destarea)
 				destarea.Entered(src, oldloc)

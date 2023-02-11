@@ -1,6 +1,6 @@
 #define STATE_DEFAULT 1
 #define STATE_EVACUATION 2
-#define STATE_EVACUATION_CANCEL	3
+#define STATE_EVACUATION_CANCEL 3
 #define STATE_DISTRESS 4
 #define STATE_DESTROY 5
 #define STATE_DEFCONLIST 6
@@ -9,12 +9,9 @@
 #define STATE_VIEWMESSAGE 8
 #define STATE_DELMESSAGE 9
 
-#define COOLDOWN_COMM_MESSAGE 30 SECONDS
-#define COOLDOWN_COMM_REQUEST 5 MINUTES
-#define COOLDOWN_COMM_CENTRAL 30 SECONDS
-#define COOLDOWN_COMM_DESTRUCT 5 MINUTES
 
-#define COMMAND_SHIP_ANNOUNCE		"Command Ship Announcement"
+
+#define COMMAND_SHIP_ANNOUNCE "Command Ship Announcement"
 
 /obj/structure/machinery/computer/almayer_control
 	name = "almayer control console"
@@ -37,10 +34,10 @@
 	var/currmsg = 0
 	var/aicurrmsg = 0
 
-/obj/structure/machinery/computer/almayer_control/attack_remote(var/mob/user as mob)
+/obj/structure/machinery/computer/almayer_control/attack_remote(mob/user as mob)
 	return attack_hand(user)
 
-/obj/structure/machinery/computer/almayer_control/attack_hand(var/mob/user as mob)
+/obj/structure/machinery/computer/almayer_control/attack_hand(mob/user as mob)
 	if(..() || !allowed(user) || inoperable())
 		return
 
@@ -70,7 +67,7 @@
 
 			dat += "<BR><A HREF='?src=\ref[src];operation=messagelist'>Message list</A>"
 			dat += "<BR><A HREF='?src=\ref[src];operation=distress'>Send Distress Beacon</A>"
-			dat += "<BR><A HREF='?src=\ref[src];operation=destroy'>Activate Self Destruct</A>"
+			dat += "<BR><A HREF='?src=\ref[src];operation=destroy'>Activate Self-Destruct</A>"
 			switch(EvacuationAuthority.evac_status)
 				if(EVACUATION_STATUS_STANDING_BY)
 					dat += "<BR><A HREF='?src=\ref[src];operation=evacuation_start'>Initiate emergency evacuation</A>"
@@ -87,7 +84,7 @@
 			dat += "Are you sure you want to trigger a distress signal? The signal can be picked up by anyone listening, friendly or not. <A HREF='?src=\ref[src];operation=distress'>Confirm</A>"
 
 		if(STATE_DESTROY)
-			dat += "Are you sure you want to trigger the self destruct? This would mean abandoning ship. <A HREF='?src=\ref[src];operation=destroy'>Confirm</A>"
+			dat += "Are you sure you want to trigger the self-destruct? This would mean abandoning ship. <A HREF='?src=\ref[src];operation=destroy'>Confirm</A>"
 
 		if(STATE_MESSAGELIST)
 			dat += "Messages:"
@@ -145,7 +142,7 @@
 					signed = "[paygrade] [id.registered_name]"
 
 			shipwide_ai_announcement(input, COMMAND_SHIP_ANNOUNCE, signature = signed)
-			addtimer(CALLBACK(src, .proc/reactivate_announcement, usr), COOLDOWN_COMM_MESSAGE)
+			addtimer(CALLBACK(src, PROC_REF(reactivate_announcement), usr), COOLDOWN_COMM_MESSAGE)
 			message_staff("[key_name(usr)] has made a shipwide annoucement.")
 			log_announcement("[key_name(usr)] has announced the following to the ship: [input]")
 
@@ -178,7 +175,7 @@
 
 				spawn(35)//some time between AI announcements for evac cancel and SD cancel.
 					if(EvacuationAuthority.evac_status == EVACUATION_STATUS_STANDING_BY)//nothing changed during the wait
-						 //if the self_destruct is active we try to cancel it (which includes lowering alert level to red)
+						//if the self_destruct is active we try to cancel it (which includes lowering alert level to red)
 						if(!EvacuationAuthority.cancel_self_destruct(1))
 							//if SD wasn't active (likely canceled manually in the SD room), then we lower the alert level manually.
 							set_security_level(SEC_LEVEL_RED, TRUE) //both SD and evac are inactive, lowering the security level.
@@ -191,7 +188,6 @@
 
 		if("distress")
 			if(state == STATE_DISTRESS)
-				//Comment to test
 				if(world.time < DISTRESS_TIME_LOCK)
 					to_chat(usr, SPAN_WARNING("The distress beacon cannot be launched this early in the operation. Please wait another [time_left_until(DISTRESS_TIME_LOCK, world.time, 1 MINUTES)] minutes before trying again."))
 					return FALSE
@@ -203,13 +199,12 @@
 					to_chat(usr, SPAN_WARNING("ARES has denied your request for operational security reasons."))
 					return FALSE
 
-				 //Comment block to test
 				if(world.time < cooldown_request + COOLDOWN_COMM_REQUEST)
 					to_chat(usr, SPAN_WARNING("The distress beacon has recently broadcast a message. Please wait."))
 					return FALSE
 
 				if(security_level == SEC_LEVEL_DELTA)
-					to_chat(usr, SPAN_WARNING("The ship is already undergoing self destruct procedures!"))
+					to_chat(usr, SPAN_WARNING("The ship is already undergoing self-destruct procedures!"))
 					return FALSE
 
 				for(var/client/C in GLOB.admins)
@@ -227,7 +222,7 @@
 			if(state == STATE_DESTROY)
 				//Comment to test
 				if(world.time < DISTRESS_TIME_LOCK)
-					to_chat(usr, SPAN_WARNING("The self destruct cannot be activated this early in the operation. Please wait another [time_left_until(DISTRESS_TIME_LOCK, world.time, 1 MINUTES)] minutes before trying again."))
+					to_chat(usr, SPAN_WARNING("The self-destruct cannot be activated this early in the operation. Please wait another [time_left_until(DISTRESS_TIME_LOCK, world.time, 1 MINUTES)] minutes before trying again."))
 					return FALSE
 
 				if(!SSticker.mode)
@@ -238,18 +233,18 @@
 					return FALSE
 
 				if(world.time < cooldown_destruct + COOLDOWN_COMM_DESTRUCT)
-					to_chat(usr, SPAN_WARNING("A self destruct request has already been sent to high command. Please wait."))
+					to_chat(usr, SPAN_WARNING("A self-destruct request has already been sent to high command. Please wait."))
 					return FALSE
 
 				if(get_security_level() == "delta")
-					to_chat(usr, SPAN_WARNING("The [MAIN_SHIP_NAME]'s self destruct is already activated."))
+					to_chat(usr, SPAN_WARNING("The [MAIN_SHIP_NAME]'s self-destruct is already activated."))
 					return FALSE
 
 				for(var/client/C in GLOB.admins)
 					if((R_ADMIN|R_MOD) & C.admin_holder.rights)
 						C << 'sound/effects/sos-morse-code.ogg'
-				message_staff("[key_name(usr)] has requested Self Destruct! (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ccmark=\ref[usr]'>Mark</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];destroyship=\ref[usr]'>GRANT</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];sddeny=\ref[usr]'>DENY</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];adminplayerobservejump=\ref[usr]'>JMP</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];CentcommReply=\ref[usr]'>RPLY</A>)")
-				to_chat(usr, SPAN_NOTICE("A self destruct request has been sent to USCM Central Command."))
+				message_staff("[key_name(usr)] has requested Self-Destruct! (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ccmark=\ref[usr]'>Mark</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];destroyship=\ref[usr]'>GRANT</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];sddeny=\ref[usr]'>DENY</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];adminplayerobservejump=\ref[usr]'>JMP</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];CentcommReply=\ref[usr]'>RPLY</A>)")
+				to_chat(usr, SPAN_NOTICE("A self-destruct request has been sent to USCM Central Command."))
 				cooldown_destruct = world.time
 				return TRUE
 
@@ -262,8 +257,8 @@
 		if("viewmessage")
 			state = STATE_VIEWMESSAGE
 			if (!currmsg)
-				if(href_list["message-num"]) 	currmsg = text2num(href_list["message-num"])
-				else 							state = STATE_MESSAGELIST
+				if(href_list["message-num"]) currmsg = text2num(href_list["message-num"])
+				else state = STATE_MESSAGELIST
 
 		if("delmessage")
 			state = (currmsg) ? STATE_DELMESSAGE : STATE_MESSAGELIST
@@ -314,7 +309,7 @@
 
 	updateUsrDialog()
 
-/obj/structure/machinery/computer/almayer_control/proc/reactivate_announcement(var/mob/user)
+/obj/structure/machinery/computer/almayer_control/proc/reactivate_announcement(mob/user)
 	is_announcement_active = TRUE
 	updateUsrDialog()
 
@@ -325,10 +320,6 @@
 #undef STATE_DISTRESS
 #undef STATE_DESTROY
 #undef STATE_DEFCONLIST
-
-#undef COOLDOWN_COMM_MESSAGE
-#undef COOLDOWN_COMM_REQUEST
-#undef COOLDOWN_COMM_CENTRAL
 
 #undef STATE_MESSAGELIST
 #undef STATE_VIEWMESSAGE

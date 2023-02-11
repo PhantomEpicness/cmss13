@@ -22,9 +22,13 @@
 	ammo = new /obj/item/ammo_magazine/hardpoint/boyars_dualcannon
 	max_clips = 2
 
+	use_muzzle_flash = TRUE
+	angle_muzzleflash = FALSE
+	muzzleflash_icon_state = "muzzle_flash_double"
+
 	muzzle_flash_pos = list(
-		"1" = list(10, -29),
-		"2" = list(-10, 10),
+		"1" = list(11, -29),
+		"2" = list(-11, 10),
 		"4" = list(-14, 9),
 		"8" = list(14, 9)
 	)
@@ -35,7 +39,7 @@
 		BULLET_TRAIT_ENTRY(/datum/element/bullet_trait_iff)
 	))
 
-/obj/item/hardpoint/primary/dualcannon/fire(var/mob/user, var/atom/A)
+/obj/item/hardpoint/primary/dualcannon/fire(mob/user, atom/A)
 	if(ammo.current_rounds <= 0)
 		return
 
@@ -50,6 +54,6 @@
 		fire_projectile(user, T)
 		if(ammo.current_rounds <= 0)
 			break
-		if(bullets_fired < burst_amount)	//we need to sleep only if there are more bullets to shoot in the burst
+		if(bullets_fired < burst_amount) //we need to sleep only if there are more bullets to shoot in the burst
 			sleep(3)
 	to_chat(user, SPAN_WARNING("[src] Ammo: <b>[SPAN_HELPFUL(ammo ? ammo.current_rounds : 0)]/[SPAN_HELPFUL(ammo ? ammo.max_rounds : 0)]</b> | Mags: <b>[SPAN_HELPFUL(LAZYLEN(backup_clips))]/[SPAN_HELPFUL(max_clips)]</b>"))

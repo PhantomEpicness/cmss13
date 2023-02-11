@@ -95,7 +95,6 @@
 "aq" = (
 /obj/structure/pipes/standard/simple/hidden/green,
 /obj/structure/machinery/door/airlock/multi_tile/almayer/generic{
-	dir = 4;
 	name = "\improper Office Complex"
 	},
 /turf/open/floor/plating{
@@ -156,12 +155,10 @@
 	},
 /obj/effect/decal/cleanable/dirt,
 /obj/item/device/radio/intercom{
-	anyai = 1;
 	freerange = 1;
 	frequency = 1469;
 	name = "General Listening Channel";
-	pixel_x = 30;
-	pixel_y = 0
+	pixel_x = 30
 	},
 /turf/open/floor/plating{
 	icon_state = "platingdmg3"
@@ -266,7 +263,6 @@
 /area/bigredv2/outside/office_complex)
 "aR" = (
 /turf/open/floor{
-	dir = 2;
 	icon_state = "warnwhite"
 	},
 /area/bigredv2/outside/office_complex)
@@ -297,7 +293,6 @@
 "aW" = (
 /obj/structure/bed/chair/dropship/pilot{
 	tag = "icon-pilot_chair (NORTH)";
-	icon_state = "pilot_chair";
 	dir = 1
 	},
 /turf/open/shuttle/dropship{
@@ -452,8 +447,7 @@
 /area/bigredv2/outside/office_complex)
 "bt" = (
 /obj/structure/pipes/standard/simple/hidden/green{
-	dir = 4;
-	layer = 2.4
+	dir = 4
 	},
 /turf/open/floor/plating{
 	icon_state = "panelscorched"
@@ -508,7 +502,6 @@
 "bB" = (
 /obj/item/clothing/head/welding,
 /turf/open/floor{
-	dir = 2;
 	icon_state = "warnwhite"
 	},
 /area/bigredv2/outside/office_complex)
@@ -696,8 +689,7 @@
 /area/bigredv2/outside/office_complex)
 "ce" = (
 /obj/structure/pipes/standard/simple/hidden/green{
-	dir = 4;
-	layer = 2.4
+	dir = 4
 	},
 /obj/structure/machinery/door/airlock/almayer/generic{
 	name = "\improper Office Complex Storage"
@@ -718,13 +710,11 @@
 "cg" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor{
-	dir = 2;
 	icon_state = "redcorner"
 	},
 /area/bigredv2/outside/office_complex)
 "ch" = (
 /turf/open/floor{
-	dir = 2;
 	icon_state = "redcorner"
 	},
 /area/bigredv2/outside/office_complex)
@@ -750,8 +740,7 @@
 "cl" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/structure/pipes/standard/simple/hidden/green{
-	dir = 4;
-	layer = 2.4
+	dir = 4
 	},
 /turf/open/floor{
 	icon_state = "dark"
@@ -773,7 +762,6 @@
 /area/bigredv2/outside/office_complex)
 "co" = (
 /obj/structure/machinery/door/airlock/multi_tile/almayer/generic{
-	dir = 4;
 	name = "\improper Office Complex Janitor Room"
 	},
 /turf/open/floor{
@@ -822,12 +810,20 @@
 	},
 /area/bigredv2/outside/office_complex)
 "cw" = (
+/obj/item/weapon/gun/rifle/nsg23/no_lock/stripped{
+	name = "smashed NSG 23 assault rifle";
+	desc = "A rare sight, this rifle is seen most commonly in the hands of Weyland-Yutani PMCs. Compared to the M41A MK2, it has noticeably improved handling and vastly improved performance at long and medium range, but compares similarly up close. This one seems to have been heavily damaged from impact, you can still see some debris that resembles a scope and underbarrel attachment point on it."
+	},
 /turf/open/shuttle/dropship{
 	tag = "icon-rasputin5";
 	icon_state = "rasputin12"
 	},
 /area/bigredv2/outside/office_complex)
 "cx" = (
+/obj/effect/spawner/gibspawner/human,
+/obj/item/limb/arm/l_arm,
+/obj/item/limb/leg/l_leg,
+/obj/item/limb/hand/r_hand,
 /turf/open/shuttle/dropship{
 	icon_state = "rasputin8";
 	tag = "icon-rasputin7"
@@ -901,8 +897,7 @@
 /obj/structure/surface/table,
 /obj/item/clothing/mask/cigarette,
 /obj/structure/pipes/standard/simple/hidden/green{
-	dir = 4;
-	layer = 2.4
+	dir = 4
 	},
 /obj/item/device/healthanalyzer,
 /turf/open/floor{
@@ -1085,7 +1080,6 @@
 /area/bigredv2/outside/office_complex)
 "dk" = (
 /obj/structure/machinery/door/airlock/multi_tile/almayer/generic{
-	dir = 4;
 	name = "\improper Office Complex Janitor Room"
 	},
 /turf/open/floor,
@@ -1242,7 +1236,7 @@
 /area/bigredv2/outside/office_complex)
 "dH" = (
 /obj/effect/decal/cleanable/blood,
-/obj/effect/landmark/corpsespawner/PMC,
+/obj/effect/landmark/corpsespawner/wygoon,
 /turf/open/shuttle/dropship{
 	icon_state = "floor8";
 	tag = "icon-rasputin7"
@@ -1250,7 +1244,8 @@
 /area/bigredv2/outside/office_complex)
 "dI" = (
 /obj/structure/surface/rack,
-
+/obj/item/ammo_magazine/rifle/nsg23,
+/obj/item/ammo_magazine/rifle/nsg23/extended,
 /turf/open/shuttle/dropship{
 	tag = "icon-rasputin15";
 	icon_state = "rasputin15"
@@ -1282,7 +1277,6 @@
 /area/bigredv2/outside/office_complex)
 "dM" = (
 /obj/structure/surface/rack,
-/obj/item/storage/firstaid,
 /turf/open/shuttle/dropship{
 	tag = "icon-rasputin15";
 	icon_state = "rasputin15"
@@ -1291,6 +1285,9 @@
 "dN" = (
 /obj/structure/surface/rack,
 /obj/item/device/flashlight,
+/obj/item/ammo_magazine/pistol/rubber,
+/obj/item/ammo_magazine/pistol/rubber,
+/obj/item/ammo_magazine/pistol/rubber,
 /turf/open/shuttle/dropship{
 	tag = "icon-rasputin15";
 	icon_state = "rasputin15"
@@ -1461,6 +1458,7 @@
 "ej" = (
 /obj/effect/decal/cleanable/dirt,
 /obj/item/trash/syndi_cakes,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor{
 	icon_state = "dark"
 	},
@@ -1486,22 +1484,120 @@
 	icon_state = "platingdmg1"
 	},
 /area/bigredv2/outside/office_complex)
+"fG" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 8
+	},
+/obj/item/device/radio/headset/distress/pmc/hvh,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin15";
+	icon_state = "rasputin15"
+	},
+/area/bigredv2/outside/office_complex)
+"jx" = (
+/obj/effect/decal/cleanable/blood{
+	icon_state = "gib6";
+	dir = 1
+	},
+/obj/item/limb/leg/l_leg,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin3";
+	icon_state = "rasputin3"
+	},
+/area/bigredv2/outside/office_complex)
+"od" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 4
+	},
+/obj/item/clothing/gloves/marine/veteran/pmc,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin15";
+	icon_state = "rasputin15"
+	},
+/area/bigredv2/outside/office_complex)
+"oF" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 4
+	},
+/obj/item/clothing/under/marine/veteran/pmc,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin15";
+	icon_state = "rasputin15"
+	},
+/area/bigredv2/outside/office_complex)
 "qX" = (
 /obj/effect/decal/cleanable/blood,
-/obj/effect/landmark/corpsespawner/PMC,
-
+/obj/effect/landmark/corpsespawner/pmc,
+/obj/item/weapon/gun/rifle/nsg23/no_lock,
 /turf/open/shuttle/dropship{
 	tag = "icon-rasputin3";
 	icon_state = "rasputin3"
 	},
 /area/bigredv2/outside/office_complex)
 "rF" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 8
+	},
 /obj/effect/decal/cleanable/blood,
-/obj/effect/landmark/corpsespawner/PMC,
-
+/obj/effect/spawner/gibspawner/human,
+/obj/item/clothing/head/helmet/marine/veteran/pmc,
+/obj/item/clothing/under/marine/veteran/pmc,
+/obj/item/clothing/head/helmet/marine/veteran/pmc,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin15";
+	icon_state = "rasputin15"
+	},
+/area/bigredv2/outside/office_complex)
+"rK" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 8
+	},
+/obj/effect/decal/cleanable/blood,
+/obj/effect/landmark/corpsespawner/wygoon,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin15";
+	icon_state = "rasputin15"
+	},
+/area/bigredv2/outside/office_complex)
+"si" = (
+/obj/item/clothing/head/helmet/marine/veteran/pmc,
 /turf/open/shuttle/dropship{
 	tag = "icon-rasputin3";
 	icon_state = "rasputin3"
+	},
+/area/bigredv2/outside/office_complex)
+"sR" = (
+/obj/item/storage/firstaid,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin3";
+	icon_state = "rasputin3"
+	},
+/area/bigredv2/outside/office_complex)
+"uC" = (
+/obj/effect/spawner/gibspawner/human,
+/obj/item/weapon/gun/rifle/m41a/corporate{
+	current_mag = /obj/item/ammo_magazine/rifle/rubber;
+	name = "battered M41A pulse rifle MK2";
+	pixel_x = 4;
+	desc = "A Weyland-Yutani creation, this M41A MK2 comes equipped in corporate white. Uses 10x24mm caseless ammunition. It seems to be pretty battered and broken up."
+	},
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin3";
+	icon_state = "rasputin3"
+	},
+/area/bigredv2/outside/office_complex)
+"uL" = (
+/obj/item/weapon/gun/rifle/nsg23/no_lock,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin3";
+	icon_state = "rasputin3"
+	},
+/area/bigredv2/outside/office_complex)
+"vw" = (
+/obj/item/limb/arm/l_arm,
+/turf/open/shuttle/dropship{
+	icon_state = "floor8";
+	tag = "icon-rasputin7"
 	},
 /area/bigredv2/outside/office_complex)
 "yS" = (
@@ -1514,6 +1610,54 @@
 	icon_state = "rasputin15"
 	},
 /area/bigredv2/outside/office_complex)
+"AB" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/blood,
+/obj/item/limb/leg/r_leg,
+/obj/item/weapon/gun/pistol/m4a3/training{
+	name = "dented M4A3 service pistol"
+	},
+/obj/effect/landmark/corpsespawner/wygoon,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin15";
+	icon_state = "rasputin15"
+	},
+/area/bigredv2/outside/office_complex)
+"Bu" = (
+/obj/effect/decal/cleanable/blood,
+/obj/effect/spawner/gibspawner/human,
+/obj/item/limb/arm/l_arm,
+/obj/item/limb/leg/l_leg,
+/obj/item/limb/hand/r_hand,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin3";
+	icon_state = "rasputin3"
+	},
+/area/bigredv2/outside/office_complex)
+"EE" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 8
+	},
+/obj/item/limb/hand/l_hand,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin15";
+	icon_state = "rasputin15"
+	},
+/area/bigredv2/outside/office_complex)
+"GG" = (
+/obj/item/weapon/gun/rifle/m41a/corporate{
+	current_mag = /obj/item/ammo_magazine/rifle/rubber;
+	name = "battered M41A pulse rifle MK2";
+	pixel_x = 4;
+	desc = "A Weyland-Yutani creation, this M41A MK2 comes equipped in corporate white. Uses 10x24mm caseless ammunition. It seems to be pretty battered and broken up."
+	},
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin3";
+	icon_state = "rasputin3"
+	},
+/area/bigredv2/outside/office_complex)
 "Ha" = (
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor{
@@ -1522,6 +1666,26 @@
 	dir = 1
 	},
 /area/bigredv2/outside/se)
+"Lk" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 4
+	},
+/obj/item/device/radio/headset/distress/pmc/hvh,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin15";
+	icon_state = "rasputin15"
+	},
+/area/bigredv2/outside/office_complex)
+"NK" = (
+/obj/structure/surface/rack,
+/obj/item/ammo_magazine/rifle/rubber,
+/obj/item/ammo_magazine/rifle/rubber,
+/obj/item/ammo_magazine/rifle/rubber,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin15";
+	icon_state = "rasputin15"
+	},
+/area/bigredv2/outside/office_complex)
 "PR" = (
 /turf/open/floor{
 	tag = "icon-asteroidfloor (NORTH)";
@@ -1539,6 +1703,30 @@
 	icon_state = "rasputin15"
 	},
 /area/bigredv2/outside/office_complex)
+"Ra" = (
+/obj/structure/bed/chair/dropship/passenger{
+	dir = 8
+	},
+/obj/item/clothing/gloves/marine/veteran/pmc,
+/turf/open/shuttle/dropship{
+	tag = "icon-rasputin15";
+	icon_state = "rasputin15"
+	},
+/area/bigredv2/outside/office_complex)
+"Vg" = (
+/obj/effect/landmark/objective_landmark/medium,
+/turf/open/shuttle/dropship{
+	icon_state = "floor8";
+	tag = "icon-rasputin7"
+	},
+/area/bigredv2/outside/office_complex)
+"ZG" = (
+/obj/effect/landmark/objective_landmark/close,
+/turf/open/mars_cave{
+	tag = "icon-mars_dirt_4";
+	icon_state = "mars_dirt_4"
+	},
+/area/bigredv2/outside/e)
 
 (1,1,1) = {"
 aa
@@ -1819,7 +2007,7 @@ ao
 by
 aN
 bk
-cu
+AB
 bk
 aV
 bv
@@ -1828,7 +2016,7 @@ dP
 aV
 bk
 bk
-bk
+od
 cE
 cM
 cM
@@ -1854,9 +2042,9 @@ bc
 bc
 bc
 bc
-rF
+Bu
 dF
-bk
+oF
 cu
 bk
 bk
@@ -1883,8 +2071,8 @@ Qc
 bp
 bp
 dG
-bc
-bc
+si
+GG
 bc
 dz
 bc
@@ -1899,9 +2087,9 @@ aC
 aO
 aV
 aV
-bm
+Vg
 bk
-bk
+Lk
 yS
 bk
 cu
@@ -1925,10 +2113,10 @@ bt
 aD
 aP
 aW
-bc
+uL
 bn
-qX
-dE
+rF
+jx
 dE
 dE
 bc
@@ -1953,8 +2141,8 @@ aE
 aQ
 aV
 aV
-bm
-bp
+vw
+EE
 dA
 bp
 bp
@@ -1967,13 +2155,13 @@ bm
 dR
 dI
 dS
-bv
+NK
 cE
 dm
 dv
 "}
 (17,1,1) = {"
-ag
+ZG
 ap
 az
 bu
@@ -1981,7 +2169,7 @@ aN
 bv
 dL
 bm
-bk
+od
 bk
 bk
 cu
@@ -1989,7 +2177,7 @@ bk
 bk
 bk
 bk
-bk
+oF
 cv
 dz
 dJ
@@ -2010,16 +2198,16 @@ aQ
 bo
 bc
 bc
-dz
+uC
 bc
-bc
+sR
 bc
 bc
 bc
 bc
 cx
 dA
-bp
+fG
 bp
 bp
 cF
@@ -2035,7 +2223,7 @@ dX
 dY
 aN
 bp
-dA
+rK
 bp
 aV
 dM
@@ -2044,7 +2232,7 @@ bv
 aV
 bp
 dA
-bp
+Ra
 cF
 cN
 cN
@@ -2207,7 +2395,7 @@ bY
 aS
 cp
 aS
-cA
+qX
 cA
 cW
 de

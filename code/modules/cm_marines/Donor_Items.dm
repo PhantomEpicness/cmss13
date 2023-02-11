@@ -1,4 +1,4 @@
-////SS13 DONATOR CUSTOM ITEM STORAGE ZONE OF MAGICAL HAPPINESS APOPHIS - LAST UPDATE - 14JUN2016
+// SS13 DONATOR CUSTOM ITEM STORAGE ZONE OF MAGICAL HAPPINESS APOPHIS - LAST UPDATE - 14JUN2016
 
 //  EXO-SUITS/ARMORS COSMETICS  ////////////////////////////////////////////////
 
@@ -101,7 +101,7 @@
 
 /obj/item/clothing/suit/storage/marine/fluff/SAS
 	name = "Legion Armor"
-	desc = "This armor was custom made to resemble the small growing Legion within the galaxy started by one man slowly making its way to becoming a larger Corperation.  DONOR ITEM."
+	desc = "This armor was custom-made to resemble the small growing Legion within the galaxy started by one man slowly making its way to becoming a larger Corporation.  DONOR ITEM."
 	item_state = "ncrjacket"
 	icon_state = "ncrjacket"
 
@@ -228,8 +228,8 @@
 	icon_state = "solo_jumpsuit_u"
 
 /obj/item/clothing/suit/storage/marine/fluff/oneonethreeeight
-	name = "Camoflage Armor"
-	desc = "Woodland Camoflage Armor.  DONOR ITEM" //Add UNIQUE if Unique
+	name = "Camouflage Armor"
+	desc = "Woodland Camouflage Armor.  DONOR ITEM" //Add UNIQUE if Unique
 	icon_state = "camo_armor"
 	item_state = "camo_armor"
 
@@ -247,7 +247,7 @@
 
 /obj/item/clothing/suit/storage/marine/fluff/paradox
 	name = "Templar Armor"
-	desc = "Ancient holy armor of heros long passed...  DONOR ITEM"
+	desc = "Ancient holy armor of heroes long passed...  DONOR ITEM"
 	icon_state = "templar2"
 	item_state = "templar2"
 
@@ -297,7 +297,7 @@
 
 /obj/item/clothing/suit/storage/marine/fluff/Sado2
 	name = "T15 spec ops armor"
-	desc = "A suit of tightly woven armor crafted for a special forces operator, meant to be flexable and protective against small arms fire. Seems to be custom fit for a very specific user, as the collar has the name 'Tanya' stamped on it.  DONOR ITEM"
+	desc = "A suit of tightly woven armor crafted for a special forces operator, meant to be flexible and protective against small arms fire. Seems to be custom fit for a very specific user, as the collar has the name 'Tanya' stamped on it.  DONOR ITEM"
 	icon_state = "sadokist_armor"
 	item_state = "sadokist_armor"
 
@@ -378,7 +378,7 @@
 
 /obj/item/clothing/suit/storage/marine/fluff/zegara
 	name = "Black and Pink armor"
-	desc = "Shiney black armor with pink accents...  UNIQUE DONOR ITEM"
+	desc = "Shiny black armor with pink accents...  UNIQUE DONOR ITEM"
 	icon_state = "zegara_armor_u"
 	item_state = "zegara_armor_u"
 
@@ -390,7 +390,7 @@
 
 /obj/item/clothing/suit/storage/marine/fluff/kaila
 	name = "Custom Engineering Armor"
-	desc = "Custom paint job on an set of engineering armor.  DONOR ITEM"
+	desc = "Custom paint job on a set of engineering armor.  DONOR ITEM"
 	icon_state = "kailas_armor"
 	item_state = "kailas_armor"
 
@@ -408,7 +408,7 @@
 
 /obj/item/clothing/suit/storage/marine/fluff/laser243
 	name = "faded ranger armor"
-	desc = "Looks like it was assembled out of several types of armor and cloth, probably somewhere post apocalyptic...  DONOR ITEM."
+	desc = "Looks like it was assembled out of several types of armor and cloth, probably somewhere post-apocalyptic...  DONOR ITEM."
 	icon_state = "laser243"
 	item_state = "laser243"
 
@@ -427,7 +427,7 @@
 
 
 
-//	HELMETS/HATS/BERETS COSMETICS  ////////////////////////////////////////////////
+// HELMETS/HATS/BERETS COSMETICS  ////////////////////////////////////////////////
 
 //HEAD TEMPLATE (for Helmets/Hats/Berets)  ONLY TAKE NAME, DESC, ICON_STATE, AND ITEM_STATE.  Make a copy of those, and put the ckey of the person at the end after fluff
 /obj/item/clothing/head/helmet/marine/fluff
@@ -441,7 +441,7 @@
 	flags_inventory = BLOCKSHARPOBJ
 	flags_inv_hide = HIDEEARS
 	flags_atom = NO_NAME_OVERRIDE
-	min_cold_protection_temperature = ICE_PLANET_min_cold_protection_temperature
+	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROT
 	flags_marine_helmet = NO_FLAGS
 
 /obj/item/clothing/head/helmet/marine/fluff/verb/toggle_squad_markings()
@@ -535,7 +535,7 @@
 
 /obj/item/clothing/head/helmet/marine/fluff/biolock
 	name = "Medic Helmet"
-	desc = "Medical Helmet designed to protect the head of a medic.. DONOR ITEM"
+	desc = "Medical Helmet designed to protect the head of a medic. DONOR ITEM"
 	icon_state = "helmetm"
 
 /obj/item/clothing/head/helmet/marine/fluff/haveatya
@@ -582,7 +582,7 @@
 
 /obj/item/clothing/head/helmet/marine/fluff/juniho
 	name = "Sheet's Hat"
-	desc = "A hat, very closely affiliated with accuasions of people being bad at security...  DONOR ITEM" //Add UNIQUE if Unique
+	desc = "A hat, very closely affiliated with accusations of people being bad at security...  DONOR ITEM" //Add UNIQUE if Unique
 	icon_state = "detective"
 	item_state = "detective"
 	flags_inventory = BLOCKSHARPOBJ
@@ -619,7 +619,7 @@
 
 /obj/item/clothing/head/helmet/marine/fluff/mitii
 	name = "Mya's Beret"
-	desc = "A red beret with a shiney Security badge.  DONOR ITEM"
+	desc = "A red beret with a shiny Security badge.  DONOR ITEM"
 	icon_state = "beret_badge"
 	item_state = "beret_badge"
 	flags_inventory = BLOCKSHARPOBJ
@@ -661,13 +661,13 @@
 	flags_inv_hide = HIDELOWHAIR
 
 /obj/item/clothing/head/helmet/marine/fluff/oneonethreeeight
-	name = "Camoflage Helmet"
-	desc = "Woodland Camoflage helmet.  DONOR ITEM"
+	name = "Camouflage Helmet"
+	desc = "Woodland Camouflage helmet.  DONOR ITEM"
 	icon_state = "camo_helm"
 	item_state = "camo_helm"
 
 /obj/item/clothing/head/helmet/marine/fluff/dino
-	name = "Snake's Bandanna"
+	name = "Snake's Bandana"
 	desc = "Property of The Boss.  DONOR ITEM"
 	icon_state = "snakeheadband"
 	item_state = "snakeheadband"
@@ -705,7 +705,7 @@
 
 /obj/item/clothing/head/helmet/marine/fluff/coleMercer
 	name = "Black Ops Helmet"
-	desc = "Your not authorized to look at it.  DONOR ITEM"
+	desc = "You're not authorized to look at it.  DONOR ITEM"
 	icon_state = "syndicate-helm-black"
 	item_state = "syndicate-helm-black"
 	flags_inventory = BLOCKSHARPOBJ
@@ -713,7 +713,7 @@
 
 /obj/item/clothing/head/helmet/marine/fluff/leondark
 	name = "Hunter's USCM Cap"
-	desc = "A well worn cap with the name 'Barrientos' written on the inside.  DONOR ITEM"
+	desc = "A well-worn cap with the name 'Barrientos' written on the inside.  DONOR ITEM"
 	icon_state = "USCM_cap"
 	item_state = "USCM_cap"
 	flags_inventory = BLOCKSHARPOBJ
@@ -862,7 +862,7 @@
 	item_state = "killaninja12_u"
 
 
-//	UNIFORM/JUMPSUIT COSMETICS  ////////////////////////////////////////////////
+// UNIFORM/JUMPSUIT COSMETICS  ////////////////////////////////////////////////
 
 //UNIFORM TEMPLATE (for uniforms/jumpsuits)  ONLY TAKE NAME, DESC, ICON_STATE, ITEM_STATE,  AND ITEM_COLOR.  Make a copy of those, and put the ckey of the person at the end after fluff
 /obj/item/clothing/under/marine/fluff
@@ -871,7 +871,7 @@
 	flags_atom = NO_NAME_OVERRIDE
 	icon_state = "state"
 	item_state = null
-	min_cold_protection_temperature = ICE_PLANET_min_cold_protection_temperature
+	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROT
 	//DON'T GRAB STUFF BETWEEN THIS LINE
 	//AND THIS LINE
 //END UNIFORM TEMPLATE
@@ -905,7 +905,7 @@
 
 /obj/item/clothing/under/marine/fluff/SAS
 	name = "Legion Suit"
-	desc = "This armor was custom made to resemble the small growing Legion within the galaxy started by one man slowly making its way to becoming a larger Corperation.  DONOR ITEM."
+	desc = "This armor was custom-made to resemble the small growing Legion within the galaxy started by one man slowly making its way to becoming a larger Corporation.  DONOR ITEM."
 	icon_state = "ncr_uni"
 	worn_state = "ncr_uni"
 	flags_jumpsuit = FALSE
@@ -1001,8 +1001,8 @@
 	flags_jumpsuit = FALSE
 
 /obj/item/clothing/under/marine/fluff/oneonethreeeight
-	name = "Camoflage Jumpsuit"
-	desc = "Woodland Camoflage Jumpsuit.  DONOR ITEM"
+	name = "Camouflage Jumpsuit"
+	desc = "Woodland Camouflage Jumpsuit.  DONOR ITEM"
 	icon_state = "camo_jumpsuit"
 	worn_state = "camo_jumpsuit"
 	flags_jumpsuit = FALSE
@@ -1016,7 +1016,7 @@
 
 /obj/item/clothing/under/marine/fluff/paradox
 	name = "Templar Jumpsuit"
-	desc = "The interfact components, for Templar Armor.  DONOR ITEM"
+	desc = "The interface components, for Templar Armor.  DONOR ITEM"
 	icon_state = "templar_jumpsuit"
 	worn_state = "templar_jumpsuit"
 	flags_jumpsuit = FALSE
@@ -1030,7 +1030,7 @@
 
 /obj/item/clothing/under/marine/fluff/radical
 	name = "Bounty Hunter Jumpsuit"
-	desc = "Undergarmants of an ancient bounty hunter.  DONOR ITEM"
+	desc = "Undergarments of an ancient bounty hunter.  DONOR ITEM"
 	icon_state = "boba_jumpsuit"
 	worn_state = "boba_jumpsuit"
 	flags_jumpsuit = FALSE
@@ -1072,7 +1072,7 @@
 
 /obj/item/clothing/under/marine/fluff/arach
 	name = "Zero Suit"
-	desc = "A jumpsut worn under futuristic armor.  DONOR ITEM"
+	desc = "A jumpsuit worn under futuristic armor.  DONOR ITEM"
 	icon_state = "samus_jumpsuit"
 	worn_state = "samus_jumpsuit"
 	flags_jumpsuit = FALSE
@@ -1148,7 +1148,7 @@
 	flags_jumpsuit = FALSE
 
 
-//	MASK COSMETICS  ////////////////////////////////////////////////
+// MASK COSMETICS  ////////////////////////////////////////////////
 
 //MASK TEMPLATE (for masks)  ONLY TAKE NAME, DESC, ICON_STATE, ITEM_STATE,  AND ITEM_COLOR.  Make a copy of those, and put the ckey of the person at the end after fluff
 /obj/item/clothing/mask/fluff
@@ -1180,7 +1180,7 @@
 
 /obj/item/clothing/mask/fluff/SAS
 	name = "Legion Mask"
-	desc = "This armor was custom made to resemble the small growing Legion within the galaxy started by one man slowly making its way to becoming a larger Corperation.  DONOR ITEM."
+	desc = "This armor was custom-made to resemble the small growing Legion within the galaxy started by one man slowly making its way to becoming a larger Corporation.  DONOR ITEM."
 	icon_override = 'icons/mob/humans/onmob/mask.dmi'
 	item_state = "officer_mask"
 	icon_state = "officer_mask"
@@ -1242,7 +1242,7 @@
 	flags_inventory = ALLOWREBREATH
 	flags_inv_hide = HIDEFACE
 
-//	BOOTS/SHOES COSMETICS  ////////////////////////////////////////////////
+// BOOTS/SHOES COSMETICS  ////////////////////////////////////////////////
 
 //FEET TEMPLATE (for masks)  ONLY TAKE NAME, DESC, ICON_STATE, ITEM_STATE,  AND ITEM_COLOR.  Make a copy of those, and put the ckey of the person at the end after fluff
 /obj/item/clothing/shoes/marine/fluff
@@ -1309,6 +1309,8 @@
 	desc = "Black gloves, favored by Special Operations teams.  DONOR ITEM"
 	name = "Black Ops Black Gloves"
 
+/obj/item/storage/backpack/marine/fluff
+	xeno_types = null
 
 /obj/item/storage/backpack/marine/fluff/Sado
 	name = "Tanya's Backpack"
@@ -1328,7 +1330,7 @@
 	icon_state = "sun"
 	item_state = "sun"
 
-obj/item/clothing/gloves/marine/fluff/jedijas
+/obj/item/clothing/gloves/marine/fluff/jedijas
 	name = "Fists of Mandalore"
 	desc = "If Mandalore was a person, these would be it's fists...  DONOR ITEM"
 	icon_state = "marine-white"
@@ -1349,7 +1351,7 @@ obj/item/clothing/gloves/marine/fluff/jedijas
 
 /obj/item/clothing/mask/cigarette/fluff/ghost
 	name = "XXX's custom Cigar"
-	desc = "A custom rolled giant, made specifically for John Donable in the best, hottest, and most abusive of cuban sweat shops.  UNIQUE DONOR ITEM."
+	desc = "A custom rolled giant, made specifically for John Donable in the best, hottest, and most abusive of Cuban sweat shops.  UNIQUE DONOR ITEM."
 	icon_state = "cigar2off"
 	icon_on = "cigar2on"
 	icon_off = "cigar2off"

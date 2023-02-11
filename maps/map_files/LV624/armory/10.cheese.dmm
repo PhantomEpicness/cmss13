@@ -114,6 +114,7 @@
 /obj/item/ammo_magazine/pistol/highpower,
 /obj/item/ammo_magazine/pistol/highpower,
 /obj/item/ammo_magazine/pistol/highpower,
+/obj/effect/landmark/objective_landmark/close,
 /turf/open/floor{
 	icon_state = "cult"
 	},
@@ -186,6 +187,12 @@
 	pixel_x = 8;
 	pixel_y = -4
 	},
+/obj/structure/machinery/door_control{
+	id = "secure_inner_blast";
+	name = "Inner Blast Door";
+	pixel_x = 25;
+	pixel_y = 5
+	},
 /turf/open/floor{
 	icon_state = "cult"
 	},
@@ -214,7 +221,7 @@
 	},
 /area/lv624/lazarus/armory)
 "B" = (
-/obj/structure/machinery/door/airlock/almayer/secure{
+/obj/structure/machinery/door/airlock/almayer/secure/colony{
 	locked = 1;
 	name = "\improper Nexus Dome Armory"
 	},
@@ -236,6 +243,12 @@
 /obj/item/reagent_container/food/snacks/sliceable/cheesewheel/mature{
 	pixel_y = -6
 	},
+/turf/open/floor{
+	icon_state = "cult"
+	},
+/area/lv624/lazarus/armory)
+"M" = (
+/obj/effect/landmark/objective_landmark/medium,
 /turf/open/floor{
 	icon_state = "cult"
 	},
@@ -300,7 +313,7 @@ i
 k
 p
 p
-p
+M
 A
 i
 "}

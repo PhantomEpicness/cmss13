@@ -17,10 +17,12 @@
 	flags_inv_hide = HIDEEARS|HIDEEYES
 	flags_cold_protection = BODY_FLAG_HEAD
 	flags_heat_protection = BODY_FLAG_HEAD
-	min_cold_protection_temperature = HELMET_min_cold_protection_temperature
-	max_heat_protection_temperature = HELMET_max_heat_protection_temperature
+	min_cold_protection_temperature = HELMET_MIN_COLD_PROT
+	max_heat_protection_temperature = HELMET_MAX_HEAT_PROT
 	siemens_coefficient = 0.7
 	w_class = SIZE_MEDIUM
+	pickup_sound = "armorequip"
+	drop_sound = "armorequip"
 
 /obj/item/clothing/head/helmet/verb/hidehair()
 	set name = "Toggle Hair"
@@ -97,7 +99,7 @@
 
 /obj/item/clothing/head/helmet/warden
 	name = "warden's hat"
-	desc = "It's a special helmet issued to the Warden of a securiy force. Protects the head from impacts."
+	desc = "It's a special helmet issued to the Warden of a security force. Protects the head from impacts."
 	icon_state = "policehelm"
 	flags_inventory = NO_FLAGS
 	flags_inv_hide = NO_FLAGS
@@ -135,7 +137,7 @@
 	flags_inventory = COVEREYES|BLOCKSHARPOBJ
 	flags_inv_hide = HIDEEARS|HIDEEYES
 	flags_cold_protection = BODY_FLAG_HEAD
-	min_cold_protection_temperature = SPACE_HELMET_min_cold_protection_temperature
+	min_cold_protection_temperature = SPACE_HELMET_MIN_COLD_PROT
 	siemens_coefficient = 0.5
 	anti_hug = 1
 
@@ -155,7 +157,7 @@
 	armor_rad = CLOTHING_ARMOR_MEDIUM
 	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
 	flags_cold_protection = BODY_FLAG_HEAD
-	min_cold_protection_temperature = SPACE_HELMET_min_cold_protection_temperature
+	min_cold_protection_temperature = SPACE_HELMET_MIN_COLD_PROT
 	siemens_coefficient = 1
 
 /obj/item/clothing/head/helmet/gladiator
@@ -198,7 +200,7 @@
 //=======================================================================\\
 
 GLOBAL_LIST_INIT(allowed_helmet_items, list(
-	///// TOBACCO-RELATED
+	// TOBACCO-RELATED
 	/obj/item/tool/lighter/random = HELMET_GARB_RELAY_ICON_STATE,
 	/obj/item/tool/lighter/zippo = "helmet_lighter_zippo",
 	/obj/item/storage/box/matches = "helmet_matches",
@@ -212,7 +214,7 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	/obj/item/storage/fancy/cigarettes/lucky_strikes_4 = "hat_cig_ls_mre",
 	/obj/item/storage/fancy/cigar/matchbook = "helmet_matches_mre",
 
-	///// CARDS
+	// CARDS
 	/obj/item/toy/deck = "helmet_card_deck",
 	/obj/item/toy/deck/uno = "helmet_card_uno",
 	/obj/item/toy/handcard = "helmet_card_card",
@@ -222,7 +224,7 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	/obj/item/toy/handcard/uno_reverse_yellow = "yellow_reverse",
 	/obj/item/toy/handcard/uno_reverse_purple = "purple_reverse",
 
-	///// FOOD AND SNACKS
+	// FOOD AND SNACKS
 	/obj/item/reagent_container/food/drinks/flask = "helmet_flask",
 	/obj/item/reagent_container/food/drinks/flask/marine = "helmet_flask",
 	/obj/item/reagent_container/food/snacks/eat_bar = "helmet_snack_eat",
@@ -238,9 +240,11 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	/obj/item/reagent_container/food/snacks/wrapped/barcardine = "barcardine-bars",
 
 
-	///// EYEWEAR
-	/obj/item/clothing/glasses/mgoggles = "goggles-h",
-	/obj/item/clothing/glasses/mgoggles/prescription = "goggles-h",
+	// EYEWEAR
+	/obj/item/clothing/glasses/mgoggles = HELMET_GARB_RELAY_ICON_STATE,
+	/obj/item/clothing/glasses/mgoggles/prescription = HELMET_GARB_RELAY_ICON_STATE,
+	/obj/item/clothing/glasses/mgoggles/black = HELMET_GARB_RELAY_ICON_STATE,
+	/obj/item/clothing/glasses/mgoggles/orange = HELMET_GARB_RELAY_ICON_STATE,
 	/obj/item/clothing/glasses/sunglasses = "sunglasses",
 	/obj/item/clothing/glasses/sunglasses/prescription = "sunglasses",
 	/obj/item/clothing/glasses/sunglasses/aviator = "aviator",
@@ -249,7 +253,7 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	/obj/item/clothing/glasses/eyepatch = "eyepatch",
 	/obj/item/clothing/glasses/regular/hipster = "persc-glasses",
 
-	///// WALKMAN AND CASSETTES
+	// WALKMAN AND CASSETTES
 	/obj/item/device/walkman = HELMET_GARB_RELAY_ICON_STATE,
 	/obj/item/device/cassette_tape/pop1 = "cassette_blue",
 	/obj/item/device/cassette_tape/pop2 = "cassette_rainbow",
@@ -263,7 +267,7 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	/obj/item/device/cassette_tape/ocean = "cassette_ocean",
 	/obj/item/storage/pouch/cassette = "cassette_pouch",
 
-	///// PREFERENCES GEAR
+	// PREFERENCES GEAR
 	/obj/item/prop/helmetgarb/gunoil = "gunoil",
 	/obj/item/prop/helmetgarb/netting = "netting",
 	/obj/item/prop/helmetgarb/spent_buckshot = "spent_buckshot",
@@ -289,7 +293,7 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	/obj/item/prop/helmetgarb/bullet_pipe = "bullet_pipe",
 	/obj/item/prop/helmetgarb/spacejam_tickets = "tickets_to_space_jam",
 
-	///// MISC
+	// MISC
 	/obj/item/tool/pen = "helmet_pen_black",
 	/obj/item/tool/pen/blue = "helmet_pen_blue",
 	/obj/item/tool/pen/red = "helmet_pen_red",
@@ -297,6 +301,9 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	/obj/item/clothing/head/headband = "headbandgreen",
 	/obj/item/clothing/head/headband/tan = "headbandtan",
 	/obj/item/clothing/head/headband/red = "headbandred",
+	/obj/item/clothing/head/headband/brown = "helmet_headbandbrown",
+	/obj/item/clothing/head/headband/gray = "helmet_headbandgray",
+	/obj/item/clothing/head/headband/squad = HELMET_GARB_RELAY_ICON_STATE,
 	/obj/item/tool/candle = "candle",
 	/obj/item/clothing/mask/facehugger/lamarr = "lamarr",
 	/obj/item/toy/crayon/red = "crayonred",
@@ -314,8 +321,9 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	/obj/item/ammo_magazine/handful = "bullet",
 	/obj/item/prop/helmetgarb/riot_shield = "helmet_riot_shield",
 	/obj/item/attachable/flashlight = HELMET_GARB_RELAY_ICON_STATE,
+	/obj/item/prop/helmetgarb/chaplain_patch = "chaplain_patch",
 
-	///// MEDICAL
+	// MEDICAL
 	/obj/item/stack/medical/bruise_pack ="brutepack (bandages)",
 	/obj/item/stack/medical/ointment = "ointment",
 	/obj/item/tool/surgery/scalpel = "scalpel",
@@ -345,7 +353,6 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	flags_inventory = BLOCKSHARPOBJ
 	flags_inv_hide = HIDEEARS
 	var/flags_marine_helmet = HELMET_SQUAD_OVERLAY|HELMET_GARB_OVERLAY|HELMET_DAMAGE_OVERLAY
-	var/obj/item/storage/internal/pockets
 	var/helmet_bash_cooldown = 0
 
 	var/specialty = "M10 pattern marine" //Give them a specialty var so that they show up correctly in vendors.
@@ -355,10 +362,16 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 		WEAR_HEAD = 'icons/mob/humans/onmob/head_1.dmi'
 	)
 
+	var/obj/item/storage/internal/headgear/pockets
+	var/storage_slots = 2 // keep in mind, one slot is reserved for garb items
+	var/storage_slots_reserved_for_garb = 1
+	var/storage_max_w_class = SIZE_TINY // can hold tiny items only, EXCEPT for glasses & metal flask.
+	var/storage_max_storage_space = 4
+
 	//speciality does NOTHING if you have NO_NAME_OVERRIDE
 
 /obj/item/clothing/head/helmet/marine/New(loc,
-	new_protection[]	= list(MAP_ICE_COLONY = ICE_PLANET_min_cold_protection_temperature))
+	new_protection[] = list(MAP_ICE_COLONY = ICE_PLANET_MIN_COLD_PROT))
 	if(!(flags_atom & NO_NAME_OVERRIDE))
 		name = "[specialty]"
 		if(SSmapping.configs[GROUND_MAP].environment_traits[MAP_COLD])
@@ -370,11 +383,13 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 		select_gamemode_skin(type,null,new_protection)
 
 	helmet_overlays = list() //To make things simple.
-	pockets = new/obj/item/storage/internal(src)
-	pockets.storage_slots = 2
-	pockets.max_w_class = SIZE_TINY //can hold tiny items only, EXCEPT for glasses & metal flask.
+
+	pockets = new(src)
+	pockets.storage_slots = HAS_FLAG(flags_marine_helmet, HELMET_GARB_OVERLAY) ? storage_slots + storage_slots_reserved_for_garb : storage_slots
+	pockets.slots_reserved_for_garb = HAS_FLAG(flags_marine_helmet, HELMET_GARB_OVERLAY) ? storage_slots_reserved_for_garb : 0
+	pockets.max_w_class = storage_max_w_class
 	pockets.bypass_w_limit = GLOB.allowed_helmet_items
-	pockets.max_storage_space = 3
+	pockets.max_storage_space = storage_max_storage_space
 
 	camera = new /obj/structure/machinery/camera(src)
 	camera.network = list(CAMERA_NET_OVERWATCH)
@@ -435,19 +450,34 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	// we have to add overlays to that.
 	helmet_overlays = list() // Rebuild our list every time
 	if(pockets && pockets.contents.len && (flags_marine_helmet & HELMET_GARB_OVERLAY))
-		helmet_overlays += "helmet_band"
+		var/list/above_band_layer = list()
+		var/list/below_band_layer = list()
+		var/has_helmet_band = FALSE
 		for(var/obj/O in pockets.contents)
 			if(GLOB.allowed_helmet_items[O.type])
+				var/has_band = !HAS_FLAG(O.flags_obj, OBJ_NO_HELMET_BAND)
+				if(has_band)
+					has_helmet_band = TRUE
 				if(GLOB.allowed_helmet_items[O.type] == HELMET_GARB_RELAY_ICON_STATE)
-					helmet_overlays += "helmet_[O.icon_state]"
+					if(has_band)
+						above_band_layer += "helmet_[O.icon_state]"
+					else
+						below_band_layer += "helmet_[O.icon_state]"
 				else
-					helmet_overlays += GLOB.allowed_helmet_items[O.type]
+					if(has_band)
+						above_band_layer += GLOB.allowed_helmet_items[O.type]
+					else
+						below_band_layer += GLOB.allowed_helmet_items[O.type]
+		if(has_helmet_band)
+			helmet_overlays = above_band_layer + list("helmet_band") + below_band_layer
+		else
+			helmet_overlays = above_band_layer + below_band_layer
 
 	if(ismob(loc))
 		var/mob/M = loc
 		M.update_inv_head()
 
-/obj/item/clothing/head/helmet/marine/equipped(var/mob/living/carbon/human/mob, slot)
+/obj/item/clothing/head/helmet/marine/equipped(mob/living/carbon/human/mob, slot)
 	if(camera)
 		camera.c_tag = mob.name
 	..()
@@ -459,7 +489,7 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 			if(F.activated)
 				F.activate_attachment(src, user, TRUE)
 
-/obj/item/clothing/head/helmet/marine/dropped(var/mob/living/carbon/human/mob)
+/obj/item/clothing/head/helmet/marine/dropped(mob/living/carbon/human/mob)
 	if(camera)
 		camera.c_tag = "Unknown"
 	if(pockets)
@@ -514,14 +544,14 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 			flags_inventory &= ~(COVEREYES|COVERMOUTH)
 			flags_inv_hide &= ~(HIDEEYES|HIDEFACE)
 			icon_state = base_icon_state
-			eye_protection = 0
+			eye_protection = EYE_PROTECTION_NONE
 			to_chat(usr, "You <b>deactivate</b> the [src]'s welding screen.")
 		else
 			vision_impair = VISION_IMPAIR_MAX
 			flags_inventory |= COVEREYES|COVERMOUTH
 			flags_inv_hide |= HIDEEYES|HIDEFACE
 			icon_state = "[base_icon_state]_on"
-			eye_protection = 2
+			eye_protection = EYE_PROTECTION_WELDING
 			to_chat(usr, "You <b>activate</b> the [src]'s welding screen.")
 
 		protection_on = !protection_on
@@ -531,11 +561,23 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 			if(H.head == src)
 				H.update_tint()
 
-		update_clothing_icon()	//so our mob-overlays update
+		update_clothing_icon() //so our mob-overlays update
 
 		for(var/X in actions)
 			var/datum/action/A = X
 			A.update_button_icon()
+
+/obj/item/clothing/head/helmet/marine/tech/tanker
+	name = "\improper M50 tanker helmet"
+	desc = "The lightweight M50 tanker helmet is designed for use by armored crewmen in the USCM. It offers low weight protection, and allows agile movement inside the confines of an armored vehicle. Features a toggleable welding screen for eye protection."
+	icon_state = "tanker_helmet"
+	armor_melee = CLOTHING_ARMOR_MEDIUMLOW
+	armor_bomb = CLOTHING_ARMOR_MEDIUMHIGH
+	armor_internaldamage = CLOTHING_ARMOR_MEDIUMLOW
+	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROT
+	flags_inventory = BLOCKSHARPOBJ
+	flags_inv_hide = HIDEEARS|HIDETOPHAIR
+	specialty = "M50 tanker"
 
 /obj/item/clothing/head/helmet/marine/medic
 	name = "\improper M10 corpsman helmet"
@@ -543,10 +585,10 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	icon_state = "med_helmet"
 	specialty = "M10 pattern medic"
 
-/obj/item/clothing/head/helmet/marine/leader
-	name = "\improper M11 pattern helmet"
-	desc = "A variant of the standard M10 pattern. The front plate is reinforced. This one contains a small built-in camera and has cushioning to project your fragile brain."
-	icon_state = "sl_helmet"
+/obj/item/clothing/head/helmet/marine/covert
+	name = "\improper M10 covert helmet"
+	desc = "An M10 marine helmet version designed for use in darkened enviroments. It is coated with a special anti-reflective paint."
+	icon_state = "marsoc_helmet"
 	armor_melee = CLOTHING_ARMOR_MEDIUM
 	armor_bullet = CLOTHING_ARMOR_MEDIUM
 	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
@@ -554,6 +596,14 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	armor_bio = CLOTHING_ARMOR_MEDIUMHIGH
 	armor_rad = CLOTHING_ARMOR_LOW
 	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
+	specialty = "M10 pattern covert"
+	flags_atom = NO_SNOW_TYPE
+
+/obj/item/clothing/head/helmet/marine/leader
+	name = "\improper M11 pattern helmet"
+	desc = "A variant of the standard M10 pattern. The front plate is reinforced. This one contains a small built-in camera and has cushioning to project your fragile brain."
+	icon_state = "sl_helmet"
+	armor_bio = CLOTHING_ARMOR_MEDIUMHIGH
 	specialty = "M11 pattern marine"
 
 /obj/item/clothing/head/helmet/marine/rto
@@ -562,13 +612,13 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	icon_state = "io"
 	item_state = "io"
 	armor_melee = CLOTHING_ARMOR_MEDIUMHIGH
-	armor_bullet = CLOTHING_ARMOR_MEDIUM
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bomb = CLOTHING_ARMOR_LOW
 	armor_bio = CLOTHING_ARMOR_MEDIUMHIGH
-	armor_rad = CLOTHING_ARMOR_LOW
-	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
 	specialty = "M12 pattern"
+
+/obj/item/clothing/head/helmet/marine/rto/intel
+	name = "\improper XM12 pattern intelligence helmet"
+	desc = "An experimental brain-bucket. A dust ruffle hangs from back. Moderately better at deflecting blunt objects at the cost of humiliation. But who will be laughing at the memorial? Not you, you'll be busy getting medals for your intel work."
+	specialty = "XM12 pattern intel"
 
 /obj/item/clothing/head/helmet/marine/specialist
 	name = "\improper B18 helmet"
@@ -577,7 +627,6 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	item_state = "grenadier_helmet"
 	armor_melee = CLOTHING_ARMOR_HIGH
 	armor_bullet = CLOTHING_ARMOR_HIGH
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_bomb = CLOTHING_ARMOR_ULTRAHIGH
 	armor_bio = CLOTHING_ARMOR_HIGH
 	armor_rad = CLOTHING_ARMOR_HIGH
@@ -589,16 +638,16 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 
 /obj/item/clothing/head/helmet/marine/grenadier
 	name = "\improper M3-G4 grenadier helmet"
-	desc = "Pairs with the M3-G4 heavy grenadier plating. A distant cousin of the experimental B18 defensive helmet."
+	desc = "Pairs with the M3-G4 heavy grenadier plating. A distant cousin of the experimental B18 defensive helmet. Comes with inbuilt ear blast protection."
 	icon_state = "grenadier_helmet"
 	item_state = "grenadier_helmet"
 	armor_melee = CLOTHING_ARMOR_MEDIUMHIGH
 	armor_bullet = CLOTHING_ARMOR_MEDIUMHIGH
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_bomb = CLOTHING_ARMOR_ULTRAHIGH
 	armor_bio = CLOTHING_ARMOR_MEDIUMHIGH
 	armor_rad = CLOTHING_ARMOR_HIGH
 	armor_internaldamage = CLOTHING_ARMOR_HIGH
+	clothing_traits = list(TRAIT_EAR_PROTECTION)
 	unacidable = TRUE
 	anti_hug = 6
 	specialty = "M3-G4 grenadier"
@@ -608,14 +657,7 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	name = "\improper M3-S light helmet"
 	icon_state = "scout_helmet"
 	desc = "A custom helmet designed for USCM Scouts."
-	armor_melee = CLOTHING_ARMOR_MEDIUM
-	armor_bullet = CLOTHING_ARMOR_MEDIUM
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bomb = CLOTHING_ARMOR_LOW
-	armor_bio = CLOTHING_ARMOR_MEDIUM
-	armor_rad = CLOTHING_ARMOR_LOW
-	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
-	min_cold_protection_temperature = ICE_PLANET_min_cold_protection_temperature
+	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROT
 	specialty = "M3-S light"
 	flags_item = MOB_LOCK_ON_EQUIP|NO_CRYO_STORE
 
@@ -623,120 +665,51 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	name = "\improper M35 pyrotechnician helmet"
 	icon_state = "pyro_helmet"
 	desc = "A helmet designed for USCM Pyrotechnicians."
-	armor_melee = CLOTHING_ARMOR_MEDIUM
-	armor_bullet = CLOTHING_ARMOR_MEDIUM
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bomb = CLOTHING_ARMOR_LOW
-	armor_bio = CLOTHING_ARMOR_MEDIUM
-	armor_rad = CLOTHING_ARMOR_LOW
-	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
-	min_cold_protection_temperature = ICE_PLANET_min_cold_protection_temperature
-	max_heat_protection_temperature = FIRESUIT_max_heat_protection_temperature
+	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROT
+	max_heat_protection_temperature = FIRESUIT_MAX_HEAT_PROT
 	specialty = "M35 pyrotechnician"
 	flags_item = MOB_LOCK_ON_EQUIP|NO_CRYO_STORE
 
+/obj/item/clothing/head/helmet/marine/M3T
+	name = "\improper M3-T bombardier helmet"
+	icon_state = "sadar_helmet"
+	desc = "A custom-built helmet for explosive weaponry users. Comes with inbuilt ear blast protection, firing a rocket launcher without this is not recommended."
+	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROT
+	armor_bomb = CLOTHING_ARMOR_HIGH
+	specialty = "M3-T bombardier"
+	flags_inventory = BLOCKSHARPOBJ
+	clothing_traits = list(TRAIT_EAR_PROTECTION)
+	unacidable = TRUE
+
 /obj/item/clothing/head/helmet/marine/pilot
 	name = "\improper M30 tactical helmet"
-	desc = "The M30 tactical helmet has an left eyepiece filter used to filter tactical data. It is required to fly the dropships manually and in safety."
+	desc = "The M30 tactical helmet has a left eyepiece filter used to filter tactical data. It is required to fly the dropships manually and in safety."
 	icon_state = "helmetp"
 	armor_melee = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bullet = CLOTHING_ARMOR_MEDIUM
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_bomb = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bio = CLOTHING_ARMOR_MEDIUM
-	armor_rad = CLOTHING_ARMOR_LOW
 	armor_internaldamage = CLOTHING_ARMOR_MEDIUMLOW
-	min_cold_protection_temperature = ICE_PLANET_min_cold_protection_temperature
+	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROT
 	flags_inventory = BLOCKSHARPOBJ
 	flags_inv_hide = HIDEEARS|HIDETOPHAIR
 	specialty = "M30 tactical"
 
 /obj/item/clothing/head/helmet/marine/pilottex
 	name = "\improper Tex's M30 tactical helmet"
-	desc = "The M30 tactical helmet has an left eyepiece filter used to filter tactical data. It is required to fly the dropships manually and in safety. This one belonged to Tex: the craziest sum'bitch pilot the Almayer ever had. He's not dead or anything, but he did get a medical discharge after he was hit by a car on shore leave last year."
+	desc = "The M30 tactical helmet has a left eyepiece filter used to filter tactical data. It is required to fly the dropships manually and in safety. This one belonged to Tex: the craziest sum'bitch pilot the Almayer ever had. He's not dead or anything, but he did get a medical discharge after he was hit by a car on shore leave last year."
 	icon_state = "helmetp_tex"
 	item_state = "helmetp_tex"
 	flags_atom = NO_SNOW_TYPE
-
-/obj/item/clothing/head/helmet/marine/tanker
-	name = "\improper M50 tanker helmet"
-	desc = "The lightweight M50 tanker helmet is designed for use by armored crewmen in the USCM. It offers low weight protection, and allows agile movement inside the confines of an armored vehicle. Features a toggleable welding screen for eye protection."
-	icon_state = "tanker_helmet"
-	armor_melee = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bullet = CLOTHING_ARMOR_MEDIUM
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bomb = CLOTHING_ARMOR_MEDIUMHIGH
-	armor_bio = CLOTHING_ARMOR_MEDIUM
-	armor_rad = CLOTHING_ARMOR_LOW
-	armor_internaldamage = CLOTHING_ARMOR_MEDIUMLOW
-	min_cold_protection_temperature = ICE_PLANET_min_cold_protection_temperature
-	flags_inventory = BLOCKSHARPOBJ
-	flags_inv_hide = HIDEEARS|HIDETOPHAIR
-	specialty = "M50 tanker"
-
-	var/protection_on = FALSE
-	///To remember the helmet's map variant-adjusted icon state
-	var/base_icon_state
-
-	actions_types = list(/datum/action/item_action/toggle)
-	vision_impair = VISION_IMPAIR_NONE
-
-/obj/item/clothing/head/helmet/marine/tanker/Initialize()
-	. = ..()
-	base_icon_state = icon_state
-
-/obj/item/clothing/head/helmet/marine/tanker/attack_self(mob/user)
-	..()
-	toggle()
-
-/obj/item/clothing/head/helmet/marine/tanker/verb/toggle()
-	set category = "Object"
-	set name = "Toggle Tanker Helmet"
-	set src in usr
-
-	if(usr.canmove && !usr.stat && !usr.is_mob_restrained())
-		if(protection_on)
-			vision_impair = VISION_IMPAIR_NONE
-			flags_inventory &= ~(COVEREYES|COVERMOUTH)
-			flags_inv_hide &= ~(HIDEEYES|HIDEFACE)
-			icon_state = base_icon_state
-			eye_protection = 0
-			to_chat(usr, "You <b>deactivate</b> the [src]'s welding screen.")
-		else
-			vision_impair = VISION_IMPAIR_MAX
-			flags_inventory |= COVEREYES|COVERMOUTH
-			flags_inv_hide |= HIDEEYES|HIDEFACE
-			icon_state = "[base_icon_state]_on"
-			eye_protection = 2
-			to_chat(usr, "You <b>activate</b> the [src]'s welding screen.")
-
-		protection_on = !protection_on
-
-		if(ishuman(loc))
-			var/mob/living/carbon/human/H = loc
-			if(H.head == src)
-				H.update_tint()
-
-		update_clothing_icon()	//so our mob-overlays update
-
-		for(var/X in actions)
-			var/datum/action/A = X
-			A.update_button_icon()
 
 /obj/item/clothing/head/helmet/marine/ghillie
 	name = "\improper M45 ghillie helmet"
 	desc = "A lightweight M45 helmet with ghillie coif used by USCM snipers on recon missions."
 	icon_state = "ghillie_coif"
-	armor_melee = CLOTHING_ARMOR_MEDIUM
-	armor_bullet = CLOTHING_ARMOR_MEDIUM
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_bomb = CLOTHING_ARMOR_MEDIUM
 	armor_bio = CLOTHING_ARMOR_LOW
-	armor_rad = CLOTHING_ARMOR_LOW
 	armor_internaldamage = CLOTHING_ARMOR_MEDIUMLOW
 	flags_inventory = BLOCKSHARPOBJ
 	flags_inv_hide = HIDEEARS|HIDETOPHAIR
-	flags_marine_helmet = NO_FLAGS
+	flags_marine_helmet = HELMET_GARB_OVERLAY
 	flags_item = MOB_LOCK_ON_EQUIP
 	specialty = "M45 ghillie"
 
@@ -747,12 +720,8 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	item_state = "co_officer"
 	armor_melee = CLOTHING_ARMOR_MEDIUMHIGH
 	armor_bullet = CLOTHING_ARMOR_HIGH
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bomb = CLOTHING_ARMOR_LOW
 	armor_bio = CLOTHING_ARMOR_MEDIUMHIGH
-	armor_rad = CLOTHING_ARMOR_LOW
-	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
 	specialty = "M10 pattern captain"
 	flags_atom = NO_SNOW_TYPE
 
@@ -761,14 +730,7 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	desc = "A special variant of the M10 Pattern Helmet worn by the Military Police of the USCM. Whether you're facing a crime syndicate or a mutiny, this bucket will keep your brains intact."
 	icon_state = "mp_helmet"
 	item_state = "mp_helmet"
-	armor_melee = CLOTHING_ARMOR_MEDIUM
-	armor_bullet = CLOTHING_ARMOR_MEDIUM
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bomb = CLOTHING_ARMOR_LOW
-	armor_bio = CLOTHING_ARMOR_MEDIUM
-	armor_rad = CLOTHING_ARMOR_LOW
-	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
 	specialty = "M10 pattern military police"
 	flags_atom = NO_SNOW_TYPE
 
@@ -781,24 +743,20 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 
 /obj/item/clothing/head/helmet/marine/mp/provost/marshal
 	name = "\improper Provost Marshal Cap"
-	desc = "The expensive headwear of a Provost Marshal. Contains shards of kevlar to keep it's valuable contents safe."
+	desc = "The expensive headwear of a Provost Marshal. Contains shards of kevlar to keep its valuable contents safe."
 	icon_state = "pvmarshalhat"
 	item_state = "pvmarshalhat"
 	flags_atom = NO_SNOW_TYPE|NO_NAME_OVERRIDE
 
-/obj/item/clothing/head/helmet/marine/marsoc
-	name = "\improper MARSOC Operator Helmet"
-	desc = "A special variant of the M10 Pattern Helmet worn by MARSOC operators. Fitted for quad NODs."
+/obj/item/clothing/head/helmet/marine/sof
+	name = "\improper SOF Operator Helmet"
+	desc = "A special variant of the M10 Pattern Helmet worn by USCM SOF."
 	icon_state = "marsoc_helmet"
 	armor_melee = CLOTHING_ARMOR_MEDIUMHIGH
 	armor_bullet = CLOTHING_ARMOR_HIGH
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bomb = CLOTHING_ARMOR_LOW
 	armor_bio = CLOTHING_ARMOR_MEDIUMHIGH
-	armor_rad = CLOTHING_ARMOR_LOW
-	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
-	specialty = "M10 pattern MARSOC"
+	specialty = "M10 pattern SOF"
 	flags_atom = NO_SNOW_TYPE
 
 
@@ -808,62 +766,48 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 /obj/item/clothing/head/helmet/marine/veteran
 	flags_atom = NO_SNOW_TYPE|NO_NAME_OVERRIDE //Let's make these keep their name and icon.
 
-/obj/item/clothing/head/helmet/marine/veteran/PMC
+/obj/item/clothing/head/helmet/marine/veteran/pmc
 	name = "\improper PMC tactical cap"
 	desc = "A protective cap made from flexible kevlar. Standard issue for most security forms in the place of a helmet."
 	icon_state = "pmc_hat"
-	armor_melee = CLOTHING_ARMOR_MEDIUM
-	armor_bullet = CLOTHING_ARMOR_MEDIUM
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
 	armor_bomb = CLOTHING_ARMOR_MEDIUM
 	armor_bio = CLOTHING_ARMOR_LOW
-	armor_rad = CLOTHING_ARMOR_LOW
 	armor_internaldamage = CLOTHING_ARMOR_LOW
-	min_cold_protection_temperature = ICE_PLANET_min_cold_protection_temperature
+	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROT
 	flags_inventory = BLOCKSHARPOBJ
 	flags_inv_hide = NO_FLAGS
 	flags_marine_helmet = NO_FLAGS
 
-/obj/item/clothing/head/helmet/marine/veteran/PMC/leader
+/obj/item/clothing/head/helmet/marine/veteran/pmc/leader
 	name = "\improper PMC beret"
-	desc = "The pinacle of fashion for any aspiring mercenary leader. Designed to protect the head from light impacts."
+	desc = "The pinnacle of fashion for any aspiring mercenary leader. Designed to protect the head from light impacts."
 	icon_state = "officer_hat"
 
-/obj/item/clothing/head/helmet/marine/veteran/PMC/sniper
+/obj/item/clothing/head/helmet/marine/veteran/pmc/sniper
 	name = "\improper PMC sniper helmet"
-	desc = "A helmet worn by PMC Marksmen"
+	desc = "A helmet worn by PMC Marksmen."
 	icon_state = "pmc_sniper_hat"
 	flags_armor_protection = BODY_FLAG_HEAD|BODY_FLAG_FACE|BODY_FLAG_EYES
-	armor_melee = CLOTHING_ARMOR_MEDIUM
 	armor_bullet = CLOTHING_ARMOR_MEDIUMHIGH
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
-	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bomb = CLOTHING_ARMOR_MEDIUM
 	armor_bio = CLOTHING_ARMOR_MEDIUMLOW
-	armor_rad = CLOTHING_ARMOR_LOW
 	armor_internaldamage = CLOTHING_ARMOR_MEDIUMLOW
 	flags_inventory = COVEREYES|COVERMOUTH|BLOCKSHARPOBJ
 	flags_marine_helmet = HELMET_DAMAGE_OVERLAY
 
-/obj/item/clothing/head/helmet/marine/veteran/PMC/gunner
+/obj/item/clothing/head/helmet/marine/veteran/pmc/gunner
 	name = "\improper PMC gunner helmet"
 	desc = "A modification of the standard Armat Systems M3 armor."
 	icon_state = "heavy_helmet"
 	flags_armor_protection = BODY_FLAG_HEAD|BODY_FLAG_FACE|BODY_FLAG_EYES
-	armor_melee = CLOTHING_ARMOR_MEDIUM
 	armor_bullet = CLOTHING_ARMOR_MEDIUMHIGH
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
-	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bomb = CLOTHING_ARMOR_MEDIUM
 	armor_bio = CLOTHING_ARMOR_MEDIUMLOW
-	armor_rad = CLOTHING_ARMOR_LOW
 	armor_internaldamage = CLOTHING_ARMOR_MEDIUMLOW
 	flags_inventory = COVEREYES|COVERMOUTH|BLOCKSHARPOBJ
 	flags_inv_hide = HIDEEARS|HIDEEYES|HIDEFACE|HIDEMASK|HIDEALLHAIR
 	flags_marine_helmet = HELMET_DAMAGE_OVERLAY
 
-/obj/item/clothing/head/helmet/marine/veteran/PMC/commando
+/obj/item/clothing/head/helmet/marine/veteran/pmc/commando
 	name = "\improper M5X helmet"
 	desc = "A fully enclosed, armored helmet made to complete the M5X exoskeleton armor."
 	icon_state = "commando_helmet"
@@ -883,20 +827,26 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	flags_marine_helmet = HELMET_DAMAGE_OVERLAY
 	unacidable = TRUE
 
+/obj/item/clothing/head/helmet/marine/veteran/pmc/corporate
+	name = "\improper WY corporate security helmet"
+	desc = "A basic skull-helm worn by corporate security assets, graded to protect your head from an unruly scientist armed with a crowbar."
+	icon = 'icons/mob/humans/onmob/contained/wy_goons.dmi'
+	icon_state = "helmet"
+	item_state = "helmet"
+	contained_sprite = TRUE
+
+/obj/item/clothing/head/helmet/marine/veteran/pmc/corporate/lead
+	desc = "A basic skull-helm worn by corporate security assets. This variant is worn by low-level guards that have too much brainmatter to fit into the old one. Or so they say."
+	icon_state = "lead_helmet"
+	item_state = "lead_helmet"
+
 //FIORINA / UA RIOT CONTROL HELMET//
 
 /obj/item/clothing/head/helmet/marine/veteran/ua_riot
 	name = "\improper RC6 helmet"
 	desc = "The standard UA Riot Control 6 helmet is of odd design, lacking a face shield by default (mounting points are available). The distinct white pattern and red emblem are synonymous with oppression throughout the rim."
 	icon_state = "ua_riot"
-	armor_melee = CLOTHING_ARMOR_MEDIUM
-	armor_bullet = CLOTHING_ARMOR_MEDIUM
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
-	armor_bomb = CLOTHING_ARMOR_LOW
-	armor_bio = CLOTHING_ARMOR_MEDIUM
-	armor_rad = CLOTHING_ARMOR_LOW
-	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
 	specialty = "RC6"
 	flags_atom = NO_SNOW_TYPE
 
@@ -917,12 +867,9 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	icon_state = "dutch_helmet"
 	armor_melee = CLOTHING_ARMOR_HIGH
 	armor_bullet = CLOTHING_ARMOR_HIGHPLUS
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
 	armor_bomb = CLOTHING_ARMOR_MEDIUM
-	armor_bio = CLOTHING_ARMOR_MEDIUM
 	armor_rad = CLOTHING_ARMOR_MEDIUM
-	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
 	flags_marine_helmet = HELMET_GARB_OVERLAY|HELMET_DAMAGE_OVERLAY
 
 /obj/item/clothing/head/helmet/marine/veteran/dutch/cap
@@ -947,13 +894,12 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	icon_state = "dutch_helmet"
 	armor_melee = CLOTHING_ARMOR_HIGH
 	armor_bullet = CLOTHING_ARMOR_HIGH
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
 	armor_bomb = CLOTHING_ARMOR_MEDIUMLOW
 	armor_bio = CLOTHING_ARMOR_MEDIUMLOW
 	armor_rad = CLOTHING_ARMOR_MEDIUMLOW
 	armor_internaldamage = CLOTHING_ARMOR_MEDIUMLOW
-	min_cold_protection_temperature = ICE_PLANET_min_cold_protection_temperature
+	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROT
 	flags_marine_helmet = HELMET_GARB_OVERLAY|HELMET_DAMAGE_OVERLAY
 
 // UPP Are very powerful against bullets (marines) but middling against melee (xenos)
@@ -961,28 +907,21 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	name = "\improper UM4 helmet"
 	desc = "Using highly skilled manufacturing techniques this UM4 helmet manages to be very resistant to ballistics damage, at the cost of its huge weight causing an extreme stress on the occupant's head that will most likely cause neck problems."
 	icon_state = "upp_helmet"
-	armor_melee = CLOTHING_ARMOR_MEDIUM
 	armor_bullet = CLOTHING_ARMOR_HIGH
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_energy = CLOTHING_ARMOR_MEDIUM
 	armor_bomb = CLOTHING_ARMOR_MEDIUM
 	armor_bio = CLOTHING_ARMOR_MEDIUMLOW
 	armor_rad = CLOTHING_ARMOR_MEDIUMLOW
 	armor_internaldamage = CLOTHING_ARMOR_HIGH
-	min_cold_protection_temperature = ICE_PLANET_min_cold_protection_temperature
+	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROT
 
 /obj/item/clothing/head/helmet/marine/veteran/UPP/engi
 	name = "\improper UM4-V helmet"
 	desc = "This version of the UM4 helmet has a ballistic-glass visor, allowing for the UPP Engineers to safely weld, but by some reports hindering sight in the process."
 	icon_state = "upp_helmet_engi"
 	armor_melee = CLOTHING_ARMOR_MEDIUMHIGH
-	armor_bullet = CLOTHING_ARMOR_HIGH
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_energy = CLOTHING_ARMOR_MEDIUM
 	armor_bomb = CLOTHING_ARMOR_HIGH
-	armor_bio = CLOTHING_ARMOR_MEDIUMLOW
-	armor_rad = CLOTHING_ARMOR_MEDIUMLOW
-	armor_internaldamage = CLOTHING_ARMOR_HIGH
 	var/protection_on = TRUE
 
 /obj/item/clothing/head/helmet/marine/veteran/UPP/heavy
@@ -991,11 +930,9 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	icon_state = "upp_helmet_heavy"
 	armor_melee = CLOTHING_ARMOR_MEDIUMHIGH
 	armor_bullet = CLOTHING_ARMOR_HIGHPLUS
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_energy = CLOTHING_ARMOR_MEDIUM
 	armor_bomb = CLOTHING_ARMOR_HIGH
 	armor_bio = CLOTHING_ARMOR_MEDIUM
-	armor_rad = CLOTHING_ARMOR_MEDIUMLOW
 	armor_internaldamage = CLOTHING_ARMOR_HIGHPLUS
 
 /obj/item/clothing/head/uppcap
@@ -1006,7 +943,7 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	item_icons = list(
 		WEAR_HEAD = 'icons/mob/humans/onmob/head_1.dmi'
 	)
-	siemens_coefficient = 2.0
+	siemens_coefficient = 2
 	flags_armor_protection = BODY_FLAG_HEAD
 	armor_melee = CLOTHING_ARMOR_MEDIUMHIGH
 	armor_bullet = CLOTHING_ARMOR_MEDIUMHIGH
@@ -1017,7 +954,7 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	armor_rad = CLOTHING_ARMOR_LOW
 	armor_internaldamage = CLOTHING_ARMOR_MEDIUM
 	flags_cold_protection = BODY_FLAG_HEAD
-	min_cold_protection_temperature = ICE_PLANET_min_cold_protection_temperature
+	min_cold_protection_temperature = ICE_PLANET_MIN_COLD_PROT
 	flags_inventory = BLOCKSHARPOBJ
 	flags_inv_hide = HIDEEARS
 
@@ -1032,7 +969,7 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 
 /obj/item/clothing/head/uppcap/peaked
 	name = "\improper UL3 UPP peaked cap"
-	desc = "UPP headgear issued to Kapitans and above. It is made of high quality materials, and has the officers rank in gold placed upon the front of the cap."
+	desc = "UPP headgear issued to Kapitans and above. It is made of high-quality materials, and has the officers rank in gold placed upon the front of the cap."
 	icon_state = "upp_peaked"
 
 /obj/item/clothing/head/uppcap/ushanka
@@ -1069,7 +1006,7 @@ GLOBAL_LIST_INIT(allowed_helmet_items, list(
 	item_state = "upp_ushanka_civi"
 	original_state = "upp_ushanka_civi"
 
-obj/item/clothing/head/helmet/marine/veteran/van_bandolier
+/obj/item/clothing/head/helmet/marine/veteran/van_bandolier
 	name = "pith helmet"
 	desc = "A stylish pith helmet, made from space-age materials. Lightweight, breathable, cool, and protective."
 	icon_state = "van_bandolier"
@@ -1127,7 +1064,7 @@ obj/item/clothing/head/helmet/marine/veteran/van_bandolier
 	icon_state = "skullcapm"
 
 /obj/item/clothing/head/helmet/skullcap/jungle/New(loc, type,
-	new_protection[] 	= list(MAP_ICE_COLONY = ICE_PLANET_min_cold_protection_temperature))
+	new_protection[] = list(MAP_ICE_COLONY = ICE_PLANET_MIN_COLD_PROT))
 	select_gamemode_skin(type,, new_protection)
 	..()
 	switch(icon_state)
@@ -1146,7 +1083,6 @@ obj/item/clothing/head/helmet/marine/veteran/van_bandolier
 	flags_armor_protection = BODY_FLAG_HEAD|BODY_FLAG_FACE|BODY_FLAG_EYES
 	armor_melee = CLOTHING_ARMOR_VERYHIGH
 	armor_bullet = CLOTHING_ARMOR_VERYHIGH
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
 	armor_bomb = CLOTHING_ARMOR_MEDIUM
 	armor_bio = CLOTHING_ARMOR_HIGHPLUS
@@ -1161,7 +1097,6 @@ obj/item/clothing/head/helmet/marine/veteran/van_bandolier
 	desc = "A sturdy helmet worn by an unknown mercenary group. Reinforced with extra plating."
 	armor_melee = CLOTHING_ARMOR_ULTRAHIGH
 	armor_bullet = CLOTHING_ARMOR_ULTRAHIGHPLUS
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
 	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
 	armor_bomb = CLOTHING_ARMOR_HIGHPLUS
 	armor_bio = CLOTHING_ARMOR_HIGHPLUS
@@ -1175,11 +1110,7 @@ obj/item/clothing/head/helmet/marine/veteran/van_bandolier
 	flags_armor_protection = BODY_FLAG_HEAD|BODY_FLAG_FACE|BODY_FLAG_EYES
 	armor_melee = CLOTHING_ARMOR_VERYHIGH
 	armor_bullet = CLOTHING_ARMOR_VERYHIGH
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
-	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
 	armor_bomb = CLOTHING_ARMOR_MEDIUM
-	armor_bio = CLOTHING_ARMOR_HIGHPLUS
-	armor_rad = CLOTHING_ARMOR_MEDIUM
 	armor_internaldamage = CLOTHING_ARMOR_HIGHPLUS
 
 
@@ -1190,11 +1121,7 @@ obj/item/clothing/head/helmet/marine/veteran/van_bandolier
 	flags_armor_protection = BODY_FLAG_HEAD|BODY_FLAG_FACE|BODY_FLAG_EYES
 	armor_melee = CLOTHING_ARMOR_VERYHIGH
 	armor_bullet = CLOTHING_ARMOR_VERYHIGH
-	armor_laser = CLOTHING_ARMOR_MEDIUMLOW
-	armor_energy = CLOTHING_ARMOR_MEDIUMLOW
 	armor_bomb = CLOTHING_ARMOR_MEDIUM
-	armor_bio = CLOTHING_ARMOR_HIGHPLUS
-	armor_rad = CLOTHING_ARMOR_MEDIUM
 	armor_internaldamage = CLOTHING_ARMOR_HIGHPLUS
 
 /obj/item/clothing/head/helmet/marine/veteran/mercenary/support/engineer
@@ -1218,13 +1145,13 @@ obj/item/clothing/head/helmet/marine/veteran/van_bandolier
 			vision_impair = VISION_IMPAIR_NONE
 			flags_inventory &= ~(COVEREYES|COVERMOUTH)
 			flags_inv_hide &= ~(HIDEEYES|HIDEFACE)
-			eye_protection = 0
+			eye_protection = EYE_PROTECTION_NONE
 			to_chat(usr, "You <b>deactivate</b> the [src]'s welding screen.")
 		else
 			vision_impair = VISION_IMPAIR_MAX
 			flags_inventory |= COVEREYES|COVERMOUTH
 			flags_inv_hide |= HIDEEYES|HIDEFACE
-			eye_protection = 2
+			eye_protection = EYE_PROTECTION_WELDING
 			to_chat(usr, "You <b>activate</b> the [src]'s welding screen.")
 
 		protection_on = !protection_on
@@ -1281,10 +1208,10 @@ obj/item/clothing/head/helmet/marine/veteran/van_bandolier
 	overlays += /obj/effect/overlay/danger
 	playsound(loc, 'sound/weapons/armbomb.ogg', 25, 1, 6)
 
-	addtimer(CALLBACK(src, .proc/prime), det_time)
+	addtimer(CALLBACK(src, PROC_REF(prime)), det_time)
 
 /obj/item/clothing/head/helmet/marine/specialist/hefa/proc/prime()
-	INVOKE_ASYNC(src, .proc/boom)
+	INVOKE_ASYNC(src, PROC_REF(boom))
 
 // Values nabbed from the HEFA nade
 /obj/item/clothing/head/helmet/marine/specialist/hefa/proc/boom()

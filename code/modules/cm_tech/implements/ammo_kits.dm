@@ -12,9 +12,9 @@
 	. = ..()
 	convert_map = get_convert_map()
 
-/obj/item/ammo_kit/examine(mob/user)
+/obj/item/ammo_kit/get_examine_text(mob/user)
 	. = ..()
-	to_chat(user, SPAN_NOTICE("It has [uses] uses remaining."))
+	. += SPAN_NOTICE("It has [uses] uses remaining.")
 
 /obj/item/ammo_kit/afterattack(atom/target, mob/living/user, proximity_flag, click_parameters)
 	if(!(target.type in convert_map))
@@ -38,7 +38,7 @@
 	QDEL_NULL(M)
 	M = new type_to_convert_to(get_turf(user))
 	user.put_in_any_hand_if_possible(M)
-	uses -= 1
+	uses--
 	playsound(get_turf(user), "sound/machines/fax.ogg", 5)
 
 	if(uses <= 0)
@@ -81,7 +81,7 @@
 	name = "incendiary buckshot kit"
 	desc = "A box containing 5 handfuls of incendiary buckshot."
 	can_hold = list(
-		/obj/item/ammo_magazine/handful/shotgun/buckshot/incendiary
+		/obj/item/ammo_magazine/handful/shotgun/buckshot/incendiary,
 	)
 	to_hold = /obj/item/ammo_magazine/handful/shotgun/buckshot/incendiary
 
@@ -90,7 +90,7 @@
 	desc = "A box containing 5 handfuls of incendiary slugs."
 	icon_state = "incenslug"
 	can_hold = list(
-		/obj/item/ammo_magazine/handful/shotgun/incendiary
+		/obj/item/ammo_magazine/handful/shotgun/incendiary,
 	)
 	to_hold = /obj/item/ammo_magazine/handful/shotgun/incendiary
 

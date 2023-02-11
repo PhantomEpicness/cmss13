@@ -23,9 +23,10 @@
 	w_class = SIZE_TINY
 	volume = 60
 	reagent_desc_override = TRUE //it has a special examining mechanic
+	var/identificable = TRUE //can medically trained people tell what's in it?
 	var/pill_desc = "An unknown pill." // The real description of the pill, shown when examined by a medically trained person
-	var/pill_icon_class = "random"     // Pills with the same icon class share icons
-	var/list/pill_initial_reagents     // Defaults reagents if any
+	var/pill_icon_class = "random" // Pills with the same icon class share icons
+	var/list/pill_initial_reagents // Default reagents if any
 
 /obj/item/reagent_container/pill/Initialize(mapload, ...)
 	. = ..()
@@ -39,17 +40,22 @@
 	if(!icon_state)
 		icon_state = GLOB.pill_icon_mappings[pill_icon_class]
 
-/obj/item/reagent_container/pill/examine(mob/user)
-	..()
+/obj/item/reagent_container/pill/get_examine_text(mob/user)
+	. = ..()
 	if(pill_desc)
-		display_contents(user)
+		var/pill_info = display_contents(user)
+		if(pill_info)
+			. += pill_info
 
 /obj/item/reagent_container/pill/display_contents(mob/user)
-	if(isXeno(user))
+	if(isxeno(user))
 		return
+	if(!identificable)
+		return
+	. = ""
 	if(skillcheck(user, SKILL_MEDICAL, SKILL_MEDICAL_TRAINED))
-		to_chat(user, pill_desc)
-	..()
+		. += "[pill_desc]\n"
+	. += ..()
 
 /obj/item/reagent_container/pill/attack(mob/M, mob/user)
 	if(M == user)
@@ -81,22 +87,25 @@
 			return
 
 		user.affected_message(M,
-			SPAN_HELPFUL("You <b>start feeding</b> [user == M ? "yourself" : "[M]"] a pill."),
+			SPAN_HELPFUL("You <b>start feeding</b> [M] a pill."),
 			SPAN_HELPFUL("[user] <b>starts feeding</b> you a pill."),
-			SPAN_NOTICE("[user] starts feeding [user == M ? "themselves" : "[M]"] a pill."))
+			SPAN_NOTICE("[user] starts feeding [M] a pill."))
 
 		var/ingestion_time = 30
 		if(user.skills)
 			ingestion_time = max(10, 30 - 10*user.skills.get_skill_level(SKILL_MEDICAL))
 
-		if(!do_after(user, ingestion_time, INTERRUPT_NO_NEEDHAND, BUSY_ICON_FRIENDLY, M, INTERRUPT_MOVED, BUSY_ICON_MEDICAL)) return
+		if(!do_after(user, ingestion_time, INTERRUPT_NO_NEEDHAND, BUSY_ICON_FRIENDLY, M, INTERRUPT_MOVED, BUSY_ICON_MEDICAL))
+			return
+		if(QDELETED(src))
+			return
 
 		user.drop_inv_item_on_ground(src) //icon update
 
 		user.affected_message(M,
-			SPAN_HELPFUL("You [user == M ? "<b>swallowed</b>" : "<b>fed</b> [M]"] a pill."),
+			SPAN_HELPFUL("You <b>fed</b> [M] a pill."),
 			SPAN_HELPFUL("[user] <b>fed</b> you a pill."),
-			SPAN_NOTICE("[user] [user == M ? "swallowed" : "fed [M]"] a pill."))
+			SPAN_NOTICE("[user] fed [M] a pill."))
 		user.count_niche_stat(STATISTICS_NICHE_PILLS)
 
 		var/rgt_list_text = get_reagent_list_text()
@@ -130,7 +139,7 @@
 
 		reagents.trans_to(target, reagents.total_volume)
 		for(var/mob/O in viewers(2, user))
-			O.show_message(SPAN_DANGER("[user] puts something in \the [target]."), 1)
+			O.show_message(SPAN_DANGER("[user] puts something in \the [target]."), SHOW_MESSAGE_VISIBLE)
 
 		QDEL_IN(src, 5)
 
@@ -172,9 +181,9 @@
 	pill_icon_class = "kelo"
 
 /obj/item/reagent_container/pill/oxycodone
-    pill_desc = "A Oxycodone pill. A powerful painkiller."
-    pill_initial_reagents = list("oxycodone" = 15)
-    pill_icon_class = "oxy"
+	pill_desc = "A Oxycodone pill. A powerful painkiller."
+	pill_initial_reagents = list("oxycodone" = 15)
+	pill_icon_class = "oxy"
 
 /obj/item/reagent_container/pill/paracetamol
 	pill_desc = "A Paracetamol pill. Painkiller for the ages."
@@ -214,6 +223,12 @@
 /obj/item/reagent_container/pill/happy
 	pill_desc = "A Happy Pill! Happy happy joy joy!"
 	pill_initial_reagents = list("space_drugs" = 15, "sugar" = 15)
+	pill_icon_class = "drug"
+
+/obj/item/reagent_container/pill/zombie_powder
+	desc = "A strange pill that smells like death itself."
+	pill_desc = "A strange pill that smells like death itself."
+	pill_initial_reagents = list("zombiepowder" = 8, "copper" = 2) //roughly two minutes of death
 	pill_icon_class = "drug"
 
 /obj/item/reagent_container/pill/russianRed

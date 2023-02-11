@@ -16,10 +16,11 @@
 		/obj/item/stack/cable_coil,
 		/obj/item/device/t_scanner,
 		/obj/item/device/analyzer,
-		/obj/item/tool/shovel/etool
+		/obj/item/tool/shovel/etool,
 	)
 	storage_slots = null
 	max_storage_space = 8
+	black_market_value = 15
 	var/mob/affecting = null
 	var/deity_name = "Christ"
 
@@ -37,14 +38,14 @@
 
 /obj/item/storage/bible/hefa
 	name = "Holy texts of the High Explosive Fragmenting Anti-personnel hand grenade."
-	desc = "Praise be he, reverand Clearsmire who has brought us into the light of the shrapnel! Sworn to the holy service of the HEFA lord are we, and while few, we are the voices of the silent many! Printed in the RESS."
+	desc = "Praise be he, reverend Clearsmire who has brought us into the light of the shrapnel! Sworn to the holy service of the HEFA lord are we, and while few, we are the voices of the silent many! Printed in the RESS."
 	icon_state ="tome_hefa"
 
 /obj/item/storage/bible/hefa/Initialize()
 	. = ..()
-	new /obj/item/explosive/grenade/HE/frag(src)
-	new /obj/item/explosive/grenade/HE/frag(src)
-	new /obj/item/explosive/grenade/HE/frag(src)
+	new /obj/item/explosive/grenade/high_explosive/frag(src)
+	new /obj/item/explosive/grenade/high_explosive/frag(src)
+	new /obj/item/explosive/grenade/high_explosive/frag(src)
 
 /obj/item/storage/bible/afterattack(atom/A, mob/user as mob, proximity)
 	if(!proximity)

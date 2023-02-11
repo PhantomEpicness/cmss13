@@ -19,6 +19,7 @@ GLOBAL_LIST_INIT(cm_vending_gear_rto, list(
 		list("M40 HSDP Smoke Packet (x3 grenades)", 9, /obj/item/storage/box/packet/smoke, null, VENDOR_ITEM_REGULAR),
 		list("M74 AGM-Frag Airburst Packet (x3 airburst grenades)", 20, /obj/item/storage/box/packet/airburst_he, null, VENDOR_ITEM_REGULAR),
 		list("M74 AGM-Incendiary Airburst Packet (x3 airburst grenades)", 20, /obj/item/storage/box/packet/airburst_incen, null, VENDOR_ITEM_REGULAR),
+		list("M74 AGM-Smoke Airburst Packet (x3 airburst grenades)", 10, /obj/item/storage/box/packet/airburst_smoke, null, VENDOR_ITEM_REGULAR),
 		list("M74 AGM-Hornet Airburst Packet (x3 airburst grenades", 20, /obj/item/storage/box/packet/hornet, null, VENDOR_ITEM_REGULAR),
 		list("M20 Mine Box (x4 mines)", 20, /obj/item/storage/box/explosive_mines, null, VENDOR_ITEM_REGULAR),
 		list("M40 MFHS Metal Foam Grenade", 5, /obj/item/explosive/grenade/metal_foam, null, VENDOR_ITEM_REGULAR),
@@ -41,7 +42,7 @@ GLOBAL_LIST_INIT(cm_vending_gear_rto, list(
 		list("Large General Pouch", 15, /obj/item/storage/pouch/general/large, null, VENDOR_ITEM_REGULAR),
 		list("Shoulder Holster", 15, /obj/item/clothing/accessory/storage/holster, null, VENDOR_ITEM_REGULAR),
 		list("Machete Scabbard (Full)", 5, /obj/item/storage/large_holster/machete/full, null, VENDOR_ITEM_REGULAR),
-		list("Machete Pouch (Full)", 15, /obj/item/storage/large_holster/macheteB/full, null, VENDOR_ITEM_REGULAR),
+		list("Machete Pouch (Full)", 15, /obj/item/storage/pouch/machete/full, null, VENDOR_ITEM_REGULAR),
 		list("Fire Extinguisher (Portable)", 5, /obj/item/tool/extinguisher/mini, null, VENDOR_ITEM_REGULAR),
 		list("Whistle", 5, /obj/item/device/whistle, null, VENDOR_ITEM_REGULAR),
 		list("Welding Goggles", 5, /obj/item/clothing/glasses/welding, null, VENDOR_ITEM_REGULAR),
@@ -50,7 +51,7 @@ GLOBAL_LIST_INIT(cm_vending_gear_rto, list(
 
 		list("RADIO KEYS", 0, null, null, null),
 		list("Engineering Radio Encryption Key", 5, /obj/item/device/encryptionkey/engi, null, VENDOR_ITEM_REGULAR),
-		list("Tactics Radio Encryption Key", 5, /obj/item/device/encryptionkey/tactics, null, VENDOR_ITEM_REGULAR),
+		list("Intel Radio Encryption Key", 5, /obj/item/device/encryptionkey/intel, null, VENDOR_ITEM_REGULAR),
 		list("JTAC Radio Encryption Key", 5, /obj/item/device/encryptionkey/jtac, null, VENDOR_ITEM_REGULAR),
 		list("Supply Radio Encryption Key", 5, /obj/item/device/encryptionkey/req, null, VENDOR_ITEM_REGULAR),
 	))
@@ -60,13 +61,11 @@ GLOBAL_LIST_INIT(cm_vending_gear_rto, list(
 	desc = "An automated gear rack for RTOs."
 	icon_state = "intel_gear"
 	show_points = TRUE
-	use_points = TRUE
 	req_access = list(ACCESS_MARINE_RTO_PREP)
 	vendor_role = list(JOB_SQUAD_RTO)
 
-/obj/structure/machinery/cm_vending/gear/rto/Initialize(mapload, ...)
-	. = ..()
-	listed_products = GLOB.cm_vending_gear_rto
+/obj/structure/machinery/cm_vending/gear/rto/get_listed_products(mob/user)
+	return GLOB.cm_vending_gear_rto
 
 //------------CLOTHING VENDOR---------------
 
@@ -96,7 +95,8 @@ GLOBAL_LIST_INIT(cm_vending_clothing_rto, list(
 		list("POUCHES (CHOOSE 2)", 0, null, null, null),
 		list("First-Aid Pouch (Refillable Injectors)", 0, /obj/item/storage/pouch/firstaid/full, (MARINE_CAN_BUY_R_POUCH|MARINE_CAN_BUY_L_POUCH), VENDOR_ITEM_RECOMMENDED),
 		list("First-Aid Pouch (Splints, Gauze, Ointment)", 0, /obj/item/storage/pouch/firstaid/full/alternate, (MARINE_CAN_BUY_R_POUCH|MARINE_CAN_BUY_L_POUCH), VENDOR_ITEM_RECOMMENDED),
-		list("First-Aid Pouch (Pill Packets)", 0, /obj/item/storage/pouch/firstaid/full/pills, (MARINE_CAN_BUY_R_POUCH|MARINE_CAN_BUY_L_POUCH), VENDOR_ITEM_RECOMMENDED),
+		list("First-Aid Pouch (Pill Packets)", 0, /obj/item/storage/pouch/firstaid/full/pills, (MARINE_CAN_BUY_R_POUCH|MARINE_CAN_BUY_L_POUCH), VENDOR_ITEM_REGULAR),
+		list("First Responder Pouch", 0, /obj/item/storage/pouch/first_responder, (MARINE_CAN_BUY_R_POUCH|MARINE_CAN_BUY_L_POUCH), VENDOR_ITEM_REGULAR),
 		list("Flare Pouch (Full)", 0, /obj/item/storage/pouch/flare/full, (MARINE_CAN_BUY_R_POUCH|MARINE_CAN_BUY_L_POUCH), VENDOR_ITEM_REGULAR),
 		list("Fuel Tank Strap Pouch", 0, /obj/item/storage/pouch/flamertank, (MARINE_CAN_BUY_R_POUCH|MARINE_CAN_BUY_L_POUCH), VENDOR_ITEM_REGULAR),
 		list("Large General Pouch", 0, /obj/item/storage/pouch/general/large, (MARINE_CAN_BUY_R_POUCH|MARINE_CAN_BUY_L_POUCH), VENDOR_ITEM_REGULAR),
@@ -128,10 +128,8 @@ GLOBAL_LIST_INIT(cm_vending_clothing_rto, list(
 	req_access = list(ACCESS_MARINE_RTO_PREP)
 	vendor_role = list(JOB_SQUAD_RTO)
 
-
-/obj/structure/machinery/cm_vending/clothing/rto/Initialize(mapload, ...)
-	. = ..()
-	listed_products = GLOB.cm_vending_clothing_rto
+/obj/structure/machinery/cm_vending/clothing/rto/get_listed_products(mob/user)
+	return GLOB.cm_vending_clothing_rto
 
 /obj/structure/machinery/cm_vending/clothing/rto/alpha
 	squad_tag = SQUAD_MARINE_1
@@ -169,20 +167,20 @@ GLOBAL_LIST_INIT(cm_vending_clothing_rto, list(
 		/obj/item/ammo_magazine/pistol/vp78,
 		/obj/item/ammo_magazine/pistol/vp78,
 		/obj/item/ammo_magazine/pistol/vp78,
-		/obj/item/storage/belt/gun/m4a3
+		/obj/item/storage/belt/gun/m4a3,
 	)
 
-/obj/effect/essentials_set/rto/m4a3c
+/obj/effect/essentials_set/rto/mod
 	spawned_gear_list = list(
-		/obj/item/weapon/gun/pistol/m4a3/custom,
+		/obj/item/weapon/gun/pistol/mod88,
 		/obj/item/device/binoculars/range/designator,
 		/obj/item/storage/box/m94/signal,
 		/obj/item/storage/box/m94/signal,
-		/obj/item/ammo_magazine/pistol/hp,
-		/obj/item/ammo_magazine/pistol/hp,
-		/obj/item/ammo_magazine/pistol/ap,
-		/obj/item/ammo_magazine/pistol/ap,
-		/obj/item/storage/belt/gun/m4a3
+		/obj/item/ammo_magazine/pistol/mod88,
+		/obj/item/ammo_magazine/pistol/mod88,
+		/obj/item/ammo_magazine/pistol/mod88,
+		/obj/item/ammo_magazine/pistol/mod88,
+		/obj/item/storage/belt/gun/m4a3,
 	)
 
 /obj/effect/essentials_set/rto/utilities

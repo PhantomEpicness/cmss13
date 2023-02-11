@@ -38,7 +38,7 @@
 
 /obj/item/storage/large_holster/equipped(mob/user, slot)
 	if(slot == WEAR_BACK || slot == WEAR_WAIST || slot == WEAR_J_STORE)
-		mouse_opacity = 2 //so it's easier to click when properly equipped.
+		mouse_opacity = MOUSE_OPACITY_OPAQUE //so it's easier to click when properly equipped.
 	..()
 
 /obj/item/storage/large_holster/dropped(mob/user)
@@ -60,9 +60,10 @@
 	name = "\improper L44 M37A2 scabbard"
 	desc = "A large leather holster fitted for USCM-issue shotguns. It has harnesses that allow it to be secured to the back for easy storage."
 	icon_state = "m37_holster"
+	max_w_class = SIZE_HUGE
 	can_hold = list(
 		/obj/item/weapon/gun/shotgun/pump,
-		/obj/item/weapon/gun/shotgun/combat
+		/obj/item/weapon/gun/shotgun/combat,
 	)
 	has_gamemode_skin = TRUE
 
@@ -89,22 +90,9 @@
 /obj/item/storage/large_holster/machete/arnold/full/fill_preset_inventory()
 	new /obj/item/weapon/melee/claymore/mercsword/machete/arnold(src)
 
-/obj/item/storage/large_holster/macheteB
-	name = "\improper H6B pattern M2132 machete scabbard"
-	desc = "A large leather scabbard used to carry a M2132 machete. It can be strapped to the pouch slot."
-	base_icon = "macheteB_holster"
-	icon_state = "macheteB_holster"
-	item_state = "machete_holster"
-	flags_equip_slot = SLOT_STORE
-	storage_flags = STORAGE_FLAGS_POUCH
-	can_hold = list(/obj/item/weapon/melee/claymore/mercsword/machete)
-
-/obj/item/storage/large_holster/macheteB/full/fill_preset_inventory()
-	new /obj/item/weapon/melee/claymore/mercsword/machete(src)
-
 /obj/item/storage/large_holster/katana
 	name = "\improper katana scabbard"
-	desc = "A large, vibrantly colored katana scabbard used to carry a japanese sword. It can be strapped to the back or worn at the belt. Because of the sturdy wood casing of the scabbard, it makes an okay defensive weapon in a pinch."
+	desc = "A large, vibrantly colored katana scabbard used to carry a Japanese sword. It can be strapped to the back or worn at the belt. Because of the sturdy wood casing of the scabbard, it makes an okay defensive weapon in a pinch."
 	icon_state = "katana_holster"
 	force = 12
 	attack_verb = list("bludgeoned", "struck", "cracked")
@@ -134,10 +122,10 @@
 	max_w_class = 5
 	can_hold = list(
 		/obj/item/weapon/gun/smg/m39,
-		/obj/item/weapon/gun/smg/mp7,
-		/obj/item/weapon/gun/smg/uzi,
-		/obj/item/weapon/gun/pistol/skorpion
-		)
+		/obj/item/weapon/gun/smg/mp27,
+		/obj/item/weapon/gun/smg/mac15,
+		/obj/item/weapon/gun/pistol/skorpion,
+	)
 	///Guns have a hud offset that throws the vis_contents alignment off.
 	var/gun_offset = 0
 	///Whether the gun had pixel scaling set before being holstered.
@@ -209,8 +197,8 @@
 /obj/item/storage/large_holster/fuelpack/Initialize()
 	. = ..()
 	fuel = new /obj/item/ammo_magazine/flamer_tank/large()
-	fuelB =	new /obj/item/ammo_magazine/flamer_tank/large/B()
-	fuelX =	new /obj/item/ammo_magazine/flamer_tank/large/X()
+	fuelB = new /obj/item/ammo_magazine/flamer_tank/large/B()
+	fuelX = new /obj/item/ammo_magazine/flamer_tank/large/X()
 	active_fuel = fuel
 	flamer_overlay = overlay_image('icons/obj/items/clothing/backpacks.dmi', "+m240t")
 
@@ -257,7 +245,7 @@
 	..()
 	do_toggle_fuel(user)
 
-/obj/item/storage/large_holster/fuelpack/proc/do_toggle_fuel(var/mob/user)
+/obj/item/storage/large_holster/fuelpack/proc/do_toggle_fuel(mob/user)
 	if(!ishuman(user) || user.is_mob_incapacitated())
 		return FALSE
 
@@ -298,7 +286,7 @@
 	do_toggle_fuel(usr)
 
 
-/obj/item/storage/large_holster/fuelpack/attackby(var/obj/item/A as obj, mob/user as mob)
+/obj/item/storage/large_holster/fuelpack/attackby(obj/item/A as obj, mob/user as mob)
 	if(istype(A, /obj/item/ammo_magazine/flamer_tank/large/))
 		switch_fuel(A, user)
 		return
@@ -314,7 +302,7 @@
 
 	. = ..()
 
-/obj/item/storage/large_holster/fuelpack/proc/switch_fuel(var/obj/item/ammo_magazine/flamer_tank/large/new_fuel, var/mob/user)
+/obj/item/storage/large_holster/fuelpack/proc/switch_fuel(obj/item/ammo_magazine/flamer_tank/large/new_fuel, mob/user)
 	// Switch out the currently stored fuel and drop it
 	if(istype(new_fuel, /obj/item/ammo_magazine/flamer_tank/large/X/))
 		fuelX.forceMove(get_turf(user))
@@ -335,22 +323,22 @@
 		active_fuel = new_fuel
 
 
-/obj/item/storage/large_holster/fuelpack/examine(mob/user)
-	..()
+/obj/item/storage/large_holster/fuelpack/get_examine_text(mob/user)
+	. = ..()
 	if(contents.len)
-		to_chat(user, "It is storing \a M240-T incinerator unit.")
+		. += "It is storing \a M240-T incinerator unit."
 	if (get_dist(user, src) <= 1)
 		if(fuel)
-			to_chat(user, "The [fuel.caliber] currently contains: [round(fuel.get_ammo_percent())]% fuel.")
+			. += "The [fuel.caliber] currently contains: [round(fuel.get_ammo_percent())]% fuel."
 		if(fuelB)
-			to_chat(user, "The [fuelB.caliber] currently contains: [round(fuelB.get_ammo_percent())]% fuel.")
+			. += "The [fuelB.caliber] currently contains: [round(fuelB.get_ammo_percent())]% fuel."
 		if(fuelX)
-			to_chat(user, "The [fuelX.caliber] currently contains: [round(fuelX.get_ammo_percent())]% fuel.")
+			. += "The [fuelX.caliber] currently contains: [round(fuelX.get_ammo_percent())]% fuel."
 
 /datum/action/item_action/specialist/toggle_fuel
 	ability_primacy = SPEC_PRIMARY_ACTION_1
 
-/datum/action/item_action/specialist/toggle_fuel/New(var/mob/living/user, var/obj/item/holder)
+/datum/action/item_action/specialist/toggle_fuel/New(mob/living/user, obj/item/holder)
 	..()
 	name = "Toggle Fuel Type"
 	button.name = name

@@ -2,12 +2,12 @@
 
 /obj/item/device/chameleon
 	name = "chameleon-projector"
-	desc = "Use this to become invisible to the human eyesocket."
+	desc = "Use this to become invisible to the human eye."
 	icon_state = "shield0"
 	flags_atom = FPRINT|CONDUCT
 	flags_equip_slot = SLOT_WAIST
 	item_state = "electronic"
-	throwforce = 5.0
+	throwforce = 5
 	throw_speed = SPEED_FAST
 	throw_range = 5
 	w_class = SIZE_SMALL

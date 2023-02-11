@@ -18,13 +18,13 @@
 #define HELD_KEY_BUFFER_LENGTH 15
 
 ///This note is used by staff for disciplinary record keeping.
-#define NOTE_ADMIN			1
+#define NOTE_ADMIN 1
 ///This note is used by staff for positive record keeping.
-#define NOTE_MERIT			2
+#define NOTE_MERIT 2
 ///These notes are used by respective whitelist councils for record keeping.
-#define NOTE_COMMANDER		3
-#define NOTE_SYNTHETIC		4
-#define NOTE_YAUTJA			5
+#define NOTE_COMMANDER 3
+#define NOTE_SYNTHETIC 4
+#define NOTE_YAUTJA 5
 ///Note categories in text form, in order of their numerical #defines.
 var/global/list/note_categories = list("Admin", "Merit", "Commanding Officer", "Synthetic", "Yautja")
 
@@ -54,3 +54,10 @@ var/global/list/note_categories = list("Admin", "Merit", "Commanding Officer", "
 #define AHELP_ACTIVE 1
 #define AHELP_CLOSED 2
 #define AHELP_RESOLVED 3
+
+/// Disables antigrief entirely: Anyone can activate explosives at any time on the Almayer.
+#define ANTIGRIEF_DISABLED 0
+/// Enables antigrief on the Almayer, but only for new players: Those who've had less than 10 total human hours.
+#define ANTIGRIEF_NEW_PLAYERS 1
+/// Enables antigrief entirely: Nobody can activate explosives on the Almayer, unless the ship crashed.
+#define ANTIGRIEF_ENABLED 2

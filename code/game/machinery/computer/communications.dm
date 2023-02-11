@@ -1,6 +1,6 @@
 #define STATE_DEFAULT 1
 #define STATE_EVACUATION 2
-#define STATE_EVACUATION_CANCEL	3
+#define STATE_EVACUATION_CANCEL 3
 #define STATE_DISTRESS 4
 #define STATE_MESSAGELIST 5
 #define STATE_VIEWMESSAGE 6
@@ -10,10 +10,6 @@
 #define STATE_CONFIRM_LEVEL 10
 #define STATE_DESTROY 11
 #define STATE_DEFCONLIST 12
-
-#define COOLDOWN_COMM_MESSAGE 1 MINUTES
-#define COOLDOWN_COMM_REQUEST 5 MINUTES
-#define COOLDOWN_COMM_CENTRAL 30 SECONDS
 
 //Note: Commented out procs are things I left alone and did not revise. Usually AI-related interactions.
 
@@ -27,7 +23,6 @@
 	unslashable = TRUE
 	unacidable = TRUE
 
-	var/mob/living/carbon/human/current_mapviewer
 	var/prints_intercept = 1
 	var/authenticated = 0
 	var/list/messagetitle = list()
@@ -47,47 +42,32 @@
 	var/status_display_freq = "1435"
 	var/stat_msg1
 	var/stat_msg2
+
+	var/datum/tacmap/tacmap
+	var/minimap_type = MINIMAP_FLAG_USCM
+
 	processing = TRUE
 
 /obj/structure/machinery/computer/communications/Initialize()
 	. = ..()
 	start_processing()
-	SSmapview.map_machines += src
+	tacmap = new(src, minimap_type)
 
 /obj/structure/machinery/computer/communications/Destroy()
-	SSmapview.map_machines -= src
+	QDEL_NULL(tacmap)
 	return ..()
 
 /obj/structure/machinery/computer/communications/process()
 	if(..() && state != STATE_STATUSDISPLAY)
 		updateDialog()
 
-/obj/structure/machinery/computer/communications/proc/update_mapview(var/close = 0)
-	if (close || !current_mapviewer || !Adjacent(current_mapviewer))
-		close_browser(current_mapviewer, "marineminimap")
-		current_mapviewer = null
-		return
-	if(!populated_mapview_type_updated[TACMAP_DEFAULT])
-		overlay_tacmap(TACMAP_DEFAULT)
-	current_mapviewer << browse_rsc(populated_mapview_types[TACMAP_DEFAULT], "marine_minimap.png")
-	show_browser(current_mapviewer, "<img src=marine_minimap.png>", "Marine Minimap", "marineminimap", "size=[(map_sizes[1]*2)+50]x[(map_sizes[2]*2)+50]", closeref = src)
-
 /obj/structure/machinery/computer/communications/Topic(href, href_list)
-	if (href_list["close"] && current_mapviewer)
-		close_browser(current_mapviewer, "marineminimap")
-		current_mapviewer = null
-		return
 	if(..()) return FALSE
 
 	usr.set_interaction(src)
 	switch(href_list["operation"])
 		if("mapview")
-			if(current_mapviewer)
-				update_mapview(1)
-				return
-			current_mapviewer = usr
-			update_mapview()
-			return
+			tacmap.tgui_interact(usr)
 
 		if("main") state = STATE_DEFAULT
 
@@ -133,11 +113,11 @@
 
 		if("announce")
 			if(authenticated == 2)
-				if(world.time < cooldown_message + COOLDOWN_COMM_MESSAGE)
-					to_chat(usr, SPAN_WARNING("Please allow at least [COOLDOWN_COMM_MESSAGE*0.1] second\s to pass between announcements."))
+				if(world.time < cooldown_message + COOLDOWN_COMM_MESSAGE_LONG)
+					to_chat(usr, SPAN_WARNING("Please allow at least [COOLDOWN_COMM_MESSAGE_LONG*0.1] second\s to pass between announcements."))
 					return FALSE
 				var/input = stripped_multiline_input(usr, "Please write a message to announce to the station crew.", "Priority Announcement", "")
-				if(!input || authenticated != 2 || world.time < cooldown_message + COOLDOWN_COMM_MESSAGE || !(usr in view(1,src)))
+				if(!input || authenticated != 2 || world.time < cooldown_message + COOLDOWN_COMM_MESSAGE_LONG || !(usr in view(1,src)))
 					return FALSE
 
 				marine_announcement(input)
@@ -176,7 +156,7 @@
 
 				spawn(35)//some time between AI announcements for evac cancel and SD cancel.
 					if(EvacuationAuthority.evac_status == EVACUATION_STATUS_STANDING_BY)//nothing changed during the wait
-						 //if the self_destruct is active we try to cancel it (which includes lowering alert level to red)
+						//if the self_destruct is active we try to cancel it (which includes lowering alert level to red)
 						if(!EvacuationAuthority.cancel_self_destruct(1))
 							//if SD wasn't active (likely canceled manually in the SD room), then we lower the alert level manually.
 							set_security_level(SEC_LEVEL_RED, TRUE) //both SD and evac are inactive, lowering the security level.
@@ -202,13 +182,12 @@
 					to_chat(usr, SPAN_WARNING("ARES has denied your request for operational security reasons."))
 					return FALSE
 
-				 //Comment block to test
 				if(world.time < cooldown_request + COOLDOWN_COMM_REQUEST)
 					to_chat(usr, SPAN_WARNING("The distress beacon has recently broadcast a message. Please wait."))
 					return FALSE
 
 				if(security_level == SEC_LEVEL_DELTA)
-					to_chat(usr, SPAN_WARNING("The ship is already undergoing self destruct procedures!"))
+					to_chat(usr, SPAN_WARNING("The ship is already undergoing self-destruct procedures!"))
 					return FALSE
 
 				for(var/client/C in GLOB.admins)
@@ -227,7 +206,7 @@
 
 				//Comment to test
 				if(world.time < DISTRESS_TIME_LOCK)
-					to_chat(usr, SPAN_WARNING("The self destruct cannot be activated this early in the operation. Please wait another [time_left_until(DISTRESS_TIME_LOCK, world.time, 1 MINUTES)] minutes before trying again."))
+					to_chat(usr, SPAN_WARNING("The self-destruct cannot be activated this early in the operation. Please wait another [time_left_until(DISTRESS_TIME_LOCK, world.time, 1 MINUTES)] minutes before trying again."))
 					return FALSE
 
 				if(!SSticker.mode)
@@ -238,18 +217,18 @@
 					return FALSE
 
 				if(world.time < cooldown_destruct + COOLDOWN_COMM_DESTRUCT)
-					to_chat(usr, SPAN_WARNING("A self destruct request has already been sent to high command. Please wait."))
+					to_chat(usr, SPAN_WARNING("A self-destruct request has already been sent to high command. Please wait."))
 					return FALSE
 
 				if(get_security_level() == "delta")
-					to_chat(usr, SPAN_WARNING("The [MAIN_SHIP_NAME]'s self destruct is already activated."))
+					to_chat(usr, SPAN_WARNING("The [MAIN_SHIP_NAME]'s self-destruct is already activated."))
 					return FALSE
 
 				for(var/client/C in GLOB.admins)
 					if((R_ADMIN|R_MOD) & C.admin_holder.rights)
 						C << 'sound/effects/sos-morse-code.ogg'
-				message_staff("[key_name(usr)] has requested Self Destruct! (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ccmark=\ref[usr]'>Mark</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];destroyship=\ref[usr]'>GRANT</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];sddeny=\ref[usr]'>DENY</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];adminplayerobservejump=\ref[usr]'>JMP</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];CentcommReply=\ref[usr]'>RPLY</A>)")
-				to_chat(usr, SPAN_NOTICE("A self destruct request has been sent to USCM Central Command."))
+				message_staff("[key_name(usr)] has requested Self-Destruct! (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];ccmark=\ref[usr]'>Mark</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];destroyship=\ref[usr]'>GRANT</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];sddeny=\ref[usr]'>DENY</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];adminplayerobservejump=\ref[usr]'>JMP</A>) (<A HREF='?_src_=admin_holder;[HrefToken(forceGlobal = TRUE)];CentcommReply=\ref[usr]'>RPLY</A>)")
+				to_chat(usr, SPAN_NOTICE("A self-destruct request has been sent to USCM Central Command."))
 				cooldown_destruct = world.time
 				return TRUE
 
@@ -262,8 +241,8 @@
 		if("viewmessage")
 			state = STATE_VIEWMESSAGE
 			if (!currmsg)
-				if(href_list["message-num"]) 	currmsg = text2num(href_list["message-num"])
-				else 							state = STATE_MESSAGELIST
+				if(href_list["message-num"]) currmsg = text2num(href_list["message-num"])
+				else state = STATE_MESSAGELIST
 
 		if("delmessage")
 			state = (currmsg) ? STATE_DELMESSAGE : STATE_MESSAGELIST
@@ -327,10 +306,10 @@
 
 	updateUsrDialog()
 
-/obj/structure/machinery/computer/communications/attack_remote(var/mob/user as mob)
+/obj/structure/machinery/computer/communications/attack_remote(mob/user as mob)
 	return attack_hand(user)
 
-/obj/structure/machinery/computer/communications/attack_hand(var/mob/user as mob)
+/obj/structure/machinery/computer/communications/attack_hand(mob/user as mob)
 	if(..()) return FALSE
 
 	//Should be refactored later, if there's another ship that can appear during a mode with a comm console.
@@ -363,7 +342,7 @@
 					dat += GLOB.admins.len > 0 ? "<BR><A HREF='?src=\ref[src];operation=messageUSCM'>Send a message to USCM</A>" : "<BR>USCM communication offline"
 					dat += "<BR><A HREF='?src=\ref[src];operation=award'>Award a medal</A>"
 					dat += "<BR><A HREF='?src=\ref[src];operation=distress'>Send Distress Beacon</A>"
-					dat += "<BR><A HREF='?src=\ref[src];operation=destroy'>Activate Self Destruct</A>"
+					dat += "<BR><A HREF='?src=\ref[src];operation=destroy'>Activate Self-Destruct</A>"
 					switch(EvacuationAuthority.evac_status)
 						if(EVACUATION_STATUS_STANDING_BY) dat += "<BR><A HREF='?src=\ref[src];operation=evacuation_start'>Initiate emergency evacuation</A>"
 						if(EVACUATION_STATUS_INITIATING) dat += "<BR><A HREF='?src=\ref[src];operation=evacuation_cancel'>Cancel emergency evacuation</A>"
@@ -381,7 +360,7 @@
 			dat += "Are you sure you want to trigger a distress signal? The signal can be picked up by anyone listening, friendly or not. <A HREF='?src=\ref[src];operation=distress'>Confirm</A>"
 
 		if(STATE_DESTROY)
-			dat += "Are you sure you want to trigger the self destruct? This would mean abandoning ship. <A HREF='?src=\ref[src];operation=destroy'>Confirm</A>"
+			dat += "Are you sure you want to trigger the self-destruct? This would mean abandoning ship. <A HREF='?src=\ref[src];operation=destroy'>Confirm</A>"
 
 		if(STATE_MESSAGELIST)
 			dat += "Messages:"
@@ -445,11 +424,11 @@
 	show_browser(user, dat, name, "communications")
 	onclose(user, "communications")
 
- //A simpler version that doesn't have everything the other one has
+//A simpler version that doesn't have everything the other one has
 /obj/structure/machinery/computer/communications/simple
 	circuit = null
 
-/obj/structure/machinery/computer/communications/simple/attack_hand(var/mob/user as mob)
+/obj/structure/machinery/computer/communications/simple/attack_hand(mob/user as mob)
 	user.set_interaction(src)
 	var/dat = "<body>"
 
@@ -501,6 +480,3 @@
 #undef STATE_STATUSDISPLAY
 #undef STATE_ALERT_LEVEL
 #undef STATE_CONFIRM_LEVEL
-#undef COOLDOWN_COMM_MESSAGE
-#undef COOLDOWN_COMM_REQUEST
-#undef COOLDOWN_COMM_CENTRAL

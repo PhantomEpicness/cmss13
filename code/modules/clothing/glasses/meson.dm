@@ -9,7 +9,7 @@
 	deactive_state = "degoggles"
 	actions_types = list(/datum/action/item_action/toggle)
 	toggleable = TRUE
-	fullscreen_vision = /obj/screen/fullscreen/meson
+	fullscreen_vision = /atom/movable/screen/fullscreen/meson
 
 /obj/item/clothing/glasses/meson/prescription
 	name = "prescription optical meson scanner"
@@ -27,6 +27,7 @@
 	vision_flags = SEE_TURFS
 	flags_inventory = COVEREYES
 	flags_item = NODROP|DELONDROP
+	actions_types = null
 
 /obj/item/clothing/glasses/meson/refurbished
 	name = "refurbished meson scanner"
@@ -38,4 +39,4 @@
 	vision_flags = SEE_TURFS
 	flags_inventory = COVEREYES
 	flags_item = MOB_LOCK_ON_EQUIP
-	fullscreen_vision = /obj/screen/fullscreen/meson/refurb
+	fullscreen_vision = /atom/movable/screen/fullscreen/meson/refurb

@@ -1,16 +1,17 @@
 //This file was auto-corrected by findeclaration.exe on 25.5.2012 20:42:31
 
 /obj/structure/machinery/recharger
-	name = "recharger"
+	name = "\improper recharger"
 	icon = 'icons/obj/structures/props/stationobjs.dmi'
 	icon_state = "recharger"
-	anchored = 1
-	use_power = 1
+	anchored = TRUE
+	use_power = USE_POWER_IDLE
 	idle_power_usage = 4
-	active_power_usage = 15000	//15 kW
+	active_power_usage = 15000 //15 kW
+	black_market_value = 35
 	var/obj/item/charging = null
 	var/percent_charge_complete = 0
-	var/list/allowed_devices = list(/obj/item/weapon/melee/baton, /obj/item/cell, /obj/item/weapon/gun/energy, /obj/item/device/defibrillator)
+	var/list/allowed_devices = list(/obj/item/weapon/melee/baton, /obj/item/cell, /obj/item/weapon/gun/energy, /obj/item/device/defibrillator, /obj/item/tool/portadialysis, /obj/item/clothing/suit/auto_cpr)
 
 	var/charge_amount = 1000
 
@@ -29,12 +30,17 @@
 		// Checks to make sure he's not in space doing it, and that the area got proper power.
 		var/area/a = get_area(src)
 		if(!isarea(a) || (a.power_equip == 0 && !a.unlimited_power))
-			to_chat(user, SPAN_DANGER("The [name] blinks red as you try to insert the item!"))
+			to_chat(user, SPAN_DANGER("\The [name] blinks red as you try to insert the item!"))
 			return
 		if(istype(G, /obj/item/device/defibrillator))
 			var/obj/item/device/defibrillator/D = G
 			if(D.ready)
-				to_chat(user, SPAN_WARNING("It won't fit, put the paddles back into [D] first!"))
+				to_chat(user, SPAN_WARNING("It won't fit, put the paddles back into \the [D] first!"))
+				return
+		if(istype(G, /obj/item/tool/portadialysis))
+			var/obj/item/tool/portadialysis/P = G
+			if(P.attached)
+				to_chat(user, SPAN_WARNING("It won't fit, detach it from [P.attached] first!"))
 				return
 		if(user.drop_inv_item_to_loc(G, src))
 			charging = G
@@ -42,7 +48,7 @@
 			update_icon()
 	else if(HAS_TRAIT(G, TRAIT_TOOL_WRENCH))
 		if(charging)
-			to_chat(user, SPAN_DANGER("Remove [charging] first!"))
+			to_chat(user, SPAN_DANGER("Remove \the [charging] first!"))
 			return
 		anchored = !anchored
 		to_chat(user, "You [anchored ? "attached" : "detached"] the recharger.")
@@ -64,11 +70,11 @@
 
 /obj/structure/machinery/recharger/process()
 	if(inoperable() || !anchored)
-		update_use_power(0)
+		update_use_power(USE_POWER_NONE)
 		update_icon()
 		return
 	if(!charging)
-		update_use_power(1)
+		update_use_power(USE_POWER_IDLE)
 		percent_charge_complete = 0
 		update_icon()
 	//This is an awful check. Holy cow.
@@ -80,11 +86,11 @@
 			if(!E.cell.fully_charged())
 				E.cell.give(charge_amount)
 				percent_charge_complete = E.cell.percent()
-				update_use_power(2)
+				update_use_power(USE_POWER_ACTIVE)
 				update_icon()
 			else
 				percent_charge_complete = 100
-				update_use_power(1)
+				update_use_power(USE_POWER_IDLE)
 				update_icon()
 			return
 
@@ -94,15 +100,15 @@
 				if(!B.bcell.fully_charged())
 					B.bcell.give(charge_amount)
 					percent_charge_complete = B.bcell.percent()
-					update_use_power(2)
+					update_use_power(USE_POWER_ACTIVE)
 					update_icon()
 				else
 					percent_charge_complete = 100
-					update_use_power(1)
+					update_use_power(USE_POWER_IDLE)
 					update_icon()
 			else
 				percent_charge_complete = 0
-				update_use_power(1)
+				update_use_power(USE_POWER_IDLE)
 				update_icon()
 			return
 
@@ -111,11 +117,39 @@
 			if(!D.dcell.fully_charged())
 				D.dcell.give(active_power_usage*CELLRATE)
 				percent_charge_complete = D.dcell.percent()
-				update_use_power(2)
+				update_use_power(USE_POWER_ACTIVE)
 				update_icon()
 			else
 				percent_charge_complete = 100
-				update_use_power(1)
+				update_use_power(USE_POWER_IDLE)
+				update_icon()
+			return
+
+
+
+		if(istype(charging, /obj/item/clothing/suit/auto_cpr))
+			var/obj/item/clothing/suit/auto_cpr/A = charging
+			if(!A.pdcell.fully_charged())
+				A.pdcell.give(active_power_usage*CELLRATE)
+				percent_charge_complete = A.pdcell.percent()
+				update_use_power(USE_POWER_ACTIVE)
+				update_icon()
+			else
+				percent_charge_complete = 100
+				update_use_power(USE_POWER_IDLE)
+				update_icon()
+			return
+
+		if(istype(charging, /obj/item/tool/portadialysis))
+			var/obj/item/tool/portadialysis/P = charging
+			if(!P.pdcell.fully_charged())
+				P.pdcell.give(active_power_usage*CELLRATE)
+				percent_charge_complete = P.pdcell.percent()
+				update_use_power(USE_POWER_ACTIVE)
+				update_icon()
+			else
+				percent_charge_complete = 100
+				update_use_power(USE_POWER_IDLE)
 				update_icon()
 			return
 
@@ -124,11 +158,11 @@
 			if(!C.fully_charged())
 				C.give(active_power_usage*CELLRATE)
 				percent_charge_complete = C.percent()
-				update_use_power(2)
+				update_use_power(USE_POWER_ACTIVE)
 				update_icon()
 			else
 				percent_charge_complete = 100
-				update_use_power(1)
+				update_use_power(USE_POWER_IDLE)
 				update_icon()
 			return
 
@@ -139,13 +173,13 @@
 				if(!D.dcell.fully_charged())
 					icon_state = icon_state_charging
 					D.dcell.give(active_power_usage*CELLRATE)
-					update_use_power(2)
+					update_use_power(USE_POWER_ACTIVE)
 				else
 					icon_state = icon_state_charged
-					update_use_power(1)
+					update_use_power(USE_POWER_IDLE)
 			else
 				icon_state = icon_state_idle
-				update_use_power(1)
+				update_use_power(USE_POWER_IDLE)
 			return
 		*/
 
@@ -169,7 +203,7 @@
 			B.bcell.charge = 0
 	..(severity)
 
-/obj/structure/machinery/recharger/update_icon()	//we have an update_icon() in addition to the stuff in process to make it feel a tiny bit snappier.
+/obj/structure/machinery/recharger/update_icon() //we have an update_icon() in addition to the stuff in process to make it feel a tiny bit snappier.
 	src.overlays = 0
 	if((inoperable()))
 		return
@@ -193,12 +227,23 @@
 	else if(istype(charging, /obj/item/weapon/melee/baton))
 		overlays += "recharger-baton"
 
+/obj/structure/machinery/recharger/get_examine_text(mob/user)
+	. = ..()
+	. += "There's [charging ? "[charging]" : "nothing"] in the charger."
+	if(charging)
+		if(istype(charging, /obj/item/cell))
+			var/obj/item/cell/C = charging
+			. += "Current charge: [C.charge] ([C.percent()]%)"
+
+/obj/structure/machinery/recharger/unanchored
+	anchored = FALSE
+
 /*
-obj/structure/machinery/recharger/wallcharger
+/obj/structure/machinery/recharger/wallcharger
 	name = "wall recharger"
 	icon = 'icons/obj/structures/props/stationobjs.dmi'
 	icon_state = "wrecharger0"
-	active_power_usage = 25000	//25 kW , It's more specialized than the standalone recharger (guns and batons only) so make it more powerful
+	active_power_usage = 25000 //25 kW , It's more specialized than the standalone recharger (guns and batons only) so make it more powerful
 	allowed_devices = list(/obj/item/weapon/gun/energy, /obj/item/weapon/melee/baton)
 	icon_state_charged = "wrecharger2"
 	icon_state_idle = "wrecharger0"

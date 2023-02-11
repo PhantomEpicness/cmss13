@@ -7,6 +7,13 @@ on the go. There's also buffering involved. But, we do need the ammo to check ha
 you're looking back on the different shotgun projectiles available. In short of it, it's not needed to have more than
 one type of shotgun ammo, but I think it helps in referencing it. ~N
 */
+
+var/list/shotgun_boxes_12g = list(
+	/obj/item/ammo_magazine/shotgun/buckshot,
+	/obj/item/ammo_magazine/shotgun/flechette,
+	/obj/item/ammo_magazine/shotgun/slugs
+	)
+
 /obj/item/ammo_magazine/shotgun
 	name = "box of shotgun slugs"
 	desc = "A box filled with heavy shotgun shells. A timeless classic. 12 Gauge."
@@ -20,6 +27,13 @@ one type of shotgun ammo, but I think it helps in referencing it. ~N
 	flags_magazine = AMMUNITION_REFILLABLE|AMMUNITION_HANDFUL_BOX
 	handful_state = "slug_shell"
 	transfer_handful_amount = 5
+
+/obj/item/ammo_magazine/shotgun/attack_self(mob/user)
+	if(current_rounds == 0)
+		new /obj/item/stack/sheet/cardboard(user.loc)
+		qdel(src)
+	else
+		return ..()
 
 /obj/item/ammo_magazine/shotgun/slugs//for distinction on weapons that can't take child objects but still take slugs.
 
@@ -115,12 +129,15 @@ also doesn't really matter. You can only reload them with handfuls.
 /obj/item/ammo_magazine/internal/shotgun/type23/dragonsbreath
 	default_ammo = /datum/ammo/bullet/shotgun/heavy/buckshot/dragonsbreath
 
+/obj/item/ammo_magazine/internal/shotgun/type23/beanbag
+	default_ammo = /datum/ammo/bullet/shotgun/heavy/beanbag
+
 /obj/item/ammo_magazine/internal/shotgun/cmb
 	default_ammo = /datum/ammo/bullet/shotgun/buckshot
-	max_rounds = 8
+	max_rounds = 4
 
 /obj/item/ammo_magazine/internal/shotgun/cmb/m3717
-	max_rounds = 10
+	max_rounds = 5
 
 //-------------------------------------------------------
 
@@ -128,19 +145,20 @@ also doesn't really matter. You can only reload them with handfuls.
 Handfuls of shotgun rounds. For spawning directly on mobs in roundstart, ERTs, etc
 */
 
-var/list/shotgun_shells_8g = list(
+var/list/shotgun_handfuls_8g = list(
 	/obj/item/ammo_magazine/handful/shotgun/heavy/slug,
 	/obj/item/ammo_magazine/handful/shotgun/heavy/buckshot,
 	/obj/item/ammo_magazine/handful/shotgun/heavy/flechette,
 	/obj/item/ammo_magazine/handful/shotgun/heavy/dragonsbreath
 	)
 
-var/list/shotgun_shells_12g = list(
+var/list/shotgun_handfuls_12g = list(
 	/obj/item/ammo_magazine/handful/shotgun/slug,
 	/obj/item/ammo_magazine/handful/shotgun/buckshot,
 	/obj/item/ammo_magazine/handful/shotgun/flechette,
 	/obj/item/ammo_magazine/handful/shotgun/incendiary,
-	/obj/item/ammo_magazine/handful/shotgun/buckshot/incendiary
+	/obj/item/ammo_magazine/handful/shotgun/buckshot/incendiary,
+	/obj/item/ammo_magazine/handful/shotgun/beanbag
 	)
 
 /obj/item/ammo_magazine/handful/shotgun

@@ -163,9 +163,7 @@
 	color = "#C8A5DC" // rgb: 200, 165, 220
 	chemclass = CHEM_CLASS_SPECIAL
 	objective_value = OBJECTIVE_HIGH_VALUE
-	properties = list(	PROPERTY_CROSSMETABOLIZING = 1,
-						PROPERTY_HYPERGENETIC = 1,
-						PROPERTY_ANTICORROSIVE = 1,
+	properties = list( PROPERTY_CROSSMETABOLIZING = 1,
 						PROPERTY_ANTITOXIC = 1,
 						PROPERTY_HEMOGENIC = 9,
 						PROPERTY_OXYGENATING = 6,
@@ -292,8 +290,8 @@
 	overdose_critical = LOWM_REAGENTS_OVERDOSE_CRITICAL
 	custom_metabolism = AMOUNT_PER_TIME(1, 5 SECONDS)
 	chemclass = CHEM_CLASS_COMMON
-	properties = list(PROPERTY_PAINKILLING = 1.5, PROPERTY_ELECTROGENETIC = 4)
-	flags = REAGENT_TYPE_MEDICAL | REAGENT_SCANNABLE | REAGENT_NOT_INGESTIBLE
+	properties = list(PROPERTY_PAINKILLING = 1.5, PROPERTY_ELECTROGENETIC = 4, PROPERTY_INTRAVENOUS = 1)
+	flags = REAGENT_TYPE_MEDICAL | REAGENT_SCANNABLE
 
 /datum/reagent/medical/ultrazine
 	name = "Ultrazine"
@@ -306,7 +304,7 @@
 	overdose_critical = LOWM_REAGENTS_OVERDOSE_CRITICAL
 	chemclass = CHEM_CLASS_RARE
 	properties = list(PROPERTY_MUSCLESTIMULATING = 40, PROPERTY_ADDICTIVE = 8)
-	flags = REAGENT_TYPE_MEDICAL
+	flags = REAGENT_TYPE_MEDICAL | REAGENT_NO_GENERATION
 
 /datum/reagent/medical/stimulant
 	name = "Stimulant"
@@ -319,7 +317,7 @@
 	overdose_critical = LOWH_REAGENTS_OVERDOSE_CRITICAL
 	chemclass = CHEM_CLASS_RARE
 	properties = list(PROPERTY_UNKNOWN = 1)
-	flags = REAGENT_TYPE_MEDICAL
+	flags = REAGENT_TYPE_MEDICAL | REAGENT_NO_GENERATION
 
 /datum/reagent/medical/cryoxadone
 	name = "Cryoxadone"
@@ -369,7 +367,7 @@
 	overdose_critical = REAGENTS_OVERDOSE_CRITICAL
 	properties = list(PROPERTY_UNKNOWN = 1)
 
-/datum/reagent/medical/ethylredoxrazine	// FUCK YOU, ALCOHOL
+/datum/reagent/medical/ethylredoxrazine // FUCK YOU, ALCOHOL
 	name = "Ethylredoxrazine"
 	id = "ethylredoxrazine"
 	description = "Neutralizes the effects of alcohol in the blood stream, by oxidizing it into water molecules. However, it does not stop immediate intoxication. Ethylredoxrazine being a powerful oxidizer, it becomes toxic in high doses."

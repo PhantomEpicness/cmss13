@@ -14,14 +14,14 @@
 	destroyed_stack_amount = 4
 	barricade_hitsound = 'sound/effects/metalhit.ogg'
 	barricade_type = "plasteel"
-	density = 0
+	density = FALSE
 	closed = TRUE
 	can_wire = TRUE
 	repair_materials = list("plasteel" = 0.3)
 
 	var/build_state = BARRICADE_BSTATE_SECURED //Look at __game.dm for barricade defines
 	var/tool_cooldown = 0 //Delay to apply tools to prevent spamming
-	var/busy = 0 //Standard busy check
+	var/busy = FALSE //Standard busy check
 	var/linked = 0
 	var/recentlyflipped = FALSE
 	var/hasconnectionoverlay = TRUE
@@ -46,16 +46,16 @@
 	else
 		return 0
 
-/obj/structure/barricade/plasteel/examine(mob/user)
-	..()
+/obj/structure/barricade/plasteel/get_examine_text(mob/user)
+	. = ..()
 
 	switch(build_state)
 		if(BARRICADE_BSTATE_SECURED)
-			to_chat(user, SPAN_INFO("The protection panel is still tighly screwed in place."))
+			. += SPAN_INFO("The protection panel is still tightly screwed in place.")
 		if(BARRICADE_BSTATE_UNSECURED)
-			to_chat(user, SPAN_INFO("The protection panel has been removed, you can see the anchor bolts."))
+			. += SPAN_INFO("The protection panel has been removed, you can see the anchor bolts.")
 		if(BARRICADE_BSTATE_MOVABLE)
-			to_chat(user, SPAN_INFO("The protection panel has been removed and the anchor bolts loosened. It's ready to be taken apart."))
+			. += SPAN_INFO("The protection panel has been removed and the anchor bolts loosened. It's ready to be taken apart.")
 
 /obj/structure/barricade/plasteel/weld_cade(obj/item/W, mob/user)
 	busy = TRUE
@@ -64,6 +64,9 @@
 
 /obj/structure/barricade/plasteel/attackby(obj/item/W, mob/user)
 	if(iswelder(W))
+		if(!HAS_TRAIT(W, TRAIT_TOOL_BLOWTORCH))
+			to_chat(user, SPAN_WARNING("You need a stronger blowtorch!"))
+			return
 		if(busy || tool_cooldown > world.time)
 			return
 		tool_cooldown = world.time + 10
@@ -189,20 +192,20 @@
 				user.visible_message(SPAN_NOTICE("[user] starts unseating [src]'s panels."),
 				SPAN_NOTICE("You start unseating [src]'s panels."))
 				playsound(src.loc, 'sound/items/Crowbar.ogg', 25, 1)
-				busy = 1
+				busy = TRUE
 				if(do_after(user, 50 * user.get_skill_duration_multiplier(SKILL_CONSTRUCTION), INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_BUILD, src))
-					busy = 0
+					busy = FALSE
 					user.visible_message(SPAN_NOTICE("[user] takes [src]'s panels apart."),
 					SPAN_NOTICE("You take [src]'s panels apart."))
 					playsound(loc, 'sound/items/Deconstruct.ogg', 25, 1)
-					destroy(TRUE) //Note : Handles deconstruction too !
-				else busy = 0
+					deconstruct(TRUE) //Note : Handles deconstruction too !
+				else busy = FALSE
 				return
 
 	. = ..()
 
 /obj/structure/barricade/plasteel/attack_hand(mob/user as mob)
-	if(isXeno(user))
+	if(isxeno(user))
 		return
 
 	if(closed)
@@ -229,12 +232,12 @@
 			if(istype(src, /obj/structure/barricade/plasteel))
 				recentlyflipped = FALSE
 
-/obj/structure/barricade/plasteel/proc/open(var/obj/structure/barricade/plasteel/origin)
+/obj/structure/barricade/plasteel/proc/open(obj/structure/barricade/plasteel/origin)
 	if(!closed)
 		return
 	playsound(src.loc, 'sound/items/Ratchet.ogg', 25, 1)
 	closed = 0
-	density = 1
+	density = TRUE
 	if(linked)
 		for(var/direction in cardinal)
 			for(var/obj/structure/barricade/plasteel/cade in get_step(src, direction))
@@ -242,12 +245,12 @@
 					cade.open(src)
 	update_icon()
 
-/obj/structure/barricade/plasteel/proc/close(var/obj/structure/barricade/plasteel/origin)
+/obj/structure/barricade/plasteel/proc/close(obj/structure/barricade/plasteel/origin)
 	if(closed)
 		return
 	playsound(src.loc, 'sound/items/Ratchet.ogg', 25, 1)
 	closed = 1
-	density = 0
+	density = FALSE
 	if(linked)
 		for(var/direction in cardinal)
 			for(var/obj/structure/barricade/plasteel/cade in get_step(src, direction))
@@ -263,7 +266,7 @@
 	update_icon()
 	. = ..()
 
-/obj/structure/barricade/plasteel/wired/initialize_pass_flags(var/datum/pass_flags_container/PF)
+/obj/structure/barricade/plasteel/wired/initialize_pass_flags(datum/pass_flags_container/PF)
 	..()
 	flags_can_pass_front_temp &= ~PASS_OVER_THROW_MOB
 	flags_can_pass_behind_temp &= ~PASS_OVER_THROW_MOB
@@ -279,7 +282,6 @@
 	debris = list(/obj/item/stack/sheet/metal)
 	stack_amount = 6
 	destroyed_stack_amount = 3
-	barricade_hitsound = "sound/effects/metalhit.ogg"
 	barricade_type = "folding_metal"
 	repair_materials = list("metal" = 0.3, "plasteel" = 0.45)
 

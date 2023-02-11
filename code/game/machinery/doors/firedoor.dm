@@ -7,8 +7,8 @@
 #define FIREDOOR_MIN_TEMP 0
 
 // Bitflags
-#define FIREDOOR_ALERT_HOT      1
-#define FIREDOOR_ALERT_COLD     2
+#define FIREDOOR_ALERT_HOT   1
+#define FIREDOOR_ALERT_COLD  2
 
 
 /obj/structure/machinery/door/firedoor
@@ -17,13 +17,13 @@
 	icon = 'icons/obj/structures/doors/DoorHazard.dmi'
 	icon_state = "door_open"
 	req_one_access = list(ACCESS_CIVILIAN_ENGINEERING)
-	opacity = 0
-	density = 0
+	opacity = FALSE
+	density = FALSE
 	layer = FIREDOOR_OPEN_LAYER
 	open_layer = FIREDOOR_OPEN_LAYER // Just below doors when open
 	closed_layer = FIREDOOR_CLOSED_LAYER // Just above doors when closed
 	power_channel = POWER_CHANNEL_ENVIRON
-	use_power = 1
+	use_power = USE_POWER_IDLE
 	idle_power_usage = 5
 
 	var/blocked = 0
@@ -69,15 +69,15 @@
 	return ..()
 
 
-/obj/structure/machinery/door/firedoor/examine(mob/user)
-	..()
+/obj/structure/machinery/door/firedoor/get_examine_text(mob/user)
+	. = ..()
 	if(get_dist(src, user) > 1 && !isRemoteControlling(user))
 		return
 
 	if(pdiff >= FIREDOOR_MAX_PRESSURE_DIFF)
-		to_chat(user, SPAN_WARNING("WARNING: Current pressure differential is [pdiff]kPa! Opening door may result in injury!"))
+		. += SPAN_WARNING("WARNING: Current pressure differential is [pdiff]kPa! Opening door may result in injury!")
 
-	to_chat(user, "<b>Sensor readings:</b>")
+	. += "<b>Sensor readings:</b>"
 	for(var/index = 1; index <= tile_info.len; index++)
 		var/o = "&nbsp;&nbsp;"
 		switch(index)
@@ -91,7 +91,7 @@
 				o += "WEST: "
 		if(tile_info[index] == null)
 			o += SPAN_WARNING("DATA UNAVAILABLE")
-			to_chat(user, o)
+			. += o
 			continue
 		var/celsius = convert_k2c(tile_info[index][1])
 		var/pressure = tile_info[index][2]
@@ -102,14 +102,14 @@
 		o += "[celsius]&deg;C</span> "
 		o += "<span style='color:blue'>"
 		o += "[pressure]kPa</span></li>"
-		to_chat(user, o)
+		. += o
 
 	if(islist(users_to_open) && users_to_open.len)
 		var/users_to_open_string = users_to_open[1]
 		if(users_to_open.len >= 2)
 			for(var/i = 2 to users_to_open.len)
 				users_to_open_string += ", [users_to_open[i]]"
-		to_chat(user, "These people have opened \the [src] during an alert: [users_to_open_string].")
+		. += "These people have opened \the [src] during an alert: [users_to_open_string]."
 
 /obj/structure/machinery/door/firedoor/Collided(atom/movable/AM)
 	if(panel_open || operating)
@@ -128,13 +128,12 @@
 		return
 
 	var/alarmed = lockdown
-	for(var/area/A in areas_added)		//Checks if there are fire alarms in any areas associated with that firedoor
+	for(var/area/A in areas_added) //Checks if there are fire alarms in any areas associated with that firedoor
 		if(A.flags_alarm_state & ALARM_WARNING_FIRE || A.air_doors_activated)
 			alarmed = 1
-
-	var/answer = alert(user, "Would you like to [density ? "open" : "close"] this [src.name]?[ alarmed && density ? "\nNote that by doing so, you acknowledge any damages from opening this\n[src.name] as being your own fault, and you will be held accountable under the law." : ""]",\
-	"\The [src]", "Yes, [density ? "open" : "close"]", "No")
-	if(answer == "No")
+	if(tgui_alert(user,\
+	"Would you like to [density ? "open" : "close"] this [src.name]?[ alarmed && density ? "\nNote that by doing so, you acknowledge any damages from opening this\n[src.name] as being your own fault, and you will be held accountable under the law." : ""]",\
+	"\The [src]", list("Yes", "No")) != "Yes")
 		return
 	if(user.is_mob_incapacitated() || (!user.canmove && !isRemoteControlling(user)) || (get_dist(src, user) > 1  && !isRemoteControlling(user)))
 		to_chat(user, "Sorry, you must remain able bodied and close to \the [src] in order to use it.")
@@ -157,14 +156,14 @@
 			// Accountability!
 			users_to_open |= user.name
 			needs_to_close = 1
-		INVOKE_ASYNC(src, .proc/open, TRUE)
+		INVOKE_ASYNC(src, PROC_REF(open), TRUE)
 	else
-		INVOKE_ASYNC(src, .proc/close)
+		INVOKE_ASYNC(src, PROC_REF(close))
 
 	if(needs_to_close)
 		spawn(50)
 			alarmed = 0
-			for(var/area/A in areas_added)		//Just in case a fire alarm is turned off while the firedoor is going through an autoclose cycle
+			for(var/area/A in areas_added) //Just in case a fire alarm is turned off while the firedoor is going through an autoclose cycle
 				if(A.flags_alarm_state & ALARM_WARNING_FIRE || A.air_doors_activated)
 					alarmed = 1
 			if(alarmed)
@@ -175,7 +174,7 @@
 	add_fingerprint(user)
 	if(operating)
 		return//Already doing something.
-	if(istype(C, /obj/item/tool/weldingtool))
+	if(iswelder(C))
 		var/obj/item/tool/weldingtool/W = C
 		if(W.remove_fuel(0, user))
 			blocked = !blocked
@@ -225,9 +224,9 @@
 			"You force \the [ blocked ? "welded" : "" ] [src] [density ? "open" : "closed"] with \the [C]!",\
 			"You hear metal strain and groan, and a door [density ? "opening" : "closing"].")
 			if(density)
-				INVOKE_ASYNC(src, .proc/open, TRUE)
+				INVOKE_ASYNC(src, PROC_REF(open), TRUE)
 			else
-				INVOKE_ASYNC(src, .proc/close)
+				INVOKE_ASYNC(src, PROC_REF(close))
 			return
 
 /obj/structure/machinery/door/firedoor/try_to_activate_door(mob/user)
@@ -249,7 +248,7 @@
 	latetoggle()
 	return ..()
 
-/obj/structure/machinery/door/firedoor/open(var/forced = FALSE)
+/obj/structure/machinery/door/firedoor/open(forced = FALSE)
 	if(!forced)
 		if(inoperable())
 			return //needs power to open unless it was forced

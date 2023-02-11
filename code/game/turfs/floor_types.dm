@@ -30,12 +30,12 @@
 
 
 /turf/open/floor/plating/attackby(obj/item/C, mob/user)
-	if(istype(C, /obj/item/stack/rods))
+	if(istypestrict(C, /obj/item/stack/rods))
 		var/obj/item/stack/rods/R = C
 		if(R.get_amount() < 2)
 			to_chat(user, SPAN_WARNING("You need more rods."))
 			return
-		to_chat(user, SPAN_NOTICE("Reinforcing the floor."))
+		to_chat(user, SPAN_NOTICE("You start reinforcing the floor."))
 		var/current_type = type
 		if(do_after(user, 30 * user.get_skill_duration_multiplier(SKILL_CONSTRUCTION), INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_BUILD) && current_type == type)
 			if(!R)
@@ -48,7 +48,10 @@
 		var/obj/item/stack/cable_coil/coil = C
 		coil.turf_place(src, user)
 		return
-	if(istype(C, /obj/item/tool/weldingtool))
+	if(iswelder(C))
+		if(!HAS_TRAIT(C, TRAIT_TOOL_BLOWTORCH))
+			to_chat(user, SPAN_WARNING("You need a stronger blowtorch!"))
+			return
 		var/obj/item/tool/weldingtool/welder = C
 		if(welder.isOn() && (broken || burnt))
 			if(welder.remove_fuel(0, user))
@@ -108,6 +111,13 @@
 /turf/open/floor/plating/icefloor/Initialize(mapload, ...)
 	. = ..()
 	name = "plating"
+
+/// Visually like plating+catwalks but without overlaying or interactions - mainly for Reqs Elevator
+/turf/open/floor/plating/bare_catwalk
+	name = "catwalk"
+	desc = "Cats really don't like these things."
+	icon = 'icons/turf/almayer.dmi'
+	icon_state = "plating_catwalk"
 
 /turf/open/floor/plating/plating_catwalk
 	name = "catwalk"
@@ -200,10 +210,18 @@
 	icon = 'icons/turf/floors/floors.dmi'
 	icon_state = "black"
 
+/turf/open/floor/almayer/empty/Initialize(mapload, ...)
+	. = ..()
+	GLOB.asrs_empty_space_tiles_list += src
+
+/turf/open/floor/almayer/empty/Destroy(force) // may as well
+	. = ..()
+	GLOB.asrs_empty_space_tiles_list -= src
+
 /turf/open/floor/almayer/empty/is_weedable()
 	return NOT_WEEDABLE
 
-/turf/open/floor/almayer/empty/ex_act(severity) //Should make it indestructable
+/turf/open/floor/almayer/empty/ex_act(severity) //Should make it indestructible
 	return
 
 /turf/open/floor/almayer/empty/fire_act(exposed_temperature, exposed_volume)
@@ -212,32 +230,35 @@
 /turf/open/floor/almayer/empty/attackby() //This should fix everything else. No cables, etc
 	return
 
-/turf/open/floor/almayer/empty/Entered(var/atom/movable/AM)
+/turf/open/floor/almayer/empty/Entered(atom/movable/AM)
 	..()
 	if(!isobserver(AM))
-		addtimer(CALLBACK(src, .proc/enter_depths, AM), 0.2 SECONDS)
+		addtimer(CALLBACK(src, PROC_REF(enter_depths), AM), 0.2 SECONDS)
 
-/turf/open/floor/almayer/empty/proc/enter_depths(var/atom/movable/AM)
+/turf/open/floor/almayer/empty/proc/enter_depths(atom/movable/AM)
 	if(AM.throwing == 0 && istype(get_turf(AM), /turf/open/floor/almayer/empty))
 		AM.visible_message(SPAN_WARNING("[AM] falls into the depths!"), SPAN_WARNING("You fall into the depths!"))
-		for(var/i in GLOB.disposal_retrieval_list)
-			var/obj/structure/disposaloutlet/retrieval/R = i
-			if(R.z != src.z)	continue
-			var/obj/structure/disposalholder/H = new()
-			AM.forceMove(H)
-			sleep(10)
-			H.forceMove(R)
-			for(var/mob/living/M in H)
-				M.take_overall_damage(100, 0, "Blunt Trauma")
-			sleep(20)
-			for(var/mob/living/M in H)
-				M.take_overall_damage(20, 0, "Blunt Trauma")
-			for(var/obj/effect/decal/cleanable/C in contents) //get rid of blood
-				qdel(C)
-			R.expel(H)
+		if(!ishuman(AM))
+			qdel(AM)
 			return
+		var/mob/living/carbon/human/thrown_human = AM
+		for(var/atom/computer as anything in supply_controller.bound_supply_computer_list)
+			computer.balloon_alert_to_viewers("you hear horrifying noises coming from the elevator!")
 
-		qdel(AM)
+		var/area/area_shuttle = supply_controller.shuttle?.get_location_area()
+		if(!area_shuttle)
+			return
+		var/list/turflist = list()
+		for(var/turf/turf in area_shuttle)
+			turflist |= turf
+
+		thrown_human.forceMove(pick(turflist))
+
+		var/timer = 0.5 SECONDS
+		for(var/index in 1 to 10)
+			timer += 0.5 SECONDS
+			addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(maul_human), thrown_human), timer)
+		return
 
 	else
 		for(var/obj/effect/decal/cleanable/C in contents) //for the off chance of someone bleeding mid=flight
@@ -338,7 +359,7 @@
 
 /turf/open/floor/wood/ship
 	name = "fake wooden floor"
-	desc = "This metal floor has been painted to look like one made of wood. Unfortunately, wood and high pressure internal atmosphere don't mix well. Wood is a major fire hazard don't'cha know."
+	desc = "This metal floor has been painted to look like one made of wood. Unfortunately, wood and high-pressure internal atmosphere don't mix well. Wood is a major fire hazard don't'cha know."
 	tile_type = /obj/item/stack/tile/wood/fake
 
 /turf/open/floor/vault
@@ -535,7 +556,7 @@
 	icon = 'icons/turf/floors/carpet_manual.dmi'//I dunno man, CM-ified carpet sprites are placed manually and I can't be bothered to write a new system for 'em.
 	icon_state = "single"
 
-////// Mechbay /////////////////:
+// Mechbay
 /turf/open/floor/mech_bay_recharge_floor
 	name = "Mech Bay Recharge Station"
 	icon = 'icons/obj/structures/props/mech.dmi'
@@ -564,7 +585,7 @@
 
 /turf/open/floor/interior/tatami
 	name = "tatami flooring"
-	desc = "A type of flooring often used in traditional japanese-style housing."
+	desc = "A type of flooring often used in traditional Japanese-style housing."
 	icon_state = "tatami"
 
 /turf/open/floor/interior/plastic

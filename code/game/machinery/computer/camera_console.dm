@@ -14,13 +14,14 @@
 
 	// Stuff needed to render the map
 	var/map_name
-	var/obj/screen/map_view/cam_screen
-	var/obj/screen/background/cam_background
+	var/atom/movable/screen/map_view/cam_screen
+	var/atom/movable/screen/background/cam_background
 
 	/// All turfs within range of the currently active camera
 	var/list/range_turfs = list()
 
 	var/colony_camera_mapload = TRUE
+	var/admin_console = FALSE
 
 /obj/structure/machinery/computer/security/Initialize(mapload)
 	. = ..()
@@ -34,6 +35,7 @@
 
 	// Initialize map objects
 	cam_screen = new
+	cam_screen.icon = null
 	cam_screen.name = "screen"
 	cam_screen.assigned_map = map_name
 	cam_screen.del_on_map_removal = FALSE
@@ -47,11 +49,11 @@
 	qdel(cam_background)
 	return ..()
 
-/obj/structure/machinery/computer/security/attack_remote(var/mob/user as mob)
+/obj/structure/machinery/computer/security/attack_remote(mob/user as mob)
 	return attack_hand(user)
 
 /obj/structure/machinery/computer/security/attack_hand(mob/user)
-	if(is_admin_level(z))
+	if(!admin_console && is_admin_level(z))
 		to_chat(user, SPAN_DANGER("<b>Unable to establish a connection</b>: \black You're too far away from the ship!"))
 		return
 	if(inoperable())
@@ -59,6 +61,11 @@
 	if(!isRemoteControlling(user))
 		user.set_interaction(src)
 	tgui_interact(user)
+
+/obj/structure/machinery/computer/security/ui_status(mob/user, datum/ui_state/state)
+	. = ..()
+	if(inoperable())
+		return UI_DISABLED
 
 /obj/structure/machinery/computer/security/tgui_interact(mob/user, datum/tgui/ui)
 	// Update UI
@@ -76,7 +83,7 @@
 			concurrent_users += user_ref
 		// Turn on the console
 		if(length(concurrent_users) == 1 && is_living)
-			use_power(active_power_usage)
+			update_use_power(USE_POWER_ACTIVE)
 		// Register map objects
 		user.client.register_map_obj(cam_screen)
 		user.client.register_map_obj(cam_background)
@@ -118,10 +125,11 @@
 		var/list/cameras = get_available_cameras()
 		var/obj/structure/machinery/camera/selected_camera
 		selected_camera = cameras[c_tag]
-		// Cause Unicode breaks c_tags
+		// Unicode breaks c_tags
+		// Currently the only issues with character names comes from the improper or proper tags and so we strip and recheck if not found.
 		if(!selected_camera)
 			for(var/I in cameras)
-				if(copytext_char(I, 3) == c_tag)
+				if(strip_improper(I) == c_tag)
 					selected_camera = cameras[I]
 					break
 		current = selected_camera
@@ -201,12 +209,14 @@
 		current = null
 		last_camera_turf = null
 		range_turfs = list()
-		use_power(0)
+		if(use_power)
+			update_use_power(USE_POWER_IDLE)
 		STOP_PROCESSING(SSfastobj, src)
 	user.unset_interaction()
 
 /obj/structure/machinery/computer/security/proc/show_camera_static()
 	cam_screen.vis_contents.Cut()
+	last_camera_turf = null
 	cam_background.icon_state = "scanline2"
 	cam_background.fill_rect(1, 1, DEFAULT_MAP_SIZE, DEFAULT_MAP_SIZE)
 
@@ -231,7 +241,7 @@
 	icon = 'icons/obj/structures/props/stationobjs.dmi'
 	icon_state = "telescreen"
 	network = list("thunder")
-	density = 0
+	density = FALSE
 	circuit = null
 
 /obj/structure/machinery/computer/security/telescreen/update_icon()
@@ -249,7 +259,7 @@
 
 /obj/structure/machinery/computer/security/wooden_tv
 	name = "Security Cameras"
-	desc = "An old TV hooked into the stations camera network."
+	desc = "An old TV hooked into the station's camera network."
 	icon_state = "security_det"
 	circuit = null
 
@@ -290,7 +300,7 @@
 
 
 /obj/structure/machinery/computer/security/almayer
-	density = 0
+	density = FALSE
 	icon_state = "security_cam"
 	network = list(CAMERA_NET_ALMAYER)
 
@@ -324,11 +334,12 @@
 /obj/structure/machinery/computer/security/mortar
 	name = "Mortar Camera Interface"
 	alpha = 0
-	mouse_opacity = 0
+	mouse_opacity = MOUSE_OPACITY_TRANSPARENT
 	density = FALSE
-	use_power = 0
+	use_power = USE_POWER_NONE
 	idle_power_usage = 0
 	active_power_usage = 0
+	needs_power = FALSE
 	network = list(CAMERA_NET_MORTAR)
 	exproof = TRUE
 	colony_camera_mapload = FALSE
@@ -339,7 +350,7 @@
 /obj/structure/machinery/computer/security/dropship
 	name = "abstract dropship camera computer"
 	desc = "A computer to monitor cameras linked to the dropship."
-	density = 1
+	density = TRUE
 	icon = 'icons/obj/structures/machinery/shuttle-parts.dmi'
 	icon_state = "consoleleft"
 	circuit = null

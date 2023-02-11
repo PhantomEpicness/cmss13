@@ -1,5 +1,5 @@
 /datum/action/xeno_action/activable/runner_skillshot/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/X = owner
+	var/mob/living/carbon/xenomorph/X = owner
 	if (!istype(X))
 		return
 
@@ -29,7 +29,7 @@
 
 
 /datum/action/xeno_action/activable/acider_acid/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/X = owner
+	var/mob/living/carbon/xenomorph/X = owner
 	if(!istype(A, /obj/item) && !istype(A, /obj/structure/) && !istype(A, /obj/vehicle/multitile))
 		to_chat(X, SPAN_XENOHIGHDANGER("Can only melt barricades and items!"))
 		return
@@ -45,7 +45,7 @@
 		X.corrosive_acid(E,acid_type,0)
 	..()
 
-/mob/living/carbon/Xenomorph/Runner/corrosive_acid(atom/O, acid_type, plasma_cost)
+/mob/living/carbon/xenomorph/runner/corrosive_acid(atom/O, acid_type, plasma_cost)
 	if (mutation_type != RUNNER_ACIDER)
 		..(O, acid_type, plasma_cost)
 		return
@@ -79,17 +79,16 @@
 	if(isobj(O))
 		I = O
 
-		if(I.unacidable || istype(I, /obj/structure/machinery/computer) || istype(I, /obj/effect)) //So the aliens don't destroy energy fields/singularies/other aliens/etc with their acid.
-			to_chat(src, SPAN_WARNING("You cannot dissolve [I].")) // ^^ Note for obj/effect.. this might check for unwanted stuff. Oh well
-			return
 		if(istype(O, /obj/structure/window_frame))
 			var/obj/structure/window_frame/WF = O
 			if(WF.reinforced && acid_type != /obj/effect/xenomorph/acid/strong)
 				to_chat(src, SPAN_WARNING("This [O.name] is too tough to be melted by your weak acid."))
 				return
 
-		if(O.density || istype(O, /obj/structure))
-			wait_time = 40 //dense objects are big, so takes longer to melt.
+		wait_time = I.get_applying_acid_time()
+		if(wait_time == -1)
+			to_chat(src, SPAN_WARNING("You cannot dissolve \the [I]."))
+			return
 	else
 		to_chat(src, SPAN_WARNING("You cannot dissolve [O]."))
 		return
@@ -148,7 +147,7 @@
 
 
 /datum/action/xeno_action/activable/acider_for_the_hive/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/X = owner
+	var/mob/living/carbon/xenomorph/X = owner
 
 	if(!istype(X))
 		return
@@ -190,12 +189,12 @@
 	BD.caboom_trigger = TRUE
 	BD.caboom_left = BD.caboom_timer
 	BD.caboom_last_proc = 0
-	X.SetSuperslowed(BD.caboom_timer*2)
+	X.set_effect(BD.caboom_timer*2, SUPERSLOW)
 
 	X.say(";FOR THE HIVE!!!")
 
 /datum/action/xeno_action/activable/acider_for_the_hive/proc/cancel_ability()
-	var/mob/living/carbon/Xenomorph/X = owner
+	var/mob/living/carbon/xenomorph/X = owner
 
 	if(!istype(X))
 		return

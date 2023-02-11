@@ -8,7 +8,7 @@
 	xeno_cooldown = 10
 
 /datum/action/xeno_action/onclick/toggle_agility/can_use_action()
-	var/mob/living/carbon/Xenomorph/X = owner
+	var/mob/living/carbon/xenomorph/X = owner
 	if(X && !X.buckled && !X.is_mob_incapacitated())
 		return TRUE
 
@@ -20,12 +20,13 @@
 	macro_path = /datum/action/xeno_action/verb/verb_fling
 	action_type = XENO_ACTION_CLICK
 	ability_primacy = XENO_PRIMARY_ACTION_3
-	xeno_cooldown = 55
+	xeno_cooldown = 65
 
 	// Configurables
 	var/fling_distance = 4
 	var/stun_power = 1
 	var/weaken_power = 1
+	var/slowdown = FALSE
 
 
 // Warrior Lunge
@@ -52,15 +53,12 @@
 	macro_path = /datum/action/xeno_action/verb/verb_punch
 	action_type = XENO_ACTION_CLICK
 	ability_primacy = XENO_PRIMARY_ACTION_1
-	xeno_cooldown = 40
+	xeno_cooldown = 50
 
 	// Configurables
 	var/base_damage = 25
-	var/boxer_punch_damage = 20
 	var/base_punch_damage_synth = 30
-	var/boxer_punch_damage_synth = 30
 	var/base_punch_damage_pred = 25
-	var/boxer_punch_damage_pred = 25
 	var/damage_variance = 5
 
 /datum/action/xeno_action/activable/uppercut

@@ -1,20 +1,21 @@
 //This is the proc for gibbing a mob. Cannot gib ghosts.
 //added different sort of gibs and animations. N
-/mob/proc/gib(var/cause = "gibbing")
+/mob/proc/gib(datum/cause_data/cause = create_cause_data("gibbing", src))
 	gibbing = TRUE
-	death(istype(cause, /datum/cause_data) ? cause : create_cause_data(cause), TRUE)
+	death(cause, TRUE)
 	gib_animation()
-	if (!SSticker?.mode?.hardcore)
+	if(!SSticker?.mode?.hardcore)
 		spawn_gibs()
 
 	// You're not coming back from being gibbed. Stop tracking here
 	SSround_recording.recorder.stop_tracking(src)
+	SSminimaps.remove_marker(src)
 
 	qdel(src)
 
-/mob/proc/async_gib(var/cause)
+/mob/proc/async_gib(cause)
 	gibbing = TRUE
-	INVOKE_ASYNC(src, .proc/gib, cause)
+	INVOKE_ASYNC(src, PROC_REF(gib), cause)
 
 
 /mob/proc/gib_animation()
@@ -30,7 +31,7 @@
 //This is the proc for turning a mob into ash. Mostly a copy of gib code (above).
 //Originally created for wizard disintegrate. I've removed the virus code since it's irrelevant here.
 //Dusting robots does not eject the MMI, so it's a bit more powerful than gib() /N
-/mob/proc/dust(var/cause = "dusting")
+/mob/proc/dust(cause = "dusting")
 	death(cause, 1)
 	dust_animation()
 	spawn_dust_remains()
@@ -43,7 +44,7 @@
 /mob/proc/dust_animation()
 	return
 
-/mob/proc/death(var/datum/cause_data/cause_data, var/gibbed = 0, var/deathmessage = "seizes up and falls limp...")
+/mob/proc/death(datum/cause_data/cause_data, gibbed = 0, deathmessage = "seizes up and falls limp...")
 	if(stat == DEAD)
 		return 0
 
@@ -51,9 +52,10 @@
 		visible_message("<b>\The [src.name]</b> [deathmessage]")
 
 	if(cause_data && !istype(cause_data))
-		stack_trace("death called with string cause instead of datum")
+		stack_trace("death called with string cause ([cause_data]) instead of datum")
+		cause_data = create_cause_data(cause_data)
 
-	stat = DEAD
+	set_stat(DEAD)
 
 	update_canmove()
 
@@ -69,6 +71,8 @@
 	hide_fullscreens()
 
 	update_sight()
+
+	remove_typing_indicator()
 
 	drop_r_hand()
 	drop_l_hand()
@@ -90,7 +94,7 @@
 
 	track_death_calculations()
 
-	INVOKE_ASYNC(src, .proc/handle_death_cause, cause_data, get_turf(src))
+	INVOKE_ASYNC(src, PROC_REF(handle_death_cause), cause_data, get_turf(src))
 
 	med_hud_set_health()
 	med_hud_set_armor()
@@ -100,18 +104,18 @@
 	SEND_SIGNAL(src, COMSIG_MOB_DEATH)
 	return 1
 
-/mob/proc/handle_death_cause(var/datum/cause_data/cause_data, var/turf/death_loc)
+/mob/proc/handle_death_cause(datum/cause_data/cause_data, turf/death_loc)
 	track_mob_death(cause_data, death_loc)
-	if(cause_data)
+	if(cause_data && istype(cause_data))
 		var/obj/O = cause_data.resolve_cause()
 		if(isdefenses(O))
 			var/obj/structure/machinery/defenses/TR = O
 			TR.earn_kill()
 		var/mob/cause_mob = cause_data.resolve_mob()
 		if(cause_mob)
-			if(isYautja(cause_mob) && cause_mob.client && cause_mob != src)
-				INVOKE_ASYNC(cause_mob.client, /client.proc/add_honor, max(life_kills_total, 1))
+			if(isyautja(cause_mob) && cause_mob.client && cause_mob != src)
+				INVOKE_ASYNC(cause_mob.client, TYPE_PROC_REF(/client, add_honor), max(life_kills_total, default_honor_value))
 
-			if(isXeno(cause_mob))
-				var/mob/living/carbon/Xenomorph/X = cause_mob
+			if(isxeno(cause_mob))
+				var/mob/living/carbon/xenomorph/X = cause_mob
 				X.behavior_delegate.on_kill_mob(src)

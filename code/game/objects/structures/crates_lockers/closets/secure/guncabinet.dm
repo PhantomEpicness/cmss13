@@ -12,15 +12,15 @@
 	req_access = list(ACCESS_MARINE_WO) //Trusting the CMP to be able to open the lockers on any alert level, just in case
 	var/req_level = SEC_LEVEL_GREEN
 
-/obj/structure/closet/secure_closet/guncabinet/examine()
-	..()
-	to_chat(usr, SPAN_NOTICE("[src] will only open on [num2seclevel(req_level)] security level."))
+/obj/structure/closet/secure_closet/guncabinet/get_examine_text(mob/user)
+	. = ..()
+	. += SPAN_NOTICE("[src] will only open on [num2seclevel(req_level)] security level.")
 
 /obj/structure/closet/secure_closet/guncabinet/Initialize()
 	. = ..()
 	update_icon()
 	if(is_mainship_level(z))
-		RegisterSignal(SSdcs, COMSIG_GLOB_SECURITY_LEVEL_CHANGED, .proc/sec_changed)
+		RegisterSignal(SSdcs, COMSIG_GLOB_SECURITY_LEVEL_CHANGED, PROC_REF(sec_changed))
 
 /obj/structure/closet/secure_closet/guncabinet/proc/sec_changed(datum/source, new_sec)
 	SIGNAL_HANDLER
@@ -57,18 +57,16 @@
 			overlays += icon(src.icon,"open")
 
 //immune to bullets
-/obj/structure/closet/secure_closet/guncabinet/bullet_act(var/obj/item/projectile/Proj)
+/obj/structure/closet/secure_closet/guncabinet/bullet_act(obj/item/projectile/Proj)
 	return 1
 
 /obj/structure/closet/secure_closet/guncabinet/ex_act(severity)
 	if(severity > EXPLOSION_THRESHOLD_MEDIUM)
-		for(var/atom/movable/A in contents)//pulls everything out of the locker and hits it with an explosion
-			A.forceMove(loc)
-			A.ex_act(severity - EXPLOSION_THRESHOLD_LOW)
-		qdel(src)
+		contents_explosion(severity - EXPLOSION_THRESHOLD_LOW)
+		deconstruct(FALSE)
 
 /obj/structure/closet/secure_closet/guncabinet/mp_armory
-//	req_access = list(ACCESS_MARINE_BRIG)
+// req_access = list(ACCESS_MARINE_BRIG)
 	req_level = SEC_LEVEL_RED
 
 /obj/structure/closet/secure_closet/guncabinet/mp_armory/Initialize()
@@ -84,7 +82,7 @@
 
 /obj/structure/closet/secure_closet/guncabinet/riot_control
 	name = "riot control equipment closet"
-//	req_access = list(ACCESS_MARINE_BRIG)
+// req_access = list(ACCESS_MARINE_BRIG)
 	storage_capacity = 55 //lots of stuff to fit in
 	req_level = SEC_LEVEL_RED
 

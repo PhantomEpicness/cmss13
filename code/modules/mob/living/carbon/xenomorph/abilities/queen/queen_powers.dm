@@ -1,105 +1,106 @@
 // devolve a xeno - lots of old, vaguely shitty code here
-/datum/action/xeno_action/onclick/deevolve/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/Queen/X = owner
-	if(!X.check_state())
+/datum/action/xeno_action/onclick/deevolve/use_ability(atom/Atom)
+	var/mob/living/carbon/xenomorph/queen/user_xeno = owner
+	if(!user_xeno.check_state())
 		return
-	if(!X.observed_xeno)
-		to_chat(X, SPAN_WARNING("You must overwatch the xeno you want to de-evolve."))
-		return
-
-	var/mob/living/carbon/Xenomorph/T = X.observed_xeno
-	if(!X.check_plasma(plasma_cost)) return
-
-	if(T.hivenumber != X.hivenumber)
-		to_chat(X, SPAN_XENOWARNING("[T] doesn't belong to your hive!"))
+	if(!user_xeno.observed_xeno)
+		to_chat(user_xeno, SPAN_WARNING("You must overwatch the xeno you want to de-evolve."))
 		return
 
-	if(T.is_ventcrawling)
-		to_chat(X, SPAN_XENOWARNING("[T] can't be deevolved here."))
+	var/mob/living/carbon/xenomorph/target_xeno = user_xeno.observed_xeno
+	if(!user_xeno.check_plasma(plasma_cost))
 		return
 
-	if(!isturf(T.loc))
-		to_chat(X, SPAN_XENOWARNING("[T] can't be deevolved here."))
+	if(target_xeno.hivenumber != user_xeno.hivenumber)
+		to_chat(user_xeno, SPAN_XENOWARNING("[target_xeno] doesn't belong to your hive!"))
 		return
 
-	if(T.health <= 0)
-		to_chat(X, SPAN_XENOWARNING("[T] is too weak to be deevolved."))
+	if(target_xeno.is_ventcrawling)
+		to_chat(user_xeno, SPAN_XENOWARNING("[target_xeno] can't be deevolved here."))
 		return
 
-	if(length(T.caste.deevolves_to) < 1)
-		to_chat(X, SPAN_XENOWARNING("[T] can't be deevolved."))
+	if(!isturf(target_xeno.loc))
+		to_chat(user_xeno, SPAN_XENOWARNING("[target_xeno] can't be deevolved here."))
 		return
 
-	if(T.banished)
-		to_chat(X, SPAN_XENOWARNING("[T] is banished and can't be deevolved."))
+	if(target_xeno.health <= 0)
+		to_chat(user_xeno, SPAN_XENOWARNING("[target_xeno] is too weak to be deevolved."))
+		return
+
+	if(length(target_xeno.caste.deevolves_to) < 1)
+		to_chat(user_xeno, SPAN_XENOWARNING("[target_xeno] can't be deevolved."))
+		return
+
+	if(target_xeno.banished)
+		to_chat(user_xeno, SPAN_XENOWARNING("[target_xeno] is banished and can't be deevolved."))
 		return
 
 
 	var/newcaste
 
-	if(length(T.caste.deevolves_to) == 1)
-		newcaste = T.caste.deevolves_to[1]
-	else if(length(T.caste.deevolves_to) > 1)
-		newcaste = tgui_input_list(X, "Choose a caste you want to de-evolve [T] to.", "De-evolve", T.caste.deevolves_to)
+	if(length(target_xeno.caste.deevolves_to) == 1)
+		newcaste = target_xeno.caste.deevolves_to[1]
+	else if(length(target_xeno.caste.deevolves_to) > 1)
+		newcaste = tgui_input_list(user_xeno, "Choose a caste you want to de-evolve [target_xeno] to.", "De-evolve", target_xeno.caste.deevolves_to, theme="hive_status")
 
 	if(!newcaste)
 		return
 
 	if(newcaste == "Larva")
-		to_chat(X, SPAN_XENOWARNING("You cannot deevolve xenomorphs to larva."))
+		to_chat(user_xeno, SPAN_XENOWARNING("You cannot deevolve xenomorphs to larva."))
 		return
 
-	if (X.observed_xeno != T)
+	if (user_xeno.observed_xeno != target_xeno)
 		return
 
-	var/confirm = alert(X, "Are you sure you want to deevolve [T] from [T.caste.caste_type] to [newcaste]?", , "Yes", "No")
-	if(confirm == "No")
+	var/confirm = tgui_alert(user_xeno, "Are you sure you want to deevolve [target_xeno] from [target_xeno.caste.caste_type] to [newcaste]?", "Deevolution", list("Yes", "No"))
+	if(confirm != "Yes")
 		return
 
-	var/reason = stripped_input(X, "Provide a reason for deevolving this xenomorph, [T]")
-	if(isnull(reason))
-		to_chat(X, SPAN_XENOWARNING("You must provide a reason for deevolving [T]."))
+	var/reason = stripped_input(user_xeno, "Provide a reason for deevolving this xenomorph, [target_xeno]")
+	if(!reason)
+		to_chat(user_xeno, SPAN_XENOWARNING("You must provide a reason for deevolving [target_xeno]."))
 		return
 
-	if (!check_and_use_plasma_owner())
+	if (!check_and_use_plasma_owner(plasma_cost))
 		return
 
-	to_chat(T, SPAN_XENOWARNING("The queen is deevolving you for the following reason: [reason]"))
+	to_chat(target_xeno, SPAN_XENOWARNING("The queen is deevolving you for the following reason: [reason]"))
 
 	var/xeno_type
-	var/level_to_switch_to = T.get_vision_level()
+	var/level_to_switch_to = target_xeno.get_vision_level()
 	switch(newcaste)
 		if(XENO_CASTE_RUNNER)
-			xeno_type = /mob/living/carbon/Xenomorph/Runner
+			xeno_type = /mob/living/carbon/xenomorph/runner
 		if(XENO_CASTE_DRONE)
-			xeno_type = /mob/living/carbon/Xenomorph/Drone
+			xeno_type = /mob/living/carbon/xenomorph/drone
 		if(XENO_CASTE_SENTINEL)
-			xeno_type = /mob/living/carbon/Xenomorph/Sentinel
+			xeno_type = /mob/living/carbon/xenomorph/sentinel
 		if(XENO_CASTE_SPITTER)
-			xeno_type = /mob/living/carbon/Xenomorph/Spitter
+			xeno_type = /mob/living/carbon/xenomorph/spitter
 		if(XENO_CASTE_LURKER)
-			xeno_type = /mob/living/carbon/Xenomorph/Lurker
+			xeno_type = /mob/living/carbon/xenomorph/lurker
 		if(XENO_CASTE_WARRIOR)
-			xeno_type = /mob/living/carbon/Xenomorph/Warrior
+			xeno_type = /mob/living/carbon/xenomorph/warrior
 		if(XENO_CASTE_DEFENDER)
-			xeno_type = /mob/living/carbon/Xenomorph/Defender
+			xeno_type = /mob/living/carbon/xenomorph/defender
 		if(XENO_CASTE_BURROWER)
-			xeno_type = /mob/living/carbon/Xenomorph/Burrower
+			xeno_type = /mob/living/carbon/xenomorph/burrower
 
 	//From there, the new xeno exists, hopefully
-	var/mob/living/carbon/Xenomorph/new_xeno = new xeno_type(get_turf(T), T)
+	var/mob/living/carbon/xenomorph/new_xeno = new xeno_type(get_turf(target_xeno), target_xeno)
 
 	if(!istype(new_xeno))
 		//Something went horribly wrong!
-		to_chat(X, SPAN_WARNING("Something went terribly wrong here. Your new xeno is null! Tell a coder immediately!"))
+		to_chat(user_xeno, SPAN_WARNING("Something went terribly wrong here. Your new xeno is null! Tell a coder immediately!"))
 		if(new_xeno)
 			qdel(new_xeno)
 		return
 
-	if(T.mind)
-		T.mind.transfer_to(new_xeno)
+	if(target_xeno.mind)
+		target_xeno.mind.transfer_to(new_xeno)
 	else
-		new_xeno.key = T.key
+		new_xeno.key = target_xeno.key
 		if(new_xeno.client)
 			new_xeno.client.change_view(world_view_size)
 			new_xeno.client.pixel_x = 0
@@ -110,23 +111,30 @@
 	if(new_xeno.client)
 		new_xeno.set_lighting_alpha(level_to_switch_to)
 	// If the player has self-deevolved before, don't allow them to do it again
-	if(!(/mob/living/carbon/Xenomorph/verb/Deevolve in T.verbs))
-		remove_verb(new_xeno, /mob/living/carbon/Xenomorph/verb/Deevolve)
+	if(!(/mob/living/carbon/xenomorph/verb/Deevolve in target_xeno.verbs))
+		remove_verb(new_xeno, /mob/living/carbon/xenomorph/verb/Deevolve)
 
-	new_xeno.visible_message(SPAN_XENODANGER("A [new_xeno.caste.caste_type] emerges from the husk of \the [T]."), \
-	SPAN_XENODANGER("[X] makes you regress into your previous form."))
+	new_xeno.visible_message(SPAN_XENODANGER("A [new_xeno.caste.caste_type] emerges from the husk of \the [target_xeno]."), \
+	SPAN_XENODANGER("[user_xeno] makes you regress into your previous form."))
 
-	if(X.hive.living_xeno_queen && X.hive.living_xeno_queen.observed_xeno == T)
-		X.hive.living_xeno_queen.overwatch(new_xeno)
+	if(user_xeno.hive.living_xeno_queen && user_xeno.hive.living_xeno_queen.observed_xeno == target_xeno)
+		user_xeno.hive.living_xeno_queen.overwatch(new_xeno)
 
-	message_staff("[key_name_admin(X)] has deevolved [key_name_admin(T)]. Reason: [reason]")
-	log_admin("[key_name_admin(X)] has deevolved [key_name_admin(T)]. Reason: [reason]")
-	qdel(T)
+	message_staff("[key_name_admin(user_xeno)] has deevolved [key_name_admin(target_xeno)]. Reason: [reason]")
+	log_admin("[key_name_admin(user_xeno)] has deevolved [key_name_admin(target_xeno)]. Reason: [reason]")
+
+	target_xeno.transfer_observers_to(new_xeno)
+
+	if(round_statistics && !new_xeno.statistic_exempt)
+		round_statistics.track_new_participant(target_xeno.faction, -1) //so an evolved xeno doesn't count as two.
+	SSround_recording.recorder.stop_tracking(target_xeno)
+	SSround_recording.recorder.track_player(new_xeno)
+	qdel(target_xeno)
 	..()
 	return
 
 /datum/action/xeno_action/onclick/remove_eggsac/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/Queen/X = owner
+	var/mob/living/carbon/xenomorph/queen/X = owner
 	if(!X.check_state())
 		return
 
@@ -148,57 +156,57 @@
 	X.dismount_ovipositor()
 
 
-/datum/action/xeno_action/onclick/grow_ovipositor/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/Queen/X = owner
-	if(!X.check_state())
+/datum/action/xeno_action/onclick/grow_ovipositor/use_ability(atom/Atom)
+	var/mob/living/carbon/xenomorph/queen/xeno = owner
+	if(!xeno.check_state())
 		return
 
-	var/turf/current_turf = get_turf(X)
+	var/turf/current_turf = get_turf(xeno)
 	if(!current_turf || !istype(current_turf))
 		return
 
-	if(X.ovipositor_cooldown > world.time)
-		to_chat(X, SPAN_XENOWARNING("You're still recovering from detaching your old ovipositor. Wait [round((X.ovipositor_cooldown-world.time)*0.1)] seconds"))
+	if(!action_cooldown_check())
+		to_chat(xeno, SPAN_XENOWARNING("You're still recovering from detaching your old ovipositor. Wait [DisplayTimeText(timeleft(cooldown_timer_id))]."))
 		return
 
 	var/obj/effect/alien/weeds/alien_weeds = locate() in current_turf
 
 	if(!alien_weeds)
-		to_chat(X, SPAN_XENOWARNING("You need to be on resin to grow an ovipositor."))
+		to_chat(xeno, SPAN_XENOWARNING("You need to be on resin to grow an ovipositor."))
 		return
 
-	if(GLOB.interior_manager.interior_z == X.z)
-		to_chat(X, SPAN_XENOWARNING("It's too tight in here to grow an ovipositor."))
+	if(GLOB.interior_manager.interior_z == xeno.z)
+		to_chat(xeno, SPAN_XENOWARNING("It's too tight in here to grow an ovipositor."))
 		return
 
-	if(alien_weeds.linked_hive.hivenumber != X.hivenumber)
-		to_chat(X, SPAN_XENOWARNING("These weeds don't belong to your hive! You can't grow an ovipositor here."))
+	if(alien_weeds.linked_hive.hivenumber != xeno.hivenumber)
+		to_chat(xeno, SPAN_XENOWARNING("These weeds don't belong to your hive! You can't grow an ovipositor here."))
 		return
 
-	if(!X.check_alien_construction(current_turf))
+	if(!xeno.check_alien_construction(current_turf))
 		return
 
-	if(X.action_busy)
+	if(xeno.action_busy)
 		return
 
-	if(!X.check_plasma(plasma_cost))
+	if(!xeno.check_plasma(plasma_cost))
 		return
 
-	X.visible_message(SPAN_XENOWARNING("\The [X] starts to grow an ovipositor."), \
+	xeno.visible_message(SPAN_XENOWARNING("\The [xeno] starts to grow an ovipositor."), \
 	SPAN_XENOWARNING("You start to grow an ovipositor...(takes 20 seconds, hold still)"))
-	if(!do_after(X, 200, INTERRUPT_NO_NEEDHAND, BUSY_ICON_FRIENDLY, numticks = 20) && X.check_plasma(plasma_cost))
+	if(!do_after(xeno, 200, INTERRUPT_NO_NEEDHAND, BUSY_ICON_FRIENDLY, numticks = 20) && xeno.check_plasma(plasma_cost))
 		return
-	if(!X.check_state()) return
+	if(!xeno.check_state()) return
 	if(!locate(/obj/effect/alien/weeds) in current_turf)
 		return
-	X.use_plasma(plasma_cost)
-	X.visible_message(SPAN_XENOWARNING("\The [X] has grown an ovipositor!"), \
+	xeno.use_plasma(plasma_cost)
+	xeno.visible_message(SPAN_XENOWARNING("\The [xeno] has grown an ovipositor!"), \
 	SPAN_XENOWARNING("You have grown an ovipositor!"))
-	X.mount_ovipositor()
+	xeno.mount_ovipositor()
 
 
 /datum/action/xeno_action/onclick/set_xeno_lead/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/Queen/X = owner
+	var/mob/living/carbon/xenomorph/queen/X = owner
 	if(!X.check_state())
 		return
 
@@ -209,7 +217,7 @@
 		if(!hive.open_xeno_leader_positions.len && X.observed_xeno.hive_pos == NORMAL_XENO)
 			to_chat(X, SPAN_XENOWARNING("You currently have [hive.xeno_leader_list.len] promoted leaders. You may not maintain additional leaders until your power grows."))
 			return
-		var/mob/living/carbon/Xenomorph/T = X.observed_xeno
+		var/mob/living/carbon/xenomorph/T = X.observed_xeno
 		if(T == X)
 			to_chat(X, SPAN_XENOWARNING("You cannot add yourself as a leader!"))
 			return
@@ -226,11 +234,11 @@
 			to_chat(T, SPAN_XENOANNOUNCE("[X] has demoted you from Hive Leader. Your leadership rights and abilities have waned."))
 	else
 		var/list/possible_xenos = list()
-		for(var/mob/living/carbon/Xenomorph/T in hive.xeno_leader_list)
+		for(var/mob/living/carbon/xenomorph/T in hive.xeno_leader_list)
 			possible_xenos += T
 
 		if(possible_xenos.len > 1)
-			var/mob/living/carbon/Xenomorph/selected_xeno = tgui_input_list(X, "Target", "Watch which xenomorph leader?", possible_xenos)
+			var/mob/living/carbon/xenomorph/selected_xeno = tgui_input_list(X, "Target", "Watch which leader?", possible_xenos, theme="hive_status")
 			if(!selected_xeno || selected_xeno.hive_pos == NORMAL_XENO || selected_xeno == X.observed_xeno || selected_xeno.stat == DEAD || selected_xeno.z != X.z || !X.check_state())
 				return
 			X.overwatch(selected_xeno)
@@ -241,7 +249,7 @@
 
 
 /datum/action/xeno_action/activable/queen_heal/use_ability(atom/A, verbose)
-	var/mob/living/carbon/Xenomorph/Queen/X = owner
+	var/mob/living/carbon/xenomorph/queen/X = owner
 	if(!X.check_state())
 		return
 
@@ -260,7 +268,7 @@
 	if(!check_and_use_plasma_owner())
 		return
 
-	for(var/mob/living/carbon/Xenomorph/Xa in range(4, T))
+	for(var/mob/living/carbon/xenomorph/Xa in range(4, T))
 		if(!X.can_not_harm(Xa))
 			continue
 
@@ -279,82 +287,147 @@
 			continue
 
 		new /datum/effects/heal_over_time(Xa, Xa.maxHealth * 0.3, 2 SECONDS, 2)
-		Xa.flick_heal_overlay(3 SECONDS, "#D9F500")	//it's already hard enough to gauge health without hp overlays!
+		Xa.flick_heal_overlay(3 SECONDS, "#D9F500") //it's already hard enough to gauge health without hp overlays!
 
 	apply_cooldown()
 	to_chat(X, SPAN_XENONOTICE("You channel your plasma to heal your sisters' wounds around this area."))
 
-/datum/action/xeno_action/onclick/banish/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/Queen/X = owner
-	if(!X.check_state())
+/datum/action/xeno_action/onclick/give_evo_points/use_ability(atom/Atom)
+	var/mob/living/carbon/xenomorph/queen/user_xeno = owner
+	if(!user_xeno.check_state())
 		return
 
-	var/choice = tgui_input_list(X, "Choose a xenomorph to banish:", "Banish", X.hive.totalXenos)
+	if(!user_xeno.check_plasma(plasma_cost))
+		return
+
+	if(world.time < SSticker.mode.round_time_lobby + SHUTTLE_TIME_LOCK)
+		to_chat(usr, SPAN_XENOWARNING("You must give some time for larva to spawn before sacrificing them. Please wait another [round((SSticker.mode.round_time_lobby + SHUTTLE_TIME_LOCK - world.time) / 600)] minutes."))
+		return
+
+	var/choice = tgui_input_list(user_xeno, "Choose a xenomorph to give evolution points for a pooled larva:", "Give Evolution Points", user_xeno.hive.totalXenos, theme="hive_status")
 
 	if(!choice)
 		return
 
-	var/mob/living/carbon/Xenomorph/T
+	var/mob/living/carbon/xenomorph/target_xeno
 
-	for(var/mob/living/carbon/Xenomorph/xeno in X.hive.totalXenos)
+	for(var/mob/living/carbon/xenomorph/xeno in user_xeno.hive.totalXenos)
 		if(html_encode(xeno.name) == html_encode(choice))
-			T = xeno
+			target_xeno = xeno
 			break
 
-	if(T == X)
-		to_chat(X, SPAN_XENOWARNING("You cannot banish yourself."))
+	if(target_xeno == user_xeno)
+		to_chat(user_xeno, SPAN_XENOWARNING("You cannot give evolution points to yourself."))
 		return
 
-	if(T.banished)
-		to_chat(X, SPAN_XENOWARNING("This xenomorph is already banished!"))
+	if(target_xeno.evolution_stored == target_xeno.evolution_threshold)
+		to_chat(user_xeno, SPAN_XENOWARNING("This xenomorph is already ready to evolve!"))
 		return
 
-	if(T.hivenumber != X.hivenumber)
-		to_chat(X, SPAN_XENOWARNING("This xenomorph doesn't belong to your hive!"))
+	if(target_xeno.hivenumber != user_xeno.hivenumber)
+		to_chat(user_xeno, SPAN_XENOWARNING("This xenomorph doesn't belong to your hive!"))
+		return
+
+	if(target_xeno.health < 0)
+		to_chat(user_xeno, SPAN_XENOWARNING("What's the point? They're about to die."))
+		return
+
+	if(user_xeno.hive.stored_larva < required_larva)
+		to_chat(user_xeno, SPAN_XENOWARNING("You need at least [required_larva] pooled larva to sacrifice one for evolution points."))
+		return
+
+	if(tgui_alert(user_xeno, "Are you sure you want to sacrifice a larva to give [target_xeno] [evo_points_per_larva] evolution points?", "Give Evolution Points", list("Yes", "No")) != "Yes")
+		return
+
+	if(!user_xeno.check_state() || !check_and_use_plasma_owner(plasma_cost) || target_xeno.health < 0 || user_xeno.hive.stored_larva < required_larva)
+		return
+
+	to_chat(target_xeno, SPAN_XENOWARNING("\The [user_xeno] has given you evolution points! Use them well."))
+	to_chat(user_xeno, SPAN_XENOWARNING("\The [target_xeno] was given [evo_points_per_larva] evolution points."))
+
+	if(target_xeno.evolution_stored + evo_points_per_larva > target_xeno.evolution_threshold)
+		target_xeno.evolution_stored = target_xeno.evolution_threshold
+	else
+		target_xeno.evolution_stored += evo_points_per_larva
+
+	user_xeno.hive.stored_larva--
+
+/datum/action/xeno_action/onclick/banish/use_ability(atom/Atom)
+	var/mob/living/carbon/xenomorph/queen/user_xeno = owner
+	if(!user_xeno.check_state())
+		return
+
+	if(!user_xeno.check_plasma(plasma_cost))
+		return
+
+	var/choice = tgui_input_list(user_xeno, "Choose a xenomorph to banish:", "Banish", user_xeno.hive.totalXenos, theme="hive_status")
+
+	if(!choice)
+		return
+
+	var/mob/living/carbon/xenomorph/target_xeno
+
+	for(var/mob/living/carbon/xenomorph/xeno in user_xeno.hive.totalXenos)
+		if(html_encode(xeno.name) == html_encode(choice))
+			target_xeno = xeno
+			break
+
+	if(target_xeno == user_xeno)
+		to_chat(user_xeno, SPAN_XENOWARNING("You cannot banish yourself."))
+		return
+
+	if(target_xeno.banished)
+		to_chat(user_xeno, SPAN_XENOWARNING("This xenomorph is already banished!"))
+		return
+
+	if(target_xeno.hivenumber != user_xeno.hivenumber)
+		to_chat(user_xeno, SPAN_XENOWARNING("This xenomorph doesn't belong to your hive!"))
 		return
 
 	// No banishing critted xenos
-	if(T.health < 0)
-		to_chat(X, SPAN_XENOWARNING("What's the point? They're already about to die."))
+	if(target_xeno.health < 0)
+		to_chat(user_xeno, SPAN_XENOWARNING("What's the point? They're already about to die."))
 		return
 
-	var/confirm = alert(X, "Are you sure you want to banish [T] from the hive? This should only be done with good reason. (Note this prevents them from rejoining the hive after dying for 30 minutes as well unless readmitted)", , "Yes", "No")
-	if(confirm == "No")
+	var/confirm = tgui_alert(user_xeno, "Are you sure you want to banish [target_xeno] from the hive? This should only be done with good reason. (Note this prevents them from rejoining the hive after dying for 30 minutes as well unless readmitted)", "Banishment", list("Yes", "No"))
+	if(confirm != "Yes")
 		return
 
-	var/reason = stripped_input(X, "Provide a reason for banishing [T]. This will be announced to the entire hive!")
-	if(isnull(reason))
-		to_chat(X, SPAN_XENOWARNING("You must provide a reason for banishing [T]."))
+	var/reason = stripped_input(user_xeno, "Provide a reason for banishing [target_xeno]. This will be announced to the entire hive!")
+	if(!reason)
+		to_chat(user_xeno, SPAN_XENOWARNING("You must provide a reason for banishing [target_xeno]."))
 		return
 
-	if(!X.check_state() || !X.check_plasma(plasma_cost) || T.health < 0)
+	if(!user_xeno.check_state() || !check_and_use_plasma_owner(plasma_cost) || target_xeno.health < 0)
 		return
 
 	// Let everyone know they were banished
-	xeno_announcement("By [X]'s will, [T] has been banished from the hive!\n\n[reason]", X.hivenumber, title=SPAN_ANNOUNCEMENT_HEADER_BLUE("Banishment"))
-	to_chat(T, FONT_SIZE_LARGE(SPAN_XENOWARNING("The [X] has banished you from the hive! Other xenomorphs may now attack you freely, but your link to the hivemind remains, preventing you from harming other sisters.")))
+	xeno_announcement("By [user_xeno]'s will, [target_xeno] has been banished from the hive!\n\n[reason]", user_xeno.hivenumber, title=SPAN_ANNOUNCEMENT_HEADER_BLUE("Banishment"))
+	to_chat(target_xeno, FONT_SIZE_LARGE(SPAN_XENOWARNING("The [user_xeno] has banished you from the hive! Other xenomorphs may now attack you freely, but your link to the hivemind remains, preventing you from harming other sisters.")))
 
-	T.banished = TRUE
-	T.hud_update_banished()
-	T.lock_evolve = TRUE
-	X.hive.banished_ckeys[T.name] = T.ckey
-	addtimer(CALLBACK(src, .proc/remove_banish, X.hive, T.name), 30 MINUTES)
+	target_xeno.banished = TRUE
+	target_xeno.hud_update_banished()
+	target_xeno.lock_evolve = TRUE
+	user_xeno.hive.banished_ckeys[target_xeno.name] = target_xeno.ckey
+	addtimer(CALLBACK(src, PROC_REF(remove_banish), user_xeno.hive, target_xeno.name), 30 MINUTES)
 
-	message_staff("[key_name_admin(X)] has banished [key_name_admin(T)]. Reason: [reason]")
+	message_staff("[key_name_admin(user_xeno)] has banished [key_name_admin(target_xeno)]. Reason: [reason]")
 
-/datum/action/xeno_action/onclick/banish/proc/remove_banish(var/datum/hive_status/hive, var/name)
+/datum/action/xeno_action/onclick/banish/proc/remove_banish(datum/hive_status/hive, name)
 	hive.banished_ckeys.Remove(name)
 
 
 // Readmission = un-banish
 
-/datum/action/xeno_action/onclick/readmit/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/Queen/X = owner
-	if(!X.check_state())
+/datum/action/xeno_action/onclick/readmit/use_ability(atom/Atom)
+	var/mob/living/carbon/xenomorph/queen/user_xeno = owner
+	if(!user_xeno.check_state())
 		return
 
+	if(!user_xeno.check_plasma(plasma_cost))
+		return
 
-	var/choice = tgui_input_list(X, "Choose a xenomorph to readmit:", "Re-admit", X.hive.banished_ckeys)
+	var/choice = tgui_input_list(user_xeno, "Choose a xenomorph to readmit:", "Re-admit", user_xeno.hive.banished_ckeys, theme="hive_status")
 
 	if(!choice)
 		return
@@ -362,39 +435,39 @@
 	var/banished_ckey
 	var/banished_name
 
-	for(var/mob_name in X.hive.banished_ckeys)
-		if(X.hive.banished_ckeys[mob_name] == X.hive.banished_ckeys[choice])
-			banished_ckey = X.hive.banished_ckeys[mob_name]
+	for(var/mob_name in user_xeno.hive.banished_ckeys)
+		if(user_xeno.hive.banished_ckeys[mob_name] == user_xeno.hive.banished_ckeys[choice])
+			banished_ckey = user_xeno.hive.banished_ckeys[mob_name]
 			banished_name = mob_name
 			break
 
 	var/banished_living = FALSE
-	var/mob/living/carbon/Xenomorph/T
+	var/mob/living/carbon/xenomorph/target_xeno
 
-	for(var/mob/living/carbon/Xenomorph/xeno in X.hive.totalXenos)
+	for(var/mob/living/carbon/xenomorph/xeno in user_xeno.hive.totalXenos)
 		if(xeno.ckey == banished_ckey)
-			T = xeno
+			target_xeno = xeno
 			banished_living = TRUE
 			break
 
 	if(banished_living)
-		if(!T.banished)
-			to_chat(X, SPAN_XENOWARNING("This xenomorph isn't banished!"))
+		if(!target_xeno.banished)
+			to_chat(user_xeno, SPAN_XENOWARNING("This xenomorph isn't banished!"))
 			return
 
-		var/confirm = alert(X, "Are you sure you want to readmit [T] into the hive?", , "Yes", "No")
-		if(confirm == "No")
+		var/confirm = tgui_alert(user_xeno, "Are you sure you want to readmit [target_xeno] into the hive?", "Readmittance", list("Yes", "No"))
+		if(confirm != "Yes")
 			return
 
-		if(!X.check_state() || !X.check_plasma(plasma_cost))
+		if(!user_xeno.check_state() || !check_and_use_plasma_owner(plasma_cost))
 			return
 
-		to_chat(T, FONT_SIZE_LARGE(SPAN_XENOWARNING("The [X] has readmitted you into the hive.")))
-		T.banished = FALSE
-		T.hud_update_banished()
-		T.lock_evolve = FALSE
+		to_chat(target_xeno, FONT_SIZE_LARGE(SPAN_XENOWARNING("The [user_xeno] has readmitted you into the hive.")))
+		target_xeno.banished = FALSE
+		target_xeno.hud_update_banished()
+		target_xeno.lock_evolve = FALSE
 
-	X.hive.banished_ckeys.Remove(banished_name)
+	user_xeno.hive.banished_ckeys.Remove(banished_name)
 
 /datum/action/xeno_action/activable/secrete_resin/remote/queen/use_ability(atom/A)
 	. = ..()
@@ -403,7 +476,7 @@
 
 	if(!boosted)
 		return
-	var/mob/living/carbon/Xenomorph/X = owner
+	var/mob/living/carbon/xenomorph/X = owner
 	var/datum/hive_status/HS = X.hive
 	if(!HS || !HS.hive_location)
 		return
@@ -411,6 +484,11 @@
 	if(get_dist(A, HS.hive_location) > 35)
 		// Apply the normal cooldown if not building near the hive
 		apply_cooldown_override(initial(xeno_cooldown))
+
+/datum/action/xeno_action/onclick/eye
+	name = "Enter Eye Form"
+	action_icon_state = "queen_eye"
+	plasma_cost = 0
 
 /datum/action/xeno_action/onclick/eye/use_ability(atom/A)
 	. = ..()
@@ -432,7 +510,7 @@
 	return ..()
 
 /datum/action/xeno_action/activable/expand_weeds/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/Queen/X = owner
+	var/mob/living/carbon/xenomorph/queen/X = owner
 	if(!X.check_state())
 		return
 
@@ -480,10 +558,6 @@
 		to_chat(X, SPAN_XENOWARNING("You can only plant weeds near weeds with a connected node!"))
 		return
 
-	if(node.weed_strength >= WEED_LEVEL_HIVE)
-		to_chat(X, SPAN_XENOWARNING("You cannot expand hive weeds!"))
-		return
-
 	if(T in recently_built_turfs)
 		to_chat(X, SPAN_XENOWARNING("You've recently built here already!"))
 		return
@@ -491,20 +565,20 @@
 	if (!check_and_use_plasma_owner())
 		return
 
-	new /obj/effect/alien/weeds(T, node)
+	new /obj/effect/alien/weeds(T, node, FALSE)
 	playsound(T, "alien_resin_build", 35)
 
 	recently_built_turfs += T
-	addtimer(CALLBACK(src, .proc/reset_turf_cooldown, T), turf_build_cooldown)
+	addtimer(CALLBACK(src, PROC_REF(reset_turf_cooldown), T), turf_build_cooldown)
 
 	to_chat(X, SPAN_XENONOTICE("You plant weeds at [T]."))
 	apply_cooldown()
 
-/datum/action/xeno_action/activable/expand_weeds/proc/reset_turf_cooldown(var/turf/T)
+/datum/action/xeno_action/activable/expand_weeds/proc/reset_turf_cooldown(turf/T)
 	recently_built_turfs -= T
 
 /datum/action/xeno_action/activable/place_queen_beacon/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/Queen/Q = owner
+	var/mob/living/carbon/xenomorph/queen/Q = owner
 	if(!Q.check_state())
 		return FALSE
 
@@ -524,26 +598,26 @@
 
 	to_chat(Q, SPAN_XENONOTICE("You rally the hive to the queen beacon!"))
 	LAZYCLEARLIST(transported_xenos)
-	RegisterSignal(SSdcs, COMSIG_GLOB_XENO_SPAWN, .proc/tunnel_xeno)
+	RegisterSignal(SSdcs, COMSIG_GLOB_XENO_SPAWN, PROC_REF(tunnel_xeno))
 	for(var/xeno in hive.totalXenos)
 		if(xeno == Q)
 			continue
 		tunnel_xeno(src, xeno)
 
-	addtimer(CALLBACK(src, .proc/transport_xenos, T), 3 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(transport_xenos), T), 3 SECONDS)
 	return TRUE
 
-/datum/action/xeno_action/activable/place_queen_beacon/proc/tunnel_xeno(datum/source, mob/living/carbon/Xenomorph/X)
+/datum/action/xeno_action/activable/place_queen_beacon/proc/tunnel_xeno(datum/source, mob/living/carbon/xenomorph/X)
 	SIGNAL_HANDLER
 	if(X.z == owner.z)
 		to_chat(X, SPAN_XENONOTICE("You begin tunneling towards the queen beacon!"))
-		RegisterSignal(X, COMSIG_MOVABLE_PRE_MOVE, .proc/cancel_movement)
+		RegisterSignal(X, COMSIG_MOVABLE_PRE_MOVE, PROC_REF(cancel_movement))
 		LAZYADD(transported_xenos, X)
 
 /datum/action/xeno_action/activable/place_queen_beacon/proc/transport_xenos(turf/target)
 	UnregisterSignal(SSdcs, COMSIG_GLOB_XENO_SPAWN)
 	for(var/xeno in transported_xenos)
-		var/mob/living/carbon/Xenomorph/X = xeno
+		var/mob/living/carbon/xenomorph/X = xeno
 		to_chat(X, SPAN_XENONOTICE("You tunnel to the queen beacon!"))
 		UnregisterSignal(X, COMSIG_MOVABLE_PRE_MOVE)
 		if(target)
@@ -553,7 +627,7 @@
 	SIGNAL_HANDLER
 	return COMPONENT_CANCEL_MOVE
 
-/datum/action/xeno_action/activable/place_queen_beacon/proc/check_turf(mob/living/carbon/Xenomorph/Queen/Q, turf/T)
+/datum/action/xeno_action/activable/place_queen_beacon/proc/check_turf(mob/living/carbon/xenomorph/queen/Q, turf/T)
 	if(!T || T.density)
 		to_chat(Q, SPAN_XENOWARNING("You can't place a queen beacon here."))
 		return FALSE
@@ -571,7 +645,7 @@
 
 
 /datum/action/xeno_action/activable/blockade/use_ability(atom/A)
-	var/mob/living/carbon/Xenomorph/Queen/Q = owner
+	var/mob/living/carbon/xenomorph/queen/Q = owner
 	if(!Q.check_state())
 		return FALSE
 
@@ -622,19 +696,16 @@
 
 	return TRUE
 
-/datum/action/xeno_action/activable/blockade/proc/check_turf(mob/living/carbon/Xenomorph/Queen/Q, turf/T)
+/datum/action/xeno_action/activable/blockade/proc/check_turf(mob/living/carbon/xenomorph/queen/Q, turf/T)
 	if(T.density)
 		to_chat(Q, SPAN_XENOWARNING("You can't place a blockade here."))
 		return FALSE
 
 	return TRUE
 
-/mob/living/carbon/Xenomorph/proc/xeno_tacmap()
+/mob/living/carbon/xenomorph/proc/xeno_tacmap()
 	set name = "View Xeno Tacmap"
 	set desc = "This opens a tactical map, where you can see where every xenomorph is."
 	set category = "Alien"
 
-	var/icon/O = overlay_tacmap(TACMAP_XENO, TACMAP_BASE_OPEN, hivenumber)
-	if(O)
-		src << browse_rsc(O, "marine_minimap.png")
-		show_browser(src, "<img src=marine_minimap.png>", "Xeno Tacmap", "marineminimap", "size=[(map_sizes[1]*2)+50]x[(map_sizes[2]*2)+50]", closeref = src)
+	hive.tacmap.tgui_interact(src)

@@ -1,4 +1,4 @@
-/mob/living/carbon/Xenomorph/attackby(obj/item/item, mob/user)
+/mob/living/carbon/xenomorph/attackby(obj/item/item, mob/user)
 	if(user.a_intent != INTENT_HELP)
 		return ..()
 	if(HAS_TRAIT(item, TRAIT_TOOL_MULTITOOL) && ishuman(user))
@@ -32,7 +32,7 @@
 		return
 	return ..()
 
-/mob/living/carbon/Xenomorph/ex_act(var/severity, var/direction, var/datum/cause_data/cause_data, pierce=0)
+/mob/living/carbon/xenomorph/ex_act(severity, direction, datum/cause_data/cause_data, pierce=0)
 
 	if(lying)
 		severity *= EXPLOSION_PRONE_MULTIPLIER
@@ -40,9 +40,11 @@
 	if(severity >= 30)
 		flash_eyes()
 
+	last_damage_data = istype(cause_data) ? cause_data : create_cause_data(cause_data)
+
 	if(severity > EXPLOSION_THRESHOLD_LOW && stomach_contents.len)
 		for(var/mob/M in stomach_contents)
-			M.ex_act(severity - EXPLOSION_THRESHOLD_LOW, cause_data, pierce)
+			M.ex_act(severity - EXPLOSION_THRESHOLD_LOW, last_damage_data, pierce)
 
 	var/b_loss = 0
 	var/f_loss = 0
@@ -55,8 +57,6 @@
 	var/armor_punch = armor_break_calculation(cfg, damage, total_explosive_resistance, pierce, 1, 0.5, armor_integrity)
 	apply_armorbreak(armor_punch)
 
-	last_damage_data = cause_data
-
 	last_hit_time = world.time
 
 	var/shieldtotal = 0
@@ -65,8 +65,8 @@
 
 	if (damage >= (health + shieldtotal) && damage >= EXPLOSION_THRESHOLD_GIB)
 		var/oldloc = loc
-		gib(cause_data)
-		create_shrapnel(oldloc, rand(16, 24), , , /datum/ammo/bullet/shrapnel/light/xeno, cause_data)
+		gib(last_damage_data)
+		create_shrapnel(oldloc, rand(16, 24), , , /datum/ammo/bullet/shrapnel/light/xeno, last_damage_data)
 		return
 	if (damage >= 0)
 		b_loss += damage * 0.5
@@ -78,7 +78,7 @@
 		var/powerfactor_value = round( damage * 0.05 ,1)
 		powerfactor_value = min(powerfactor_value,20)
 		if(powerfactor_value > 0 && small_explosives_stun)
-			KnockOut(powerfactor_value/5)
+			KnockDown(powerfactor_value/5)
 			if(mob_size < MOB_SIZE_BIG)
 				Slow(powerfactor_value)
 				Superslow(powerfactor_value/2)
@@ -87,14 +87,14 @@
 			explosion_throw(severity, direction)
 		else if(powerfactor_value > 10)
 			powerfactor_value /= 5
-			KnockOut(powerfactor_value/5)
+			KnockDown(powerfactor_value/5)
 			if(mob_size < MOB_SIZE_BIG)
 				Slow(powerfactor_value)
 				Superslow(powerfactor_value/2)
 			else
 				Slow(powerfactor_value/3)
 
-/mob/living/carbon/Xenomorph/apply_armoured_damage(var/damage = 0, var/armour_type = ARMOR_MELEE, var/damage_type = BRUTE, var/def_zone = null, var/penetration = 0, var/armour_break_pr_pen = 0, var/armour_break_flat = 0, var/effectiveness_mult = 1)
+/mob/living/carbon/xenomorph/apply_armoured_damage(damage = 0, armour_type = ARMOR_MELEE, damage_type = BRUTE, def_zone = null, penetration = 0, armour_break_pr_pen = 0, armour_break_flat = 0, effectiveness_mult = 1)
 	if(damage <= 0)
 		return ..(damage, armour_type, damage_type, def_zone)
 
@@ -125,7 +125,7 @@
 
 	return modified_damage
 
-/mob/living/carbon/Xenomorph/apply_damage(damage = 0, damagetype = BRUTE, def_zone = null, used_weapon = null, sharp = 0, edge = 0, force = FALSE)
+/mob/living/carbon/xenomorph/apply_damage(damage = 0, damagetype = BRUTE, def_zone = null, used_weapon = null, sharp = 0, edge = 0, force = FALSE)
 	if(!damage)
 		return
 
@@ -191,8 +191,8 @@
 #define XENO_ARMOR_BREAK_PASS_TIME 0.5 SECONDS
 #define XENO_ARMOR_BREAK_25PERCENT_IMMUNITY_TIME 2 SECONDS
 
-/mob/living/carbon/Xenomorph/var/armor_break_to_apply = 0
-/mob/living/carbon/Xenomorph/proc/apply_armorbreak(armorbreak = 0)
+/mob/living/carbon/xenomorph/var/armor_break_to_apply = 0
+/mob/living/carbon/xenomorph/proc/apply_armorbreak(armorbreak = 0)
 	if(GLOB.xeno_general.armor_ignore_integrity)
 		return FALSE
 
@@ -220,7 +220,7 @@
 
 	return 1
 
-/mob/living/carbon/Xenomorph/proc/post_apply_armorbreak()
+/mob/living/carbon/xenomorph/proc/post_apply_armorbreak()
 	set waitfor = 0
 	if(!caste) return
 	sleep(XENO_ARMOR_BREAK_PASS_TIME)
@@ -233,8 +233,8 @@
 	armor_break_to_apply = 0
 	updatehealth()
 
-/mob/living/carbon/Xenomorph/proc/check_blood_splash(damage = 0, damtype = BRUTE, chancemod = 0, radius = 1)
-	if(!damage || world.time < acid_splash_last + acid_splash_cooldown || SSticker?.mode?.hardcore)
+/mob/living/carbon/xenomorph/proc/check_blood_splash(damage = 0, damtype = BRUTE, chancemod = 0, radius = 1)
+	if(!damage || !acid_blood_damage || world.time < acid_splash_last + acid_splash_cooldown || SSticker?.mode?.hardcore)
 		return FALSE
 	var/chance = 20 //base chance
 	if(damtype == BRUTE) chance += 5
@@ -254,15 +254,12 @@
 					decal.icon_state = pick(decal.random_icon_states)
 
 		var/splash_chance = 40 //Base chance of getting splashed. Decreases with # of victims.
-		var/distance = 0 //Distance, decreases splash chance.
 		var/i = 0 //Tally up our victims.
 
-		for(var/mob/living/carbon/human/victim in orange(radius,src)) //Loop through all nearby victims, including the tile.
-			distance = get_dist(src,victim)
-
-			splash_chance = 80 - (i * 5)
-			if(victim.loc == loc) splash_chance += 30 //Same tile? BURN
-			splash_chance += distance * -15
+		for(var/mob/living/carbon/human/victim in orange(radius, src)) //Loop through all nearby victims, including the tile.
+			splash_chance = 65 - (i * 5)
+			if(victim.loc == loc)
+				splash_chance += 30 //Same tile? BURN
 			if(victim.species?.acid_blood_dodge_chance)
 				splash_chance -= victim.species.acid_blood_dodge_chance
 
@@ -274,12 +271,15 @@
 				victim.visible_message(SPAN_DANGER("\The [victim] is scalded with hissing green blood!"), \
 				SPAN_DANGER("You are splattered with sizzling blood! IT BURNS!"))
 				if(prob(60) && !victim.stat && victim.pain.feels_pain)
-					INVOKE_ASYNC(victim, /mob.proc/emote, "scream") //Topkek
+					INVOKE_ASYNC(victim, TYPE_PROC_REF(/mob, emote), "scream") //Topkek
 				victim.take_limb_damage(0, dmg["damage"]) //Sizzledam! This automagically burns a random existing body part.
 				victim.add_blood(get_blood_color(), BLOOD_BODY)
 				acid_splash_last = world.time
+				handle_blood_splatter(get_dir(src, victim), 1 SECONDS)
+				playsound(victim, "acid_sizzle", 25, TRUE)
+				animation_flash_color(victim, "#FF0000") //pain hit flicker
 
-/mob/living/carbon/Xenomorph/get_target_lock(var/access_to_check)
+/mob/living/carbon/xenomorph/get_target_lock(access_to_check)
 	if(isnull(access_to_check))
 		return
 
@@ -291,3 +291,23 @@
 
 	var/list/overlap = iff_tag.faction_groups & access_to_check
 	return length(overlap)
+
+/mob/living/carbon/xenomorph/handle_flamer_fire(obj/flamer_fire/fire, damage, delta_time)
+	. = ..()
+	switch(fire.fire_variant)
+		if(FIRE_VARIANT_TYPE_B)
+			if(!armor_deflection_debuff) //Only adds another reset timer if the debuff is currently on 0, so at the start or after a reset has recently occured.
+				reset_xeno_armor_debuff_after_time(src, delta_time*10)
+			fire.type_b_debuff_xeno_armor(src) //Always reapplies debuff each time to minimize gap.
+
+/mob/living/carbon/xenomorph/handle_flamer_fire_crossed(obj/flamer_fire/fire)
+	. = ..()
+	switch(fire.fire_variant)
+		if(FIRE_VARIANT_TYPE_B) //Armor Shredding Greenfire
+			if(!armor_deflection_debuff) //Only applies the xeno armor shred reset when the debuff isn't present or was recently removed.
+				reset_xeno_armor_debuff_after_time(src, 20)
+			var/resist_modifier = fire.type_b_debuff_xeno_armor(src)
+			fire.set_on_fire(src) //Deals an extra proc of fire when you're crossing it. 30 damage per tile crossed, plus 15 per Process().
+			next_move_slowdown = next_move_slowdown + (SLOWDOWN_AMT_GREENFIRE * resist_modifier)
+			if(resist_modifier > 0)
+				to_chat(src, SPAN_DANGER("You feel pieces of your exoskeleton fusing with the viscous fluid below and tearing off as you struggle to move through the flames!"))

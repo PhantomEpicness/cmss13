@@ -3,7 +3,7 @@
 	weight = WEIGHT_XENO
 
 /datum/keybinding/xenomorph/can_use(client/user)
-	return isXeno(user.mob)
+	return isxeno(user.mob)
 
 /datum/keybinding/xenomorph/primary_attack_one
 	hotkey_keys = list("C")
@@ -16,7 +16,7 @@
 	. = ..()
 	if(.)
 		return
-	var/mob/living/carbon/Xenomorph/X = user.mob
+	var/mob/living/carbon/xenomorph/X = user.mob
 	X.xeno_primary_action_one()
 	return TRUE
 
@@ -31,7 +31,7 @@
 	. = ..()
 	if(.)
 		return
-	var/mob/living/carbon/Xenomorph/X = user.mob
+	var/mob/living/carbon/xenomorph/X = user.mob
 	X.xeno_primary_action_two()
 	return TRUE
 
@@ -46,7 +46,7 @@
 	. = ..()
 	if(.)
 		return
-	var/mob/living/carbon/Xenomorph/X = user.mob
+	var/mob/living/carbon/xenomorph/X = user.mob
 	X.xeno_primary_action_three()
 	return TRUE
 
@@ -61,8 +61,23 @@
 	. = ..()
 	if(.)
 		return
-	var/mob/living/carbon/Xenomorph/X = user.mob
+	var/mob/living/carbon/xenomorph/X = user.mob
 	X.xeno_primary_action_four()
+	return TRUE
+
+/datum/keybinding/xenomorph/primary_attack_five
+	hotkey_keys = list("N")
+	classic_keys = list()
+	name = "primary_attack_five"
+	full_name = "Primary Attack Five"
+	keybind_signal = COMSIG_KB_XENO_PRIMARY_ATTACK_FIVE
+
+/datum/keybinding/xenomorph/primary_attack_five/down(client/user)
+	. = ..()
+	if(.)
+		return
+	var/mob/living/carbon/xenomorph/X = user.mob
+	X.xeno_primary_action_five()
 	return TRUE
 
 /datum/keybinding/xenomorph/emit_pheromones
@@ -78,7 +93,7 @@
 	. = ..()
 	if(.)
 		return
-	var/mob/living/carbon/Xenomorph/X = user.mob
+	var/mob/living/carbon/xenomorph/X = user.mob
 	X.emit_pheromones(pheromone)
 	return TRUE
 
@@ -114,8 +129,8 @@
 	. = ..()
 	if(.)
 		return
-	var/mob/living/carbon/Xenomorph/X = user.mob
-	X.m_corrosive_acid()
+	var/mob/living/carbon/xenomorph/xeno = user.mob
+	xeno.m_corrosive_acid()
 	return TRUE
 
 /datum/keybinding/xenomorph/tech_secrete_resin
@@ -129,6 +144,36 @@
 	. = ..()
 	if(.)
 		return
-	var/mob/living/carbon/Xenomorph/X = user.mob
-	X.tech_secrete_resin()
+	var/mob/living/carbon/xenomorph/xeno = user.mob
+	xeno.tech_secrete_resin()
+	return TRUE
+
+/datum/keybinding/xenomorph/screech
+	hotkey_keys = list()
+	classic_keys = list()
+	name = "screech"
+	full_name = "Screech"
+	keybind_signal = COMSIG_KB_XENO_SCREECH
+
+/datum/keybinding/xenomorph/screech/down(client/user)
+	. = ..()
+	if(.)
+		return
+	var/mob/living/carbon/xenomorph/xeno = user.mob
+	xeno.xeno_screech_action()
+	return TRUE
+
+/datum/keybinding/xenomorph/tail_stab
+	hotkey_keys = list()
+	classic_keys = list()
+	name = "tail_stab"
+	full_name = "Tail Stab"
+	keybind_signal = COMSIG_KB_TAIL_STAB
+
+/datum/keybinding/xenomorph/tail_stab/down(client/user)
+	. = ..()
+	if(.)
+		return
+	var/mob/living/carbon/xenomorph/xeno = user.mob
+	xeno.xeno_tail_stab_action()
 	return TRUE

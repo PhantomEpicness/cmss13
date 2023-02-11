@@ -2,11 +2,11 @@
 	icon = 'icons/obj/pipes/pipes.dmi'
 	icon_state = ""
 	name = "pipe"
-	desc = "A one meter section of regular pipe"
+	desc = "A one-meter section of regular pipe"
 	dir = SOUTH
 	valid_directions = list(SOUTH, NORTH)
 
-/obj/structure/pipes/standard/simple/color_cache_name(var/obj/structure/pipes/node)
+/obj/structure/pipes/standard/simple/color_cache_name(obj/structure/pipes/node)
 	return node.pipe_color
 
 /obj/structure/pipes/standard/simple/Initialize()
@@ -35,7 +35,7 @@
 	else if(dir == 12)
 		setDir(EAST)
 
-/obj/structure/pipes/standard/simple/update_icon(var/safety = 0)
+/obj/structure/pipes/standard/simple/update_icon(safety = 0)
 	..()
 
 	if(!check_icon_cache())
@@ -56,14 +56,14 @@
 
 /obj/structure/pipes/standard/simple/visible/scrubbers
 	name = "Scrubbers pipe"
-	desc = "A one meter section of scrubbers pipe"
+	desc = "A one-meter section of scrubbers pipe"
 	icon_state = "intact-scrubbers"
 	layer = ATMOS_PIPE_SCRUBBER_LAYER
 	color = PIPE_COLOR_RED
 
 /obj/structure/pipes/standard/simple/visible/supply
 	name = "Air supply pipe"
-	desc = "A one meter section of supply pipe"
+	desc = "A one-meter section of supply pipe"
 	icon_state = "intact-supply"
 	layer = ATMOS_PIPE_SUPPLY_LAYER
 	color = PIPE_COLOR_BLUE
@@ -83,7 +83,7 @@
 
 /obj/structure/pipes/standard/simple/hidden
 	icon_state = "intact"
-	alpha = 128		//set for the benefit of mapping - this is reset to opaque when the pipe is spawned in game
+	alpha = 128 //set for the benefit of mapping - this is reset to opaque when the pipe is spawned in game
 
 /obj/structure/pipes/standard/simple/hidden/update_icon()
 	level = 1
@@ -92,14 +92,14 @@
 
 /obj/structure/pipes/standard/simple/hidden/scrubbers
 	name = "Scrubbers pipe"
-	desc = "A one meter section of scrubbers pipe"
+	desc = "A one-meter section of scrubbers pipe"
 	icon_state = "intact-scrubbers"
 	layer = ATMOS_PIPE_SCRUBBER_LAYER
 	color = PIPE_COLOR_RED
 
 /obj/structure/pipes/standard/simple/hidden/supply
 	name = "Air supply pipe"
-	desc = "A one meter section of supply pipe"
+	desc = "A one-meter section of supply pipe"
 	icon_state = "intact-supply"
 	layer = ATMOS_PIPE_SUPPLY_LAYER
 	color = PIPE_COLOR_BLUE

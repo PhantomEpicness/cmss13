@@ -9,64 +9,65 @@
 	var/mob/mymob
 	var/datum/custom_hud/ui_datum
 
-	var/hud_version = HUD_STYLE_STANDARD	//the hud version used (standard, reduced, none)
-	var/hud_shown = TRUE			//Used for the HUD toggle (F12)
-	var/inventory_shown = TRUE		//the inventory
+	var/hud_version = HUD_STYLE_STANDARD //the hud version used (standard, reduced, none)
+	var/hud_shown = TRUE //Used for the HUD toggle (F12)
+	var/inventory_shown = TRUE //the inventory
 	var/show_intent_icons = 0
-	var/hotkey_ui_hidden = 0	//This is to hide the buttons that can be used via hotkeys. (hotkeybuttons list of buttons)
+	var/hotkey_ui_hidden = 0 //This is to hide the buttons that can be used via hotkeys. (hotkeybuttons list of buttons)
 
-	var/obj/screen/r_hand_hud_object
-	var/obj/screen/l_hand_hud_object
-	var/obj/screen/action_intent
-	var/obj/screen/alien_plasma_display
-	var/obj/screen/alien_armor_display
-	var/obj/screen/locate_leader
-	var/obj/screen/locate_marker
-	var/obj/screen/locate_nuke
-	var/obj/screen/pred_power_icon
+	var/atom/movable/screen/r_hand_hud_object
+	var/atom/movable/screen/l_hand_hud_object
+	var/atom/movable/screen/action_intent
+	var/atom/movable/screen/mov_intent/move_intent
+	var/atom/movable/screen/alien_plasma_display
+	var/atom/movable/screen/alien_armor_display
+	var/atom/movable/screen/locate_leader
+	var/atom/movable/screen/locate_marker
+	var/atom/movable/screen/locate_nuke
+	var/atom/movable/screen/pred_power_icon
 
-	var/obj/screen/frame_hud
-	var/obj/screen/pulse_line
+	var/atom/movable/screen/frame_hud
+	var/atom/movable/screen/pulse_line
 
-	var/obj/screen/slowed_icon
-	var/obj/screen/bleeding_icon
-	var/obj/screen/shrapnel_icon
-	var/obj/screen/tethering_icon
-	var/obj/screen/tethered_icon
+	var/atom/movable/screen/slowed_icon
+	var/atom/movable/screen/bleeding_icon
+	var/atom/movable/screen/shrapnel_icon
+	var/atom/movable/screen/tethering_icon
+	var/atom/movable/screen/tethered_icon
 
-	var/obj/screen/module_store_icon
+	var/atom/movable/screen/module_store_icon
 
-	var/obj/screen/nutrition_icon
+	var/atom/movable/screen/nutrition_icon
 
-	var/obj/screen/use_attachment
-	var/obj/screen/toggle_raillight
-	var/obj/screen/eject_mag
-	var/obj/screen/toggle_burst
-	var/obj/screen/unique_action
+	var/atom/movable/screen/use_attachment
+	var/atom/movable/screen/toggle_raillight
+	var/atom/movable/screen/eject_mag
+	var/atom/movable/screen/toggle_burst
+	var/atom/movable/screen/unique_action
 
-	var/obj/screen/zone_sel
-	var/obj/screen/pull_icon
-	var/obj/screen/throw_icon
-	var/obj/screen/oxygen_icon
-	var/obj/screen/fire_icon
-	var/obj/screen/healths
-	var/obj/screen/bodytemp_icon
+	var/atom/movable/screen/zone_sel
+	var/atom/movable/screen/pull_icon
+	var/atom/movable/screen/throw_icon
+	var/atom/movable/screen/oxygen_icon
+	var/atom/movable/screen/fire_icon
+	var/atom/movable/screen/healths
+	var/atom/movable/screen/bodytemp_icon
 
-	var/obj/screen/gun_setting_icon
-	var/obj/screen/gun_item_use_icon
-	var/obj/screen/gun_move_icon
-	var/obj/screen/gun_run_icon
+	var/atom/movable/screen/gun_setting_icon
+	var/atom/movable/screen/gun_item_use_icon
+	var/atom/movable/screen/gun_move_icon
+	var/atom/movable/screen/gun_run_icon
 
-	var/list/obj/screen/plane_master/plane_masters = list() // see "appearance_flags" in the ref, assoc list of "[plane]" = object
+	var/list/atom/movable/screen/plane_master/plane_masters = list() // see "appearance_flags" in the ref, assoc list of "[plane]" = object
 	///Assoc list of controller groups, associated with key string group name with value of the plane master controller ref
-	var/list/obj/plane_master_controller/plane_master_controllers = list()
+	var/list/atom/movable/plane_master_controller/plane_master_controllers = list()
 
 	var/list/static_inventory = list() //the screen objects which are static
 	var/list/toggleable_inventory = list() //the screen objects which can be hidden
-	var/list/obj/screen/hotkeybuttons = list() //the buttons that can be used via hotkeys
+	var/list/atom/movable/screen/hotkeybuttons = list() //the buttons that can be used via hotkeys
 	var/list/infodisplay = list() //the screen objects that display mob info (health, alien plasma, etc...)
 
-	var/obj/screen/action_button/hide_toggle/hide_actions_toggle
+	var/atom/movable/screen/action_button/hide_toggle/hide_actions_toggle
 	var/action_buttons_hidden = 0
 
 	var/list/equip_slots = list()
@@ -76,14 +77,14 @@
 	mymob = owner
 	hide_actions_toggle = new
 
-	for(var/mytype in subtypesof(/obj/screen/plane_master)- /obj/screen/plane_master/rendering_plate)
-		var/obj/screen/plane_master/instance = new mytype()
+	for(var/mytype in subtypesof(/atom/movable/screen/plane_master)- /atom/movable/screen/plane_master/rendering_plate)
+		var/atom/movable/screen/plane_master/instance = new mytype()
 		plane_masters["[instance.plane]"] = instance
 		if(owner.client)
 			instance.backdrop(mymob)
 
-	for(var/mytype in subtypesof(/obj/plane_master_controller))
-		var/obj/plane_master_controller/controller_instance = new mytype(null,src)
+	for(var/mytype in subtypesof(/atom/movable/plane_master_controller))
+		var/atom/movable/plane_master_controller/controller_instance = new mytype(null,src)
 		plane_master_controllers[controller_instance.name] = controller_instance
 
 /datum/hud/Destroy()
@@ -112,6 +113,7 @@
 	r_hand_hud_object = null
 	l_hand_hud_object = null
 	action_intent = null
+	move_intent = null
 	alien_plasma_display = null
 	alien_armor_display = null
 	locate_leader = null
@@ -165,8 +167,8 @@
 /datum/hud/proc/show_hud(version = 0, mob/viewmob)
 	if(!ismob(mymob))
 		return FALSE
-//	if(!mymob.client)
-//		return FALSE
+// if(!mymob.client)
+// return FALSE
 	var/mob/screenmob = viewmob || mymob
 	if(!screenmob.client)
 		return FALSE
@@ -175,14 +177,14 @@
 	screenmob.client.apply_clickcatcher()
 
 	var/display_hud_version = version
-	if(!display_hud_version)	//If 0 or blank, display the next hud version
+	if(!display_hud_version) //If 0 or blank, display the next hud version
 		display_hud_version = hud_version + 1
-	if(display_hud_version > HUD_VERSIONS)	//If the requested version number is greater than the available versions, reset back to the first version
+	if(display_hud_version > HUD_VERSIONS) //If the requested version number is greater than the available versions, reset back to the first version
 		display_hud_version = 1
 
 	switch(display_hud_version)
-		if(HUD_STYLE_STANDARD)	//Default HUD
-			hud_shown = 1	//Governs behavior of other procs
+		if(HUD_STYLE_STANDARD) //Default HUD
+			hud_shown = 1 //Governs behavior of other procs
 			if(static_inventory.len)
 				screenmob.client.screen += static_inventory
 			if(toggleable_inventory.len && inventory_shown)
@@ -192,8 +194,8 @@
 			if(infodisplay.len)
 				screenmob.client.screen += infodisplay
 
-		if(HUD_STYLE_REDUCED)	//Reduced HUD
-			hud_shown = 0	//Governs behavior of other procs
+		if(HUD_STYLE_REDUCED) //Reduced HUD
+			hud_shown = 0 //Governs behavior of other procs
 			if(static_inventory.len)
 				screenmob.client.screen -= static_inventory
 			if(toggleable_inventory.len)
@@ -205,14 +207,14 @@
 
 			//These ones are a part of 'static_inventory', 'toggleable_inventory' or 'hotkeybuttons' but we want them to stay
 			if(l_hand_hud_object)
-				screenmob.client.screen += l_hand_hud_object	//we want the hands to be visible
+				screenmob.client.screen += l_hand_hud_object //we want the hands to be visible
 			if(r_hand_hud_object)
-				screenmob.client.screen += r_hand_hud_object	//we want the hands to be visible
+				screenmob.client.screen += r_hand_hud_object //we want the hands to be visible
 			if(action_intent)
-				screenmob.client.screen += action_intent		//we want the intent switcher visible
+				screenmob.client.screen += action_intent //we want the intent switcher visible
 
-		if(HUD_STYLE_NOHUD)	//No HUD
-			hud_shown = 0	//Governs behavior of other procs
+		if(HUD_STYLE_NOHUD) //No HUD
+			hud_shown = 0 //Governs behavior of other procs
 			if(static_inventory.len)
 				screenmob.client.screen -= static_inventory
 			if(toggleable_inventory.len)
@@ -240,7 +242,7 @@
 /datum/hud/proc/plane_masters_update()
 	// Plane masters are always shown to OUR mob, never to observers
 	for(var/thing in plane_masters)
-		var/obj/screen/plane_master/PM = plane_masters[thing]
+		var/atom/movable/screen/plane_master/PM = plane_masters[thing]
 		PM.backdrop(mymob)
 		mymob.client.screen += PM
 
@@ -262,7 +264,7 @@
 //Triggered when F12 is pressed (Unless someone changed something in the DMF)
 /mob/verb/button_pressed_F12()
 	set name = "F12"
-	set hidden = 1
+	set hidden = TRUE
 
 	if(hud_used && client)
 		hud_used.show_hud()
@@ -271,8 +273,8 @@
 		to_chat(usr, SPAN_WARNING("This mob type does not use a HUD."))
 
 
-/datum/hud/proc/draw_act_intent(var/datum/custom_hud/ui_datum, var/ui_alpha)
-	var/obj/screen/using = new /obj/screen/act_intent/corner()
+/datum/hud/proc/draw_act_intent(datum/custom_hud/ui_datum, ui_alpha)
+	var/atom/movable/screen/using = new /atom/movable/screen/act_intent/corner()
 	using.icon = ui_datum.ui_style_icon
 	if(ui_alpha)
 		using.alpha = ui_alpha
@@ -281,8 +283,20 @@
 	static_inventory += using
 	action_intent = using
 
-/datum/hud/proc/draw_drop(var/datum/custom_hud/ui_datum, var/ui_alpha, var/ui_color)
-	var/obj/screen/using = new /obj/screen/drop()
+/datum/hud/proc/draw_mov_intent(datum/custom_hud/ui_datum, ui_alpha, ui_color)
+	var/atom/movable/screen/using = new /atom/movable/screen/mov_intent()
+	using.icon = ui_datum.ui_style_icon
+	using.screen_loc = ui_datum.ui_movi
+	if(ui_alpha)
+		using.alpha = ui_alpha
+	if(ui_color)
+		using.color = ui_color
+	using.icon_state = (mymob.m_intent == MOVE_INTENT_RUN ? "running" : "walking")
+	static_inventory += using
+	move_intent = using
+
+/datum/hud/proc/draw_drop(datum/custom_hud/ui_datum, ui_alpha, ui_color)
+	var/atom/movable/screen/using = new /atom/movable/screen/drop()
 	using.icon = ui_datum.ui_style_icon
 	using.screen_loc = ui_datum.ui_drop_throw
 	if(ui_alpha)
@@ -291,8 +305,8 @@
 		using.color = ui_color
 	static_inventory += using
 
-/datum/hud/proc/draw_throw(var/datum/custom_hud/ui_datum, var/ui_alpha, var/ui_color)
-	throw_icon = new /obj/screen/throw_catch()
+/datum/hud/proc/draw_throw(datum/custom_hud/ui_datum, ui_alpha, ui_color)
+	throw_icon = new /atom/movable/screen/throw_catch()
 	throw_icon.icon = ui_datum.ui_style_icon
 	throw_icon.screen_loc = ui_datum.ui_drop_throw
 	if(ui_alpha)
@@ -301,15 +315,15 @@
 		throw_icon.color = ui_color
 	hotkeybuttons += throw_icon
 
-/datum/hud/proc/draw_pull(var/datum/custom_hud/ui_datum)
-	pull_icon = new /obj/screen/pull()
+/datum/hud/proc/draw_pull(datum/custom_hud/ui_datum)
+	pull_icon = new /atom/movable/screen/pull()
 	pull_icon.icon = ui_datum.ui_style_icon
 	pull_icon.screen_loc = ui_datum.ui_pull
 	pull_icon.update_icon(mymob)
 	hotkeybuttons += pull_icon
 
-/datum/hud/proc/draw_resist(var/datum/custom_hud/ui_datum, var/ui_alpha, var/ui_color)
-	var/obj/screen/using = new /obj/screen/resist()
+/datum/hud/proc/draw_resist(datum/custom_hud/ui_datum, ui_alpha, ui_color)
+	var/atom/movable/screen/using = new /atom/movable/screen/resist()
 	using.icon = ui_datum.ui_style_icon
 	using.screen_loc = ui_datum.ui_resist
 	if(ui_alpha)
@@ -318,8 +332,8 @@
 		using.color = ui_color
 	hotkeybuttons += using
 
-/datum/hud/proc/draw_left_hand(var/datum/custom_hud/ui_datum, var/ui_alpha, var/ui_color)
-	var/obj/screen/inventory/inv_box = new /obj/screen/inventory()
+/datum/hud/proc/draw_left_hand(datum/custom_hud/ui_datum, ui_alpha, ui_color)
+	var/atom/movable/screen/inventory/inv_box = new /atom/movable/screen/inventory()
 	inv_box.name = WEAR_L_HAND
 	inv_box.icon = ui_datum.ui_style_icon
 	inv_box.setDir(EAST)
@@ -336,14 +350,14 @@
 	l_hand_hud_object = inv_box
 	static_inventory += inv_box
 
-/datum/hud/proc/draw_right_hand(var/datum/custom_hud/ui_datum, var/ui_alpha, var/ui_color)
-	var/obj/screen/inventory/inv_box = new /obj/screen/inventory()
+/datum/hud/proc/draw_right_hand(datum/custom_hud/ui_datum, ui_alpha, ui_color)
+	var/atom/movable/screen/inventory/inv_box = new /atom/movable/screen/inventory()
 	inv_box.name = WEAR_R_HAND
 	inv_box.icon = ui_datum.ui_style_icon
 	inv_box.setDir(WEST)
 	inv_box.screen_loc = ui_datum.ui_rhand
 	inv_box.icon_state = "hand_inactive"
-	if(mymob && !mymob.hand)	//This being 0 or null means the right hand is in use
+	if(mymob && !mymob.hand) //This being 0 or null means the right hand is in use
 		inv_box.icon_state = "hand_active"
 	if(ui_alpha)
 		inv_box.alpha = ui_alpha
@@ -354,8 +368,8 @@
 	r_hand_hud_object = inv_box
 	static_inventory += inv_box
 
-/datum/hud/proc/draw_swaphand(var/handswap_part, var/handswap_part_loc, var/datum/custom_hud/ui_datum, var/ui_alpha, var/ui_color)
-	var/obj/screen/using = new /obj/screen/inventory()
+/datum/hud/proc/draw_swaphand(handswap_part, handswap_part_loc, datum/custom_hud/ui_datum, ui_alpha, ui_color)
+	var/atom/movable/screen/using = new /atom/movable/screen/inventory()
 	using.name = "hand"
 	using.icon = ui_datum.ui_style_icon
 	using.icon_state = handswap_part
@@ -367,14 +381,14 @@
 	using.layer = HUD_LAYER
 	static_inventory += using
 
-/datum/hud/proc/draw_healths(var/datum/custom_hud/ui_datum, var/ui_alpha)
-	healths = new /obj/screen/healths()
+/datum/hud/proc/draw_healths(datum/custom_hud/ui_datum, ui_alpha)
+	healths = new /atom/movable/screen/healths()
 	healths.icon = ui_datum.ui_style_icon
 	healths.screen_loc = ui_datum.UI_HEALTH_LOC
 	infodisplay += healths
 
-/datum/hud/proc/draw_zone_sel(var/datum/custom_hud/ui_datum, var/ui_alpha, var/ui_color)
-	zone_sel = new /obj/screen/zone_sel()
+/datum/hud/proc/draw_zone_sel(datum/custom_hud/ui_datum, ui_alpha, ui_color)
+	zone_sel = new /atom/movable/screen/zone_sel()
 	zone_sel.icon = ui_datum.ui_style_icon
 	zone_sel.screen_loc = ui_datum.ui_zonesel
 	if(ui_alpha)

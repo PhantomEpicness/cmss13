@@ -1,23 +1,23 @@
 // patient_exam defines
-#define PATIENT_NOT_AWAKE		1
-#define	PATIENT_LOW_BLOOD		2
-#define PATIENT_LOW_NUTRITION	4
+#define PATIENT_NOT_AWAKE 1
+#define PATIENT_LOW_BLOOD 2
+#define PATIENT_LOW_NUTRITION 4
 
 /obj/structure/machinery/optable
 	name = "Operating Table"
 	desc = "Used for advanced medical procedures."
 	icon = 'icons/obj/structures/machinery/surgery.dmi'
 	icon_state = "table2-idle"
-	density = 1
+	density = TRUE
 	layer = TABLE_LAYER
-	anchored = 1
+	anchored = TRUE
 	unslashable = TRUE
 	unacidable = TRUE
 	climbable = TRUE
-	use_power = 1
+	use_power = USE_POWER_IDLE
 	idle_power_usage = 1
 	active_power_usage = 5
-	var/strapped = 0.0
+	var/strapped = 0
 	can_buckle = TRUE
 	buckle_lying = TRUE
 	var/buckling_y = -4
@@ -40,7 +40,7 @@
 	QDEL_NULL(anes_tank)
 	. = ..()
 
-/obj/structure/machinery/optable/initialize_pass_flags(var/datum/pass_flags_container/PF)
+/obj/structure/machinery/optable/initialize_pass_flags(datum/pass_flags_container/PF)
 	..()
 	if (PF)
 		PF.flags_can_pass_all = PASS_OVER|PASS_AROUND
@@ -50,23 +50,23 @@
 	switch(severity)
 		if(0 to EXPLOSION_THRESHOLD_LOW)
 			if (prob(25))
-				src.density = 0
+				src.density = FALSE
 		if(EXPLOSION_THRESHOLD_LOW to EXPLOSION_THRESHOLD_MEDIUM)
 			if (prob(50))
-				qdel(src)
+				deconstruct(FALSE)
 				return
 		if(EXPLOSION_THRESHOLD_MEDIUM to INFINITY)
-			qdel(src)
+			deconstruct(FALSE)
 			return
 		else
 	return
 
-/obj/structure/machinery/optable/examine(mob/user)
-	..()
+/obj/structure/machinery/optable/get_examine_text(mob/user)
+	. = ..()
 	if(get_dist(user, src) > 2 && !isobserver(user))
 		return
 	if(anes_tank)
-		to_chat(user, SPAN_INFO("It has an [anes_tank] connected with the gauge showing [round(anes_tank.pressure,0.1)] kPa."))
+		. += SPAN_INFO("It has an [anes_tank] connected with the gauge showing [round(anes_tank.pressure,0.1)] kPa.")
 
 /obj/structure/machinery/optable/attack_hand(mob/living/user)
 	if(buckled_mob)
@@ -77,6 +77,14 @@
 		to_chat(user, SPAN_NOTICE("You remove \the [anes_tank] from \the [src]."))
 		anes_tank = null
 
+// Removing marines connected to anesthetic
+/obj/structure/machinery/optable/attack_alien(mob/living/carbon/xenomorph/alien, mob/living/user)
+	if(buckled_mob)
+		to_chat(alien, SPAN_XENONOTICE("You rip the tubes away from the host, releasing it!"))
+		playsound(alien, "alien_claw_flesh", 25, 1)
+		unbuckle(user)
+	else
+		. = ..()
 
 /obj/structure/machinery/optable/buckle_mob(mob/living/carbon/human/H, mob/living/user)
 	if(!istype(H) || !ishuman(user) || H == user || H.buckled || user.action_busy || user.is_mob_incapacitated() || buckled_mob)
@@ -100,10 +108,12 @@
 	if(!anes_tank)
 		to_chat(user, SPAN_WARNING("There is no anesthetic tank connected to the table, load one first."))
 		return
-	if(H.wear_mask && !H.drop_inv_item_on_ground(H.wear_mask))
-		to_chat(user, SPAN_DANGER("You can't remove their mask!"))
-		return
-
+	if(H.wear_mask)
+		var/obj/item/mask = H.wear_mask
+		if(mask.flags_inventory & CANTSTRIP)
+			to_chat(user, SPAN_DANGER("You can't remove their mask!"))
+			return
+		H.drop_inv_item_on_ground(mask)
 	var/obj/item/clothing/mask/breath/medical/B = new()
 	if(!H.equip_if_possible(B, WEAR_FACE, TRUE))
 		to_chat(user, SPAN_DANGER("You can't fit the gas mask over their face!"))
@@ -133,7 +143,10 @@
 		var/obj/item/M = H.wear_mask
 		H.drop_inv_item_on_ground(M)
 		qdel(M)
-		H.visible_message(SPAN_NOTICE("[user] turns off the anesthetic and removes the mask from [H]."))
+		if(ishuman(user)) //Checks for whether a xeno is unbuckling from the operating table
+			H.visible_message(SPAN_NOTICE("[user] turns off the anesthetic and removes the mask from [H]."))
+		else
+			H.visible_message(SPAN_WARNING("The anesthesia mask is ripped away from [H]'s face!"))
 		stop_processing()
 		patient_exam = 0
 		..()

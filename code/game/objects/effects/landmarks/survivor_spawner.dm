@@ -1,21 +1,26 @@
 /obj/effect/landmark/survivor_spawner
 	name = "special survivor spawner"
 	var/equipment = null
+	var/synth_equipment = null
+	var/CO_equipment = null
 	var/list/intro_text = list()
 	var/story_text = ""
 	var/roundstart_damage_min = 0
 	var/roundstart_damage_max = 0
 	var/roundstart_damage_times = 1
 
+	var/spawn_priority = LOWEST_SPAWN_PRIORITY
+
 /obj/effect/landmark/survivor_spawner/Initialize(mapload, ...)
 	. = ..()
-	GLOB.survivor_spawns += src
+	LAZYINITLIST(GLOB.survivor_spawns_by_priority["[spawn_priority]"])
+	GLOB.survivor_spawns_by_priority["[spawn_priority]"] += src
 
 /obj/effect/landmark/survivor_spawner/Destroy()
-	GLOB.survivor_spawns -= src
+	GLOB.survivor_spawns_by_priority["[spawn_priority]"] -= src
 	return ..()
 
-/obj/effect/landmark/survivor_spawner/proc/check_can_spawn(var/mob/living/carbon/human/survivor)
+/obj/effect/landmark/survivor_spawner/proc/check_can_spawn(mob/living/carbon/human/survivor)
 	// prevents stacking survivors on top of eachother
 	if(locate(/mob/living/carbon/human) in loc)
 		return FALSE
@@ -31,8 +36,11 @@
 	roundstart_damage_max = 10
 	roundstart_damage_times = 3
 
+	spawn_priority = SPAWN_PRIORITY_VERY_HIGH
+
 /obj/effect/landmark/survivor_spawner/lv624_crashed_clf
 	equipment = /datum/equipment_preset/survivor/clf
+	synth_equipment = /datum/equipment_preset/clf/synth
 	intro_text = list("<h2>You are a survivor of a crash landing!</h2>",\
 	"<span class='notice'>You are NOT aware of the xenomorph threat.</span>",\
 	"<span class='danger'>Your primary objective is to heal up and survive. If you want to assault the hive - adminhelp.</span>")
@@ -41,8 +49,11 @@
 	roundstart_damage_max = 10
 	roundstart_damage_times = 2
 
+	spawn_priority = SPAWN_PRIORITY_VERY_HIGH
+
 /obj/effect/landmark/survivor_spawner/bigred_crashed_pmc
 	equipment = /datum/equipment_preset/survivor/pmc
+	synth_equipment = /datum/equipment_preset/pmc/synth
 	intro_text = list("<h2>You are a survivor of a crash landing!</h2>",\
 	"<span class='notice'>You are NOT aware of the xenomorph threat.</span>",\
 	"<span class='danger'>Your primary objective is to heal up and survive. If you want to assault the hive - adminhelp.</span>")
@@ -51,8 +62,11 @@
 	roundstart_damage_max = 10
 	roundstart_damage_times = 2
 
+	spawn_priority = SPAWN_PRIORITY_VERY_HIGH
+
 /obj/effect/landmark/survivor_spawner/bigred_crashed_cl
 	equipment = /datum/equipment_preset/survivor/wy/manager
+	synth_equipment = /datum/equipment_preset/pmc/synth
 	intro_text = list("<h2>You are a survivor of a crash landing!</h2>",\
 	"<span class='notice'>You are NOT aware of the xenomorph threat.</span>",\
 	"<span class='danger'>Your primary objective is to heal up and survive. If you want to assault the hive - adminhelp.</span>")
@@ -61,4 +75,27 @@
 	roundstart_damage_max = 10
 	roundstart_damage_times = 2
 
+	spawn_priority = SPAWN_PRIORITY_VERY_HIGH
 
+
+//Military Survivors//
+
+/obj/effect/landmark/survivor_spawner/lv522_forecon_tech
+	equipment = /datum/equipment_preset/survivor/forecon/tech
+	spawn_priority = SPAWN_PRIORITY_MEDIUM
+
+/obj/effect/landmark/survivor_spawner/lv522_forecon_marksman
+	equipment = /datum/equipment_preset/survivor/forecon/marksman
+	spawn_priority = SPAWN_PRIORITY_MEDIUM
+
+/obj/effect/landmark/survivor_spawner/lv522_forecon_smartgunner
+	equipment = /datum/equipment_preset/survivor/forecon/smartgunner
+	spawn_priority = SPAWN_PRIORITY_MEDIUM
+
+/obj/effect/landmark/survivor_spawner/lv522_forecon_grenadier
+	equipment = /datum/equipment_preset/survivor/forecon/grenadier
+	spawn_priority = SPAWN_PRIORITY_MEDIUM
+
+/obj/effect/landmark/survivor_spawner/lv522_forecon_squad_leader
+	equipment = /datum/equipment_preset/survivor/forecon/squad_leader
+	spawn_priority = SPAWN_PRIORITY_HIGH

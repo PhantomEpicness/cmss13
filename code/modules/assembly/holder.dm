@@ -24,10 +24,10 @@
 	. = ..()
 	flags_atom |= USES_HEARING
 
-/obj/item/device/assembly_holder/proc/attach_special(var/obj/O, var/mob/user)
+/obj/item/device/assembly_holder/proc/attach_special(obj/O, mob/user)
 	return
 
-/obj/item/device/assembly_holder/proc/process_activation(var/obj/item/device/D)
+/obj/item/device/assembly_holder/proc/process_activation(obj/item/device/D)
 	return
 
 /obj/item/device/assembly_holder/proc/detached()
@@ -36,10 +36,10 @@
 /obj/item/device/assembly_holder/IsAssemblyHolder()
 	return 1
 
-/obj/item/device/assembly_holder/proc/attach(var/obj/item/device/D, var/obj/item/device/D2, var/mob/user)
-	if((!D)||(!D2))	return 0
-	if((!isassembly(D))||(!isassembly(D2)))	return 0
-	if((D:secured)||(D2:secured))	return 0
+/obj/item/device/assembly_holder/proc/attach(obj/item/device/D, obj/item/device/D2, mob/user)
+	if((!D)||(!D2)) return 0
+	if((!isassembly(D))||(!isassembly(D2))) return 0
+	if((D:secured)||(D2:secured)) return 0
 	if(user)
 		user.temp_drop_inv_item(D)
 		if(D2.loc == user)
@@ -60,9 +60,9 @@
 
 	return 1
 
-/obj/item/device/assembly_holder/attach_special(var/obj/O, var/mob/user)
-	if(!O)	return
-	if(!O.IsSpecialAssembly())	return 0
+/obj/item/device/assembly_holder/attach_special(obj/O, mob/user)
+	if(!O) return
+	if(!O.IsSpecialAssembly()) return 0
 
 /obj/item/device/assembly_holder/update_icon()
 	overlays.Cut()
@@ -77,13 +77,13 @@
 	if(master)
 		master.update_icon()
 
-/obj/item/device/assembly_holder/examine(mob/user)
-	..()
+/obj/item/device/assembly_holder/get_examine_text(mob/user)
+	. = ..()
 	if (in_range(src, user) || loc == user)
 		if (secured)
-			to_chat(user, "[src] is ready!")
+			. += "[src] is ready!"
 		else
-			to_chat(user, "[src] can be attached!")
+			. += "[src] can be attached!"
 
 /obj/item/device/assembly_holder/HasProximity(atom/movable/AM as mob|obj)
 	if(a_left)
@@ -152,8 +152,8 @@
 			return
 		if(istype(a_left,a_right.type))//If they are the same type it causes issues due to window code
 			switch(alert("Which side would you like to use?",,"Left","Right"))
-				if("Left")	a_left.attack_self(user)
-				if("Right")	a_right.attack_self(user)
+				if("Left") a_left.attack_self(user)
+				if("Right") a_right.attack_self(user)
 			return
 		else
 			if(!istype(a_left,/obj/item/device/assembly/igniter))
@@ -174,8 +174,8 @@
 			a_right = null
 		qdel(src)
 
-/obj/item/device/assembly_holder/process_activation(var/obj/D, var/normal = 1, var/special = 1)
-	if(!D)	return 0
+/obj/item/device/assembly_holder/process_activation(obj/D, normal = 1, special = 1)
+	if(!D) return 0
 	if(!secured)
 		visible_message("[icon2html(src, hearers(src))] *beep* *beep*", "*beep* *beep*")
 	if((normal) && (a_right) && (a_left))
@@ -241,7 +241,7 @@
 		if(tmr.timing)
 			to_chat(usr, SPAN_NOTICE("Clock is ticking already."))
 		else
-			var/ntime = input("Enter desired time in seconds", "Time", "5") as num
+			var/ntime = tgui_input_number(usr, "Enter desired time in seconds", "Time", 5, 1000, 0)
 			if (ntime>0 && ntime<1000)
 				tmr.time = ntime
 				name = initial(name) + "([tmr.time] secs)"

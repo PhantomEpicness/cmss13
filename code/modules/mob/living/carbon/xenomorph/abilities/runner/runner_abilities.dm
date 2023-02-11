@@ -9,12 +9,12 @@
 	plasma_cost = 0
 
 	// Config options
-	knockdown = TRUE				// Should we knock down the target?
+	knockdown = TRUE // Should we knock down the target?
 	knockdown_duration = 1
-	slash = FALSE					// Do we slash upon reception?
-	freeze_self = TRUE				// Should we freeze ourselves after the lunge?
-	freeze_time = 5					// 5 for runners
-	can_be_shield_blocked = TRUE	// Some legacy stuff, self explanatory
+	slash = FALSE // Do we slash upon reception?
+	freeze_self = TRUE // Should we freeze ourselves after the lunge?
+	freeze_time = 5 // 5 for runners
+	can_be_shield_blocked = TRUE // Some legacy stuff, self explanatory
 
 /datum/action/xeno_action/onclick/toggle_long_range/runner
 	handles_movement = FALSE
@@ -39,7 +39,7 @@
 	ability_name = "acider acid"
 	var/acid_type = /obj/effect/xenomorph/acid/strong
 	macro_path = /datum/action/xeno_action/verb/verb_acider_acid
-	ability_primacy = XENO_PRIMARY_ACTION_2
+	ability_primacy = XENO_PRIMARY_ACTION_1
 	action_type = XENO_ACTION_CLICK
 	var/acid_cost = 100
 
@@ -49,5 +49,5 @@
 	ability_name = "for the hive"
 	macro_path = /datum/action/xeno_action/verb/verb_acider_sacrifice
 	action_type = XENO_ACTION_CLICK
-	ability_primacy = XENO_PRIMARY_ACTION_3
+	ability_primacy = XENO_PRIMARY_ACTION_2
 	var/minimal_acid = 200

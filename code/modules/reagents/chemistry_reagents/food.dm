@@ -1,7 +1,10 @@
 
-/////////////////////////Food Reagents////////////////////////////
+
+//*****************************************************************************************************/
+//****************************************Food Reagents************************************************/
+//*****************************************************************************************************/
 // Part of the food code. Nutriment is used instead of the old "heal_amt" code. Also is where all the food
-// 	condiments, additives, and such go.
+// condiments, additives, and such go.
 
 /datum/reagent/nutriment
 	name = "Nutriment"
@@ -18,67 +21,73 @@
 	name = "Egg"
 	id = "egg"
 	description = "The contents of an egg. Salmonella not included."
-	chemclass = CHEM_CLASS_RARE
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/nutriment/tofu
 	name = "Tofu"
 	id = "tofu"
 	description = "Meat substitute."
-	chemclass = CHEM_CLASS_RARE
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/nutriment/cheese
 	name = "Cheese"
 	id = "cheese"
 	description = "This used to be milk."
-	chemclass = CHEM_CLASS_RARE
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/nutriment/meat
 	name = "Meat Protein"
 	id = "meatprotein"
 	description = "Proteins found in various types of meat."
-	chemclass = CHEM_CLASS_RARE
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/nutriment/meat/fish
 	name = "Fish Meat"
 	id = "fish"
 	description = "It used to swim."
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/nutriment/grown
 	name = "Plant Matter"
 	id = "plantmatter"
 	description = "Some sort of plant."
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/nutriment/grown/vegetable
 	name = "Vegetable"
 	id = "vegetable"
 	description = "Some sort of vegetable."
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/nutriment/grown/fruit
 	name = "Fruit"
 	id = "fruit"
 	description = "Some sort of fruit."
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/nutriment/grown/mushroom
 	name = "Mushroom"
 	id = "mushroom"
 	description = "Some sort of fungus."
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/nutriment/dough
 	name = "Dough"
 	id = "dough"
 	description = "Wet flour."
-	chemclass = CHEM_CLASS_RARE
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/nutriment/dough/bread
 	name = "Bread"
 	id = "bread"
 	description = "Cooked bread."
-	chemclass = CHEM_CLASS_RARE
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/nutriment/dough/noodles
 	name = "Noodles"
 	id = "noodles"
 	description = "Cooked noodles."
+	flags = REAGENT_NO_GENERATION
 
 
 /datum/reagent/lipozine
@@ -141,7 +150,7 @@
 	chemclass = CHEM_CLASS_RARE
 	properties = list(PROPERTY_HYPERTHERMIC = 1)
 
-/datum/reagent/condensedcapsaicin/reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)
+/datum/reagent/condensedcapsaicin/reaction_mob(mob/living/M, method=TOUCH, volume)
 	if(!istype(M, /mob/living) || has_species(M,"Horror"))
 		return
 
@@ -149,17 +158,17 @@
 		if(istype(M, /mob/living/carbon/human))
 			var/mob/living/carbon/human/victim = M
 			if(skillcheck(victim, SKILL_POLICE, SKILL_POLICE_SKILLED))
-				victim.eye_blurry = max(M.eye_blurry, 5)
+				victim.AdjustEyeBlur(5)
 				to_chat(victim, SPAN_WARNING("Your training protects you from the pepperspray!"))
 				return
 
 			if(victim.pain.feels_pain)
 				victim.emote("scream")
 				to_chat(victim, SPAN_WARNING("You're sprayed directly in the eyes with pepperspray!"))
-				victim.eye_blurry = max(M.eye_blurry, 25)
-				victim.eye_blind = max(M.eye_blind, 10)
-				victim.Stun(3)
-				victim.KnockDown(3)
+				victim.AdjustEyeBlur(25)
+				victim.AdjustEyeBlind(10)
+				victim.apply_effect(3, STUN)
+				victim.apply_effect(3, WEAKEN)
 
 /datum/reagent/frostoil
 	name = "Frost Oil"
@@ -220,6 +229,7 @@
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 	color = "#FF00FF" // rgb: 255, 0, 255
 	properties = list(PROPERTY_NUTRITIOUS = 2)
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/cornoil
 	name = "Corn Oil"
@@ -250,6 +260,7 @@
 	nutriment_factor = 1 * REAGENTS_METABOLISM
 	color = "#302000" // rgb: 48, 32, 0
 	properties = list(PROPERTY_NUTRITIOUS = 2)
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/hot_ramen
 	name = "Hot Ramen"
@@ -259,6 +270,7 @@
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" // rgb: 48, 32, 0
 	properties = list(PROPERTY_NUTRITIOUS = 2, PROPERTY_HYPERTHERMIC = 1)
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/hell_ramen
 	name = "Hell Ramen"
@@ -268,6 +280,7 @@
 	nutriment_factor = 5 * REAGENTS_METABOLISM
 	color = "#302000" // rgb: 48, 32, 0
 	properties = list(PROPERTY_NUTRITIOUS = 2, PROPERTY_HYPERTHERMIC = 4)
+	flags = REAGENT_NO_GENERATION
 
 /datum/reagent/rice
 	name = "Rice"
@@ -293,3 +306,4 @@
 	description = "Honey is a natural sweet, viscous food substance composed of mainly fructose and glucose."
 	color = "#FFFF00"
 	chemclass = CHEM_CLASS_RARE
+	flags = REAGENT_NO_GENERATION

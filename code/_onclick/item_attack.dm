@@ -9,7 +9,9 @@
 
 // No comment
 /atom/proc/attackby(obj/item/W, mob/living/user,list/mods)
-	return
+	if(SEND_SIGNAL(src, COMSIG_PARENT_ATTACKBY, W, user, mods) & COMPONENT_NO_AFTERATTACK)
+		return TRUE
+	return FALSE
 
 /atom/movable/attackby(obj/item/W, mob/living/user)
 	if(W)
@@ -64,7 +66,7 @@
 	if(!(user in viewers(M, null)))
 		showname = "."
 
-	if (user.a_intent == INTENT_HELP && ((user.client && user.client.prefs && user.client.prefs.toggle_prefs & TOGGLE_HELP_INTENT_SAFETY) || (user.mob_flags & SURGERY_MODE_ON)))
+	if (user.a_intent == INTENT_HELP && ((user.client?.prefs && user.client?.prefs?.toggle_prefs & TOGGLE_HELP_INTENT_SAFETY) || (user.mob_flags & SURGERY_MODE_ON)))
 		playsound(loc, 'sound/effects/pop.ogg', 25, 1)
 		user.visible_message(SPAN_NOTICE("[M] has been poked with [src][showname]"),\
 			SPAN_NOTICE("You poke [M == user ? "yourself":M] with [src]."), null, 4)
@@ -92,8 +94,8 @@
 
 		user.animation_attack_on(M)
 		user.flick_attack_overlay(M, "punch")
-		if(isXeno(M))
-			var/mob/living/carbon/Xenomorph/X = M
+		if(isxeno(M))
+			var/mob/living/carbon/xenomorph/X = M
 			power = armor_damage_reduction(GLOB.xeno_melee, power, X.armor_deflection + X.armor_deflection_buff - X.armor_deflection_debuff, 20, 0, 0, X.armor_integrity)
 			var/armor_punch = armor_break_calculation(GLOB.xeno_melee, power, X.armor_deflection + X.armor_deflection_buff - X.armor_deflection_debuff, 20, 0, 0, X.armor_integrity)
 			X.apply_armorbreak(armor_punch)

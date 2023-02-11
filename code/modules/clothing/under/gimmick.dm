@@ -32,7 +32,7 @@
 //RAMBO
 /obj/item/clothing/under/gimmick/rambo
 	name = "combat pants"
-	desc = "The only thing a man needs when he's up agains the world."
+	desc = "The only thing a man needs when he's up against the world."
 	icon_state = "rambo_suit"
 	flags_armor_protection = BODY_FLAG_LEGS|BODY_FLAG_GROIN
 	flags_cold_protection = BODY_FLAG_LEGS|BODY_FLAG_GROIN
@@ -80,16 +80,17 @@
 	armor_rad = CLOTHING_ARMOR_LOW
 	armor_internaldamage = CLOTHING_ARMOR_LOW
 	allowed = list(
-			/obj/item/weapon/gun,
-			/obj/item/device/flashlight,
-			/obj/item/ammo_magazine/,
-			/obj/item/storage/fancy/cigarettes,
-			/obj/item/tool/lighter,
-			/obj/item/explosive/grenade,
-			/obj/item/device/binoculars,
-			/obj/item/attachable/bayonet,
-			/obj/item/storage/backpack/general_belt,
-			/obj/item/storage/large_holster/machete)
+		/obj/item/weapon/gun,
+		/obj/item/device/flashlight,
+		/obj/item/ammo_magazine/,
+		/obj/item/storage/fancy/cigarettes,
+		/obj/item/tool/lighter,
+		/obj/item/explosive/grenade,
+		/obj/item/device/binoculars,
+		/obj/item/attachable/bayonet,
+		/obj/item/storage/backpack/general_belt,
+		/obj/item/storage/large_holster/machete,
+	)
 
 //ROBOCOP
 /obj/item/clothing/under/gimmick/robocop

@@ -1,5 +1,9 @@
+#define NARRATION_METHOD_SAY "Say"
+#define NARRATION_METHOD_ME "Me"
+#define NARRATION_METHOD_DIRECT "Direct"
+
 // Converted this into a proc. Verb will be separate
-/client/proc/change_ckey(mob/M in GLOB.mob_list, var/a_ckey = null)
+/client/proc/change_ckey(mob/M in GLOB.mob_list, a_ckey = null)
 	var/new_ckey = a_ckey
 
 	if (!admin_holder || !(admin_holder.rights & R_MOD))
@@ -20,10 +24,6 @@
 	message_staff("[key_name_admin(usr)] modified [key_name(M)]'s ckey to [new_ckey]", 1)
 
 	M.ckey = new_ckey
-	var/mob/living/carbon/Xenomorph/XNO = M
-	if(istype(XNO))
-		XNO.generate_name()
-		XNO.set_lighting_alpha_from_prefs(M.client)
 	M.client?.change_view(world_view_size)
 
 /client/proc/cmd_admin_changekey(mob/O in GLOB.mob_list)
@@ -34,7 +34,7 @@
 		return
 	change_ckey(O)
 
-/client/proc/cmd_admin_ghostchange(var/mob/living/M, var/mob/dead/observer/O)
+/client/proc/cmd_admin_ghostchange(mob/living/M, mob/dead/observer/O)
 	if(!istype(O) || (!check_rights(R_ADMIN|R_DEBUG, 0))) //Let's add a few extra sanity checks.
 		return
 	if(alert("Do you want to possess this mob?", "Switch Ckey", "Yes", "No") == "Yes")
@@ -89,12 +89,12 @@
 	set category = "Admin.Fun"
 	set name = "Gib"
 
-	if(!check_rights(R_ADMIN|R_FUN))	return
+	if(!check_rights(R_ADMIN)) return
 
 	var/confirm = alert(src, "You sure?", "Confirm", "Yes", "No")
 	if(confirm != "Yes") return
 	//Due to the delay here its easy for something to have happened to the mob
-	if(!M)	return
+	if(!M) return
 
 	message_staff("[key_name_admin(usr)] has gibbed [key_name_admin(M)]", 1)
 
@@ -164,7 +164,7 @@
 	message_staff(message, M.x, M.y, M.z)
 	admin_ticket_log(M, message)
 
-/client/proc/cmd_admin_alert_message(var/mob/M)
+/client/proc/cmd_admin_alert_message(mob/M)
 	set name = "Alert Message"
 	set category = "Admin.Game"
 
@@ -197,7 +197,38 @@
 		else
 			return
 
-/client/proc/cmd_admin_direct_narrate(var/mob/M)
+/client/proc/cmd_admin_object_narrate(obj/selected)
+	set name = "Object Narrate"
+	set category = null
+
+	if(!check_rights(R_MOD))
+		return
+
+	var/type = tgui_input_list(usr,
+				"What type of narration?",
+				"Narration",
+				list(NARRATION_METHOD_SAY, NARRATION_METHOD_ME, NARRATION_METHOD_DIRECT))
+	if(!type) return
+	var/message = input(usr,
+				"What should it say?",
+				"Narrating as [selected.name]")
+	if(!message) return
+
+	var/list/heard = get_mobs_in_view(world_view_size, selected)
+
+	switch(type)
+		if(NARRATION_METHOD_SAY)
+			selected.langchat_speech(message, heard, GLOB.all_languages, skip_language_check = TRUE)
+			selected.visible_message("<b>[selected]</b> says, \"[message]\"")
+		if(NARRATION_METHOD_ME)
+			selected.langchat_speech(message, heard, GLOB.all_languages, skip_language_check = TRUE, animation_style = LANGCHAT_FAST_POP, additional_styles = list("langchat_small", "emote"))
+			selected.visible_message("<b>[selected]</b> [message]")
+		if(NARRATION_METHOD_DIRECT)
+			selected.visible_message("[message]")
+	log_admin("[key_name(src)] sent an Object Narrate with message [message].")
+	message_staff("[key_name(src)] sent an Object Narrate with message [message].")
+
+/client/proc/cmd_admin_direct_narrate(mob/M)
 	set name = "Narrate"
 	set category = null
 
@@ -231,7 +262,7 @@
 	for(var/t in M.attack_log)
 		to_chat(usr, t)
 
-/client/proc/possess(obj/O as obj in GLOB.object_list)
+/client/proc/possess(obj/O as obj in world)
 	set name = "Possess Obj"
 	set category = null
 
@@ -255,7 +286,7 @@
 	usr.client.eye = O
 	usr.control_object = O
 
-/client/proc/release(obj/O as obj in GLOB.object_list)
+/client/proc/release(obj/O as obj in world)
 	set name = "Release Obj"
 	set category = null
 
@@ -293,7 +324,7 @@
 
 	message_staff("[key_name_admin(usr)] made [key_name_admin(M)] drop everything!")
 
-/client/proc/cmd_admin_change_their_hivenumber(var/mob/living/carbon/H)
+/client/proc/cmd_admin_change_their_hivenumber(mob/living/carbon/H)
 	set name = "Change Hivenumber"
 	set category = null
 
@@ -305,14 +336,14 @@
 		var/datum/hive_status/hive = GLOB.hive_datum[hivenumber]
 		hives += list("[hive.name]" = hive.hivenumber)
 
-	var/newhive = tgui_input_list(src,"Select a hive.", "Change Hivenumber", hives)
+	var/newhive = tgui_input_list(src,"Select a hive.", "Change Hivenumber", hives, theme="hive_status")
 
 	if(!H)
 		to_chat(usr, "This mob no longer exists")
 		return
 
-	if(isXeno(H))
-		var/mob/living/carbon/Xenomorph/X = H
+	if(isxeno(H))
+		var/mob/living/carbon/xenomorph/X = H
 		X.set_hive_and_update(hives[newhive])
 	else
 		var/was_leader = FALSE
@@ -333,7 +364,7 @@
 	message_staff("[key_name(src)] changed hivenumber of [H] to [H.hivenumber].")
 
 
-/client/proc/cmd_admin_change_their_name(var/mob/living/carbon/X)
+/client/proc/cmd_admin_change_their_name(mob/living/carbon/X)
 	set name = "Change Name"
 	set category = null
 
@@ -357,11 +388,11 @@
 
 	message_staff("[key_name(src)] changed name of [old_name] to [newname].")
 
-/datum/admins/proc/togglesleep(var/mob/living/M as mob in GLOB.mob_list)
+/datum/admins/proc/togglesleep(mob/living/M as mob in GLOB.mob_list)
 	set name = "Toggle Sleeping"
 	set category = null
 
-	if(!check_rights(0))	return
+	if(!check_rights(0)) return
 
 	if (M.sleeping > 0) //if they're already slept, set their sleep to zero and remove the icon
 		M.sleeping = 0
@@ -372,3 +403,7 @@
 
 	message_staff("[key_name(usr)] used Toggle Sleeping on [key_name(M)].")
 	return
+
+#undef NARRATION_METHOD_SAY
+#undef NARRATION_METHOD_ME
+#undef NARRATION_METHOD_DIRECT

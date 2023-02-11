@@ -1,11 +1,11 @@
 /obj/structure/machinery/chem_master
 	name = "ChemMaster 3000"
-	density = 1
-	anchored = 1
+	density = TRUE
+	anchored = TRUE
 	icon = 'icons/obj/structures/machinery/science_machines.dmi'
 	icon_state = "mixer0"
 	var/base_state = "mixer"
-	use_power = 1
+	use_power = USE_POWER_IDLE
 	idle_power_usage = 20
 	layer = BELOW_OBJ_LAYER //So bottles/pills reliably appear above it
 	var/req_skill = SKILL_MEDICAL
@@ -27,7 +27,7 @@
 
 /obj/structure/machinery/chem_master/Initialize()
 	. = ..()
-	create_reagents(240)
+	create_reagents(300)
 	connect_smartfridge()
 
 /obj/structure/machinery/chem_master/Destroy()
@@ -39,17 +39,17 @@
 		return
 	connected = locate(/obj/structure/machinery/smartfridge/chemistry) in range(tether_range, src)
 	if(connected)
-		RegisterSignal(connected, COMSIG_PARENT_QDELETING, .proc/cleanup)
+		RegisterSignal(connected, COMSIG_PARENT_QDELETING, PROC_REF(cleanup))
 		visible_message(SPAN_NOTICE("<b>The [src] beeps:</b> Smartfridge connected."))
 
 /obj/structure/machinery/chem_master/ex_act(severity)
 	switch(severity)
 		if(EXPLOSION_THRESHOLD_LOW to EXPLOSION_THRESHOLD_MEDIUM)
 			if (prob(50))
-				qdel(src)
+				deconstruct(FALSE)
 				return
 		if(EXPLOSION_THRESHOLD_MEDIUM to INFINITY)
-			qdel(src)
+			deconstruct(FALSE)
 			return
 
 
@@ -90,7 +90,7 @@
 		updateUsrDialog()
 	return
 
-/obj/structure/machinery/chem_master/proc/transfer_chemicals(var/obj/dest, var/obj/source, var/amount, var/reagent_id)
+/obj/structure/machinery/chem_master/proc/transfer_chemicals(obj/dest, obj/source, amount, reagent_id)
 	if(istype(source))
 		if(amount > 0 && source.reagents && amount <= source.reagents.maximum_volume)
 			if(!istype(dest))
@@ -137,7 +137,7 @@
 
 		var/label = copytext(reject_bad_text(input(user,"Label text?", "Set label", "")), 1, MAX_NAME_LEN)
 		if(label)
-			loaded_pill_bottle.set_name_label(label)
+			loaded_pill_bottle.AddComponent(/datum/component/label, label)
 			if(length(label) < 3)
 				loaded_pill_bottle.maptext_label = label
 				loaded_pill_bottle.update_icon()
@@ -157,7 +157,7 @@
 
 		else if(href_list["addcustom"])
 			var/id = href_list["addcustom"]
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = tgui_input_number(usr, "Select the amount to transfer.", "Transfer amount", useramount)
 			transfer_chemicals(src, beaker, useramount, id)
 
 		else if(href_list["addall"])
@@ -177,7 +177,7 @@
 
 		else if(href_list["removecustom"])
 			var/id = href_list["removecustom"]
-			useramount = input("Select the amount to transfer.", 30, useramount) as num
+			useramount = tgui_input_number(usr, "Select the amount to transfer.", "Transfer amount", useramount)
 			if(mode)
 				transfer_chemicals(beaker, src, useramount, id)
 			else
@@ -215,7 +215,7 @@
 				return
 
 			if(href_list["createpill_multiple"])
-				count = Clamp(input("Select the number of pills to make. (max: [max_pill_count])", 10, pillamount) as num|null,0,max_pill_count)
+				count = Clamp(tgui_input_number(user, "Select the number of pills to make. (max: [max_pill_count])", "Pills to make", pillamount, max_pill_count, 1), 0, max_pill_count)
 				if(!count)
 					return
 
@@ -276,7 +276,7 @@
 				P.update_icon()
 
 				if(href_list["store"])
-					connected.add_item(P)
+					connected.add_local_item(P)
 				else if(!Adjacent(usr) || !usr.put_in_hands(P))
 					P.forceMove(loc)
 
@@ -321,7 +321,7 @@
 			attack_hand(user)
 			return
 
-		connected.add_item(loaded_pill_bottle)
+		connected.add_local_item(loaded_pill_bottle)
 		loaded_pill_bottle = null
 
 	// Connecting a smartfridge

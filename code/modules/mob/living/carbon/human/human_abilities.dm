@@ -13,7 +13,7 @@
 	action_icon_state = "order"
 	var/order_type = "help"
 
-/datum/action/human_action/issue_order/give_to(var/mob/living/L)
+/datum/action/human_action/issue_order/give_to(mob/living/L)
 	..()
 	if(!ishuman(L))
 		return
@@ -65,7 +65,7 @@
 		var/obj/item/storage/backpack/marine/smartpack/S = H.back
 		form_call(S, H)
 
-/datum/action/human_action/smartpack/give_to(var/mob/living/L)
+/datum/action/human_action/smartpack/give_to(mob/living/L)
 	..()
 	if(!ishuman(L))
 		return
@@ -76,13 +76,13 @@
 	else
 		return
 
-/datum/action/human_action/smartpack/proc/form_call(var/obj/item/storage/backpack/marine/smartpack/S, var/mob/living/carbon/human/H)
+/datum/action/human_action/smartpack/proc/form_call(obj/item/storage/backpack/marine/smartpack/S, mob/living/carbon/human/H)
 	return
 
-/datum/action/human_action/smartpack/proc/set_cooldown(var/obj/item/storage/backpack/marine/smartpack/S)
+/datum/action/human_action/smartpack/proc/set_cooldown(obj/item/storage/backpack/marine/smartpack/S)
 	return
 
-/datum/action/human_action/smartpack/proc/cooldown_check(var/obj/item/storage/backpack/marine/smartpack/S)
+/datum/action/human_action/smartpack/proc/cooldown_check(obj/item/storage/backpack/marine/smartpack/S)
 	return S.activated_form
 
 
@@ -90,30 +90,30 @@
 	name = "Protective Form"
 	action_icon_state = "smartpack_protect"
 
-/datum/action/human_action/smartpack/protective_form/set_cooldown(var/obj/item/storage/backpack/marine/smartpack/S)
+/datum/action/human_action/smartpack/protective_form/set_cooldown(obj/item/storage/backpack/marine/smartpack/S)
 	return S.protective_form_cooldown
 
-/datum/action/human_action/smartpack/protective_form/form_call(var/obj/item/storage/backpack/marine/smartpack/S, var/mob/living/carbon/human/H)
+/datum/action/human_action/smartpack/protective_form/form_call(obj/item/storage/backpack/marine/smartpack/S, mob/living/carbon/human/H)
 	S.protective_form(H)
 
 /datum/action/human_action/smartpack/immobile_form
 	name = "Immobile Form"
 	action_icon_state = "smartpack_immobile"
 
-/datum/action/human_action/smartpack/immobile_form/form_call(var/obj/item/storage/backpack/marine/smartpack/S, var/mob/living/carbon/human/H)
+/datum/action/human_action/smartpack/immobile_form/form_call(obj/item/storage/backpack/marine/smartpack/S, mob/living/carbon/human/H)
 	S.immobile_form(H)
 
 /datum/action/human_action/smartpack/repair_form
 	name = "Repair Form"
 	action_icon_state = "smartpack_repair"
 
-/datum/action/human_action/smartpack/repair_form/set_cooldown(var/obj/item/storage/backpack/marine/smartpack/S)
+/datum/action/human_action/smartpack/repair_form/set_cooldown(obj/item/storage/backpack/marine/smartpack/S)
 	return S.repair_form_cooldown
 
-/datum/action/human_action/smartpack/repair_form/form_call(var/obj/item/storage/backpack/marine/smartpack/S, var/mob/living/carbon/human/H)
+/datum/action/human_action/smartpack/repair_form/form_call(obj/item/storage/backpack/marine/smartpack/S, mob/living/carbon/human/H)
 	S.repair_form(H)
 
-/datum/action/human_action/smartpack/repair_form/cooldown_check(var/obj/item/storage/backpack/marine/smartpack/S)
+/datum/action/human_action/smartpack/repair_form/cooldown_check(obj/item/storage/backpack/marine/smartpack/S)
 	return S.repairing
 
 /*
@@ -151,7 +151,7 @@ CULT
 	if(H.selected_ability == src)
 		H.selected_ability = null
 
-/datum/action/human_action/activable/proc/use_ability(var/mob/M)
+/datum/action/human_action/activable/proc/use_ability(mob/M)
 	return
 
 /datum/action/human_action/activable/update_button_icon()
@@ -165,12 +165,12 @@ CULT
 /datum/action/human_action/activable/action_cooldown_check()
 	return ability_used_time <= world.time
 
-/datum/action/human_action/activable/proc/enter_cooldown(var/amount = cooldown)
+/datum/action/human_action/activable/proc/enter_cooldown(amount = cooldown)
 	ability_used_time = world.time + amount
 
 	update_button_icon()
 
-	addtimer(CALLBACK(src, .proc/update_button_icon), amount)
+	addtimer(CALLBACK(src, PROC_REF(update_button_icon)), amount)
 
 /datum/action/human_action/activable/droppod
 	name = "Call Droppod"
@@ -178,7 +178,7 @@ CULT
 
 	var/obj/structure/droppod/tech/assigned_droppod
 
-/datum/action/human_action/activable/droppod/proc/can_deploy_droppod(var/turf/T)
+/datum/action/human_action/activable/droppod/proc/can_deploy_droppod(turf/T)
 	var/mob/living/carbon/human/H = owner
 	if(assigned_droppod)
 		return
@@ -237,14 +237,10 @@ CULT
 	var/list/list_of_techs = list()
 	if(!can_deploy_droppod(T))
 		return
-
 	var/area/turf_area = get_area(T)
-
 	if(!turf_area)
 		return
-
 	var/land_time = max(turf_area.ceiling, 1) * (20 SECONDS)
-
 	playsound(T, 'sound/effects/alert.ogg', 75)
 	assigned_droppod = new(T, tech_to_deploy)
 	assigned_droppod.drop_time = land_time
@@ -252,15 +248,13 @@ CULT
 	var/list/to_send_to = H.assigned_squad?.marines_list
 	if(!to_send_to)
 		to_send_to = list(H)
-
 	message_staff("[key_name_admin(H)] called a tech droppod down at [get_area(assigned_droppod)].", T.x, T.y, T.z)
 	for(var/M in to_send_to)
 		to_chat(M, SPAN_BLUE("<b>SUPPLY DROP REQUEST:</b> Droppod requested at LONGITUDE: [obfuscate_x(T.x)], LATITUDE: [obfuscate_y(T.y)]. ETA [Floor(land_time*0.1)] seconds."))
-
-	RegisterSignal(assigned_droppod, COMSIG_PARENT_QDELETING, .proc/handle_droppod_deleted)
+	RegisterSignal(assigned_droppod, COMSIG_PARENT_QDELETING, PROC_REF(handle_droppod_deleted))
 */
 
-/datum/action/human_action/activable/droppod/proc/handle_droppod_deleted(var/obj/structure/droppod/tech/T)
+/datum/action/human_action/activable/droppod/proc/handle_droppod_deleted(obj/structure/droppod/tech/T)
 	SIGNAL_HANDLER
 	if(T != assigned_droppod)
 		return
@@ -327,9 +321,9 @@ CULT
 
 	var/mob/living/carbon/human/H = owner
 
-	var/input = alert(H, "Once obtained, you'll be unable to take it off. Confirm selection.", "Obtain Equipment","Yes","No")
+	var/input = tgui_alert(H, "Once obtained, you'll be unable to take it off. Confirm selection.", "Obtain Equipment", list("Yes","No"))
 
-	if(input == "No")
+	if(input != "Yes")
 		to_chat(H, SPAN_WARNING("You have decided not to obtain your equipment."))
 		return
 
@@ -362,7 +356,7 @@ CULT
 /datum/action/human_action/activable/cult_leader
 	name = "Activable Leader Ability"
 
-/datum/action/human_action/activable/cult_leader/proc/can_target(var/mob/living/carbon/human/H)
+/datum/action/human_action/activable/cult_leader/proc/can_target(mob/living/carbon/human/H)
 	if(!ishuman(owner))
 		return
 	var/mob/living/carbon/human/Hu = owner
@@ -375,7 +369,7 @@ CULT
 		to_chat(Hu, SPAN_WARNING("This target is too far away!"))
 		return
 
-	return H.stat != DEAD && istype(H) && isHumanStrict(H) && H.hivenumber != Hu.hivenumber && !isnull(get_hive())
+	return H.stat != DEAD && istype(H) && ishuman_strict(H) && H.hivenumber != Hu.hivenumber && !isnull(get_hive())
 
 /datum/action/human_action/activable/cult_leader/proc/get_hive()
 	if(!ishuman(owner))
@@ -394,7 +388,7 @@ CULT
 	name = "Convert"
 	action_icon_state = "cultist_channel_convert"
 
-/datum/action/human_action/activable/cult_leader/convert/use_ability(var/mob/M)
+/datum/action/human_action/activable/cult_leader/convert/use_ability(mob/M)
 	var/datum/hive_status/hive = get_hive()
 
 	if(!istype(hive))
@@ -428,7 +422,7 @@ CULT
 
 	xeno_message("[chosen] has been converted into a cultist!", 2, hive.hivenumber)
 
-	chosen.KnockOut(5)
+	chosen.apply_effect(5, PARALYZE)
 	chosen.make_jittery(105)
 
 	if(chosen.client)
@@ -440,7 +434,7 @@ CULT
 
 	cooldown = 1 MINUTES
 
-/datum/action/human_action/activable/cult_leader/stun/use_ability(var/mob/M)
+/datum/action/human_action/activable/cult_leader/stun/use_ability(mob/M)
 	if(!action_cooldown_check())
 		return
 
@@ -478,7 +472,7 @@ CULT
 
 	unroot_human(chosen)
 
-	chosen.KnockOut(10)
+	chosen.apply_effect(10, PARALYZE)
 	chosen.make_jittery(105)
 
 	to_chat(chosen, SPAN_HIGHDANGER("An immense psychic wave passes through you, causing you to pass out!"))
@@ -494,7 +488,7 @@ CULT
 
 	var/list/converted = list()
 
-/datum/action/human_action/activable/mutineer/mutineer_convert/use_ability(var/mob/M)
+/datum/action/human_action/activable/mutineer/mutineer_convert/use_ability(mob/M)
 	if(!can_use_action())
 		return
 
@@ -510,7 +504,7 @@ CULT
 
 	to_chat(H, SPAN_NOTICE("Mutiny join request sent to [chosen]!"))
 
-	if(alert(chosen, "Do you want to be a mutineer?", "Become Mutineer", "Yes", "No") == "No")
+	if(tgui_alert(chosen, "Do you want to be a mutineer?", "Become Mutineer", list("Yes", "No")) != "Yes")
 		return
 
 	converted += chosen
@@ -528,10 +522,10 @@ CULT
 
 	var/mob/living/carbon/human/H = owner
 
-	if(alert(H, "Are you sure you want to begin the mutiny?", "Begin Mutiny?", "Yes", "No") == "No")
+	if(tgui_alert(H, "Are you sure you want to begin the mutiny?", "Begin Mutiny?", list("Yes", "No")) != "Yes")
 		return
 
-	shipwide_ai_announcement("DANGER: Communications received; a mutiny is in progress. Code: Detain, Arrest, Defend")
+	shipwide_ai_announcement("DANGER: Communications received; a mutiny is in progress. Code: Detain, Arrest, Defend.")
 	var/datum/equipment_preset/other/mutineer/XC = new()
 
 	XC.load_status(H)
@@ -550,7 +544,7 @@ CULT
 
 /datum/action/human_action/cancel_view/give_to(user)
 	. = ..()
-	RegisterSignal(user, COMSIG_MOB_RESET_VIEW, .proc/remove_from) // will delete the button even if you reset view by resisting or the verb
+	RegisterSignal(user, COMSIG_MOB_RESET_VIEW, PROC_REF(remove_from)) // will delete the button even if you reset view by resisting or the verb
 
 /datum/action/human_action/cancel_view/remove_from(mob/L)
 	. = ..()
@@ -567,3 +561,49 @@ CULT
 	H.client.change_view(world_view_size, target)
 	H.client.pixel_x = 0
 	H.client.pixel_y = 0
+
+//Similar to a cancel-camera-view button, but for mobs that were buckled to special vehicle seats.
+//Unbuckles them, which handles the view and offsets resets and other stuff.
+/datum/action/human_action/vehicle_unbuckle
+	name = "Vehicle Unbuckle"
+	action_icon_state = "unbuckle"
+
+/datum/action/human_action/vehicle_unbuckle/give_to(user)
+	. = ..()
+	RegisterSignal(user, COMSIG_MOB_RESET_VIEW, PROC_REF(remove_from))//since unbuckling from special vehicle seats also resets the view, gonna use same signal
+
+/datum/action/human_action/vehicle_unbuckle/remove_from(mob/L)
+	. = ..()
+	UnregisterSignal(L, COMSIG_MOB_RESET_VIEW)
+
+/datum/action/human_action/vehicle_unbuckle/action_activate()
+	if(!can_use_action())
+		return
+
+	var/mob/living/carbon/human/H = owner
+	if(H.buckled)
+		if(istype(H.buckled, /obj/structure/bed/chair/comfy/vehicle))
+			H.buckled.unbuckle()
+		else if(!isVehicleMultitile(H.interactee))
+			remove_from(H)
+	else if(!isVehicleMultitile(H.interactee))
+		remove_from(H)
+
+	H.unset_interaction()
+	H.client.change_view(world_view_size, target)
+	H.client.pixel_x = 0
+	H.client.pixel_y = 0
+	H.reset_view()
+	remove_from(H)
+
+
+/datum/action/human_action/mg_exit
+	name = "Exit MG"
+	action_icon_state = "cancel_view"
+
+/datum/action/human_action/mg_exit/action_activate()
+	if(!can_use_action())
+		return
+
+	var/mob/living/carbon/human/human_user = owner
+	SEND_SIGNAL(human_user, COMSIG_MOB_MG_EXIT)

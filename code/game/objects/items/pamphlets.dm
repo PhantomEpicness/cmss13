@@ -11,7 +11,7 @@
 	var/flavour_text = "You read over the pamphlet a few times, learning a new skill."
 	var/bypass_pamphlet_limit = FALSE
 
-obj/item/pamphlet/Initialize()
+/obj/item/pamphlet/Initialize()
 	. = ..()
 
 	trait = GLOB.character_traits[trait]
@@ -19,26 +19,28 @@ obj/item/pamphlet/Initialize()
 /obj/item/pamphlet/attack_self(mob/living/carbon/human/user)
 	..()
 
-	if(!istype(user))
+	if(!can_use(user))
 		return
-
-	if(trait in user.traits)
-		to_chat(user, SPAN_WARNING("You know this already!"))
-		return
-
-	if(user.has_used_pamphlet == TRUE && !bypass_pamphlet_limit)
-		to_chat(user, SPAN_WARNING("You've already used a pamphlet!"))
-		return
-
-	to_chat(user, SPAN_NOTICE(flavour_text))
-
-	trait.apply_trait(user)
-
-	if(!bypass_pamphlet_limit)
-		user.has_used_pamphlet = TRUE
+	on_use(user)
 
 	qdel(src)
 
+/obj/item/pamphlet/proc/can_use(mob/living/carbon/human/user)
+	if(!istype(user))
+		return FALSE
+	if(trait in user.traits)
+		to_chat(user, SPAN_WARNING("You know this already!"))
+		return FALSE
+	if(user.has_used_pamphlet == TRUE && !bypass_pamphlet_limit)
+		to_chat(user, SPAN_WARNING("You've already used a pamphlet!"))
+		return FALSE
+	return TRUE
+
+/obj/item/pamphlet/proc/on_use(mob/living/carbon/human/user)
+	to_chat(user, SPAN_NOTICE(flavour_text))
+	trait.apply_trait(user)
+	if(!bypass_pamphlet_limit)
+		user.has_used_pamphlet = TRUE
 
 /obj/item/pamphlet/skill/medical
 	name = "medical instructional pamphlet"
@@ -58,6 +60,45 @@ obj/item/pamphlet/Initialize()
 	icon_state = "pamphlet_jtac"
 	trait = /datum/character_trait/skills/jtac
 
+/obj/item/pamphlet/skill/spotter
+	name = "Spotter instructional pamphlet"
+	desc = "A pamphlet used to quickly impart vital knowledge. This one has the image of a pair of binoculars on it."
+	icon_state = "pamphlet_spotter"
+	trait = /datum/character_trait/skills/spotter
+	bypass_pamphlet_limit = TRUE
+
+/obj/item/pamphlet/skill/spotter/can_use(mob/living/carbon/human/user)
+	var/specialist_skill = user.skills.get_skill_level(SKILL_SPEC_WEAPONS)
+	if(specialist_skill == SKILL_SPEC_SNIPER)
+		to_chat(user, SPAN_WARNING("You don't need to use this! Give it to another marine to make them your spotter."))
+		return FALSE
+	if(specialist_skill != SKILL_SPEC_DEFAULT)
+		to_chat(user, SPAN_WARNING("You're already a specialist! Give this to a lesser trained marine."))
+		return FALSE
+
+	if(user.job != JOB_SQUAD_MARINE)
+		to_chat(user, SPAN_WARNING("Only squad riflemen can use this."))
+		return
+
+	var/obj/item/card/id/ID = user.wear_id
+	if(!istype(ID)) //not wearing an ID
+		to_chat(user, SPAN_WARNING("You should wear your ID before doing this."))
+		return FALSE
+	if(ID.registered_ref != WEAKREF(user))
+		to_chat(user, SPAN_WARNING("You should wear your ID before doing this."))
+		return FALSE
+
+	return ..()
+
+/obj/item/pamphlet/skill/spotter/on_use(mob/living/carbon/human/user)
+	. = ..()
+	user.rank_fallback = "ass"
+	user.hud_set_squad()
+
+	var/obj/item/card/id/ID = user.wear_id
+	ID.set_assignment((user.assigned_squad ? (user.assigned_squad.name + " ") : "") + "Squad Spotter")
+	GLOB.data_core.manifest_modify(user.real_name, WEAKREF(user), "Squad Spotter")
+
 /obj/item/pamphlet/skill/machinegunner
 	name = "heavy machinegunner instructional pamphlet"
 	desc = "A pamphlet used to quickly impart vital knowledge. This one has an engineering and a machinegun insignia."
@@ -70,7 +111,8 @@ obj/item/pamphlet/Initialize()
 	desc = "A pamphlet used to quickly impart vital knowledge. This one has a powerloader insignia. The title reads 'Moving freight and squishing heads - a practical guide to Caterpillar P-5000 Work Loader'."
 	icon_state = "pamphlet_powerloader"
 	trait = /datum/character_trait/skills/powerloader
-	bypass_pamphlet_limit = TRUE //it's really not necessary to stop people from learning powerloader skill
+	/// it's really not necessary to stop people from learning powerloader skill
+	bypass_pamphlet_limit = TRUE
 
 /obj/item/pamphlet/skill/police
 	name = "Policing instructional pamphlet"
@@ -84,6 +126,13 @@ obj/item/pamphlet/Initialize()
 	desc = "A pamphlet used to quickly impart vital knowledge. This one has a medical insignia."
 	icon_state = "pamphlet_medical"
 	trait = /datum/character_trait/skills/surgery
+	bypass_pamphlet_limit = TRUE
+
+/obj/item/pamphlet/skill/intel
+	name = "field intelligence instructional pamphlet"
+	desc = "A pamphlet used to quickly impart vital knowledge. This one has an intelligence insignia."
+	icon_state = "pamphlet_reading"
+	trait = /datum/character_trait/skills/intel
 	bypass_pamphlet_limit = TRUE
 
 /obj/item/pamphlet/language
@@ -133,6 +182,7 @@ obj/item/pamphlet/Initialize()
 
 /obj/item/pamphlet/language/monkey
 	name = "scribbled drawings"
-	desc = "A piece of paper covered in crude depictions of bananas and various types of primates. Probably drawn by a three year old child - or an unusually intelligent marine."
+	gender = PLURAL
+	desc = "A piece of paper covered in crude depictions of bananas and various types of primates. Probably drawn by a three-year-old child - or an unusually intelligent marine."
 	trait = /datum/character_trait/language/primitive
 

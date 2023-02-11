@@ -20,7 +20,7 @@
 				if(-90 to -80) severity = 8
 				if(-95 to -90) severity = 9
 				if(-INFINITY to -95) severity = 10
-			overlay_fullscreen("crit", /obj/screen/fullscreen/crit, severity)
+			overlay_fullscreen("crit", /atom/movable/screen/fullscreen/crit, severity)
 		else
 			clear_fullscreen("crit")
 			if(oxyloss)
@@ -33,7 +33,7 @@
 					if(35 to 40) severity = 5
 					if(40 to 45) severity = 6
 					if(45 to INFINITY) severity = 7
-				overlay_fullscreen("oxy", /obj/screen/fullscreen/oxy, severity)
+				overlay_fullscreen("oxy", /atom/movable/screen/fullscreen/oxy, severity)
 			else
 				clear_fullscreen("oxy")
 
@@ -50,25 +50,29 @@
 					if(45 to 70) severity = 4
 					if(70 to 85) severity = 5
 					if(85 to INFINITY) severity = 6
-				overlay_fullscreen("brute", /obj/screen/fullscreen/brute, severity)
+				overlay_fullscreen("brute", /atom/movable/screen/fullscreen/brute, severity)
 			else
 				clear_fullscreen("brute")
 
 
 		if(blinded)
-			overlay_fullscreen("blind", /obj/screen/fullscreen/blind)
+			overlay_fullscreen("blind", /atom/movable/screen/fullscreen/blind)
 		else
 			clear_fullscreen("blind")
 
-		if(eye_blurry || dazed)
-			overlay_fullscreen("eye_blurry", /obj/screen/fullscreen/impaired, 5)
-		else if((disabilities & NEARSIGHTED) && !HAS_TRAIT(src, TRAIT_NEARSIGHTED_EQUIPMENT))
-			overlay_fullscreen("eye_blurry", /obj/screen/fullscreen/impaired, 2)
+		if(dazed)
+			overlay_fullscreen("eye_blurry", /atom/movable/screen/fullscreen/impaired, 5)
 		else
 			clear_fullscreen("eye_blurry")
+		///Pain should override the SetEyeBlur(0) should the pain be painful enough to cause eyeblur in the first place. Also, peepers is essential to make sure eye damage isn't overriden.
+		var/datum/internal_organ/eyes/peepers = internal_organs_by_name["eyes"]
+		if((disabilities & NEARSIGHTED) && !HAS_TRAIT(src, TRAIT_NEARSIGHTED_EQUIPMENT) && pain.current_pain < 80 && peepers.organ_status == ORGAN_HEALTHY)
+			EyeBlur(2)
+		else if((disabilities & NEARSIGHTED) && HAS_TRAIT(src, TRAIT_NEARSIGHTED_EQUIPMENT) && pain.current_pain < 80 && peepers.organ_status == ORGAN_HEALTHY)
+			SetEyeBlur(0)
 
 		if(druggy)
-			overlay_fullscreen("high", /obj/screen/fullscreen/high)
+			overlay_fullscreen("high", /atom/movable/screen/fullscreen/high)
 		else
 			clear_fullscreen("high")
 
@@ -76,30 +80,30 @@
 		if(hud_used)
 			if(hud_used.healths)
 				switch(hal_screwyhud)
-					if(1)	hud_used.healths.icon_state = "health6"
-					if(2)	hud_used.healths.icon_state = "health7"
+					if(1) hud_used.healths.icon_state = "health6"
+					if(2) hud_used.healths.icon_state = "health7"
 					else
 						var/pain_percentage = max(pain.get_pain_percentage(), 100 - (stamina.current_stamina/stamina.max_stamina)*100) // Get the highest value from either
 						switch(pain_percentage)
-							if(80 to 100)			hud_used.healths.icon_state = "health6"
-							if(60 to 80)			hud_used.healths.icon_state = "health5"
-							if(50 to 60)			hud_used.healths.icon_state = "health4"
-							if(40 to 50)			hud_used.healths.icon_state = "health3"
-							if(20 to 40)			hud_used.healths.icon_state = "health2"
-							if(1 to 20)				hud_used.healths.icon_state = "health1"
-							else					hud_used.healths.icon_state = "health0"
+							if(80 to 100) hud_used.healths.icon_state = "health6"
+							if(60 to 80) hud_used.healths.icon_state = "health5"
+							if(50 to 60) hud_used.healths.icon_state = "health4"
+							if(40 to 50) hud_used.healths.icon_state = "health3"
+							if(20 to 40) hud_used.healths.icon_state = "health2"
+							if(1 to 20) hud_used.healths.icon_state = "health1"
+							else hud_used.healths.icon_state = "health0"
 
 			if(hud_used.nutrition_icon)
 				switch(nutrition)
-					if(350 to INFINITY)				hud_used.nutrition_icon.icon_state = "nutrition0"
-					if(250 to 350)					hud_used.nutrition_icon.icon_state = "nutrition1"
-					if(150 to 250)					hud_used.nutrition_icon.icon_state = "nutrition2"
-					if(50 to 150)					hud_used.nutrition_icon.icon_state = "nutrition3"
-					else							hud_used.nutrition_icon.icon_state = "nutrition3"
+					if(350 to INFINITY) hud_used.nutrition_icon.icon_state = "nutrition0"
+					if(250 to 350) hud_used.nutrition_icon.icon_state = "nutrition1"
+					if(150 to 250) hud_used.nutrition_icon.icon_state = "nutrition2"
+					if(50 to 150) hud_used.nutrition_icon.icon_state = "nutrition3"
+					else hud_used.nutrition_icon.icon_state = "nutrition3"
 
 			if(hud_used.oxygen_icon)
-				if(hal_screwyhud == 3 || oxygen_alert)	hud_used.oxygen_icon.icon_state = "oxy1"
-				else									hud_used.oxygen_icon.icon_state = "oxy0"
+				if(hal_screwyhud == 3 || oxygen_alert) hud_used.oxygen_icon.icon_state = "oxy1"
+				else hud_used.oxygen_icon.icon_state = "oxy0"
 
 			check_status_effects()
 
@@ -116,15 +120,15 @@
 			if(hud_used.bodytemp_icon)
 				if (!species)
 					switch(bodytemperature) //310.055 optimal body temp
-						if(370 to INFINITY)		hud_used.bodytemp_icon.icon_state = "temp4"
-						if(350 to 370)			hud_used.bodytemp_icon.icon_state = "temp3"
-						if(335 to 350)			hud_used.bodytemp_icon.icon_state = "temp2"
-						if(320 to 335)			hud_used.bodytemp_icon.icon_state = "temp1"
-						if(300 to 320)			hud_used.bodytemp_icon.icon_state = "temp0"
-						if(295 to 300)			hud_used.bodytemp_icon.icon_state = "temp-1"
-						if(280 to 295)			hud_used.bodytemp_icon.icon_state = "temp-2"
-						if(260 to 280)			hud_used.bodytemp_icon.icon_state = "temp-3"
-						else					hud_used.bodytemp_icon.icon_state = "temp-4"
+						if(370 to INFINITY) hud_used.bodytemp_icon.icon_state = "temp4"
+						if(350 to 370) hud_used.bodytemp_icon.icon_state = "temp3"
+						if(335 to 350) hud_used.bodytemp_icon.icon_state = "temp2"
+						if(320 to 335) hud_used.bodytemp_icon.icon_state = "temp1"
+						if(300 to 320) hud_used.bodytemp_icon.icon_state = "temp0"
+						if(295 to 300) hud_used.bodytemp_icon.icon_state = "temp-1"
+						if(280 to 295) hud_used.bodytemp_icon.icon_state = "temp-2"
+						if(260 to 280) hud_used.bodytemp_icon.icon_state = "temp-3"
+						else hud_used.bodytemp_icon.icon_state = "temp-4"
 				else
 					var/temp_step
 					if(bodytemperature >= species.body_temperature)
@@ -155,7 +159,7 @@
 						else
 							hud_used.bodytemp_icon.icon_state = "temp0"
 
-		if(interactee)
+		if(interactee && isatom(interactee))
 			interactee.check_eye(src)
 	return TRUE
 

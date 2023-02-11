@@ -1,10 +1,10 @@
 /* Types of tanks!
  * Contains:
- *		Oxygen
- *		Anesthetic
- *		Air
- *		Phoron
- *		Emergency Oxygen
+ * Oxygen
+ * Anesthetic
+ * Air
+ * Phoron
+ * Emergency Oxygen
  */
 
 /*
@@ -57,19 +57,17 @@
 	flags_atom = FPRINT|CONDUCT
 	flags_equip_slot = SLOT_WAIST
 	w_class = SIZE_TINY
-	force = 4.0
+	force = 4
 	distribute_pressure = ONE_ATMOSPHERE*O2STANDARD
 	volume = 2 //Tiny. Real life equivalents only have 21 breaths of oxygen in them. They're EMERGENCY tanks anyway -errorage (dangercon 2011)
 	gas_type = GAS_TYPE_OXYGEN
 	pressure = 3*ONE_ATMOSPHERE
 	pressure_full = 3*ONE_ATMOSPHERE
 
-
-	examine(mob/user)
-		..()
-		if(pressure < 50 && loc==user)
-			to_chat(user, SPAN_DANGER("The meter on the [src.name] indicates you are almost out of air!"))
-			user << sound('sound/effects/alert.ogg')
+/obj/item/tank/emergency_oxygen/get_examine_text(mob/user)
+	. = ..()
+	if(pressure < 50 && loc==user)
+		. += SPAN_DANGER("The meter on \the [src] indicates you are almost out of air!")
 
 /obj/item/tank/emergency_oxygen/engi
 	name = "extended-capacity emergency oxygen tank"
@@ -105,7 +103,7 @@
 
 /obj/item/tank/phoron/update_icon()
 	. = ..()
-	
+
 	if(volume <= 0)
 		icon_state = "phoron_empty"
 	else

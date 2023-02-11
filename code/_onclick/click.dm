@@ -1,5 +1,5 @@
 // Enables a tool to test ingame click rate.
-#define DEBUG_CLICK_RATE	0
+#define DEBUG_CLICK_RATE 0
 
 /// 1 decisecond click delay (above and beyond mob/next_move)
 /mob/var/next_click = 0
@@ -18,7 +18,7 @@
 */
 
 /client/Click(atom/A, location, control, params)
-	if (control && !ignore_next_click)	// No .click macros allowed, and only one click per mousedown.
+	if (control && !ignore_next_click) // No .click macros allowed, and only one click per mousedown.
 		ignore_next_click = TRUE
 		return usr.do_click(A, location, params)
 
@@ -28,7 +28,7 @@
 		return
 	// No clicking on atoms with the NOINTERACT flag
 	if ((A.flags_atom & NOINTERACT))
-		if (istype(A, /obj/screen/click_catcher))
+		if (istype(A, /atom/movable/screen/click_catcher))
 			var/list/mods = params2list(params)
 			var/turf/TU = params2turf(mods["screen-loc"], get_turf(client.eye), client)
 			if (TU)
@@ -38,7 +38,6 @@
 
 	if (world.time < next_click)
 		return
-
 
 	next_click = world.time + 1 //Maximum code-permitted clickrate 10.26/s, practical maximum manual rate: 8.5, autoclicker maximum: between 7.2/s and 8.5/s.
 	var/list/mods = params2list(params)
@@ -59,16 +58,16 @@
 	if(SEND_SIGNAL(src, COMSIG_MOB_PRE_CLICK, A, mods) & COMPONENT_INTERRUPT_CLICK)
 		return
 
-	if (client.buildmode)
-		if (istype(A, /obj/effect/bmode) || istype(A, /obj/effect/buildholder))
+	if(istype(A, /obj/effect/statclick))
+		A.clicked(src, mods)
+		return
+
+	if(client.click_intercept)
+		if(istype(A, /atom/movable/screen/buildmode))
 			A.clicked(src, mods)
 			return
 
-		client.buildmode.object_click(src, mods, A)
-		return
-
-	if(istype(A, /obj/effect/statclick))
-		A.clicked(src, mods)
+	if(check_click_intercept(params,A))
 		return
 
 	// Click handled elsewhere. (These clicks are not affected by the next_move cooldown)
@@ -88,33 +87,39 @@
 		return
 
 	// Throwing stuff, can't throw on inventory items nor screen objects nor items inside storages.
-	if (throw_mode && A.loc != src && !isstorage(A.loc) && !istype(A, /obj/screen))
+	if (throw_mode && A.loc != src && !isstorage(A.loc) && !istype(A, /atom/movable/screen))
 		throw_item(A)
 		return
 
 	// Last thing clicked is tracked for something somewhere.
-	if(!isgun(A) && !isturf(A) && !istype(A,/obj/screen))
+	if(!isgun(A) && !isturf(A) && !istype(A,/atom/movable/screen))
 		last_target_click = world.time
 
 	var/obj/item/W = get_active_hand()
 
 	// Special gun mode stuff.
-	if (W == A)
+	if(W == A)
 		mode()
 		return
 
-	//Self-harm preference. isXeno check because xeno clicks on self are redirected to the turf below the pointer.
-	if (A == src && client.prefs && client.prefs.toggle_prefs & TOGGLE_IGNORE_SELF && src.a_intent != INTENT_HELP && !isXeno(src) && (!W || !(W.flags_item & (NOBLUDGEON|ITEM_ABSTRACT))))
-		if (world.time % 3)
-			to_chat(src, SPAN_NOTICE("You have the discipline not to hurt yourself."))
-		return
+	//Self-harm preference. isxeno check because xeno clicks on self are redirected to the turf below the pointer.
+	if(A == src && client.prefs && client.prefs.toggle_prefs & TOGGLE_IGNORE_SELF && src.a_intent != INTENT_HELP && !isxeno(src))
+		if(W)
+			if(W.force && (!W || !(W.flags_item & (NOBLUDGEON|ITEM_ABSTRACT))))
+				if(world.time % 3)
+					to_chat(src, SPAN_NOTICE("You have the discipline not to hurt yourself."))
+				return
+		else
+			if(world.time % 3)
+				to_chat(src, SPAN_NOTICE("You have the discipline not to hurt yourself."))
+			return
 
 
 	// Don't allow doing anything else if inside a container of some sort, like a locker.
 	if (!isturf(loc))
 		return
 
-	if (world.time <= next_move && A.loc != src)	// Attack click cooldown check
+	if (world.time <= next_move && A.loc != src) // Attack click cooldown check
 		return
 
 	next_move = world.time
@@ -132,7 +137,7 @@
 	SEND_SIGNAL(src, COMSIG_MOB_POST_CLICK, A, mods)
 	return
 
-/mob/proc/click_adjacent(atom/A, var/obj/item/W, mods)
+/mob/proc/click_adjacent(atom/A, obj/item/W, mods)
 	if(W)
 		if(W.attack_speed && !src.contains(A)) //Not being worn or carried in the user's inventory somewhere, including internal storages.
 			next_move += W.attack_speed
@@ -149,14 +154,26 @@
 			next_move += 4
 		UnarmedAttack(A, 1, mods)
 
+/mob/proc/check_click_intercept(params,A)
+	//Client level intercept
+	if(client?.click_intercept)
+		if(call(client.click_intercept, "InterceptClickOn")(src, params, A))
+			return TRUE
 
-/*	OLD DESCRIPTION
+	//Mob level intercept
+	if(click_intercept)
+		if(call(click_intercept, "InterceptClickOn")(src, params, A))
+			return TRUE
+
+	return FALSE
+
+/* OLD DESCRIPTION
 	Standard mob ClickOn()
 	Handles exceptions: Buildmode, middle click, modified clicks, mech actions
 
 	After that, mostly just check your state, check whether you're holding an item,
 	check whether you're adjacent to the target, then pass off the click to whoever
-	is recieving it.
+	is receiving it.
 	The most common are:
 	* mob/UnarmedAttack(atom,adjacent) - used here only when adjacent, with no item in hand; in the case of humans, checks gloves
 	* atom/attackby(item,user) - used only when adjacent
@@ -164,10 +181,10 @@
 	* mob/RangedAttack(atom,params) - used only ranged, only used for tk and laser eyes but could be changed
 */
 
-/mob/proc/click(var/atom/A, var/list/mods)
+/mob/proc/click(atom/A, list/mods)
 	return FALSE
 
-/atom/proc/clicked(var/mob/user, var/list/mods)
+/atom/proc/clicked(mob/user, list/mods)
 	if (mods["shift"] && !mods["middle"])
 		if(can_examine(user))
 			examine(user)
@@ -176,13 +193,12 @@
 	if (mods["alt"])
 		var/turf/T = get_turf(src)
 		if(T && user.TurfAdjacent(T) && T.contents.len)
-			user.listed_turf = T
-			user.client << output("[url_encode(json_encode(T.name))];", "statbrowser:create_listedturf")
+			user.set_listed_turf(T)
 
 		return TRUE
 	return FALSE
 
-/atom/movable/clicked(var/mob/user, var/list/mods)
+/atom/movable/clicked(mob/user, list/mods)
 	if (..())
 		return TRUE
 
@@ -202,7 +218,7 @@
 	proximity_flag is not currently passed to attack_hand, and is instead used
 	in human click code to allow glove touches only at melee range.
 */
-/mob/proc/UnarmedAttack(var/atom/A, var/proximity_flag, click_parameters)
+/mob/proc/UnarmedAttack(atom/A, proximity_flag, click_parameters)
 	return
 
 /*
@@ -213,7 +229,7 @@
 	for things like ranged glove touches, spitting alien acid/neurotoxin,
 	animals lunging, etc.
 */
-/mob/proc/RangedAttack(var/atom/A, var/params)
+/mob/proc/RangedAttack(atom/A, params)
 	return
 
 /*
@@ -222,7 +238,7 @@
 	Used when you are handcuffed and click things.
 	Not currently used by anything but could easily be.
 */
-/mob/proc/RestrainedClickOn(var/atom/A)
+/mob/proc/RestrainedClickOn(atom/A)
 	return
 
 /*
@@ -232,7 +248,7 @@
 */
 
 // Simple helper to face what you clicked on, in case it should be needed in more than one place
-/mob/proc/face_atom(var/atom/A)
+/mob/proc/face_atom(atom/A)
 
 	if( !A || !x || !y || !A.x || !A.y ) return
 	var/dx = A.x - x
@@ -264,7 +280,7 @@
 	if(!specific_direction)
 		specific_direction = direction
 
-	facedir(direction, specific_direction)
+	face_dir(direction, specific_direction)
 
 
 
@@ -274,17 +290,17 @@
 // click catcher stuff
 
 
-/obj/screen/click_catcher
+/atom/movable/screen/click_catcher
 	icon = 'icons/mob/hud/screen1.dmi'
 	icon_state = "catcher"
 	layer = 0
 	plane = -99
-	mouse_opacity = 2
+	mouse_opacity = MOUSE_OPACITY_OPAQUE
 	screen_loc = "CENTER-7,CENTER-7"
 	flags_atom = NOINTERACT
 
 
-/obj/screen/click_catcher/proc/UpdateGreed(view_size_x = 15, view_size_y = 15)
+/atom/movable/screen/click_catcher/proc/UpdateGreed(view_size_x = 15, view_size_y = 15)
 	var/icon/newicon = icon('icons/mob/hud/screen1.dmi', "catcher")
 	var/ox = min((33 * 32)/ world.icon_size, view_size_x)
 	var/oy = min((33 * 32)/ world.icon_size, view_size_y)
@@ -301,12 +317,15 @@
 
 
 
-/client/proc/change_view(new_size, var/atom/source)
+/client/proc/change_view(new_size, atom/source)
 	if(SEND_SIGNAL(mob, COMSIG_MOB_CHANGE_VIEW, new_size) & COMPONENT_OVERRIDE_VIEW)
 		return TRUE
 	view = mob.check_view_change(new_size, source)
 	apply_clickcatcher()
 	mob.reload_fullscreens()
+
+	if(prefs.auto_fit_viewport)
+		INVOKE_ASYNC(src, .verb/fit_viewport)
 
 /client/proc/create_clickcatcher()
 	if(!void)
@@ -382,5 +401,5 @@
 		attack_self(user)
 		return
 	user.do_click(A, null, params)
-	addtimer(CALLBACK(src, .proc/autoclick, user, A, params), 0.1)
+	addtimer(CALLBACK(src, PROC_REF(autoclick), user, A, params), 0.1)
 #endif

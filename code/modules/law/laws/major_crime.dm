@@ -30,7 +30,7 @@
 
 /datum/law/major_law/interference
 	name = "Interference"
-	desc = "Interfering in an legal arrest being performed with ill intent. Clearly trying to hinder the arrest being performed."
+	desc = "Interfering in a legal arrest being performed with ill intent. Clearly trying to hinder the arrest being performed."
 	brig_time = 15
 
 /datum/law/major_law/neglect_of_duty
@@ -40,7 +40,7 @@
 
 /datum/law/major_law/subterfuge
 	name = "Subterfuge"
-	desc = "Carrying out objectives or being tied to material that describe planned actions that go against the USCM. Strong proof is required that the invidivual is working against USCM."
+	desc = "Carrying out objectives or being tied to material that describe planned actions that go against the USCM. Strong proof is required that the individual is working against USCM."
 	special_punishment = "Termination of ID/Discharge to planet"
 	brig_time = 15
 
@@ -79,3 +79,8 @@
 	name = "Misuse of Authority"
 	desc = "The exercising of power to a malicious extent by Military Police or deputized personnel acting as an MP; examples include beating a downed prisoner, excessive use of harmful or non-lethal force, or other abusive actions that led to the harm of a person in custody. Detained suspects should not have more force used on them than necessary in order to pacify them. Force may be used against retaliating or escaping parties only to the point where they are sufficiently pacified."
 	brig_time = 20
+
+/datum/law/major_law/unauthorized_deployment
+	name = "Unauthorized Deployment"
+	desc = "To deploy into the area of operations without permission of the relevant head of department or Commander where appropriate whilst still performing assigned duties. (I.E A doctor deploying without permission, with the intentions to perform field surgery.) Deploying without intent to perform assigned duties remains desertion."
+	brig_time = 10

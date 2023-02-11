@@ -7,8 +7,8 @@
 	desc = "A portable generator used for emergency backup power."
 	icon = 'generator.dmi'
 	icon_state = "off"
-	density = 1
-	anchored = 0
+	density = TRUE
+	anchored = FALSE
 	directwired = 0
 	var/t_status = 0
 	var/t_per = 5000
@@ -32,7 +32,7 @@ tank [un]loading stuff
 /obj/structure/machinery/power/port_gen/attack_hand(mob/user)
 turn on/off
 
-/obj/structure/machinery/power/port_gen/examine(mob/user)
+/obj/structure/machinery/power/port_gen/get_examine_text(mob/user)
 display round(lastgen) and phorontank amount
 
 */
@@ -42,14 +42,14 @@ display round(lastgen) and phorontank amount
 
 //Baseline portable generator. Has all the default handling. Not intended to be used on it's own (since it generates unlimited power).
 /obj/structure/machinery/power/port_gen
-	name = "Placeholder Generator"	//seriously, don't use this. It can't be anchored without VV magic.
-	desc = "A portable generator for emergency backup power"
+	name = "Placeholder Generator" //seriously, don't use this. It can't be anchored without VV magic.
+	desc = "A portable generator for emergency backup power."
 	icon = 'icons/obj/structures/machinery/power.dmi'
 	icon_state = "portgen0"
-	density = 1
-	anchored = 0
-//	directwired = 0
-	use_power = 0
+	density = TRUE
+	anchored = FALSE
+// directwired = 0
+	use_power = USE_POWER_NONE
 	unslashable = FALSE
 
 	var/active = 0
@@ -95,12 +95,12 @@ display round(lastgen) and phorontank amount
 	if(!anchored)
 		return
 
-/obj/structure/machinery/power/port_gen/examine(mob/user)
-	..()
+/obj/structure/machinery/power/port_gen/get_examine_text(mob/user)
+	. = ..()
 	if(active)
-		to_chat(user, SPAN_NOTICE(" The generator is on."))
+		. += SPAN_NOTICE("The generator is on.")
 	else
-		to_chat(user, SPAN_NOTICE(" The generator is off."))
+		. += SPAN_NOTICE("The generator is off.")
 
 //A power generator that runs on solid plasma sheets.
 /obj/structure/machinery/power/port_gen/pacman
@@ -147,10 +147,10 @@ display round(lastgen) and phorontank amount
 	reliability = min(round(temp_reliability / 4), 100)
 	power_gen = round(initial(power_gen) * (max(2, temp_rating) / 2))
 
-/obj/structure/machinery/power/port_gen/pacman/examine(mob/user)
-	..()
-	to_chat(user, SPAN_NOTICE(" The generator has [sheets] units of [sheet_name] fuel left, producing [power_gen] per cycle."))
-	if(crit_fail) to_chat(user, SPAN_DANGER("The generator seems to have broken down."))
+/obj/structure/machinery/power/port_gen/pacman/get_examine_text(mob/user)
+	. = ..()
+	. += SPAN_NOTICE(" The generator has [sheets] units of [sheet_name] fuel left, producing [power_gen] per cycle.")
+	if(crit_fail) . += SPAN_DANGER("The generator seems to have broken down.")
 
 /obj/structure/machinery/power/port_gen/pacman/HasFuel()
 	if(sheets >= 1 / (time_per_sheet / power_output) - sheet_left)
@@ -161,7 +161,7 @@ display round(lastgen) and phorontank amount
 	if(sheets)
 		var/fail_safe = 0
 		while(sheets > 0 && fail_safe < 100)
-			fail_safe += 1
+			fail_safe++
 			var/obj/item/stack/sheet/S = new sheet_path(loc)
 			var/amount = min(sheets, S.max_amount)
 			S.amount = amount
@@ -207,7 +207,7 @@ display round(lastgen) and phorontank amount
 /obj/structure/machinery/power/port_gen/pacman/proc/overheat()
 	explosion(src.loc, 2, 5, 2, -1)
 
-/obj/structure/machinery/power/port_gen/pacman/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/structure/machinery/power/port_gen/pacman/attackby(obj/item/O as obj, mob/user as mob)
 	if(istype(O, sheet_path))
 		var/obj/item/stack/addstack = O
 		var/amount = min((max_sheets - sheets), addstack.amount)
@@ -328,7 +328,7 @@ display round(lastgen) and phorontank amount
 			close_browser(usr, "port_gen")
 			usr.unset_interaction()
 
-/obj/structure/machinery/power/port_gen/pacman/inoperable(var/additional_flags)
+/obj/structure/machinery/power/port_gen/pacman/inoperable(additional_flags)
 	return (stat & (BROKEN|additional_flags)) //Removes NOPOWER check since its a goddam generator and doesn't need power
 
 /obj/structure/machinery/power/port_gen/pacman/super
@@ -338,8 +338,9 @@ display round(lastgen) and phorontank amount
 	power_gen = 15000
 	time_per_sheet = 120
 	board_path = /obj/item/circuitboard/machine/pacman/super
-	overheat()
-		explosion(src.loc, 3, 3, 3, -1)
+
+/obj/structure/machinery/power/port_gen/pacman/super/overheat()
+	explosion(src.loc, 3, 3, 3, -1)
 
 /obj/structure/machinery/power/port_gen/pacman/mrs
 	name = "M.R.S.P.A.C.M.A.N.-type Portable Generator"
@@ -348,5 +349,6 @@ display round(lastgen) and phorontank amount
 	power_gen = 40000
 	time_per_sheet = 150
 	board_path = /obj/item/circuitboard/machine/pacman/mrs
-	overheat()
-		explosion(src.loc, 4, 4, 4, -1)
+
+/obj/structure/machinery/power/port_gen/pacman/mrs/overheat()
+	explosion(src.loc, 4, 4, 4, -1)

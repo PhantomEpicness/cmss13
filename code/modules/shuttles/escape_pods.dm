@@ -1,12 +1,12 @@
 //=========================================================================================
 //===================================Shuttle Datum=========================================
 //=========================================================================================
-#define STATE_IDLE			4 //Pod is idle, not ready to launch.
-#define STATE_BROKEN		5 //Pod failed to launch, is now broken.
-#define STATE_READY			6 //Pod is armed and ready to go.
-#define STATE_DELAYED		7 //Pod is being delayed from launching automatically.
-#define STATE_LAUNCHING		8 //Pod is about to launch.
-#define STATE_LAUNCHED		9 //Pod has successfully launched.
+#define STATE_IDLE 4 //Pod is idle, not ready to launch.
+#define STATE_BROKEN 5 //Pod failed to launch, is now broken.
+#define STATE_READY 6 //Pod is armed and ready to go.
+#define STATE_DELAYED 7 //Pod is being delayed from launching automatically.
+#define STATE_LAUNCHING 8 //Pod is about to launch.
+#define STATE_LAUNCHED 9 //Pod has successfully launched.
 /*Other states are located in docking_program.dm, but they aren't important here.
 This is built upon a weird network of different states, including docking states, moving
 states, process states, and so forth. It's disorganized, but I tried to keep it in line
@@ -28,36 +28,36 @@ with the original.*/
 	//TODO: Make sure that the area has light once evac is in progress.
 
 	//Can only go one way, never back. Very simple.
-	process()
-		switch(process_state)
-			if(WAIT_LAUNCH)
-				short_jump()
-				process_state = IDLE_STATE
+/datum/shuttle/ferry/marine/evacuation_pod/process()
+	switch(process_state)
+		if(WAIT_LAUNCH)
+			short_jump()
+			process_state = IDLE_STATE
 
 	//No safeties here. Everything is done through dock_state.
-	launch()
-		process_state = WAIT_LAUNCH
+/datum/shuttle/ferry/marine/evacuation_pod/launch()
+	process_state = WAIT_LAUNCH
 
-	can_launch() //Cannot launch it early before the evacuation takes place proper, and the pod must be ready. Cannot be delayed, broken, launching, or otherwise.
-		if(..() && EvacuationAuthority.evac_status >= EVACUATION_STATUS_INITIATING)
-			switch(evacuation_program.dock_state)
-				if(STATE_READY)
-					return TRUE
-				if(STATE_DELAYED)
-					for(var/obj/structure/machinery/cryopod/evacuation/C in cryo_cells) //If all are occupied, the pod will launch anyway.
-						if(!C.occupant)
-							return FALSE
-					return TRUE
+/datum/shuttle/ferry/marine/evacuation_pod/can_launch() //Cannot launch it early before the evacuation takes place proper, and the pod must be ready. Cannot be delayed, broken, launching, or otherwise.
+	if(..() && EvacuationAuthority.evac_status >= EVACUATION_STATUS_INITIATING)
+		switch(evacuation_program.dock_state)
+			if(STATE_READY)
+				return TRUE
+			if(STATE_DELAYED)
+				for(var/obj/structure/machinery/cryopod/evacuation/C in cryo_cells) //If all are occupied, the pod will launch anyway.
+					if(!C.occupant)
+						return FALSE
+				return TRUE
 
 	//The pod can be delayed until after the automatic launch.
-	can_cancel()
-		. = (EvacuationAuthority.evac_status > EVACUATION_STATUS_STANDING_BY && (evacuation_program.dock_state in STATE_READY to STATE_DELAYED)) //Must be evac time and the pod can't be launching/launched.
+/datum/shuttle/ferry/marine/evacuation_pod/can_cancel()
+	. = (EvacuationAuthority.evac_status > EVACUATION_STATUS_STANDING_BY && (evacuation_program.dock_state in STATE_READY to STATE_DELAYED)) //Must be evac time and the pod can't be launching/launched.
 
-	short_jump()
-		. = ..()
-		evacuation_program.dock_state = STATE_LAUNCHED
-		spawn(10)
-			check_passengers("<br><br>[SPAN_CENTERBOLD("<big>You have successfully left the [MAIN_SHIP_NAME]. You may now ghost and observe the rest of the round.</big>")]<br>")
+/datum/shuttle/ferry/marine/evacuation_pod/short_jump()
+	. = ..()
+	evacuation_program.dock_state = STATE_LAUNCHED
+	spawn(10)
+		check_passengers("<br><br>[SPAN_CENTERBOLD("<big>You have successfully left the [MAIN_SHIP_NAME]. You may now ghost and observe the rest of the round.</big>")]<br>")
 
 /*
 This processes tags and connections dynamically, so you do not need to modify or pregenerate linked objects.
@@ -160,7 +160,7 @@ for(var/obj/structure/machinery/cryopod/evacuation/C in cryo_cells) C.go_out()
 You could potentially make stuff like crypods in these, but they should generally not be allowed to build inside pods.
 This can probably be done a lot more elegantly either way, but it'll suffice for now.
 */
-/datum/shuttle/ferry/marine/evacuation_pod/proc/check_passengers(var/msg = "")
+/datum/shuttle/ferry/marine/evacuation_pod/proc/check_passengers(msg = "")
 	. = TRUE
 	var/n = 0 //Generic counter.
 	var/mob/M
@@ -183,8 +183,8 @@ This can probably be done a lot more elegantly either way, but it'll suffice for
 			M = i
 			if(M.stat != DEAD && msg)
 				to_chat(M, msg)
-		else if(istype(i, /mob/living/carbon/Xenomorph))
-			var/mob/living/carbon/Xenomorph/X = i
+		else if(istype(i, /mob/living/carbon/xenomorph))
+			var/mob/living/carbon/xenomorph/X = i
 			if(X.mob_size >= MOB_SIZE_BIG)
 				return FALSE //Huge xenomorphs will automatically fail the launch.
 			n++
@@ -214,50 +214,69 @@ As such, a new tracker datum must be constructed to follow proper child inherita
 	//id_tag is the generic connection tag.
 	//TODO make sure you can't C4 this.
 
-	ex_act(severity)
-		return FALSE
+/obj/structure/machinery/embedded_controller/radio/simple_docking_controller/escape_pod/ex_act(severity)
+	return FALSE
 
-	ui_interact(mob/user, ui_key = "main", datum/nanoui/ui = null, force_open = 1)
-		var/launch_status[] = evacuation_program.check_launch_status()
-		var/data[] = list(
-			"docking_status"	= evacuation_program.dock_state,
-			"door_state"		= evacuation_program.memory["door_status"]["state"],
-			"door_lock"			= evacuation_program.memory["door_status"]["lock"],
-			"can_lock"			= 0, //evacuation_program.dock_state == (STATE_READY || STATE_DELAYED) ? 1:0,
-			"can_force"			= evacuation_program.dock_state == (STATE_READY || STATE_DELAYED) ? 1:0,
-			"can_delay"			= launch_status[2]
-		)
+// TGUI stufferinos \\
 
-		ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
+/obj/structure/machinery/embedded_controller/radio/simple_docking_controller/escape_pod/attack_hand(mob/user)
+	if(..())
+		return
+	tgui_interact(user)
 
-		if (!ui)
-			ui = new(user, src, ui_key, "escape_pod_console.tmpl", id_tag, 470, 290)
-			ui.set_initial_data(data)
-			ui.open()
-			ui.set_auto_update(0)
+/obj/structure/machinery/embedded_controller/radio/simple_docking_controller/escape_pod/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "EscapePodConsole", "[src.name]")
+		ui.open()
 
-	Topic(href, href_list)
-		if(..())
-			return TRUE	//Has to return true to fail. For some reason.
+/obj/structure/machinery/embedded_controller/radio/simple_docking_controller/escape_pod/ui_state(mob/user)
+	return GLOB.not_incapacitated_and_adjacent_state
 
-		var/datum/shuttle/ferry/marine/evacuation_pod/P = shuttle_controller.shuttles[id_tag]
-		switch(href_list["command"])
-			if("force_launch")
-				P.prepare_for_launch()
-			if("delay_launch")
-				evacuation_program.dock_state = evacuation_program.dock_state == STATE_DELAYED ? STATE_READY : STATE_DELAYED
-			if("lock_door")
-				if(P.D.density) //Closed
-					spawn()
-						P.D.unlock()
-						P.D.open()
-						P.D.lock()
-				else //Open
-					spawn()
-						P.D.unlock()
-						P.D.close()
-						P.D.lock()
+/obj/structure/machinery/embedded_controller/radio/simple_docking_controller/escape_pod/ui_status(mob/user, datum/ui_state/state)
+	. = ..()
+	if(inoperable())
+		return UI_CLOSE
 
+/obj/structure/machinery/embedded_controller/radio/simple_docking_controller/escape_pod/ui_data(mob/user)
+	var/list/data = list()
+	var/launch_status[] = evacuation_program.check_launch_status()
+	var/datum/shuttle/ferry/marine/evacuation_pod/P = shuttle_controller.shuttles[id_tag]
+
+	data["docking_status"] = evacuation_program.dock_state
+	data["door_state"] = P.D.density
+	data["door_lock"] = P.D.locked
+	data["can_delay"] = launch_status[2]
+
+	return data
+
+/obj/structure/machinery/embedded_controller/radio/simple_docking_controller/escape_pod/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+	. = ..()
+	if(.)
+		return
+
+	var/datum/shuttle/ferry/marine/evacuation_pod/P = shuttle_controller.shuttles[id_tag]
+
+	switch(action)
+		if("force_launch")
+			P.prepare_for_launch()
+			. = TRUE
+		if("delay_launch")
+			evacuation_program.dock_state = evacuation_program.dock_state == STATE_DELAYED ? STATE_READY : STATE_DELAYED
+			. = TRUE
+		if("lock_door")
+			if(P.D.density) //Closed
+				P.D.unlock()
+				P.D.open()
+				P.D.lock()
+			else //Open
+				P.D.unlock()
+				P.D.close()
+				P.D.lock()
+			. = TRUE
+
+
+// TGUI stuff END \\
 
 //=========================================================================================
 //================================Controller Program=======================================
@@ -271,12 +290,12 @@ As such, a new tracker datum must be constructed to follow proper child inherita
 	//id_tag is the generic connection tag.
 
 	//receive_user_command(command)
-	//	if(dock_state == STATE_READY)
-	//		..(command)
+	// if(dock_state == STATE_READY)
+	// ..(command)
 
-	prepare_for_undocking()
-		playsound(master,'sound/effects/escape_pod_warmup.ogg', 50, 1)
-		//close_door()
+/datum/computer/file/embedded_program/docking/simple/escape_pod/prepare_for_undocking()
+	playsound(master,'sound/effects/escape_pod_warmup.ogg', 50, 1)
+	//close_door()
 
 /datum/computer/file/embedded_program/docking/simple/escape_pod/proc/check_launch_status()
 	var/datum/shuttle/ferry/marine/evacuation_pod/P = shuttle_controller.shuttles[id_tag]
@@ -294,99 +313,99 @@ As such, a new tracker datum must be constructed to follow proper child inherita
 	var/being_forced = 0 //Simple variable to prevent sound spam.
 	var/datum/computer/file/embedded_program/docking/simple/escape_pod/evacuation_program
 
-	ex_act(severity)
-		return FALSE
+/obj/structure/machinery/cryopod/evacuation/ex_act(severity)
+	return FALSE
 
-	attackby(obj/item/grab/G, mob/user)
-		if(istype(G))
-			if(being_forced)
-				to_chat(user, SPAN_WARNING("There's something forcing it open!"))
-				return FALSE
-
-			if(occupant)
-				to_chat(user, SPAN_WARNING("There is someone in there already!"))
-				return FALSE
-
-			if(evacuation_program.dock_state < STATE_READY)
-				to_chat(user, SPAN_WARNING("The cryo pod is not responding to commands!"))
-				return FALSE
-
-			var/mob/living/carbon/human/M = G.grabbed_thing
-			if(!istype(M))
-				return FALSE
-
-			visible_message(SPAN_WARNING("[user] starts putting [M.name] into the cryo pod."), null, null, 3)
-
-			if(do_after(user, 20, INTERRUPT_ALL, BUSY_ICON_GENERIC))
-				if(!M || !G || !G.grabbed_thing || !G.grabbed_thing.loc || G.grabbed_thing != M)
-					return FALSE
-				move_mob_inside(M)
-
-	eject()
-		set name = "Eject Pod"
-		set category = "Object"
-		set src in oview(1)
-
-		if(!occupant || !usr.stat || usr.is_mob_restrained())
-			return FALSE
-
-		if(occupant) //Once you're in, you cannot exit, and outside forces cannot eject you.
-			//The occupant is actually automatically ejected once the evac is canceled.
-			if(occupant != usr) to_chat(usr, SPAN_WARNING("You are unable to eject the occupant unless the evacuation is canceled."))
-
-		add_fingerprint(usr)
-
-	go_out() //When the system ejects the occupant.
-		if(occupant)
-			occupant.forceMove(get_turf(src))
-			occupant.in_stasis = FALSE
-			occupant = null
-			icon_state = orient_right ? "body_scanner_0-r" : "body_scanner_0"
-
-	move_inside()
-		set name = "Enter Pod"
-		set category = "Object"
-		set src in oview(1)
-
-		var/mob/living/carbon/human/user = usr
-
-		if(!istype(user) || user.stat || user.is_mob_restrained())
-			return FALSE
-
+/obj/structure/machinery/cryopod/evacuation/attackby(obj/item/grab/G, mob/user)
+	if(istype(G))
 		if(being_forced)
-			to_chat(user, SPAN_WARNING("You can't enter when it's being forced open!"))
+			to_chat(user, SPAN_WARNING("There's something forcing it open!"))
 			return FALSE
 
 		if(occupant)
-			to_chat(user, SPAN_WARNING("The cryogenic pod is already in use! You will need to find another."))
+			to_chat(user, SPAN_WARNING("There is someone in there already!"))
 			return FALSE
 
 		if(evacuation_program.dock_state < STATE_READY)
 			to_chat(user, SPAN_WARNING("The cryo pod is not responding to commands!"))
 			return FALSE
 
-		visible_message(SPAN_WARNING("[user] starts climbing into the cryo pod."), null, null, 3)
+		var/mob/living/carbon/human/M = G.grabbed_thing
+		if(!istype(M))
+			return FALSE
 
-		if(do_after(user, 20, INTERRUPT_NO_NEEDHAND, BUSY_ICON_GENERIC))
-			user.stop_pulling()
-			move_mob_inside(user)
+		visible_message(SPAN_WARNING("[user] starts putting [M.name] into the cryo pod."), null, null, 3)
 
-	attack_alien(mob/living/carbon/Xenomorph/user)
-		if(being_forced)
-			to_chat(user, SPAN_XENOWARNING("It's being forced open already!"))
-			return XENO_NO_DELAY_ACTION
+		if(do_after(user, 20, INTERRUPT_ALL, BUSY_ICON_GENERIC))
+			if(!M || !G || !G.grabbed_thing || !G.grabbed_thing.loc || G.grabbed_thing != M)
+				return FALSE
+			move_mob_inside(M)
 
-		if(!occupant)
-			to_chat(user, SPAN_XENOWARNING("There is nothing of interest in there."))
-			return XENO_NO_DELAY_ACTION
+/obj/structure/machinery/cryopod/evacuation/eject()
+	set name = "Eject Pod"
+	set category = "Object"
+	set src in oview(1)
 
-		being_forced = !being_forced
-		xeno_attack_delay(user)
-		visible_message(SPAN_WARNING("[user] begins to pry \the [src]'s cover!"), null, null, 3)
-		playsound(src,'sound/effects/metal_creaking.ogg', 25, 1)
-		if(do_after(user, 20, INTERRUPT_ALL, BUSY_ICON_HOSTILE)) go_out() //Force the occupant out.
-		being_forced = !being_forced
+	if(!occupant || !usr.stat || usr.is_mob_restrained())
+		return FALSE
+
+	if(occupant) //Once you're in, you cannot exit, and outside forces cannot eject you.
+		//The occupant is actually automatically ejected once the evac is canceled.
+		if(occupant != usr) to_chat(usr, SPAN_WARNING("You are unable to eject the occupant unless the evacuation is canceled."))
+
+	add_fingerprint(usr)
+
+/obj/structure/machinery/cryopod/evacuation/go_out() //When the system ejects the occupant.
+	if(occupant)
+		occupant.forceMove(get_turf(src))
+		occupant.in_stasis = FALSE
+		occupant = null
+		icon_state = orient_right ? "body_scanner_open-r" : "body_scanner_open"
+
+/obj/structure/machinery/cryopod/evacuation/move_inside()
+	set name = "Enter Pod"
+	set category = "Object"
+	set src in oview(1)
+
+	var/mob/living/carbon/human/user = usr
+
+	if(!istype(user) || user.stat || user.is_mob_restrained())
+		return FALSE
+
+	if(being_forced)
+		to_chat(user, SPAN_WARNING("You can't enter when it's being forced open!"))
+		return FALSE
+
+	if(occupant)
+		to_chat(user, SPAN_WARNING("The cryogenic pod is already in use! You will need to find another."))
+		return FALSE
+
+	if(evacuation_program.dock_state < STATE_READY)
+		to_chat(user, SPAN_WARNING("The cryo pod is not responding to commands!"))
+		return FALSE
+
+	visible_message(SPAN_WARNING("[user] starts climbing into the cryo pod."), null, null, 3)
+
+	if(do_after(user, 20, INTERRUPT_NO_NEEDHAND, BUSY_ICON_GENERIC))
+		user.stop_pulling()
+		move_mob_inside(user)
+
+/obj/structure/machinery/cryopod/evacuation/attack_alien(mob/living/carbon/xenomorph/user)
+	if(being_forced)
+		to_chat(user, SPAN_XENOWARNING("It's being forced open already!"))
 		return XENO_NO_DELAY_ACTION
+
+	if(!occupant)
+		to_chat(user, SPAN_XENOWARNING("There is nothing of interest in there."))
+		return XENO_NO_DELAY_ACTION
+
+	being_forced = !being_forced
+	xeno_attack_delay(user)
+	visible_message(SPAN_WARNING("[user] begins to pry \the [src]'s cover!"), null, null, 3)
+	playsound(src,'sound/effects/metal_creaking.ogg', 25, 1)
+	if(do_after(user, 20, INTERRUPT_ALL, BUSY_ICON_HOSTILE)) go_out() //Force the occupant out.
+	being_forced = !being_forced
+	return XENO_NO_DELAY_ACTION
 
 /obj/structure/machinery/cryopod/evacuation/proc/move_mob_inside(mob/M)
 	if(occupant)
@@ -397,7 +416,7 @@ As such, a new tracker datum must be constructed to follow proper child inherita
 	occupant = M
 	occupant.in_stasis = STASIS_IN_CRYO_CELL
 	add_fingerprint(M)
-	icon_state = orient_right ? "body_scanner_1-r" : "body_scanner_1"
+	icon_state = orient_right ? "body_scanner_closed-r" : "body_scanner_closed"
 
 
 /obj/structure/machinery/door/airlock/evacuation
@@ -409,7 +428,7 @@ As such, a new tracker datum must be constructed to follow proper child inherita
 
 /obj/structure/machinery/door/airlock/evacuation/Initialize()
 	. = ..()
-	INVOKE_ASYNC(src, .proc/lock)
+	INVOKE_ASYNC(src, PROC_REF(lock))
 
 	//Can't interact with them, mostly to prevent grief and meta.
 /obj/structure/machinery/door/airlock/evacuation/Collided()
@@ -431,36 +450,3 @@ As such, a new tracker datum must be constructed to follow proper child inherita
 #undef STATE_READY
 #undef STATE_BROKEN
 #undef STATE_LAUNCHED
-
-/*
-//Leaving this commented out for the CL pod, which should have a way to open from the outside.
-
-//This controller is for the escape pod berth (station side)
-/obj/structure/machinery/embedded_controller/radio/simple_docking_controller/escape_pod_berth
-	name = "escape pod berth controller"
-
-/obj/structure/machinery/embedded_controller/radio/simple_docking_controller/escape_pod_berth/Initialize()
-	. = ..()
-	docking_program = new/datum/computer/file/embedded_program/docking/simple/escape_pod(src)
-	program = docking_program
-
-/obj/structure/machinery/embedded_controller/radio/simple_docking_controller/escape_pod_berth/ui_interact(mob/user, ui_key = "main", var/datum/nanoui/ui = null, var/force_open = 1)
-	var/armed = null
-	if (istype(docking_program, /datum/computer/file/embedded_program/docking/simple/escape_pod))
-		var/datum/computer/file/embedded_program/docking/simple/escape_pod/P = docking_program
-		armed = P.armed
-
-	var/data[] = list(
-		"docking_status" = docking_program.get_docking_status(),
-		"override_enabled" = docking_program.override_enabled,
-		"armed" = armed,
-	)
-
-	ui = nanomanager.try_update_ui(user, src, ui_key, ui, data, force_open)
-
-	if (!ui)
-		ui = new(user, src, ui_key, "escape_pod_berth_console.tmpl", name, 470, 290)
-		ui.set_initial_data(data)
-		ui.open()
-		ui.set_auto_update(1)
-*/

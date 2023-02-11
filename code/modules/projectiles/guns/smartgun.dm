@@ -8,7 +8,7 @@
 	icon_state = "m56"
 	item_state = "m56"
 	fire_sound = "gun_smartgun"
-	fire_rattle	= "gun_smartgun_rattle"
+	fire_rattle = "gun_smartgun_rattle"
 	reload_sound = 'sound/weapons/handling/gun_sg_reload.ogg'
 	unload_sound = 'sound/weapons/handling/gun_sg_unload.ogg'
 	current_mag = /obj/item/ammo_magazine/smartgun
@@ -20,13 +20,13 @@
 	var/powerpack = null
 	ammo = /datum/ammo/bullet/smartgun
 	actions_types = list(
-						/datum/action/item_action/smartgun/toggle_accuracy_improvement,
-						/datum/action/item_action/smartgun/toggle_ammo_type,
-						/datum/action/item_action/smartgun/toggle_auto_fire,
-						/datum/action/item_action/smartgun/toggle_lethal_mode,
-						/datum/action/item_action/smartgun/toggle_motion_detector,
-						/datum/action/item_action/smartgun/toggle_recoil_compensation
-						)
+		/datum/action/item_action/smartgun/toggle_accuracy_improvement,
+		/datum/action/item_action/smartgun/toggle_ammo_type,
+		/datum/action/item_action/smartgun/toggle_auto_fire,
+		/datum/action/item_action/smartgun/toggle_lethal_mode,
+		/datum/action/item_action/smartgun/toggle_motion_detector,
+		/datum/action/item_action/smartgun/toggle_recoil_compensation,
+	)
 	var/datum/ammo/ammo_primary = /datum/ammo/bullet/smartgun //Toggled ammo type
 	var/datum/ammo/ammo_secondary = /datum/ammo/bullet/smartgun/armor_piercing //Toggled ammo type
 	var/iff_enabled = TRUE //Begin with the safety on.
@@ -48,8 +48,9 @@
 	indestructible = 1
 
 	attachable_allowed = list(
-						/obj/item/attachable/smartbarrel,
-						/obj/item/attachable/flashlight)
+		/obj/item/attachable/smartbarrel,
+		/obj/item/attachable/flashlight,
+	)
 
 	flags_gun_features = GUN_SPECIALIST|GUN_WIELDED_FIRING_ONLY|GUN_HAS_FULL_AUTO|GUN_FULL_AUTO_ON|GUN_FULL_AUTO_ONLY
 	gun_category = GUN_CATEGORY_HEAVY
@@ -93,18 +94,18 @@
 		BULLET_TRAIT_ENTRY_ID("iff", /datum/element/bullet_trait_iff)
 	))
 
-/obj/item/weapon/gun/smartgun/examine(mob/user)
-	..()
+/obj/item/weapon/gun/smartgun/get_examine_text(mob/user)
+	. = ..()
 	var/rounds = 0
 	if(current_mag && current_mag.current_rounds)
 		rounds = current_mag.current_rounds
 	var/message = "[rounds ? "Ammo counter shows [rounds] round\s remaining." : "It's dry."]"
-	to_chat(user, message)
-	to_chat(user, "The restriction system is [iff_enabled ? "<B>on</b>" : "<B>off</b>"].")
+	. += message
+	. += "The restriction system is [iff_enabled ? "<B>on</b>" : "<B>off</b>"]."
 
 /obj/item/weapon/gun/smartgun/clicked(mob/user, list/mods)
 	if(mods["alt"])
-		if(!ishuman(user))
+		if(!CAN_PICKUP(user, src))
 			return ..()
 		if(!locate(src) in list(user.get_active_hand(), user.get_inactive_hand()))
 			return TRUE
@@ -155,6 +156,9 @@
 	if(!G.powerpack)
 		G.link_powerpack(usr)
 
+/datum/action/item_action/smartgun/update_button_icon()
+	return
+
 /datum/action/item_action/smartgun/toggle_motion_detector/New(Target, obj/item/holder)
 	. = ..()
 	name = "Toggle Motion Detector"
@@ -167,6 +171,11 @@
 	. = ..()
 	var/obj/item/weapon/gun/smartgun/G = holder_item
 	G.toggle_motion_detector(usr)
+
+/datum/action/item_action/smartgun/toggle_motion_detector/proc/update_icon()
+	if(!holder_item)
+		return
+	var/obj/item/weapon/gun/smartgun/G = holder_item
 	if(G.motion_detector)
 		button.icon_state = "template_on"
 	else
@@ -184,6 +193,11 @@
 	. = ..()
 	var/obj/item/weapon/gun/smartgun/G = holder_item
 	G.toggle_auto_fire(usr)
+
+/datum/action/item_action/smartgun/toggle_auto_fire/proc/update_icon()
+	if(!holder_item)
+		return
+	var/obj/item/weapon/gun/smartgun/G = holder_item
 	if(G.auto_fire)
 		button.icon_state = "template_on"
 	else
@@ -225,7 +239,7 @@
 
 /datum/action/item_action/smartgun/toggle_lethal_mode/New(Target, obj/item/holder)
 	. = ..()
-	name = "Toggle Lethal Mode"
+	name = "Toggle IFF"
 	action_icon_state = "iff_toggle_on"
 	button.name = name
 	button.overlays.Cut()
@@ -290,7 +304,7 @@
 	return TRUE
 
 /obj/item/weapon/gun/smartgun/unique_action(mob/user)
-	if(isobserver(usr) || isXeno(usr))
+	if(isobserver(usr) || isxeno(usr))
 		return
 	if(!powerpack)
 		link_powerpack(usr)
@@ -345,7 +359,7 @@
 				..()
 
 
-/obj/item/weapon/gun/smartgun/proc/link_powerpack(var/mob/user)
+/obj/item/weapon/gun/smartgun/proc/link_powerpack(mob/user)
 	if(!QDELETED(user) && !QDELETED(user.back))
 		if(istype(user.back, /obj/item/smartgun_powerpack))
 			powerpack = user.back
@@ -382,6 +396,8 @@
 	to_chat(user, "[icon2html(src, usr)] You [auto_fire? "<B>disable</b>" : "<B>enable</b>"] \the [src]'s auto fire mode.")
 	playsound(loc,'sound/machines/click.ogg', 25, 1)
 	auto_fire = !auto_fire
+	var/datum/action/item_action/smartgun/toggle_auto_fire/TAF = locate(/datum/action/item_action/smartgun/toggle_auto_fire) in actions
+	TAF.update_icon()
 	auto_fire()
 
 /obj/item/weapon/gun/smartgun/proc/auto_fire()
@@ -411,16 +427,18 @@
 		long_range_cooldown = initial(long_range_cooldown)
 		MD.scan()
 
-/obj/item/weapon/gun/smartgun/proc/auto_prefire(var/warned) //To allow the autofire delay to properly check targets after waiting.
+/obj/item/weapon/gun/smartgun/proc/auto_prefire(warned) //To allow the autofire delay to properly check targets after waiting.
 	if(ishuman(loc) && (flags_item & WIELDED))
 		var/human_user = loc
 		target = get_target(human_user)
 		process_shot(human_user, warned)
 	else
 		auto_fire = FALSE
+		var/datum/action/item_action/smartgun/toggle_auto_fire/TAF = locate(/datum/action/item_action/smartgun/toggle_auto_fire) in actions
+		TAF.update_icon()
 		auto_fire()
 
-/obj/item/weapon/gun/smartgun/proc/get_target(var/mob/living/user)
+/obj/item/weapon/gun/smartgun/proc/get_target(mob/living/user)
 	var/list/conscious_targets = list()
 	var/list/unconscious_targets = list()
 	var/list/turf/path = list()
@@ -487,7 +505,7 @@
 	else if(unconscious_targets.len)
 		. = pick(unconscious_targets)
 
-/obj/item/weapon/gun/smartgun/proc/process_shot(var/mob/living/user, var/warned)
+/obj/item/weapon/gun/smartgun/proc/process_shot(mob/living/user, warned)
 	set waitfor = 0
 
 
@@ -511,6 +529,8 @@
 	to_chat(user, "[icon2html(src, usr)] You [motion_detector? "<B>disable</b>" : "<B>enable</b>"] \the [src]'s motion detector.")
 	playsound(loc,'sound/machines/click.ogg', 25, 1)
 	motion_detector = !motion_detector
+	var/datum/action/item_action/smartgun/toggle_motion_detector/TMD = locate(/datum/action/item_action/smartgun/toggle_motion_detector) in actions
+	TMD.update_icon()
 	motion_detector()
 
 /obj/item/weapon/gun/smartgun/proc/motion_detector()
@@ -532,11 +552,15 @@
 	var/mob/living/carbon/human/linked_human
 	var/is_locked = TRUE
 
+/obj/item/weapon/gun/smartgun/co/Initialize(mapload, ...)
+	LAZYADD(actions_types, /datum/action/item_action/co_sg/toggle_id_lock)
+	. = ..()
+
 /obj/item/weapon/gun/smartgun/co/able_to_fire(mob/user)
 	. = ..()
 	if(is_locked && linked_human && linked_human != user)
 		if(linked_human.is_revivable() || linked_human.stat != DEAD)
-			to_chat(user, SPAN_WARNING("[icon2html(src)] Trigger locked by [src]. Unauthorized user."))
+			to_chat(user, SPAN_WARNING("[icon2html(src, usr)] Trigger locked by [src]. Unauthorized user."))
 			playsound(loc,'sound/weapons/gun_empty.ogg', 25, 1)
 			return FALSE
 
@@ -544,38 +568,73 @@
 		is_locked = FALSE
 		UnregisterSignal(linked_human, COMSIG_PARENT_QDELETING)
 
+// ID lock action \\
+
+/datum/action/item_action/co_sg/action_activate()
+	var/obj/item/weapon/gun/smartgun/co/protag_gun = holder_item
+	if(!ishuman(owner))
+		return
+	var/mob/living/carbon/human/protagonist = owner
+	if(protagonist.is_mob_incapacitated() || protag_gun.get_active_firearm(protagonist, FALSE) != holder_item)
+		return
+
+/datum/action/item_action/co_sg/update_button_icon()
+	return
+
+/datum/action/item_action/co_sg/toggle_id_lock/New(Target, obj/item/holder)
+	. = ..()
+	name = "Toggle ID lock"
+	action_icon_state = "id_lock_locked"
+	button.name = name
+	button.overlays.Cut()
+	button.overlays += image('icons/mob/hud/actions.dmi', button, action_icon_state)
+
+/datum/action/item_action/co_sg/toggle_id_lock/action_activate()
+	. = ..()
+	var/obj/item/weapon/gun/smartgun/co/protag_gun = holder_item
+	protag_gun.toggle_lock()
+	if(protag_gun.is_locked)
+		action_icon_state = "id_lock_locked"
+	else
+		action_icon_state = "id_lock_unlocked"
+	button.overlays.Cut()
+	button.overlays += image('icons/mob/hud/actions.dmi', button, action_icon_state)
+
+/obj/item/weapon/gun/smartgun/co/proc/toggle_lock(mob/user)
+	if(linked_human && usr != linked_human)
+		to_chat(usr, SPAN_WARNING("[icon2html(src, usr)] Action denied by \the [src]. Unauthorized user."))
+		return
+	else if(!linked_human)
+		name_after_co(usr)
+
+	is_locked = !is_locked
+	to_chat(usr, SPAN_NOTICE("[icon2html(src, usr)] You [is_locked? "lock": "unlock"] \the [src]."))
+	playsound(loc,'sound/machines/click.ogg', 25, 1)
+
+// action end \\
+
 /obj/item/weapon/gun/smartgun/co/pickup(user)
 	if(!linked_human)
 		src.name_after_co(user, src)
-		to_chat(usr, SPAN_NOTICE("[icon2html(src)] You pick up \the [src], registering yourself as its owner."))
+		to_chat(usr, SPAN_NOTICE("[icon2html(src, usr)] You pick up \the [src], registering yourself as its owner."))
 	..()
 
-/obj/item/weapon/gun/smartgun/co/verb/toggle_lock()
-	set category = "Weapons"
-	set name = "Toggle Lock"
-	set src in usr
 
-	if(usr != linked_human)
-		to_chat(usr, SPAN_WARNING("[icon2html(src)] Action denied by \the [src]. Unauthorized user."))
-		return
-
-	is_locked = !is_locked
-	to_chat(usr, SPAN_NOTICE("[icon2html(src)] You [is_locked? "lock": "unlock"] \the [src]."))
-	playsound(loc,'sound/machines/click.ogg', 25, 1)
-
-/obj/item/weapon/gun/smartgun/co/proc/name_after_co(var/mob/living/carbon/human/H, var/obj/item/weapon/gun/smartgun/co/I)
+/obj/item/weapon/gun/smartgun/co/proc/name_after_co(mob/living/carbon/human/H, obj/item/weapon/gun/smartgun/co/I)
 	linked_human = H
-	RegisterSignal(linked_human, COMSIG_PARENT_QDELETING, .proc/remove_idlock)
+	RegisterSignal(linked_human, COMSIG_PARENT_QDELETING, PROC_REF(remove_idlock))
 
-/obj/item/weapon/gun/smartgun/co/examine()
-	..()
+/obj/item/weapon/gun/smartgun/co/get_examine_text()
+	. = ..()
 	if(linked_human)
 		if(is_locked)
-			to_chat(usr, SPAN_NOTICE("It is registered to [linked_human]."))
+			. += SPAN_NOTICE("It is registered to [linked_human].")
 		else
-			to_chat(usr, SPAN_NOTICE("It is registered to [linked_human], but has its fire restrictions unlocked."))
+			. += SPAN_NOTICE("It is registered to [linked_human] but has its fire restrictions unlocked.")
 	else
-		to_chat(usr, SPAN_NOTICE("It's unregistered. Pick it up to register yourself as its owner."))
+		. += SPAN_NOTICE("It's unregistered. Pick it up to register yourself as its owner.")
+	if(!iff_enabled)
+		. += SPAN_WARNING("Its IFF restrictions are disabled.")
 
 /obj/item/weapon/gun/smartgun/co/proc/remove_idlock()
 	SIGNAL_HANDLER
@@ -620,7 +679,7 @@
 
 /obj/item/weapon/gun/smartgun/clf
 	name = "\improper M56B 'Freedom' smartgun"
-	desc = "The actual firearm in the 4-piece M56B Smartgun System. Essentially a heavy, mobile machinegun. This one has the CLF logo carved over the manufactoring stamp.\nYou may toggle firing restrictions by using a special action.\nAlt-click it to open the feed cover and allow for reloading."
+	desc = "The actual firearm in the 4-piece M56B Smartgun System. Essentially a heavy, mobile machinegun. This one has the CLF logo carved over the manufacturing stamp.\nYou may toggle firing restrictions by using a special action.\nAlt-click it to open the feed cover and allow for reloading."
 
 /obj/item/weapon/gun/smartgun/clf/Initialize(mapload, ...)
 	. = ..()

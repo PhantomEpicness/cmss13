@@ -5,128 +5,24 @@
 	icon_state = "crew_monitor"
 	flags_equip_slot = SLOT_WAIST
 	w_class = SIZE_SMALL
+	var/datum/radar/lifeline/radar
+	var/faction = FACTION_MARINE
 
-	var/cooldown_to_use = 0
+/obj/item/tool/crew_monitor/Initialize(mapload, ...)
+	. = ..()
+	radar = new /datum/radar/lifeline(src, faction)
 
-/obj/item/tool/crew_monitor/attack_self(var/mob/user)
-	..()
+/obj/item/tool/crew_monitor/Destroy()
+	QDEL_NULL(radar)
+	. = ..()
 
-	if(cooldown_to_use > world.time)
-		return
+/obj/item/tool/crew_monitor/attack_self(mob/user)
+	. = ..()
+	radar.tgui_interact(user)
 
-	ui_interact(user)
-
-	cooldown_to_use = world.time + 2 SECONDS
-
-/obj/item/tool/crew_monitor/ui_interact(var/mob/user as mob)
-	user.set_interaction(src)
-
-	var/dat = "<head><title>Crew Monitor</title></head><body>"
-	dat += get_crew_info(user)
-
-	dat += "<BR><A HREF='?src=\ref[user];mach_close=crew_monitor'>Close</A>"
-	show_browser(user, dat, name, "crew_monitor", "size=600x700")
-	onclose(user, "crew_monitor")
-
-/obj/item/tool/crew_monitor/proc/get_crew_info(var/mob/user)
-	var/dat = ""
-	dat += {"
-	<script type="text/javascript">
-		function updateSearch() {
-			var filter_text = document.getElementById("filter");
-			var filter = filter_text.value.toLowerCase();
-
-			var marine_list = document.getElementById("marine_list");
-			var ltr = marine_list.getElementsByTagName("tr");
-
-			for(var i = 0; i < ltr.length; ++i) {
-				try {
-					var tr = ltr\[i\];
-					tr.style.display = '';
-					var ltd = tr.getElementsByTagName("td")
-					var name = ltd\[0\].innerText.toLowerCase();
-					var role = ltd\[1\].innerText.toLowerCase()
-					if(name.indexOf(filter) == -1 && role.indexOf(filter) == -1) {
-						tr.style.display = 'none';
-					}
-				} catch(err) {}
-			}
-		}
-	</script>
-	"}
-
-	var/turf/user_turf = get_turf(user)
-
-	dat += "<center><b>Search:</b> <input type='text' id='filter' value='' onkeyup='updateSearch();' style='width:300px;'></center>"
-	dat += "<table id='marine_list' border='2px' style='width: 100%; border-collapse: collapse;' align='center'><tr>"
-	dat += "<th>Name</th><th>Squad</th><th>Role</th><th>State</th><th>Location</th><th>Distance</th></tr>"
-	for(var/datum/squad/S in RoleAuthority.squads)
-		var/list/squad_roles = ROLES_MARINES.Copy()
-		for(var/i in squad_roles)
-			squad_roles[i] = ""
-		var/misc_roles = ""
-
-		for(var/X in S.marines_list)
-			if(!X)
-				continue //just to be safe
-			var/mob_name = "unknown"
-			var/mob_state = ""
-			var/squad = "None"
-			var/role = "unknown"
-			var/dist = "<b>???</b>"
-			var/area_name = "<b>???</b>"
-			var/mob/living/carbon/human/H
-			if(ishuman(X))
-				H = X
-				mob_name = H.real_name
-				var/area/A = get_area(H)
-				var/turf/M_turf = get_turf(H)
-				if(A)
-					area_name = sanitize(A.name)
-
-				if(H.undefibbable)
-					continue
-
-				if(H.job)
-					role = H.job
-				else if(istype(H.wear_id, /obj/item/card/id)) //decapitated marine is mindless,
-					var/obj/item/card/id/ID = H.wear_id		//we use their ID to get their role.
-					if(ID.rank)
-						role = ID.rank
-
-				if(M_turf)
-					var/area/mob_area = M_turf.loc
-					var/area/user_area = user_turf.loc
-					if(M_turf.z == user_turf.z && mob_area.fake_zlevel == user_area.fake_zlevel)
-						dist = "[get_dist(H, user)] ([dir2text_short(get_dir(user, H))])"
-
-				if(H.assigned_squad)
-					squad = H.assigned_squad.name
-
-				switch(H.stat)
-					if(CONSCIOUS)
-						mob_state = "Conscious"
-					if(UNCONSCIOUS)
-						if(H.health < 0)
-							mob_state = "<b>Critical</b>"
-						else
-							mob_state = "Unconscious"
-					if(DEAD)
-						mob_state = "<b>Dead</b>"
-
-			var/marine_infos = "<tr><td>[mob_name]</a></td><td>[squad]</td><td>[role]</td><td>[mob_state]</td><td>[area_name]</td><td>[dist]</td></tr>"
-			if(role in squad_roles)
-				squad_roles[role] += marine_infos
-			else
-				misc_roles += marine_infos
-
-		for(var/i in squad_roles)
-			dat += squad_roles[i]
-		dat += misc_roles
-
-	dat += "</table>"
-	dat += "<br><hr>"
-	return dat
+/obj/item/tool/crew_monitor/dropped(mob/user)
+	. = ..()
+	SStgui.close_uis(src)
 
 /obj/item/clothing/suit/auto_cpr
 	name = "autocompressor" //autocompressor
@@ -154,7 +50,7 @@
 
 /obj/item/clothing/suit/auto_cpr/mob_can_equip(mob/living/carbon/human/H, slot, disable_warning = 0, force = 0)
 	. = ..()
-	if(!isHumanStrict(H))
+	if(!ishuman_strict(H))
 		return FALSE
 
 /obj/item/clothing/suit/auto_cpr/attack(mob/living/carbon/human/M, mob/living/user)
@@ -219,9 +115,9 @@
 		if(32 to 1)
 			overlays += "cpr_batt_lo"
 
-/obj/item/clothing/suit/auto_cpr/examine(mob/user)
+/obj/item/clothing/suit/auto_cpr/get_examine_text(mob/user)
 	. = ..()
-	to_chat(user, SPAN_NOTICE("It has [round(pdcell.charge * 100 / pdcell.maxcharge)]% charge remaining."))
+	. += SPAN_NOTICE("It has [round(pdcell.charge * 100 / pdcell.maxcharge)]% charge remaining.")
 
 
 
@@ -289,3 +185,198 @@
 		else
 			end_cpr()
 			return PROCESS_KILL
+
+/obj/item/tool/portadialysis
+	name = "portable dialysis machine"
+	desc = "A man-portable dialysis machine, with a small internal battery that can be recharged. Filters out all foreign compounds from the bloodstream of whoever it's attached to, but also typically ends up removing some blood as well."
+	icon = 'icons/obj/items/experimental_tools.dmi'
+	icon_state = "portadialysis"
+	item_state = "syringe_0"
+	flags_equip_slot = SLOT_WAIST
+	w_class = SIZE_MEDIUM
+	var/attaching = FALSE
+	var/filtering = FALSE
+	var/mob/living/carbon/human/attached = null
+	var/reagent_removed_per_second = AMOUNT_PER_TIME(3, 2 SECONDS)
+	var/obj/item/cell/pdcell = null
+	var/filter_cost = AMOUNT_PER_TIME(20, 2 SECONDS)
+	var/blood_cost = AMOUNT_PER_TIME(12, 2 SECONDS)
+	var/attach_time = 1.2 SECONDS
+
+/obj/item/tool/portadialysis/Initialize(mapload, ...)
+	. = ..()
+
+	pdcell = new/obj/item/cell(src) //has 1000 charge
+	update_icon()
+
+/obj/item/tool/portadialysis/update_icon(detaching = FALSE)
+	overlays.Cut()
+	if(attached)
+		overlays += "+hooked"
+	else
+		overlays += "+unhooked"
+
+	if(detaching)
+		overlays += "+draining"
+		addtimer(CALLBACK(src, PROC_REF(update_icon)), attach_time)
+
+	else if(attaching)
+		overlays += "+filling"
+		overlays += "+running"
+
+	else if(filtering)
+		overlays += "+running"
+		overlays += "+filtering"
+
+	if(pdcell && pdcell.charge)
+		switch(round(pdcell.charge * 100 / pdcell.maxcharge))
+			if(85 to INFINITY)
+				overlays += "dialysis_battery_100"
+			if(60 to 84)
+				overlays += "dialysis_battery_85"
+			if(45 to 59)
+				overlays += "dialysis_battery_60"
+			if(30 to 44)
+				overlays += "dialysis_battery_45"
+			if(15 to 29)
+				overlays += "dialysis_battery_30"
+			if(1 to 14)
+				overlays += "dialysis_battery_15"
+			else
+				overlays += "dialysis_battery_0"
+
+/obj/item/tool/portadialysis/get_examine_text(mob/user)
+	. = ..()
+	var/currentpercent = 0
+	currentpercent = round(pdcell.charge * 100 / pdcell.maxcharge)
+	. += SPAN_INFO("It has [currentpercent]% charge left in its internal battery.")
+
+/obj/item/tool/portadialysis/proc/painful_detach()
+	if(!attached) //sanity
+		return
+	attached.visible_message(SPAN_WARNING("\The [src]'s needle is ripped out of [attached], doesn't that hurt?"))
+	to_chat(attached, SPAN_WARNING("Ow! A needle is ripped out of you!"))
+	damage_arms(attached)
+	if(attached.pain.feels_pain)
+		attached.emote("scream")
+	attached = null
+	filtering = FALSE
+	attaching = FALSE
+	update_icon(TRUE)
+	STOP_PROCESSING(SSobj, src)
+
+/obj/item/tool/portadialysis/attack(mob/living/carbon/human/target, mob/living/carbon/human/user)
+	if(!ishuman_strict(target))
+		return ..()
+
+	if(!skillcheck(user, SKILL_MEDICAL, SKILL_MEDICAL_MEDIC))
+		to_chat(user, SPAN_WARNING("You don't seem to know how to use \the [src]..."))
+		return
+
+	if(!pdcell || pdcell.charge == 0)
+		to_chat(user, SPAN_NOTICE("\The [src] flashes its 'battery low' light, and refuses to attach."))
+		return
+
+	if(ishuman(user))
+		if(user.stat || user.blinded || user.lying)
+			return
+
+		if(attaching)
+			return
+
+		if(attached && !(target == attached)) //are we already attached to something that isn't the target?
+			to_chat(user, SPAN_WARNING("You're already using \the [src] on someone else!"))
+			return
+
+		if(target == attached) //are we attached to the target?
+			user.visible_message("[user] detaches \the [src] from [attached].", \
+			"You detach \the [src] from [attached].")
+			attached = null
+			filtering = FALSE
+			attaching = FALSE
+			update_icon(TRUE)
+			STOP_PROCESSING(SSobj, src)
+			return
+
+		else
+			//check for if they actually have arms...
+			var/obj/limb/l_arm = target.get_limb("l_arm")
+			var/obj/limb/r_arm = target.get_limb("r_arm")
+			if((l_arm.status & LIMB_DESTROYED) && (r_arm.status & LIMB_DESTROYED))
+				to_chat(user, SPAN_WARNING("[target] has no arms to attach \the [src] to!"))
+				return
+
+			attaching = TRUE
+			update_icon()
+			to_chat(target, SPAN_DANGER("[user] is trying to attach \the [src] to you!"))
+			user.visible_message(SPAN_WARNING("[user] starts setting up \the [src]'s needle on [target]'s arm."), \
+				SPAN_WARNING("You start setting up \the [src]'s needle on [target]'s arm."))
+			if(!do_after(user, attach_time, INTERRUPT_ALL, BUSY_ICON_FRIENDLY, target, INTERRUPT_MOVED, BUSY_ICON_MEDICAL))
+				user.visible_message(SPAN_WARNING("[user] stops setting up \the [src]'s needle on [target]'s arm."), \
+				SPAN_WARNING("You stop setting up \the [src]'s needle on [target]'s arm."))
+				visible_message("\The [src]'s tubing snaps back onto the machine frame.")
+				attaching = FALSE
+				update_icon()
+				return
+
+			user.visible_message("[user] attaches \the [src] to [target].", \
+			"You attach \the [src] to [target].")
+			attached = target
+			filtering = TRUE
+			attaching = FALSE
+			update_icon()
+			START_PROCESSING(SSobj, src)
+			return
+
+/obj/item/tool/portadialysis/dropped(mob/user)
+	if(attached)
+		painful_detach()
+	. = ..()
+
+
+/obj/item/tool/portadialysis/process(delta_time)
+	if(!attached)
+		return
+
+	if(get_dist(src, attached) > 1)
+		painful_detach()
+		return
+
+	if(!pdcell || pdcell.charge == 0)
+		attached.visible_message(SPAN_NOTICE("\The [src] automatically detaches from [attached], blinking its 'battery low' light."))
+		attached = null
+		filtering = FALSE
+		update_icon(TRUE)
+		STOP_PROCESSING(SSobj, src)
+		return
+
+	var/obj/limb/l_arm = attached.get_limb("l_arm")
+	var/obj/limb/r_arm = attached.get_limb("r_arm")
+	if((l_arm.status & LIMB_DESTROYED) && (r_arm.status & LIMB_DESTROYED))
+		attached.visible_message(SPAN_NOTICE("\The [src] automatically detaches from [attached] - \he has no arms to attach to!."))
+		attached = null
+		filtering = FALSE
+		update_icon(TRUE)
+		STOP_PROCESSING(SSobj, src)
+		return
+
+	if(filtering)
+		attached.reagents.remove_any_but("blood", reagent_removed_per_second*delta_time)
+		attached.take_blood(attached, blood_cost*delta_time)
+		if(attached.blood_volume < BLOOD_VOLUME_SAFE) if(prob(5))
+			visible_message("\The [src] beeps loudly.")
+		pdcell.use(filter_cost*delta_time)
+
+	updateUsrDialog()
+	update_icon()
+
+/obj/item/tool/portadialysis/proc/damage_arms(mob/living/carbon/human/human_to_damage)
+	var/obj/limb/l_arm = human_to_damage.get_limb("l_arm")
+	var/obj/limb/r_arm = human_to_damage.get_limb("r_arm")
+	var/list/arms_to_damage = list(l_arm, r_arm)
+	if(l_arm.status & LIMB_DESTROYED)
+		arms_to_damage -= l_arm
+	if(r_arm.status & LIMB_DESTROYED)
+		arms_to_damage -= r_arm
+	if(arms_to_damage.len)
+		human_to_damage.apply_damage(3, BRUTE, pick(arms_to_damage))

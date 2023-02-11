@@ -6,7 +6,7 @@
 	var/returned_home = 0
 	var/move_time = 4 MINUTES
 	var/cooldown = 20
-	var/last_move = 0	//the time at which we last moved
+	var/last_move = 0 //the time at which we last moved
 
 	var/announcer
 	var/arrival_message
@@ -22,7 +22,7 @@
 	..()
 	if(origin) last_departed = origin
 
-/datum/shuttle/multi_shuttle/move(var/area/origin, var/area/destination)
+/datum/shuttle/multi_shuttle/move(area/origin, area/destination)
 	..()
 	last_move = world.time
 	if (destination == src.origin)
@@ -117,7 +117,7 @@
 		var/choice = tgui_input_list(usr, "Select a destination.", MS.destinations)
 		if(!choice) return
 
-		to_chat(usr, SPAN_NOTICE(" [shuttle_tag] main computer recieved message."))
+		to_chat(usr, SPAN_NOTICE(" [shuttle_tag] main computer received message."))
 
 		if(MS.at_origin)
 			MS.announce_arrival()

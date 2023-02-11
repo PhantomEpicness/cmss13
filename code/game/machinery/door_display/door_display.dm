@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //  Parent of all door displays.
 //  Description: This is a controls the timer for the brig doors, displays the timer on itself and
-//               has a popup window when used, allowing to set the timer.
+//    has a popup window when used, allowing to set the timer.
 //  Code Notes: Combination of old brigdoor.dm code from rev4407 and the status_display.dm code
 //  Date: 01/September/2010
 //  Programmer: Veryinky
@@ -11,12 +11,13 @@
 	icon = 'icons/obj/structures/machinery/status_display.dmi'
 	icon_state = "frame"
 	desc = "A remote control for a door."
-	anchored = 1.0    		// can't pick it up
-	density = 0       		// can walk through it.
-	var/open = 0			// If door should be open.
-	var/id = null     		// id of door it controls.
-	var/picture_state		// icon_state of alert picture, if not displaying text/numbers
+	anchored = TRUE // can't pick it up
+	density = FALSE // can walk through it.
+	var/open = 0 // If door should be open.
+	var/id = null // id of door it controls.
+	var/picture_state // icon_state of alert picture, if not displaying text/numbers
 	var/list/obj/structure/machinery/targets = list()
+	var/uses_tgui = FALSE
 
 	maptext_height = 26
 	maptext_width = 32
@@ -51,43 +52,43 @@
 
 // Opens and locks doors, power check
 /obj/structure/machinery/door_display/proc/open_door()
-	if(inoperable())	return 0
+	if(inoperable()) return FALSE
 
 	for(var/obj/structure/machinery/door/D in targets)
-		if(!D.density)	continue
-		INVOKE_ASYNC(D, /obj/structure/machinery/door.proc/open)
+		if(!D.density) continue
+		INVOKE_ASYNC(D, TYPE_PROC_REF(/obj/structure/machinery/door, open))
 
-	return 1
+	return TRUE
 
 
 // Closes and unlocks doors, power check
 /obj/structure/machinery/door_display/proc/close_door()
-	if(inoperable())	return 0
+	if(inoperable()) return FALSE
 
 	for(var/obj/structure/machinery/door/D in targets)
-		if(D.density)	continue
-		INVOKE_ASYNC(D, /obj/structure/machinery/door.proc/close)
+		if(D.density) continue
+		INVOKE_ASYNC(D, TYPE_PROC_REF(/obj/structure/machinery/door, close))
 
-	return 1
+	return TRUE
 
 // Allows AIs to use door_display, see human attack_hand function below
-/obj/structure/machinery/door_display/attack_remote(var/mob/user as mob)
+/obj/structure/machinery/door_display/attack_remote(mob/user as mob)
 	return attack_hand(user)
 
 
 // Allows humans to use door_display
 // Opens dialog window when someone clicks on door timer
 // Allows altering timer and the timing boolean.
-/obj/structure/machinery/door_display/attack_hand(var/mob/user as mob)
+/obj/structure/machinery/door_display/attack_hand(mob/user as mob)
 	if(..())
 		return
 
-	user.set_interaction(src)
-
-	show_browser(user, display_contents(user), name, "computer", "size=400x500")
+	if(!uses_tgui)
+		user.set_interaction(src)
+		show_browser(user, display_contents(user), name, "computer", "size=400x500")
 	return
 
-/obj/structure/machinery/door_display/proc/display_contents(var/mob/user as mob)
+/obj/structure/machinery/door_display/proc/display_contents(mob/user as mob)
 	var/data = "<HTML><BODY><TT>"
 
 	data += "<HR>Linked Door:</hr>"
@@ -112,9 +113,9 @@
 // Also updates dialog window and display icon.
 /obj/structure/machinery/door_display/Topic(href, href_list)
 	if(..())
-		return 0
+		return FALSE
 	if(!allowed(usr))
-		return 0
+		return FALSE
 
 	usr.set_interaction(src)
 
@@ -130,7 +131,7 @@
 	src.updateUsrDialog()
 	src.update_icon()
 
-	return 1
+	return TRUE
 
 
 //icon update function
@@ -155,7 +156,7 @@
 
 
 // Adds an icon in case the screen is broken/off, stolen from status_display.dm
-/obj/structure/machinery/door_display/proc/set_picture(var/state)
+/obj/structure/machinery/door_display/proc/set_picture(state)
 	picture_state = state
 	overlays.Cut()
 	overlays += image('icons/obj/structures/machinery/status_display.dmi', icon_state = picture_state)
@@ -163,7 +164,7 @@
 
 //Checks to see if there's 1 line or 2, adds text-icons-numbers/letters over display
 // Stolen from status_display
-/obj/structure/machinery/door_display/proc/update_display(var/text)
+/obj/structure/machinery/door_display/proc/update_display(text)
 	var/new_text = {"<div style="font-size:'5pt'; color:'#09f'; font:'Arial Black'; text-align:center;" valign="top">[text]</div>"}
 	if(maptext != new_text)
 		maptext = new_text
@@ -171,7 +172,7 @@
 
 //Actual string input to icon display for loop, with 5 pixel x offsets for each letter.
 //Stolen from status_display
-/obj/structure/machinery/door_display/proc/texticon(var/tn, var/px = 0, var/py = 0)
+/obj/structure/machinery/door_display/proc/texticon(tn, px = 0, py = 0)
 	var/image/I = image('icons/obj/structures/machinery/status_display.dmi', "blank")
 	var/len = length(tn)
 
@@ -188,12 +189,13 @@
 //************ RESEARCH DOORS ****************\\
 // Research cells have flashers and shutters/pod doors.
 /obj/structure/machinery/door_display/research_cell
-	var/open_shutter = 0
+	var/open_shutter = FALSE
 	var/has_wall_divider = FALSE
 	icon = 'icons/obj/structures/machinery/computer.dmi'
 	icon_state = "research"
 	maptext = ""
 	req_access = list(ACCESS_MARINE_RESEARCH)
+	uses_tgui = TRUE
 
 /obj/structure/machinery/door_display/research_cell/get_targets()
 	..()
@@ -219,123 +221,149 @@
 /obj/structure/machinery/door_display/update_icon()
 	return
 
-/obj/structure/machinery/door_display/research_cell/display_contents(var/mob/user as mob)
-	var/data = "<HTML><BODY><TT>"
+// TGUI \\
 
-	data += "<HR>Linked Door:</hr>"
-	data += " <b> [id]</b><br/>"
-	data += "<br/>"
+/obj/structure/machinery/door_display/research_cell/tgui_interact(mob/user, datum/tgui/ui)
+	ui = SStgui.try_update_ui(user, src, ui)
+	if(!ui)
+		ui = new(user, src, "ResearchDoorDisplay", "[src.name]")
+		ui.open()
 
-	// Open/Close Shutter
-	if(open_shutter)
-		data += "<a href='?src=\ref[src];shutter=0; open=0'>Close Shutter</a><br/>"
-	else
-		data += "<a href='?src=\ref[src];shutter=1'>Open Shutter</a><br/>"
+/obj/structure/machinery/door_display/research_cell/ui_state(mob/user)
+	return GLOB.not_incapacitated_and_adjacent_state
 
-	// Open/Close Door
-	if(open_shutter)
-		if (open)
-			data += "<a href='?src=\ref[src];open=0'>Close Door</a><br/>"
-		else
-			data += "<a href='?src=\ref[src];open=1'>Open Door</a><br/>"
+/obj/structure/machinery/door_display/research_cell/ui_status(mob/user, datum/ui_state/state)
+	. = ..()
+	if(inoperable())
+		return UI_CLOSE
+	if(!allowed(user))
+		return UI_CLOSE
 
-	data += "<br/>"
+/obj/structure/machinery/door_display/research_cell/ui_static_data(mob/user)
+	var/list/data = list()
+	var/has_flash = FALSE
 
-	// Mounted flash controls
-	for(var/obj/structure/machinery/flasher/F in targets)
-		if(F.last_flash && (F.last_flash + 150) > world.time)
-			data += "<br/><A href='?src=\ref[src];fc=1'>Flash Charging</A>"
-		else
-			data += "<br/><A href='?src=\ref[src];fc=1'>Activate Flash</A>"
+	if(locate(/obj/structure/machinery/flasher) in targets)
+		has_flash = TRUE
 
-	data += "<br/>"
-
-	//Room Divider
-	if(has_wall_divider)
-		data += "<br/><A href='?src=\ref[src];divider=1'>Containment Divider</A><br/>"
-
-	data += "<br/><a href='?src=\ref[user];mach_close=computer'>Close Display</a>"
-	data += "</TT></BODY></HTML>"
+	data["has_divider"] = has_wall_divider
+	data["door_id"] = id
+	data["has_flash"] = has_flash
 
 	return data
 
-// "fc" activates flasher
-// "shutter" opens/closes the shutter.
+/obj/structure/machinery/door_display/research_cell/ui_data(mob/user)
+	var/list/data = list()
+	var/flash_charging
 
-/obj/structure/machinery/door_display/research_cell/Topic(href, href_list)
-	if(!..())
-		return 0
+	flash_charging = FALSE
+	for(var/obj/structure/machinery/flasher/F in targets)
+		if(F.last_flash && (F.last_flash + 150) > world.time)
+			flash_charging = TRUE
 
-	if(href_list["fc"])
-		for(var/obj/structure/machinery/flasher/F in targets)
-			F.flash()
+	data["open_door"] = open
+	data["open_shutter"] = open_shutter
+	data["flash_charging"] = flash_charging
 
-	if(href_list["divider"])
-		for(var/turf/closed/wall/almayer/research/containment/wall/divide/W in targets)
-			if(W.density)
-				W.open()
+	return data
+
+/obj/structure/machinery/door_display/research_cell/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)
+	. = ..()
+	if(.)
+		return
+
+	switch(action)
+		if("flash")
+			for(var/obj/structure/machinery/flasher/F in targets)
+				F.flash()
+				. = TRUE
+
+		if("divider")
+			for(var/turf/closed/wall/almayer/research/containment/wall/divide/W in targets)
+				if(W.density)
+					W.open()
+				else
+					W.close()
+				playsound(loc, 'sound/machines/elevator_openclose.ogg', 25, 1)
+				. = TRUE
+
+		if("shutter")
+			if(!open_shutter)
+				open_shutter()
 			else
-				W.close()
-			playsound(loc, 'sound/machines/elevator_openclose.ogg', 25, 1)
+				close_door()
+				close_shutter()
+			. = TRUE
 
-	if(href_list["shutter"])
-		open_shutter = text2num(href_list["shutter"])
-		open = text2num(href_list["open"])
-
-		if(open_shutter)
-			open_shutter()
-		else
-			close_door()
-			close_shutter()
+		if("door")
+			if(!open)
+				open_door()
+			else
+				close_door()
+			. = TRUE
 
 	add_fingerprint(usr)
-	updateUsrDialog()
 
-	return 1
 
+/obj/structure/machinery/door_display/research_cell/attack_hand(mob/user)
+	. = ..()
+	if(!allowed(user))
+		to_chat(user, SPAN_WARNING("Access denied!"))
+
+	tgui_interact(user)
 
 // Opens and locks doors, power check
-/obj/structure/machinery/door_display/research_cell/open_door(var/force = FALSE)
-	if(inoperable() && !force)	return 0
+/obj/structure/machinery/door_display/research_cell/open_door(force = FALSE)
+	if(inoperable() && !force)
+		return FALSE
 
 	for(var/obj/structure/machinery/door/airlock/D in targets)
-		if(!D.density) continue
-		spawn(0)
-			D.unlock(force)
-			D.open(force)
+		if(!D.density)
+			continue
+		D.unlock(force)
+		D.open(force)
+		open = TRUE
 
-	return 1
+	return TRUE
 
 // Closes and unlocks doors, power check
 /obj/structure/machinery/door_display/research_cell/close_door()
-	if(inoperable())	return 0
+	if(inoperable())
+		return FALSE
 
 	for(var/obj/structure/machinery/door/airlock/D in targets)
-		if(D.density)	continue
-		spawn(0)
-			D.close()
-			D.lock()
+		if(D.density)
+			continue
+		D.close()
+		D.lock()
+		open = FALSE
 
-	return 1
+	return TRUE
 
 // Opens and locks doors, power check
-/obj/structure/machinery/door_display/research_cell/proc/open_shutter(var/force = FALSE)
-	if(inoperable() && !force)	return 0
+/obj/structure/machinery/door_display/research_cell/proc/open_shutter(force = FALSE)
+	if(inoperable() && !force)
+		return FALSE
 
 	for(var/obj/structure/machinery/door/poddoor/D in targets)
-		if(D.stat & BROKEN) continue
-		if(!D.density) continue
-		INVOKE_ASYNC(D, /obj/structure/machinery/door.proc/open)
-
-	return 1
+		if(D.stat & BROKEN)
+			continue
+		if(!D.density)
+			continue
+		D.open()
+		open_shutter = TRUE
+	return TRUE
 
 // Closes and unlocks doors, power check
 /obj/structure/machinery/door_display/research_cell/proc/close_shutter()
-	if(inoperable())	return 0
+	if(inoperable())
+		return FALSE
 
 	for(var/obj/structure/machinery/door/poddoor/D in targets)
-		if(D.stat & BROKEN) continue
-		if(D.density)	continue
-		INVOKE_ASYNC(D, /obj/structure/machinery/door.proc/close)
-
-	return 1
+		if(D.stat & BROKEN)
+			continue
+		if(D.density)
+			continue
+		D.close()
+		open_shutter = FALSE
+	return TRUE

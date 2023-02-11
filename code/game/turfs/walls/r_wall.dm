@@ -1,9 +1,9 @@
 /turf/closed/wall/r_wall
 	name = "reinforced wall"
-	desc = "A huge chunk of reinforced metal used to seperate rooms."
-	icon_state = "r_wall"
-	opacity = 1
-	density = 1
+	desc = "A huge chunk of reinforced metal used to separate rooms."
+	icon_state = "r_wall_mapicon"
+	opacity = TRUE
+	density = TRUE
 
 	damage_cap = HEALTH_WALL_REINFORCED
 	max_temperature = 6000
@@ -21,7 +21,7 @@
 		return
 
 	//get the user's location
-	if( !istype(user.loc, /turf) )	return	//can't do this stuff whilst inside objects and such
+	if( !istype(user.loc, /turf) ) return //can't do this stuff whilst inside objects and such
 
 	//THERMITE related stuff. Calls src.thermitemelt() which handles melting walls and the relevant effects
 	if(thermite)
@@ -29,7 +29,7 @@
 			if(hull)
 				to_chat(user, SPAN_WARNING("[src] is much too tough for you to do anything to it with [W]."))
 			else
-				if(istype(W, /obj/item/tool/weldingtool))
+				if(iswelder(W))
 					var/obj/item/tool/weldingtool/WT = W
 					WT.remove_fuel(0,user)
 				thermitemelt(user)
@@ -39,10 +39,11 @@
 		return
 
 	if(istype(W, /obj/item/weapon/melee/twohanded/breacher))
+		var/obj/item/weapon/melee/twohanded/breacher/current_hammer = W
 		if(user.action_busy)
 			return
-		if(!HAS_TRAIT(user, TRAIT_SUPER_STRONG))
-			to_chat(user, SPAN_WARNING("You can't use \the [W] properly!"))
+		if(!(HAS_TRAIT(user, TRAIT_SUPER_STRONG) || !current_hammer.really_heavy))
+			to_chat(user, SPAN_WARNING("You can't use \the [current_hammer] properly!"))
 			return
 
 		to_chat(user, SPAN_NOTICE("You start taking down \the [src]."))
@@ -61,6 +62,9 @@
 	switch(d_state)
 		if(WALL_STATE_WELD)
 			if(iswelder(W))
+				if(!HAS_TRAIT(W, TRAIT_TOOL_BLOWTORCH))
+					to_chat(user, SPAN_WARNING("You need a stronger blowtorch!"))
+					return
 				var/obj/item/tool/weldingtool/WT = W
 				try_weldingtool_deconstruction(WT, user)
 
@@ -190,17 +194,13 @@
 
 /turf/closed/wall/r_wall/unmeltable
 	name = "heavy reinforced wall"
-	desc = "A huge chunk of ultra-reinforced metal used to seperate rooms. Looks virtually indestructible."
-	icon_state = "r_wall"
+	desc = "A huge chunk of ultra-reinforced metal used to separate rooms. Looks virtually indestructible."
+	icon_state = "heavy_r_wall_mapicon"
 	walltype = WALL_REINFORCED
 	hull = 1
 
 /turf/closed/wall/r_wall/unmeltable/attackby() //This should fix everything else. No cables, etc
 	return
-
-
-
-
 
 //Chigusa
 
@@ -238,13 +238,13 @@
 
 /turf/closed/wall/r_wall/prison_unmeltable
 	name = "heavy reinforced wall"
-	desc = "A huge chunk of ultra-reinforced metal used to seperate rooms. Looks virtually indestructible."
+	desc = "A huge chunk of ultra-reinforced metal used to separate rooms. Looks virtually indestructible."
 	icon = 'icons/turf/walls/prison.dmi'
-	icon_state = "rwall"
+	icon_state = "hwall"
 	walltype = WALL_REINFORCED
 	hull = 1
 
-/turf/closed/wall/r_wall/prison_unmeltable/ex_act(severity) //Should make it indestructable
+/turf/closed/wall/r_wall/prison_unmeltable/ex_act(severity) //Should make it indestructible
 		return
 
 /turf/closed/wall/r_wall/prison_unmeltable/fire_act(exposed_temperature, exposed_volume)
@@ -263,10 +263,11 @@
 
 /turf/closed/wall/r_wall/biodome/biodome_unmeltable
 	name = "heavy reinforced wall"
-	desc = "A huge chunk of ultra-reinforced metal used to seperate rooms. Looks virtually indestructible."
+	desc = "A huge chunk of ultra-reinforced metal used to separate rooms. Looks virtually indestructible."
+	icon_state = "h_dome"
 	hull = 1
 
-/turf/closed/wall/r_wall/biodome/biodome_unmeltable/ex_act(severity) //Should make it indestructable
+/turf/closed/wall/r_wall/biodome/biodome_unmeltable/ex_act(severity) //Should make it indestructible
 		return
 
 /turf/closed/wall/r_wall/biodome/biodome_unmeltable/fire_act(exposed_temperature, exposed_volume)
@@ -274,3 +275,44 @@
 
 /turf/closed/wall/r_wall/biodome/biodome_unmeltable/attackby() //This should fix everything else. No cables, etc
 		return
+
+
+/// Destructible elevator walls, for when you want the elevator to act as a prop rather than an actual elevator
+/turf/closed/wall/r_wall/elevator
+	icon = 'icons/turf/elevator.dmi'
+	icon_state = "wall"
+	special_icon = TRUE
+
+// Wall with gears that animate when elevator is moving
+/turf/closed/wall/r_wall/elevator/gears
+	icon_state = "wall_gear"
+
+// Special wall icons
+/turf/closed/wall/r_wall/elevator/research
+	icon_state = "wall_research"
+
+/turf/closed/wall/r_wall/elevator/dorm
+	icon_state = "wall_dorm"
+
+/turf/closed/wall/r_wall/elevator/freight
+	icon_state = "wall_freight"
+
+/turf/closed/wall/r_wall/elevator/arrivals
+	icon_state = "wall_arrivals"
+
+// Elevator Buttons
+/turf/closed/wall/r_wall/elevator/button
+	name = "elevator buttons"
+
+/turf/closed/wall/r_wall/elevator/button/research
+	icon_state = "wall_button_research"
+
+/turf/closed/wall/r_wall/elevator/button/dorm
+	icon_state = "wall_button_dorm"
+
+/turf/closed/wall/r_wall/elevator/button/freight
+	icon_state = "wall_button_freight"
+
+/turf/closed/wall/r_wall/elevator/button/arrivals
+	icon_state = "wall_button_arrivals"
+

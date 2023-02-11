@@ -12,12 +12,14 @@
 	var/huggers_to_grow = 0
 	var/huggers_per_corpse = 6
 	var/huggers_to_grow_max = 12
+	var/huggers_reserved = 0
 	var/mob/captured_mob
 	var/datum/shape/rectangle/range_bounds
+
 	appearance_flags = KEEP_TOGETHER
 	layer = LYING_BETWEEN_MOB_LAYER
 
-/obj/effect/alien/resin/special/eggmorph/Initialize(mapload, var/hive_ref)
+/obj/effect/alien/resin/special/eggmorph/Initialize(mapload, hive_ref)
 	. = ..()
 	range_bounds = RECT(x, y, EGGMORPG_RANGE, EGGMORPG_RANGE)
 
@@ -27,24 +29,25 @@
 		var/obj/item/clothing/mask/facehugger/F
 		var/chance = 60
 		visible_message(SPAN_XENOWARNING("The chittering mass of tiny aliens is trying to escape [src]!"))
-		for(var/i in 0 to stored_huggers)
+		for(var/i in 1 to stored_huggers)
 			if(prob(chance))
 				F = new(loc, linked_hive.hivenumber)
 				step_away(F,src,1)
 
 	vis_contents.Cut()
 	QDEL_NULL(captured_mob)
+	range_bounds = null
 
 	. = ..()
 
-/obj/effect/alien/resin/special/eggmorph/examine(mob/user)
-	..()
-	if(isXeno(user) || isobserver(user))
-		to_chat(user, "It has [stored_huggers] facehuggers within, with [huggers_to_grow] more to grow.")
+/obj/effect/alien/resin/special/eggmorph/get_examine_text(mob/user)
+	. = ..()
+	if(isxeno(user) || isobserver(user))
+		. += "It has [stored_huggers] facehuggers within, with [huggers_to_grow] more to grow (reserved: [huggers_reserved])."
 
 /obj/effect/alien/resin/special/eggmorph/attackby(obj/item/I, mob/user)
 	if(istype(I, /obj/item/grab))
-		if(!isXeno(user)) return
+		if(!isxeno(user)) return
 		var/obj/item/grab/G = I
 		if(iscarbon(G.grabbed_thing))
 			var/mob/living/carbon/M = G.grabbed_thing
@@ -56,7 +59,7 @@
 				if(H.is_revivable())
 					to_chat(user, SPAN_XENOWARNING("This one is not suitable yet!"))
 					return
-			if(isXeno(M))
+			if(isxeno(M))
 				return
 			if(M == captured_mob)
 				to_chat(user, SPAN_XENOWARNING("[src] is already digesting [M]!"))
@@ -66,7 +69,7 @@
 				return
 			if(!do_after(user, 10, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_GENERIC))
 				return
-			visible_message(SPAN_DANGER("\The [src] churns as it begins digest \the [M], spitting out foul smelling fumes!"))
+			visible_message(SPAN_DANGER("\The [src] churns as it begins digest \the [M], spitting out foul-smelling fumes!"))
 			playsound(src, "alien_drool", 25)
 			if(captured_mob)
 				//Get rid of what we have there, we're overwriting it
@@ -79,6 +82,7 @@
 			captured_mob.pixel_x = 16
 			captured_mob.pixel_y = 16
 			vis_contents += captured_mob
+			user.stop_pulling() // Automatically remove the grab
 			huggers_to_grow += huggers_per_corpse
 			update_icon()
 		return
@@ -89,14 +93,28 @@
 				to_chat(user, SPAN_XENOWARNING("\The [src] is full of children."))
 				return
 			if(user)
-				visible_message(SPAN_XENOWARNING("[user] slides [F] back into [src]."), \
-					SPAN_XENONOTICE("You place the child back into [src]."))
+				visible_message(SPAN_XENOWARNING("[user] slides [F] back into \the [src]."), \
+					SPAN_XENONOTICE("You place the child back into \the [src]."))
 				user.temp_drop_inv_item(F)
 			else
-				visible_message(SPAN_XENOWARNING("[F] crawls back into [src]!"))
+				visible_message(SPAN_XENOWARNING("[F] crawls back into \the [src]!"))
 			stored_huggers = min(huggers_to_grow_max, stored_huggers + 1)
 			qdel(F)
 		else to_chat(user, SPAN_XENOWARNING("This child is dead."))
+		return
+	//refill egg morpher from an egg
+	if(istype(I, /obj/item/xeno_egg))
+		var/obj/item/xeno_egg/egg = I
+		if(stored_huggers >= huggers_to_grow_max)
+			to_chat(user, SPAN_XENOWARNING("\The [src] is full of children."))
+			return
+		if(user)
+			visible_message(SPAN_XENOWARNING("[user] slides a facehugger out of \the [egg] into \the [src]."), \
+				SPAN_XENONOTICE("You place the child from an egg into \the [src]."))
+			user.temp_drop_inv_item(egg)
+		stored_huggers = min(huggers_to_grow_max, stored_huggers + 1)
+		playsound(src.loc, "sound/effects/alien_egg_move.ogg", 25)
+		qdel(egg)
 		return
 	return ..(I, user)
 
@@ -119,11 +137,18 @@
 		return
 	last_spawned = world.time
 	if(huggers_to_grow > 0)
-		huggers_to_grow -= 1
+		huggers_to_grow--
 		stored_huggers = min(huggers_to_grow_max, stored_huggers + 1)
 		if(huggers_to_grow <= 0)
 			visible_message(SPAN_DANGER("\The [src] groans as its contents are reduced to nothing!"))
 			vis_contents.Cut()
+
+			for(var/atom/movable/A in captured_mob.contents_recursive()) // Get rid of any intel objects so we don't delete them
+				if(isitem(A))
+					var/obj/item/item = A
+					if(item.is_objective && item.unacidable)
+						item.forceMove(get_step(loc, pick(alldirs)))
+
 			QDEL_NULL(captured_mob)
 			update_icon()
 
@@ -142,7 +167,7 @@
 	HasProximity(target)
 
 /obj/effect/alien/resin/special/eggmorph/HasProximity(atom/movable/AM as mob|obj)
-	if(!stored_huggers || isSynth(AM))
+	if(!stored_huggers || issynth(AM))
 		return
 
 	if (!linked_hive)
@@ -156,7 +181,7 @@
 	var/obj/item/clothing/mask/facehugger/child = new(loc, linked_hive.hivenumber)
 	child.leap_at_nearest_target()
 
-/obj/effect/alien/resin/special/eggmorph/attack_alien(mob/living/carbon/Xenomorph/M)
+/obj/effect/alien/resin/special/eggmorph/attack_alien(mob/living/carbon/xenomorph/M)
 	if(!istype(M))
 		return attack_hand(M)
 	if(!linked_hive || (M.hivenumber != linked_hive.hivenumber))
@@ -167,5 +192,39 @@
 		new /obj/item/clothing/mask/facehugger(loc, linked_hive.hivenumber)
 		return XENO_NONCOMBAT_ACTION
 	..()
+
+/obj/effect/alien/resin/special/eggmorph/attack_ghost(mob/dead/observer/user)
+	. = ..() //Do a view printout as needed just in case the observer doesn't want to join as a Hugger but wants info
+	join_as_facehugger_from_this(user)
+
+/obj/effect/alien/resin/special/eggmorph/proc/join_as_facehugger_from_this(mob/dead/observer/user)
+	if(stored_huggers <= huggers_reserved)
+		to_chat(user, SPAN_WARNING("\The [src] doesn't have any facehuggers to inhabit."))
+		return
+	if(!linked_hive.can_spawn_as_hugger(user))
+		return
+	//Need to check again because time passed due to the confirmation window
+	if(stored_huggers <= huggers_reserved)
+		to_chat(user, SPAN_WARNING("\The [src] doesn't have any facehuggers to inhabit."))
+		return
+	linked_hive.spawn_as_hugger(user, src)
+	stored_huggers--
+
+/mob/living/carbon/xenomorph/proc/set_hugger_reserve_for_morpher(obj/effect/alien/resin/special/eggmorph/morpher in oview(1))
+	set name = "Set Hugger Reserve"
+	set desc = "Set Hugger Reserve"
+	set category = null
+
+	if(!istype(morpher))
+		return
+
+	if(morpher.linked_hive)
+		if(hivenumber != morpher.linked_hive.hivenumber)
+			to_chat(usr, SPAN_WARNING("This belongs to another Hive! Yuck!"))
+			return
+
+	morpher.huggers_reserved = tgui_input_number(usr, "How many facehuggers would you like to keep safe from Observers wanting to join as facehuggers?", "How many to reserve?", 0, morpher.huggers_to_grow_max, morpher.huggers_reserved)
+
+	to_chat(usr, SPAN_XENONOTICE("You reserved [morpher.huggers_reserved] facehuggers for your sisters."))
 
 #undef EGGMORPG_RANGE

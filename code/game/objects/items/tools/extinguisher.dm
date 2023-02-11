@@ -8,17 +8,19 @@
 	icon_state = "fire_extinguisher0"
 	item_state = "fire_extinguisher"
 	hitsound = 'sound/weapons/smash.ogg'
+	pickup_sound = 'sound/handling/wrench_pickup.ogg'
+	drop_sound = 'sound/handling/wrench_drop.ogg'
 	flags_atom = FPRINT|CONDUCT
 	throwforce = 10
 	w_class = SIZE_MEDIUM
 	throw_speed = SPEED_SLOW
 	throw_range = 10
-	force = 10.0
+	force = 10
 	flags_equip_slot = SLOT_WAIST
 	matter = list("metal" = 90)
 	attack_verb = list("slammed", "whacked", "bashed", "thunked", "battered", "bludgeoned", "thrashed")
 	var/max_water = 50
-	var/last_use = 1.0
+	var/last_use = 1
 	var/safety = 1
 	var/sprite_name = "fire_extinguisher"
 	var/power = BASE_EXTINGUISHER_PWR
@@ -28,7 +30,8 @@
 	desc = "A light and compact fibreglass-framed model fire extinguisher."
 	icon_state = "miniFE0"
 	item_state = "miniFE"
-	hitsound = null	//it is much lighter, after all.
+	/// it is much lighter, after all.
+	hitsound = null
 	throwforce = 2
 	w_class = SIZE_SMALL
 	force = 3
@@ -43,21 +46,22 @@
 	name = "fire extinguisher"
 	desc = "A heavy-duty fire extinguisher designed for extreme fires."
 	w_class = SIZE_MEDIUM
-	force = 3.0
+	force = 3
 	max_water = 500
 	power = PYRO_EXTINGUISHER_PWR
 
 /obj/item/tool/extinguisher/pyro/atmos_tank
-	max_water = 500000 //so it never runs out, theoretically
+	/// so it never runs out, theoretically
+	max_water = 500000
 
 /obj/item/tool/extinguisher/Initialize()
 	. = ..()
 	create_reagents(max_water)
 	reagents.add_reagent("water", max_water)
 
-/obj/item/tool/extinguisher/examine(mob/user)
-	..()
-	to_chat(user, "It contains [reagents.total_volume] units of water left!")
+/obj/item/tool/extinguisher/get_examine_text(mob/user)
+	. = ..()
+	. += "It contains [reagents.total_volume] units of water left!"
 
 /obj/item/tool/extinguisher/attack_self(mob/user)
 	..()
@@ -153,14 +157,14 @@
 			unpicked_targets += targets
 		var/turf/TT = pick(unpicked_targets)
 		unpicked_targets -= TT
-		INVOKE_ASYNC(src, .proc/release_liquid, TT, user)
+		INVOKE_ASYNC(src, PROC_REF(release_liquid), TT, user)
 
 	if(istype(user.loc, /turf/open/space) || (user.lastarea && user.lastarea.has_gravity == 0))
 		user.inertia_dir = get_dir(target, user)
 		step(user, user.inertia_dir)
 	return
 
-/obj/item/tool/extinguisher/proc/release_liquid(var/turf/target, var/mob/user)
+/obj/item/tool/extinguisher/proc/release_liquid(turf/target, mob/user)
 	var/turf/T = get_turf(user)
 	var/obj/effect/particle_effect/water/W = new /obj/effect/particle_effect/water(T)
 	W.create_reagents(5)

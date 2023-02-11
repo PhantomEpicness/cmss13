@@ -1,9 +1,9 @@
 /* Cards
  * Contains:
- *		DATA CARD
- *		ID CARD
- *		FINGERPRINT CARD HOLDER
- *		FINGERPRINT CARD
+ * DATA CARD
+ * ID CARD
+ * FINGERPRINT CARD HOLDER
+ * FINGERPRINT CARD
  */
 
 
@@ -50,6 +50,7 @@
 	desc = "This card contains coordinates to the fabled Clown Planet. Handle with care."
 	function = "teleporter"
 	data = "Clown Land"
+	black_market_value = 50
 
 /*
  * ID CARDS
@@ -64,7 +65,8 @@
 	var/faction = FACTION_NEUTRAL
 	var/list/faction_group
 
-	var/registered_name = "Unknown" // The name registered_name on the card
+	/// The name registered_name on the card
+	var/registered_name = "Unknown"
 	var/registered_ref = null
 	var/registered_gid = 0
 	flags_equip_slot = SLOT_ID
@@ -72,15 +74,21 @@
 	var/blood_type = "\[UNSET\]"
 
 	//alt titles are handled a bit weirdly in order to unobtrusively integrate into existing ID system
-	var/assignment = null	//can be alt title or the actual job
-	var/rank = null			//actual job
-	var/paygrade = "ME1"  // Marine's paygrade
-	var/claimedgear = 1 // For medics and engineers to 'claim' a locker
+
+	/// can be alt title or the actual job
+	var/assignment = null
+	/// actual job
+	var/rank = null
+	/// Marine's paygrade
+	var/paygrade = "ME1"
+	/// For medics and engineers to 'claim' a locker
+	var/claimedgear = 1
 
 	var/list/uniform_sets = null
 	var/list/vended_items
 
-	var/pinned_on_uniform = TRUE //whether the id's onmob overlay only appear when wearing a uniform
+	/// whether the id's onmob overlay only appear when wearing a uniform
+	var/pinned_on_uniform = TRUE
 
 	var/modification_log = list()
 
@@ -94,7 +102,7 @@
 	user.visible_message("[user] shows you: [icon2html(src, viewers(user))] [name]: assignment: [assignment]")
 	src.add_fingerprint(user)
 
-/obj/item/card/id/proc/set_user_data(var/mob/living/carbon/human/H)
+/obj/item/card/id/proc/set_user_data(mob/living/carbon/human/H)
 	if(!istype(H))
 		return
 
@@ -103,7 +111,7 @@
 	registered_gid = H.gid
 	blood_type = H.blood_type
 
-/obj/item/card/id/proc/set_assignment(var/new_assignment)
+/obj/item/card/id/proc/set_assignment(new_assignment)
 	assignment = new_assignment
 	name = "[registered_name]'s ID Card ([assignment])"
 
@@ -150,8 +158,8 @@
 	clearance_access = 4
 
 /obj/item/card/id/silver/clearance_badge/cl
-	name = "corporate liason badge"
-	desc = "A corporate holo-badge in unique corporate orange and white. It is fingerprint locked with clearance level 5 access. It is commonly held by corporate liasons."
+	name = "corporate liaison badge"
+	desc = "A corporate holo-badge in unique corporate orange and white. It is fingerprint locked with clearance level 5 access. It is commonly held by corporate liaisons."
 	icon_state = "cl"
 	clearance_access = 5
 
@@ -189,9 +197,9 @@
 	desc = "A corporate holo-badge. It's a unique Corporate orange and white."
 	icon_state = "cl"
 
-/obj/item/card/id/gold/commodore
+/obj/item/card/id/gold/council
 	name = "identification holo-badge"
-	desc = "A real bronze gold Commodore's holo-badge. Commands respect, authority, and it makes an excellent paperweight."
+	desc = "A real bronze gold Colonel's holo-badge. Commands respect, authority, and it makes an excellent paperweight."
 	icon_state = "commodore"
 
 /obj/item/card/id/pmc
@@ -200,13 +208,14 @@
 	icon_state = "pmc"
 	registered_name = "The Corporation"
 	assignment = "Corporate Mercenary"
-	New()
-		access = get_all_centcom_access()
-		..()
+
+/obj/item/card/id/pmc/New()
+	access = get_all_centcom_access()
+	..()
 
 /obj/item/card/id/pmc/ds
 	name = "\improper Corporate holo-badge"
-	desc = "It lists a callsign and a bloodtype. Issued to Whiteout protocol teams only."
+	desc = "It lists a callsign and a blood type. Issued to Whiteout protocol teams only."
 	icon_state = "ds"
 
 /obj/item/card/id/general
@@ -215,8 +224,9 @@
 	icon_state = "general"
 	registered_name = "The USCM"
 	assignment = "General"
-	New()
-		access = get_all_centcom_access()
+
+/obj/item/card/id/general/New()
+	access = get_all_centcom_access()
 
 /obj/item/card/id/provost
 	name = "provost holo-badge"
@@ -224,8 +234,9 @@
 	icon_state = "provost"
 	registered_name = "Provost Office"
 	assignment = "Provost"
-	New()
-		access = get_all_centcom_access()
+
+/obj/item/card/id/provost/New()
+	access = get_all_centcom_access()
 
 /obj/item/card/id/syndicate
 	name = "agent card"
@@ -241,7 +252,7 @@
 	assignment = "Agent"
 	name = "[registered_name]'s ID Card ([assignment])"
 
-/obj/item/card/id/syndicate/afterattack(var/obj/item/O as obj, mob/user as mob, proximity)
+/obj/item/card/id/syndicate/afterattack(obj/item/O as obj, mob/user as mob, proximity)
 	if(!proximity) return
 	if(istype(O, /obj/item/card/id))
 		var/obj/item/card/id/I = O
@@ -308,9 +319,10 @@
 	item_state = "gold_id"
 	registered_name = "Captain"
 	assignment = "Captain"
-	New()
-		access = get_all_marine_access()
-		..()
+
+/obj/item/card/id/captains_spare/New()
+	access = get_all_marine_access()
+	..()
 
 /obj/item/card/id/centcom
 	name = "\improper CentCom. ID"
@@ -318,9 +330,10 @@
 	icon_state = "centcom"
 	registered_name = "Central Command"
 	assignment = "General"
-	New()
-		access = get_all_centcom_access()
-		..()
+
+/obj/item/card/id/centcom/New()
+	access = get_all_centcom_access()
+	..()
 
 
 /obj/item/card/id/equipped(mob/living/carbon/human/H, slot)
@@ -347,10 +360,10 @@
 	var/dogtag_taken = FALSE
 
 
-/obj/item/card/id/dogtag/examine(mob/user)
-	..()
+/obj/item/card/id/dogtag/get_examine_text(mob/user)
+	. = ..()
 	if(ishuman(user))
-		to_chat(user, SPAN_NOTICE("It reads \"[registered_name] - [assignment] - [blood_type]\""))
+		. += SPAN_NOTICE("It reads \"[registered_name] - [assignment] - [blood_type]\"")
 
 
 /obj/item/dogtag
@@ -384,15 +397,15 @@
 	else
 		. = ..()
 
-/obj/item/dogtag/examine(mob/user)
-	..()
+/obj/item/dogtag/get_examine_text(mob/user)
+	. = ..()
 	if(ishuman(user) && fallen_names && fallen_names.len)
 		var/msg = "There [fallen_names.len>1 ? \
 			"are [fallen_names.len] tags.<br>They read":\
 			"is one ID tag.<br>It reads"]:"
 		for (var/i=1 to fallen_names.len)
 			msg += "<br>[i]. \"[fallen_names[i]] - [fallen_assgns[i]] - [fallen_blood_types[i]]\""
-		to_chat(user, SPAN_NOTICE("[msg]"))
+		. += SPAN_NOTICE("[msg]")
 
 // Used to authenticate to CORSAT machines. Doesn't do anything except have its type variable
 /obj/item/card/data/corsat

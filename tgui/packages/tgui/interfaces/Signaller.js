@@ -1,5 +1,6 @@
+import { toFixed } from 'common/math';
 import { useBackend } from '../backend';
-import { Button, Section, Knob, LabeledList } from '../components';
+import { Button, Section, LabeledList, Slider } from '../components';
 import { Window } from '../layouts';
 
 export const Signaller = (props, context) => {
@@ -7,37 +8,41 @@ export const Signaller = (props, context) => {
   const { max_freq, min_freq, max_signal, min_signal } = data;
 
   return (
-    <Window
-      width={160}
-      height={170}
-    >
+    <Window width={300} height={170}>
       <Window.Content>
         <Section>
           <Button
             fluid
+            textAlign="center"
             icon="satellite-dish"
             content="Trigger"
-            onClick={() => act("send_signal")}
+            onClick={() => act('send_signal')}
           />
         </Section>
         <Section>
           <LabeledList>
             <LabeledList.Item label="Frequency">
-              <Knob
+              <Slider
                 inline
                 maxValue={max_freq}
                 minValue={min_freq}
                 value={data.current_freq}
-                onChange={(e, value) => act("set_freq", { value: value })}
+                onChange={(e, value) => act('set_freq', { value: value })}
+                format={(value) => toFixed(value / 10, 1)}
+                unit="kHz"
+                mt={1}
+                stepPixelSize={2}
               />
             </LabeledList.Item>
-            <LabeledList.Item label="Signal">
-              <Knob
+            <LabeledList.Item label="Code">
+              <Slider
                 inline
                 maxValue={max_signal}
                 minValue={min_signal}
                 value={data.current_signal}
-                onChange={(e, value) => act("set_signal", { value: value })}
+                onChange={(e, value) => act('set_signal', { value: value })}
+                mt={1}
+                stepPixelSize={8}
               />
             </LabeledList.Item>
           </LabeledList>

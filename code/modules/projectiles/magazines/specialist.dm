@@ -45,14 +45,14 @@
 	max_rounds = 6
 
 
-//SVD //Based on the actual Dragunov sniper rifle.
+//SVD //Based on the actual Dragunov designated marksman rifle.
 
 /obj/item/ammo_magazine/sniper/svd
 	name = "\improper SVD magazine (7.62x54mmR)"
-	desc = "A large caliber magazine for the SVD sniper rifle."
+	desc = "A large caliber magazine for the SVD designated marksman rifle."
 	caliber = "7.62x54mmR"
 	icon_state = "svd"
-	default_ammo = /datum/ammo/bullet/sniper/svd
+	default_ammo = /datum/ammo/bullet/sniper/crude
 	max_rounds = 10
 	gun_type = /obj/item/weapon/gun/rifle/sniper/svd
 
@@ -99,6 +99,8 @@
 	gun_type = /obj/item/weapon/gun/smartgun
 
 /obj/item/ammo_magazine/smartgun/dirty
+	name = "irradiated smartgun drum"
+	desc = "What at first glance appears to be a standard 500 round M56 Smartgun drum, is actually a drum loaded with irradiated rounds, providing an extra 'oomph' to to its bullets. The magazine itself is slightly modified to only fit in M56D or M56T smartguns, and is marked with a red X."
 	icon_state = "m56_drum_dirty"
 	default_ammo = /datum/ammo/bullet/smartgun/dirty
 	gun_type = /obj/item/weapon/gun/smartgun/dirty
@@ -116,7 +118,7 @@
 
 /obj/item/ammo_magazine/rocket
 	name = "\improper 84mm high explosive rocket"
-	desc = "A rocket tube loaded with a HE warhead. Deals high damage to soft targets on direct hit and stuns most targets in a 5-meter wide area for a short time. Has decreased effect on heavily armored targets."
+	desc = "A rocket tube loaded with a HE warhead. Deals high damage to soft targets on direct hit and stuns most targets in a 5-meter-wide area for a short time. Has decreased effect on heavily armored targets."
 	caliber = "rocket"
 	icon_state = "rocket"
 
@@ -129,7 +131,7 @@
 	flags_magazine = NO_FLAGS
 
 /obj/item/ammo_magazine/rocket/attack_self(mob/user)
-	..()
+	. = ..()
 	if(current_rounds <= 0)
 		to_chat(user, SPAN_NOTICE("You begin taking apart the empty tube frame..."))
 		if(do_after(user,10, INTERRUPT_ALL|BEHAVIOR_IMMOBILE, BUSY_ICON_BUILD))
@@ -313,7 +315,7 @@
 		icon_state = "quad_rocket_e"
 
 //-------------------------------------------------------
-//Anti tank rocket
+//Anti-tank rocket
 
 /obj/item/ammo_magazine/rocket/anti_tank
 	name = "\improper 84mm Anti-Tank Rocket"

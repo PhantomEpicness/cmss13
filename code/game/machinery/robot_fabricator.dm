@@ -2,16 +2,16 @@
 	name = "Robotic Fabricator"
 	icon = 'icons/obj/structures/machinery/robotics.dmi'
 	icon_state = "fab-idle"
-	density = 1
-	anchored = 1
+	density = TRUE
+	anchored = TRUE
 	var/metal_amount = 0
 	var/operating = 0
 	var/obj/item/robot_parts/being_built = null
-	use_power = 1
+	use_power = USE_POWER_IDLE
 	idle_power_usage = 40
 	active_power_usage = 10000
 
-/obj/structure/machinery/robotic_fabricator/attackby(var/obj/item/O as obj, var/mob/user as mob)
+/obj/structure/machinery/robotic_fabricator/attackby(obj/item/O as obj, mob/user as mob)
 	if (istype(O, /obj/item/stack/sheet/metal))
 		var/obj/item/stack/sheet/metal/M = O
 		if (src.metal_amount < 150000.0)
@@ -77,22 +77,22 @@ Please wait until completion...</TT><BR>
 
 			switch (part_type)
 				if (1)
-					build_type = /obj/item/robot_parts/l_arm
+					build_type = /obj/item/robot_parts/arm/l_arm
 					build_time = 200
 					build_cost = 25000
 
 				if (2)
-					build_type = /obj/item/robot_parts/r_arm
+					build_type = /obj/item/robot_parts/arm/r_arm
 					build_time = 200
 					build_cost = 25000
 
 				if (3)
-					build_type = /obj/item/robot_parts/l_leg
+					build_type = /obj/item/robot_parts/leg/l_leg
 					build_time = 200
 					build_cost = 25000
 
 				if (4)
-					build_type = /obj/item/robot_parts/r_leg
+					build_type = /obj/item/robot_parts/leg/r_leg
 					build_time = 200
 					build_cost = 25000
 
@@ -115,7 +115,7 @@ Please wait until completion...</TT><BR>
 			if (building in subtypesof(/obj/item/robot_parts) + /obj/item/fake_robot_head)
 				if (src.metal_amount >= build_cost)
 					src.operating = 1
-					src.update_use_power(2)
+					src.update_use_power(USE_POWER_ACTIVE)
 
 					src.metal_amount = max(0, src.metal_amount - build_cost)
 
@@ -128,12 +128,12 @@ Please wait until completion...</TT><BR>
 						if (!QDELETED(src.being_built))
 							src.being_built.forceMove(get_turf(src))
 							src.being_built = null
-						src.update_use_power(1)
+						src.update_use_power(USE_POWER_IDLE)
 						src.operating = 0
 						src.overlays -= "fab-active"
 			else return //Someone's doing href fuckery if this gets here.
 		return
 
-	for (var/mob/M in viewers(1, src))
+	for (var/mob/M as anything in viewers(1, src))
 		if (M.client && M.interactee == src)
 			src.attack_hand(M)

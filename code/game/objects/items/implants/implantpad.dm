@@ -11,12 +11,9 @@
 	w_class = SIZE_SMALL
 	var/obj/item/implantcase/case = null
 	var/broadcasting = null
-	var/listening = 1.0
-/obj/item/implantpad/proc
-	update()
+	var/listening = 1
 
-
-/obj/item/implantpad/update()
+/obj/item/implantpad/proc/update()
 	if (src.case)
 		src.icon_state = "implantpad-1"
 	else
@@ -89,7 +86,7 @@
 		if (istype(src.loc, /mob))
 			attack_self(src.loc)
 		else
-			for(var/mob/M in viewers(1, src))
+			for(var/mob/M as anything in viewers(1, src))
 				if (M.client)
 					src.attack_self(M)
 		src.add_fingerprint(usr)

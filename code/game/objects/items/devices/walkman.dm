@@ -18,11 +18,12 @@
 	var/volume = 25
 	var/design = 1 // What kind of walkman design style to use
 	item_icons = list(
-			WEAR_L_EAR = 'icons/mob/humans/onmob/ears.dmi',
-			WEAR_R_EAR = 'icons/mob/humans/onmob/ears.dmi',
-			WEAR_WAIST = 'icons/mob/humans/onmob/ears.dmi',
-			WEAR_IN_J_STORE = 'icons/mob/humans/onmob/ears.dmi'
-			)
+		WEAR_L_EAR = 'icons/mob/humans/onmob/ears.dmi',
+		WEAR_R_EAR = 'icons/mob/humans/onmob/ears.dmi',
+		WEAR_WAIST = 'icons/mob/humans/onmob/ears.dmi',
+		WEAR_IN_J_STORE = 'icons/mob/humans/onmob/ears.dmi'
+		)
+	black_market_value = 15
 
 /obj/item/device/walkman/Initialize()
 	. = ..()
@@ -227,7 +228,7 @@
 
 	if(usr.is_mob_incapacitated() || !current_song) return
 
-	var/tmp = input(usr,"Change the volume (0 - 100)","Volume") as num|null
+	var/tmp = tgui_input_number(usr,"Change the volume (0 - 100)","Volume", volume, 100, 0)
 	if(tmp == null) return
 	if(tmp > 100) tmp = 100
 	if(tmp < 0) tmp = 0
@@ -307,6 +308,7 @@
 	icon = 'icons/obj/items/walkman.dmi'
 	icon_state = "cassette_flip"
 	w_class = SIZE_SMALL
+	black_market_value = 15
 	var/side1_icon = "cassette"
 	var/flipped = FALSE //Tape side
 	var/list/songs = list()
@@ -339,20 +341,20 @@
 	songs = list("side1" = list("sound/music/walkman/pop1/1-1-1.ogg",\
 								"sound/music/walkman/pop1/1-1-2.ogg",\
 								"sound/music/walkman/pop1/1-1-3.ogg"),\
-				 "side2" = list("sound/music/walkman/pop1/1-2-1.ogg",\
+				"side2" = list("sound/music/walkman/pop1/1-2-1.ogg",\
 								"sound/music/walkman/pop1/1-2-2.ogg",\
 								"sound/music/walkman/pop1/1-2-3.ogg"))
 
 /obj/item/device/cassette_tape/pop2
 	name = "rainbow cassette"
 	id = 3
-	desc = "A plastic cassette tape with a rainbow colored sticker."
+	desc = "A plastic cassette tape with a rainbow-colored sticker."
 	icon_state = "cassette_rainbow"
 	side1_icon = "cassette_rainbow"
 	songs = list("side1" = list("sound/music/walkman/pop2/2-1-1.ogg",\
 								"sound/music/walkman/pop2/2-1-2.ogg",\
 								"sound/music/walkman/pop2/2-1-3.ogg"),\
-				 "side2" = list("sound/music/walkman/pop2/2-2-1.ogg",\
+				"side2" = list("sound/music/walkman/pop2/2-2-1.ogg",\
 								"sound/music/walkman/pop2/2-2-2.ogg",\
 								"sound/music/walkman/pop2/2-2-3.ogg"))
 
@@ -365,7 +367,7 @@
 	songs = list("side1" = list("sound/music/walkman/pop3/3-1-1.ogg",\
 								"sound/music/walkman/pop3/3-1-2.ogg",\
 								"sound/music/walkman/pop3/3-1-3.ogg"),\
-				 "side2" = list("sound/music/walkman/pop3/3-2-1.ogg",\
+				"side2" = list("sound/music/walkman/pop3/3-2-1.ogg",\
 								"sound/music/walkman/pop3/3-2-2.ogg",\
 								"sound/music/walkman/pop3/3-2-3.ogg"))
 
@@ -378,7 +380,7 @@
 	songs = list("side1" = list("sound/music/walkman/pop4/4-1-1.ogg",\
 								"sound/music/walkman/pop4/4-1-2.ogg",\
 								"sound/music/walkman/pop4/4-1-3.ogg"),\
-				 "side2" = list("sound/music/walkman/pop4/4-2-1.ogg",\
+				"side2" = list("sound/music/walkman/pop4/4-2-1.ogg",\
 								"sound/music/walkman/pop4/4-2-2.ogg",\
 								"sound/music/walkman/pop4/4-2-3.ogg"))
 
@@ -391,7 +393,7 @@
 	songs = list("side1" = list("sound/music/walkman/heavymetal/5-1-1.ogg",\
 								"sound/music/walkman/heavymetal/5-1-2.ogg",\
 								"sound/music/walkman/heavymetal/5-1-3.ogg"),\
-				 "side2" = list("sound/music/walkman/heavymetal/5-2-1.ogg",\
+				"side2" = list("sound/music/walkman/heavymetal/5-2-1.ogg",\
 								"sound/music/walkman/heavymetal/5-2-2.ogg",\
 								"sound/music/walkman/heavymetal/5-2-3.ogg"))
 
@@ -404,7 +406,7 @@
 	songs = list("side1" = list("sound/music/walkman/hairmetal/6-1-1.ogg",\
 								"sound/music/walkman/hairmetal/6-1-2.ogg",\
 								"sound/music/walkman/hairmetal/6-1-3.ogg"),\
-				 "side2" = list("sound/music/walkman/hairmetal/6-2-1.ogg",\
+				"side2" = list("sound/music/walkman/hairmetal/6-2-1.ogg",\
 								"sound/music/walkman/hairmetal/6-2-2.ogg",\
 								"sound/music/walkman/hairmetal/6-2-3.ogg"))
 
@@ -417,7 +419,7 @@
 	songs = list("side1" = list("sound/music/walkman/indie/7-1-1.ogg",\
 								"sound/music/walkman/indie/7-1-2.ogg",\
 								"sound/music/walkman/indie/7-1-3.ogg"),\
-				 "side2" = list("sound/music/walkman/indie/7-2-1.ogg",\
+				"side2" = list("sound/music/walkman/indie/7-2-1.ogg",\
 								"sound/music/walkman/indie/7-2-2.ogg",\
 								"sound/music/walkman/indie/7-2-3.ogg"))
 
@@ -430,7 +432,7 @@
 	songs = list("side1" = list("sound/music/walkman/hiphop/8-1-1.ogg",\
 								"sound/music/walkman/hiphop/8-1-2.ogg",\
 								"sound/music/walkman/hiphop/8-1-3.ogg"),\
-				 "side2" = list("sound/music/walkman/hiphop/8-2-1.ogg",\
+				"side2" = list("sound/music/walkman/hiphop/8-2-1.ogg",\
 								"sound/music/walkman/hiphop/8-2-2.ogg",\
 								"sound/music/walkman/hiphop/8-2-3.ogg"))
 
@@ -443,7 +445,7 @@
 	songs = list("side1" = list("sound/music/walkman/nam/9-1-1.ogg",\
 								"sound/music/walkman/nam/9-1-2.ogg",\
 								"sound/music/walkman/nam/9-1-3.ogg"),\
-				 "side2" = list("sound/music/walkman/nam/9-2-1.ogg",\
+				"side2" = list("sound/music/walkman/nam/9-2-1.ogg",\
 								"sound/music/walkman/nam/9-2-2.ogg",\
 								"sound/music/walkman/nam/9-2-3.ogg"))
 
@@ -457,7 +459,7 @@
 								"sound/music/walkman/surf/10-1-2.ogg",\
 								"sound/music/walkman/surf/10-1-3.ogg",\
 								"sound/music/walkman/surf/10-1-4.ogg"),\
-				 "side2" = list("sound/music/walkman/surf/10-2-1.ogg",\
+				"side2" = list("sound/music/walkman/surf/10-2-1.ogg",\
 								"sound/music/walkman/surf/10-2-2.ogg",\
 								"sound/music/walkman/surf/10-2-3.ogg",\
 								"sound/music/walkman/surf/10-2-4.ogg"))
@@ -474,7 +476,7 @@
 /obj/item/device/cassette_tape/cargocrate
 	name = "weyland yutani cassette"
 	id = 13
-	desc = "A blue metalic cassette with a weyland yutani logo."
+	desc = "A blue metallic cassette with a weyland yutani logo."
 	icon_state = "cassette_wy"
 	side1_icon = "cassette_wy"
 
@@ -511,6 +513,6 @@
 /obj/item/device/cassette_tape/prison
 	name = "broken cassette"
 	id = 18
-	desc = "The shell on this casette is broken, it still looks like it'll work, though!"
+	desc = "The shell on this cassette is broken, it still looks like it'll work, though!"
 	icon_state = "cassette_worstmap"
 	side1_icon = "cassette_worstmap"

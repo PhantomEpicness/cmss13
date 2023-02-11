@@ -4,11 +4,11 @@
 	icon = 'icons/obj/structures/machinery/atmos.dmi'
 	icon_state = "sheater0"
 	anchored = FALSE
-	density = 0
+	density = FALSE
 	var/obj/item/cell/cell
 	var/on = 0
 	var/open = 0
-	var/set_temperature = T0C + 70	//K
+	var/set_temperature = T0C + 70 //K
 	var/heating_power = 40000
 
 	flags_atom = FPRINT
@@ -25,13 +25,13 @@
 	if(open)
 		overlays  += "sheater-open"
 
-/obj/structure/machinery/space_heater/examine(mob/user)
-	..()
-	to_chat(user, "The heater is [on ? "on" : "off"] and the hatch is [open ? "open" : "closed"].")
+/obj/structure/machinery/space_heater/get_examine_text(mob/user)
+	. = ..()
+	. += "The heater is [on ? "on" : "off"] and the hatch is [open ? "open" : "closed"]."
 	if(open)
-		to_chat(user, "The power cell is [cell ? "installed" : "missing"].")
+		. += "The power cell is [cell ? "installed" : "missing"]."
 	else
-		to_chat(user, "The charge meter reads [cell ? round(cell.percent(),1) : 0]%")
+		. += "The charge meter reads [cell ? round(cell.percent(),1) : 0]%"
 
 
 /obj/structure/machinery/space_heater/emp_act(severity)
@@ -128,7 +128,7 @@
 			if("cellremove")
 				if(open && cell && !usr.get_active_hand())
 					usr.visible_message(SPAN_NOTICE("[usr] removes \the [cell] from \the [src]."), SPAN_NOTICE("You remove \the [cell] from \the [src]."))
-					cell.updateicon()
+					cell.update_icon()
 					usr.put_in_hands(cell)
 					cell.add_fingerprint(usr)
 					cell = null
@@ -175,7 +175,11 @@
 	icon_state = "radiator"
 	anchored = TRUE
 
+/obj/structure/machinery/space_heater/radiator/update_icon()
+	return
+
 /obj/structure/machinery/space_heater/radiator/red
 	name = "radiator"
 	desc = "It's a radiator. It heats the room through convection with hot water. This one has a red handle."
 	icon_state = "radiator-r"
+

@@ -41,7 +41,7 @@
 
 /obj/item/clothing/under/rank/worker_overalls
 	name = "worker overalls"
-	desc = "An outfit fit for the hard working man."
+	desc = "An outfit fit for the hard-working man."
 	icon_state = "worker_overalls"
 	item_state = "bl_suit"
 	flags_jumpsuit = FALSE
@@ -56,6 +56,7 @@
 	desc = "<i>'HONK!'</i>"
 	icon_state = "clown"
 	flags_jumpsuit = FALSE
+	black_market_value = 25
 
 /obj/item/clothing/under/rank/hydroponics
 	desc = "It's a jumpsuit designed to protect against minor plant-related hazards."

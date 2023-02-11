@@ -1,6 +1,7 @@
 
-
-//////////////////////////////////////////FOOD MIXTURES////////////////////////////////////
+//*****************************************************************************************************/
+//****************************************Food Mixtures************************************************/
+//*****************************************************************************************************/
 
 /datum/chemical_reaction/tofu
 	name = "Tofu"
@@ -10,10 +11,10 @@
 	required_catalysts = list("enzyme" = 5)
 	result_amount = 1
 
-	on_reaction(var/datum/reagents/holder, var/created_volume)
-		var/location = get_turf(holder.my_atom)
-		for(var/i = 1, i <= created_volume, i++)
-			new /obj/item/reagent_container/food/snacks/tofu(location)
+/datum/chemical_reaction/tofu/on_reaction(datum/reagents/holder, created_volume)
+	var/location = get_turf(holder.my_atom)
+	for(var/i = 1, i <= created_volume, i++)
+		new /obj/item/reagent_container/food/snacks/tofu(location)
 
 
 /datum/chemical_reaction/chocolate_bar
@@ -23,10 +24,10 @@
 	required_reagents = list("soymilk" = 2, "coco" = 2, "sugar" = 2)
 	result_amount = 1
 
-	on_reaction(var/datum/reagents/holder, var/created_volume)
-		var/location = get_turf(holder.my_atom)
-		for(var/i = 1, i <= created_volume, i++)
-			new /obj/item/reagent_container/food/snacks/chocolatebar(location)
+/datum/chemical_reaction/chocolate_bar/on_reaction(datum/reagents/holder, created_volume)
+	var/location = get_turf(holder.my_atom)
+	for(var/i = 1, i <= created_volume, i++)
+		new /obj/item/reagent_container/food/snacks/chocolatebar(location)
 
 
 /datum/chemical_reaction/chocolate_bar2
@@ -36,10 +37,10 @@
 	required_reagents = list("milk" = 2, "coco" = 2, "sugar" = 2)
 	result_amount = 1
 
-	on_reaction(var/datum/reagents/holder, var/created_volume)
-		var/location = get_turf(holder.my_atom)
-		for(var/i = 1, i <= created_volume, i++)
-			new /obj/item/reagent_container/food/snacks/chocolatebar(location)
+/datum/chemical_reaction/chocolate_bar2/on_reaction(datum/reagents/holder, created_volume)
+	var/location = get_turf(holder.my_atom)
+	for(var/i = 1, i <= created_volume, i++)
+		new /obj/item/reagent_container/food/snacks/chocolatebar(location)
 
 
 /datum/chemical_reaction/hot_coco
@@ -53,7 +54,7 @@
 	name = "Soy Sauce"
 	id = "soysauce"
 	result = "soysauce"
-	required_reagents = list("soymilk" = 4, "sacid" = 1)
+	required_reagents = list("soymilk" = 4, "sulphuric acid" = 1)
 	result_amount = 5
 
 /datum/chemical_reaction/condensedcapsaicin
@@ -154,9 +155,9 @@
 	required_catalysts = list("enzyme" = 5)
 	result_amount = 1
 
-	on_reaction(var/datum/reagents/holder, var/created_volume)
-		var/location = get_turf(holder.my_atom)
-		new /obj/item/reagent_container/food/snacks/sliceable/cheesewheel/immature(location)
+/datum/chemical_reaction/cheesewheel/immature/on_reaction(datum/reagents/holder, created_volume)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/reagent_container/food/snacks/sliceable/cheesewheel/immature(location)
 
 
 /datum/chemical_reaction/syntiflesh
@@ -166,9 +167,9 @@
 	required_reagents = list("blood" = 5, "clonexadone" = 1)
 	result_amount = 1
 
-	on_reaction(var/datum/reagents/holder, var/created_volume)
-		var/location = get_turf(holder.my_atom)
-		new /obj/item/reagent_container/food/snacks/meat/syntiflesh(location)
+/datum/chemical_reaction/syntiflesh/on_reaction(datum/reagents/holder, created_volume)
+	var/location = get_turf(holder.my_atom)
+	new /obj/item/reagent_container/food/snacks/meat/syntiflesh(location)
 
 
 /datum/chemical_reaction/hot_ramen
@@ -186,7 +187,9 @@
 	result_amount = 6
 
 
-////////////////////////////////////////// COCKTAILS //////////////////////////////////////
+//*****************************************************************************************************/
+//******************************************Cocktails**************************************************/
+//*****************************************************************************************************/
 
 
 /datum/chemical_reaction/goldschlager
@@ -200,7 +203,7 @@
 	name = "Patron"
 	id = "patron"
 	result = "patron"
-	required_reagents = list("tequilla" = 10, "silver" = 1)
+	required_reagents = list("tequila" = 10, "silver" = 1)
 	result_amount = 10
 
 /datum/chemical_reaction/bilk
@@ -394,14 +397,14 @@
 	name = "Brave Bull"
 	id = "bravebull"
 	result = "bravebull"
-	required_reagents = list("tequilla" = 2, "kahlua" = 1)
+	required_reagents = list("tequila" = 2, "kahlua" = 1)
 	result_amount = 3
 
-/datum/chemical_reaction/tequilla_sunrise
-	name = "Tequilla Sunrise"
-	id = "tequillasunrise"
-	result = "tequillasunrise"
-	required_reagents = list("tequilla" = 2, "orangejuice" = 1)
+/datum/chemical_reaction/tequila_sunrise
+	name = "tequila Sunrise"
+	id = "tequilasunrise"
+	result = "tequilasunrise"
+	required_reagents = list("tequila" = 2, "orangejuice" = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/phoron_special
@@ -464,21 +467,21 @@
 	name = "Margarita"
 	id = "margarita"
 	result = "margarita"
-	required_reagents = list("tequilla" = 2, "limejuice" = 1)
+	required_reagents = list("tequila" = 2, "limejuice" = 1)
 	result_amount = 3
 
 /datum/chemical_reaction/longislandicedtea
 	name = "Long Island Iced Tea"
 	id = "longislandicedtea"
 	result = "longislandicedtea"
-	required_reagents = list("vodka" = 1, "gin" = 1, "tequilla" = 1, "cubalibre" = 1)
+	required_reagents = list("vodka" = 1, "gin" = 1, "tequila" = 1, "cubalibre" = 1)
 	result_amount = 4
 
 /datum/chemical_reaction/icedtea
 	name = "Long Island Iced Tea"
 	id = "longislandicedtea"
 	result = "longislandicedtea"
-	required_reagents = list("vodka" = 1, "gin" = 1, "tequilla" = 1, "cubalibre" = 1)
+	required_reagents = list("vodka" = 1, "gin" = 1, "tequila" = 1, "cubalibre" = 1)
 	result_amount = 4
 
 /datum/chemical_reaction/threemileisland
@@ -586,6 +589,13 @@
 	required_reagents = list("grapejuice" = 2, "cola" = 1)
 	result_amount = 3
 
+/datum/chemical_reaction/mojito
+	name = "Mojito"
+	id = "mojito"
+	result = "mojito"
+	required_reagents = list("rum" = 1, "sugar" = 1, "limejuice" = 1, "sodawater" = 1)
+	result_amount = 4
+
 
 
 ////DRINKS THAT REQUIRED IMPROVED SPRITES BELOW:: -Agouri/////
@@ -651,7 +661,7 @@
 	name = "Acid Spit"
 	id = "acidspit"
 	result = "acidspit"
-	required_reagents = list("wine" = 5, "sacid" = 1)
+	required_reagents = list("wine" = 5, "sulphuric acid" = 1)
 	result_amount = 6
 
 /datum/chemical_reaction/amasec

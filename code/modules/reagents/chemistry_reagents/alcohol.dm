@@ -35,7 +35,7 @@
 	M:nutrition += nutriment_factor
 	holder.remove_reagent(src.id, (alien ? FOOD_METABOLISM : ALCOHOL_METABOLISM)) // Catch-all for creatures without livers.
 
-	if(adj_drowsy)	M.drowsyness = max(0,M.drowsyness + adj_drowsy)
+	if(adj_drowsy) M.drowsyness = max(0,M.drowsyness + adj_drowsy)
 	if(adj_sleepy) M.sleeping = max(0,M.sleeping + adj_sleepy)
 
 	booze_data += boozepwr
@@ -53,7 +53,7 @@
 		if(!M.slurring) M.slurring = 1
 		M.slurring += slurr_adj
 
-/datum/reagent/ethanol/reaction_obj(var/obj/O, var/volume)
+/datum/reagent/ethanol/reaction_obj(obj/O, volume)
 	if(istype(O,/obj/item/paper))
 		var/obj/item/paper/paperaffected = O
 		paperaffected.clearpaper()
@@ -66,13 +66,6 @@
 		else
 			to_chat(usr, "It wasn't enough...")
 	return
-
-/datum/reagent/ethanol/reaction_mob(var/mob/living/M, var/method=TOUCH, var/volume)//Splashing people with ethanol isn't quite as good as fuel.
-	if(!istype(M, /mob/living))
-		return
-	if(method == TOUCH)
-		M.adjust_fire_stacks(volume / 15)
-		return
 
 /datum/reagent/ethanol/beer
 	name = "Beer"
@@ -188,9 +181,9 @@
 	color = "#664300" // rgb: 102, 67, 0
 	boozepwr = 1.5
 
-/datum/reagent/ethanol/tequilla
+/datum/reagent/ethanol/tequila
 	name = "Tequila"
-	id = "tequilla"
+	id = "tequila"
 	description = "A strong and mildly flavoured, mexican produced spirit. Feeling thirsty hombre?"
 	color = "#FFFF91" // rgb: 255, 255, 145
 	boozepwr = 2
@@ -205,7 +198,7 @@
 /datum/reagent/ethanol/wine
 	name = "Wine"
 	id = "wine"
-	description = "An premium alchoholic beverage made from distilled grape juice."
+	description = "A premium alcoholic beverage made from distilled grape juice."
 	color = "#7E4043" // rgb: 126, 64, 67
 	boozepwr = 1.5
 	dizzy_adj = 2
@@ -213,7 +206,7 @@
 /datum/reagent/ethanol/cognac
 	name = "Cognac"
 	id = "cognac"
-	description = "A sweet and strongly alchoholic drink, made after numerous distillations and years of maturing. Classy as fornication."
+	description = "A sweet and strongly alcoholic drink, made after numerous distillations and years of maturing. Classy as fornication."
 	color = "#AB3C05" // rgb: 171, 60, 5
 	boozepwr = 1.5
 	dizzy_adj = 4
@@ -221,14 +214,14 @@
 /datum/reagent/ethanol/hooch
 	name = "Hooch"
 	id = "hooch"
-	description = "Either someone's failure at cocktail making or attempt in alchohol production. In any case, do you really want to drink that?"
+	description = "Either someone's failure at cocktail making or attempt in alcohol production. In any case, do you really want to drink that?"
 	color = "#664300" // rgb: 102, 67, 0
 	boozepwr = 2
 
 /datum/reagent/ethanol/ale
 	name = "Ale"
 	id = "ale"
-	description = "A dark alchoholic beverage made by malted barley and yeast."
+	description = "A dark alcoholic beverage made by malted barley and yeast."
 	color = "#664300" // rgb: 102, 67, 0
 	boozepwr = 1
 
@@ -315,9 +308,9 @@
 	color = "#664300" // rgb: 102, 67, 0
 	boozepwr = 2
 
-
-/////////////////////////////////////////////////////////////////cocktail entities//////////////////////////////////////////////
-
+//*****************************************************************************************************/
+//***************************************Cocktail Entities*********************************************/
+//*****************************************************************************************************/
 
 /datum/reagent/ethanol/goldschlager
 	name = "Goldschlager"
@@ -403,9 +396,9 @@
 	color = "#664300" // rgb: 102, 67, 0
 	boozepwr = 3
 
-/datum/reagent/ethanol/tequilla_sunrise
+/datum/reagent/ethanol/tequila_sunrise
 	name = "Tequila Sunrise"
-	id = "tequillasunrise"
+	id = "tequilasunrise"
 	description = "Tequila and orange juice. Much like a Screwdriver, only Mexican~"
 	color = "#FFE48C" // rgb: 255, 228, 140
 	boozepwr = 2
@@ -757,3 +750,10 @@
 		M.stuttering += 10
 	else if(booze_data >= 115 && prob(33))
 		M.confused = max(M.confused+15,15)
+
+/datum/reagent/ethanol/mojito
+	name = "Mojito"
+	id = "mojito"
+	description = "You can almost feel the old fresh winds of Cuba with this one."
+	color = "#C0FF00" // rgb: 192, 255, 0
+	boozepwr = 1

@@ -3,7 +3,6 @@
 /turf/closed/wall/r_wall/bunker,
 /area/event)
 "b" = (
-/obj/effect/landmark/start/tank_crew,
 /turf/open/floor/almayer{
 	icon_state = "plating"
 	},
@@ -190,6 +189,12 @@
 	icon_state = "plating"
 	},
 /area/event)
+"V" = (
+/obj/effect/landmark/start/crew_chief,
+/turf/open/floor/almayer{
+	icon_state = "plating"
+	},
+/area/event)
 "W" = (
 /obj/effect/landmark/start/chef,
 /turf/open/floor/almayer{
@@ -274,7 +279,7 @@ a
 C
 T
 e
-g
+V
 g
 g
 g

@@ -27,11 +27,17 @@
 
 	behavior_delegate_type = /datum/behavior_delegate/predalien_base
 
-/mob/living/carbon/Xenomorph/Predalien
+	minimap_icon = "predalien"
+
+/mob/living/carbon/xenomorph/predalien
 	caste_type = XENO_CASTE_PREDALIEN
 	name = "Abomination" //snowflake name
 	desc = "A strange looking creature with fleshy strands on its head. It appears like a mixture of armor and flesh, smooth, but well carapaced."
+	icon = 'icons/mob/xenos/predalien.dmi'
+	icon_xeno = 'icons/mob/xenos/predalien.dmi'
+	icon_xenonid = 'icons/mob/xenos/predalien.dmi'
 	icon_state = "Predalien Walking"
+	speaking_noise = 'sound/voice/predalien_click.ogg'
 	plasma_types = list(PLASMA_CATECHOLAMINE)
 	faction = FACTION_PREDALIEN
 	wall_smash = TRUE
@@ -41,15 +47,17 @@
 	mob_size = MOB_SIZE_BIG
 	tier = 1
 	age = XENO_NO_AGE //Predaliens are already in their ultimate form, they don't get even better
+	show_age_prefix = FALSE
 	small_explosives_stun = FALSE
 
 	base_actions = list(
 		/datum/action/xeno_action/onclick/xeno_resting,
 		/datum/action/xeno_action/onclick/regurgitate,
 		/datum/action/xeno_action/watch_xeno,
+		/datum/action/xeno_action/activable/tail_stab,
 		/datum/action/xeno_action/activable/pounce/predalien,
-		/datum/action/xeno_action/activable/predalien_roar,
-		/datum/action/xeno_action/activable/smash,
+		/datum/action/xeno_action/onclick/predalien_roar,
+		/datum/action/xeno_action/onclick/smash,
 		/datum/action/xeno_action/activable/devastate,
 	)
 	mutation_type = "Normal"
@@ -57,18 +65,15 @@
 	var/butcher_time = 6 SECONDS
 
 
-/mob/living/carbon/Xenomorph/Predalien/Initialize(mapload, mob/living/carbon/Xenomorph/oldXeno, h_number)
+/mob/living/carbon/xenomorph/predalien/Initialize(mapload, mob/living/carbon/xenomorph/oldxeno, h_number)
 	. = ..()
-	icon = get_icon_from_source(CONFIG_GET(string/alien_predalien))
-	icon_xeno = get_icon_from_source(CONFIG_GET(string/alien_predalien))
-	icon_xenonid = get_icon_from_source(CONFIG_GET(string/alien_predalien))
-	addtimer(CALLBACK(src, .proc/announce_spawn), 3 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(announce_spawn)), 3 SECONDS)
 	hunter_data.dishonored = TRUE
 	hunter_data.dishonored_reason = "An abomination upon the honor of us all!"
 	hunter_data.dishonored_set = src
 	hud_set_hunter()
 
-/mob/living/carbon/Xenomorph/Predalien/proc/announce_spawn()
+/mob/living/carbon/xenomorph/predalien/proc/announce_spawn()
 	if(!loc)
 		return FALSE
 
@@ -99,44 +104,44 @@ Your health meter will not regenerate normally, so kill and die for the hive!</s
 	kills = min(kills + 1, max_kills)
 
 /datum/behavior_delegate/predalien_base/melee_attack_modify_damage(original_damage, mob/living/carbon/A)
-	if(!isCarbonSizeHuman(A))
+	if(!iscarbonsizehuman(A))
 		return
 	var/mob/living/carbon/human/H = A
-	if(isSpeciesYautja(H))
+	if(isspeciesyautja(H))
 		original_damage *= 1.5
 
 	return original_damage + kills * 2.5
 
-/datum/behavior_delegate/predalien_base/handle_slash(mob/M)
-	if(bound_xeno.can_not_harm(M))
+/datum/behavior_delegate/predalien_base/handle_slash(mob/victim)
+	if(bound_xeno.can_not_harm(victim))
 		return FALSE
 
-	var/mob/living/carbon/Xenomorph/Predalien/X = bound_xeno
+	var/mob/living/carbon/xenomorph/predalien/xeno = bound_xeno
 
-	if(!istype(X))
+	if(!istype(xeno))
 		return FALSE
 
-	if(M.stat == DEAD && isXenoOrHuman(M))
-		if(X.action_busy)
-			to_chat(X, SPAN_XENONOTICE("You are already performing an action!"))
+	if(victim.stat == DEAD && isxeno_human(victim))
+		if(xeno.action_busy)
+			to_chat(xeno, SPAN_XENONOTICE("You are already performing an action!"))
 			return TRUE
 
-		playsound(X.loc, 'sound/weapons/slice.ogg', 25)
-		xeno_attack_delay(X)
+		playsound(xeno.loc, 'sound/weapons/slice.ogg', 25)
+		xeno_attack_delay(xeno)
 
-		if(!do_after(X, X.butcher_time, INTERRUPT_ALL, BUSY_ICON_HOSTILE, M))
-			to_chat(X, SPAN_XENONOTICE("You decide not to butcher [M]"))
+		if(!do_after(xeno, xeno.butcher_time, INTERRUPT_ALL, BUSY_ICON_HOSTILE, victim))
+			to_chat(xeno, SPAN_XENONOTICE("You decide not to butcher [victim]"))
 			return TRUE
 
-		if(ishuman(M))
-			var/mob/living/carbon/human/H = M
+		if(ishuman(victim))
+			var/mob/living/carbon/human/human_victim = victim
 
 			for(var/i in 1 to 3)
-				var/obj/item/reagent_container/food/snacks/meat/h_meat = new(H.loc)
-				h_meat.name = "[H.name] meat"
+				var/obj/item/reagent_container/food/snacks/meat/h_meat = new(human_victim.loc)
+				h_meat.name = "[human_victim.name] meat"
 
-		else if (isXeno(M))
-			var/mob/living/carbon/Xenomorph/xeno_victim = M
+		else if (isxeno(victim))
+			var/mob/living/carbon/xenomorph/xeno_victim = victim
 
 			new /obj/effect/decal/remains/xeno(xeno_victim.loc)
 			var/obj/item/stack/sheet/animalhide/xeno/xenohide = new /obj/item/stack/sheet/animalhide/xeno(xeno_victim.loc)
@@ -144,9 +149,9 @@ Your health meter will not regenerate normally, so kill and die for the hive!</s
 			xenohide.singular_name = "[xeno_victim.age_prefix][xeno_victim.caste_type]-hide"
 			xenohide.stack_id = "[xeno_victim.age_prefix][xeno_victim.caste_type]-hide"
 
-		playsound(X.loc, 'sound/effects/blobattack.ogg', 25)
+		playsound(xeno.loc, 'sound/effects/blobattack.ogg', 25)
 
-		M.gib("butchering")
+		victim.gib(create_cause_data("butchering", xeno))
 
 		return TRUE
 

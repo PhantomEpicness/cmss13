@@ -18,7 +18,7 @@
 	switch(choice)
 		if("Colour")
 			var/newcolour = tgui_input_list(usr, "Which colour would you like to use?", list("black","blue","red","green","yellow"))
-			if(newcolour) colour = newcolour
+			if(newcolour) pen_colour = newcolour
 		if("Mode")
 			if (mode == 1)
 				mode = 2
@@ -64,7 +64,7 @@
 	..()
 	deploy_paper(get_turf(src))
 
-/obj/item/form_printer/proc/deploy_paper(var/turf/T)
+/obj/item/form_printer/proc/deploy_paper(turf/T)
 	T.visible_message(SPAN_NOTICE("\The [src.loc] dispenses a sheet of crisp white paper."))
 	new /obj/item/paper(T)
 

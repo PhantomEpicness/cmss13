@@ -3,7 +3,8 @@
 // Surgery Tools
 /obj/item/tool/surgery
 	icon = 'icons/obj/items/surgery_tools.dmi'
-	attack_speed = 4 // reduced
+	/// reduced
+	attack_speed = 4
 
 /*
  * Retractor
@@ -92,11 +93,11 @@
 	desc = "Cut, cut, and once more cut."
 	icon_state = "scalpel"
 	flags_atom = FPRINT|CONDUCT
-	force = 10.0
+	force = 10
 	sharp = IS_SHARP_ITEM_ACCURATE
 	edge = 1
 	w_class = SIZE_TINY
-	throwforce = 5.0
+	throwforce = 5
 	flags_item = CAN_DIG_SHRAPNEL
 	throw_speed = SPEED_VERY_FAST
 	throw_range = 5
@@ -120,21 +121,23 @@
 	flags_item = ANIMATED_SURGICAL_TOOL
 	///The likelihood an incision made with this will be bloodless.
 	var/bloodlessprob = 60
+	black_market_value = 25
 
 /obj/item/tool/surgery/scalpel/laser/improved
 	name = "laser scalpel"
 	desc = "A scalpel augmented with a directed laser, for controlling bleeding as the incision is made. Also functions as a cautery. This one looks trustworthy, though it could be better."
 	icon_state = "scalpel_laser_2"
 	damtype = "fire"
-	force = 12.0
+	force = 12
 	bloodlessprob = 80
+	black_market_value = 35
 
 /obj/item/tool/surgery/scalpel/laser/advanced
 	name = "advanced laser scalpel"
 	desc = "A scalpel augmented with a directed laser, for controlling bleeding as the incision is made. Also functions as a cautery. This one looks to be the pinnacle of precision energy cutlery!"
 	icon_state = "scalpel_laser_3"
 	damtype = "fire"
-	force = 15.0
+	force = 15
 	bloodlessprob = 100
 
 /*
@@ -143,10 +146,11 @@
 
 /obj/item/tool/surgery/scalpel/pict_system
 	name = "\improper PICT system"
-	desc = "The Precision Incision and Cauterization Tool uses a high-frequency vibrating blade, laser cautery, and suction liquid control system to precisely sever target tissues while preventing all fluid leakage. Despite its troubled development program and horrifying pricetag, outside of complex experimental surgeries it isn't any better than an ordinary twenty-dollar scalpel and can't create a full-length incision bloodlessly."
+	desc = "The Precision Incision and Cauterization Tool uses a high-frequency vibrating blade, laser cautery, and suction liquid control system to precisely sever target tissues while preventing all fluid leakage. Despite its troubled development program and horrifying price tag, outside of complex experimental surgeries it isn't any better than an ordinary twenty-dollar scalpel and can't create a full-length incision bloodlessly."
 	icon_state = "pict_system"
 	w_class = SIZE_SMALL
 	force = 7.5
+	black_market_value = 25
 
 /obj/item/tool/surgery/scalpel/manager
 	name = "incision management system"
@@ -154,6 +158,7 @@
 	icon_state = "scalpel_manager"
 	force = 7.5
 	flags_item = ANIMATED_SURGICAL_TOOL
+	black_market_value = 25
 
 /*
  * Circular Saw
@@ -162,13 +167,13 @@
 
 /obj/item/tool/surgery/circular_saw
 	name = "circular saw"
-	desc = "For heavy duty cutting."
+	desc = "For heavy-duty cutting."
 	icon_state = "saw"
 	hitsound = 'sound/weapons/circsawhit.ogg'
 	flags_atom = FPRINT|CONDUCT
 	force = 0
 	w_class = SIZE_SMALL
-	throwforce = 9.0
+	throwforce = 9
 	throw_speed = SPEED_VERY_FAST
 	throw_range = 5
 	matter = list("metal" = 20000,"glass" = 10000)
@@ -180,7 +185,7 @@
 
 /obj/item/tool/surgery/circular_saw/predatorbonesaw
 	name = "bone saw"
-	desc = "For heavy duty cutting."
+	desc = "For heavy-duty cutting."
 	icon_state = "predator_bonesaw"
 	flags_item = NO_FLAGS
 
@@ -193,7 +198,7 @@
 	name = "bone gel"
 	icon_state = "bone-gel"
 	force = 0
-	throwforce = 1.0
+	throwforce = 1
 	w_class = SIZE_SMALL
 	matter = list("plastic" = 7500)
 
@@ -212,7 +217,7 @@
 	desc = "Used for fixing torn blood vessels. Could also be used to reconnect other tissues, in a pinch."
 
 	force = 0
-	throwforce = 1.0
+	throwforce = 1
 	matter = list("plastic" = 5000)
 
 	w_class = SIZE_SMALL
@@ -232,7 +237,7 @@
 	desc = "A roll of military-grade surgical line, able to seamlessly sew up any wound. Also works as a robust fishing line for maritime deployments."
 	icon_state = "line"
 	force = 0
-	throwforce = 1.0
+	throwforce = 1
 	w_class = SIZE_SMALL
 
 /obj/item/tool/surgery/surgical_line/Initialize(mapload, ...)
@@ -248,10 +253,12 @@
 	name = "Synth-Graft"
 	desc = "An applicator for synthetic skin field grafts. The stuff reeks, itches like the dickens, hurts going on, and the colour is \
 		a perfectly averaged multiethnic tone that doesn't blend with <i>anyone's</i> complexion. But at least you don't have to stay in sickbay."
-	icon_state = "line" //Placeholder.
-	color = "yellow" //Placeholder, to distinguish from surgical line.
+	/// Placeholder.
+	icon_state = "line"
+	/// Placeholder, to distinguish from surgical line.
+	color = "yellow"
 	force = 0
-	throwforce = 1.0
+	throwforce = 1
 	w_class = SIZE_SMALL
 
 /obj/item/tool/surgery/synthgraft/Initialize(mapload, ...)
@@ -267,7 +274,7 @@
 	name = "bone setter"
 	icon_state = "bonesetter"
 	force = 0
-	throwforce = 9.0
+	throwforce = 9
 	throw_speed = SPEED_VERY_FAST
 	throw_range = 5
 	w_class = SIZE_SMALL
@@ -288,7 +295,7 @@ t. optimisticdude
 	desc = "This sucks. Literally"
 	icon_state = "pump"
 	force = 0
-	throwforce = 9.0
+	throwforce = 9
 	throw_speed = SPEED_VERY_FAST
 	throw_range = 5
 	w_class = SIZE_SMALL
@@ -300,8 +307,77 @@ t. optimisticdude
 	name = "surgical drapes"
 	desc = "Used to cover a limb prior to the beginning of a surgical procedure"
 	icon_state = "drapes"
+	gender = PLURAL
 	w_class = SIZE_SMALL
 	flags_item = NOBLUDGEON
+
+/*
+ * MEDICOMP TOOLS
+ */
+
+/obj/item/tool/surgery/stabilizer_gel
+	name = "stabilizer gel vial"
+	desc = "Used for stabilizing wounds for treatment."
+	icon_state = "stabilizer_gel"
+	force = 0
+	throwforce = 1
+	w_class = SIZE_SMALL
+	flags_item = ITEM_PREDATOR
+	black_market_value = 50
+
+/obj/item/tool/surgery/healing_gun
+	name = "healing gun"
+	desc = "Used for mending stabilized wounds."
+	icon_state = "healing_gun"
+	force = 0
+	throwforce = 1
+	w_class = SIZE_SMALL
+	flags_item = ITEM_PREDATOR|ANIMATED_SURGICAL_TOOL
+	var/loaded  = TRUE
+	black_market_value = 50
+
+/obj/item/tool/surgery/healing_gun/update_icon()
+	if(loaded)
+		icon_state = "healing_gun"
+	else
+		icon_state = "healing_gun_empty"
+
+/obj/item/tool/surgery/healing_gun/attackby(obj/item/O, mob/user)
+	if(!HAS_TRAIT(user, TRAIT_YAUTJA_TECH))
+		to_chat(user, SPAN_WARNING("You have no idea how to put \the [O] into \the [src]!"))
+		return
+	if(istype(O, /obj/item/tool/surgery/healing_gel))
+		if(loaded)
+			to_chat(user, SPAN_WARNING("There's already a capsule inside the healing gun!"))
+			return
+		user.visible_message(SPAN_NOTICE("[user] loads \the [src] with \a [O].") ,SPAN_NOTICE("You load \the [src] with \a [O]."))
+		playsound(loc, 'sound/items/air_release.ogg',25)
+		loaded = TRUE
+		update_icon()
+		qdel(O)
+		return
+	return ..()
+
+/obj/item/tool/surgery/healing_gel
+	name = "healing gel capsule"
+	desc = "Used for reloading the healing gun."
+	icon_state = "healing_gel"
+	force = 0
+	throwforce = 1
+	w_class = SIZE_SMALL
+	flags_item = ITEM_PREDATOR
+	black_market_value = 15
+
+/obj/item/tool/surgery/wound_clamp
+	name = "wound clamp"
+	desc = "Used for clamping wounds after treatment."
+	icon_state = "wound_clamp"
+	force = 0
+	throwforce = 1
+	w_class = SIZE_SMALL
+	flags_item = ITEM_PREDATOR|ANIMATED_SURGICAL_TOOL
+	black_market_value = 15
+
 
 //XENO AUTOPSY TOOL
 
@@ -335,13 +411,13 @@ t. optimisticdude
 					to_chat(usr, "System Reset completed")
 					resetting = 0
 
-/obj/item/tool/surgery/WYautopsy/attack(mob/living/carbon/Xenomorph/T as mob, mob/living/user as mob)
-/*	set category = "Autopsy"
+/obj/item/tool/surgery/WYautopsy/attack(mob/living/carbon/xenomorph/T as mob, mob/living/user as mob)
+/* set category = "Autopsy"
 	set name = "Perform Alien Autopsy"
 	set src in usr*/
 	if(resetting)
 		to_chat(usr, "Tool is currently returning to factory default.  If you have been waiting, try running the reset again.")
-	if(!isXeno(T))
+	if(!isxeno(T))
 		to_chat(usr, "What are you, some sort of fucking MONSTER?")
 		return
 	if(T.health > 0)
@@ -350,7 +426,7 @@ t. optimisticdude
 	if(active)
 		to_chat(usr, "Your already performing an autopsy")
 		return
-	if(istype(T, /mob/living/carbon/Xenomorph/Larva))
+	if(istype(T, /mob/living/carbon/xenomorph/larva))
 		to_chat(usr, "It's too young... (This will be in a future update)")
 		return
 	active = 1
@@ -359,7 +435,7 @@ t. optimisticdude
 	to_chat(usr, "You begin to cut into the alien... This might take some time...")
 	if(T.health >-100)
 		to_chat(usr, "HOLY SHIT IT'S STILL ALIVE.  It knocks you down as it jumps up.")
-		usr.KnockDown(20)
+		usr.apply_effect(20, WEAKEN)
 		to_chat(T, "You feel TREMENDOUS pain and jump back up to use the last of your strength to kill [usr] with your final moments of life. (~10 seconds)")
 		T.health = T.maxHealth*2 //It's hulk levels of angry.
 		active = 0

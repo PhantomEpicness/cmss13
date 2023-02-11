@@ -1,15 +1,15 @@
 
 //if null is passed for def_zone, then this should return something appropriate for all zones (e.g. area effect damage)
-/mob/living/proc/getarmor(var/def_zone, var/type)
+/mob/living/proc/getarmor(def_zone, type)
 	return 0
 
 //Handles the effects of "stun" weapons
-/mob/living/proc/stun_effect_act(var/stun_amount, var/agony_amount, var/def_zone, var/used_weapon=null)
+/mob/living/proc/stun_effect_act(stun_amount, agony_amount, def_zone, used_weapon=null)
 	flash_pain()
 
 	if (stun_amount)
-		Stun(stun_amount)
-		KnockDown(stun_amount)
+		apply_effect(stun_amount, STUN)
+		apply_effect(stun_amount, WEAKEN)
 		apply_effect(STUTTER, stun_amount)
 		apply_effect(EYE_BLUR, stun_amount)
 
@@ -18,7 +18,7 @@
 		apply_effect(STUTTER, agony_amount/10)
 		apply_effect(EYE_BLUR, agony_amount/10)
 
-/mob/living/proc/electrocute_act(var/shock_damage, var/obj/source, var/siemens_coeff = 1.0)
+/mob/living/proc/electrocute_act(shock_damage, obj/source, siemens_coeff = 1.0)
 	return 0 //only carbon liveforms have this proc
 
 /mob/living/emp_act(severity)
@@ -62,7 +62,7 @@
 		else
 			playsound(loc, 'sound/effects/thud.ogg', 25, TRUE, falloff = 2)
 
-	O.throwing = 0		//it hit, so stop moving
+	O.throwing = 0 //it hit, so stop moving
 
 	var/mob/M
 	if(ismob(LM.thrower))
@@ -80,21 +80,20 @@
 	if(last_damage_source)
 		last_damage_data = create_cause_data(last_damage_source, M)
 
-/mob/living/mob_launch_collision(var/mob/living/L)
+/mob/living/mob_launch_collision(mob/living/L)
 	L.Move(get_step_away(L, src))
 
-/mob/living/obj_launch_collision(var/obj/O)
+/mob/living/obj_launch_collision(obj/O)
 	var/datum/launch_metadata/LM = launch_metadata
 	if(!rebounding && LM.thrower != src)
 		var/impact_damage = (1 + MOB_SIZE_COEFF/(mob_size + 1))*THROW_SPEED_DENSE_COEFF*cur_speed
 		apply_damage(impact_damage)
 		visible_message(SPAN_DANGER("\The [name] slams into [O]!"), null, null, 5) //feedback to know that you got slammed into a wall and it hurt
-		var/S = pick('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg')
-		playsound(O,S, 50, 1)
+		playsound(O,"slam", 50, 1)
 	..()
 
 //This is called when the mob or human is thrown into a dense turf or wall
-/mob/living/turf_launch_collision(var/turf/T)
+/mob/living/turf_launch_collision(turf/T)
 	var/datum/launch_metadata/LM = launch_metadata
 	if(!rebounding && LM.thrower != src)
 		if(LM.thrower)
@@ -102,11 +101,10 @@
 		var/impact_damage = (1 + MOB_SIZE_COEFF/(mob_size + 1))*THROW_SPEED_DENSE_COEFF*cur_speed
 		apply_damage(impact_damage)
 		visible_message(SPAN_DANGER("\The [name] slams into [T]!"), null, null, 5) //feedback to know that you got slammed into a wall and it hurt
-		var/S = pick('sound/weapons/punch1.ogg','sound/weapons/punch2.ogg','sound/weapons/punch3.ogg','sound/weapons/punch4.ogg')
-		playsound(T,S, 50, 1)
+		playsound(T,"slam", 50, 1)
 	..()
 
-/mob/living/proc/near_wall(var/direction,var/distance=1)
+/mob/living/proc/near_wall(direction, distance=1)
 	var/turf/T = get_step(get_turf(src),direction)
 	var/turf/last_turf = src.loc
 	var/i = 1
@@ -140,13 +138,14 @@
 /mob/living/carbon/human/IgniteMob()
 	. = ..()
 	if((. & IGNITE_IGNITED) && !stat && pain.feels_pain)
-		INVOKE_ASYNC(src, /mob.proc/emote, "scream")
+		INVOKE_ASYNC(src, TYPE_PROC_REF(/mob, emote), "scream")
 
 /mob/living/proc/ExtinguishMob()
 	if(on_fire)
 		on_fire = FALSE
 		fire_stacks = 0
 		update_fire()
+		SetLuminosity(0)
 		return TRUE
 	return FALSE
 
@@ -157,7 +156,7 @@
 /mob/living/proc/update_fire()
 	return
 
-/mob/living/proc/adjust_fire_stacks(add_fire_stacks, var/datum/reagent/R, var/min_stacks = MIN_FIRE_STACKS) //Adjusting the amount of fire_stacks we have on person
+/mob/living/proc/adjust_fire_stacks(add_fire_stacks, datum/reagent/R, min_stacks = MIN_FIRE_STACKS) //Adjusting the amount of fire_stacks we have on person
 	if(R)
 		if( \
 			!on_fire || !fire_reagent || \
@@ -186,6 +185,8 @@
 		return TRUE
 	if(fire_stacks > 0)
 		adjust_fire_stacks(-0.5, min_stacks = 0) //the fire is consumed slowly
+	if(current_weather_effect_type && SSweather && SSweather.weather_event_instance)
+		adjust_fire_stacks(-SSweather.weather_event_instance.fire_smothering_strength, min_stacks = 0)
 
 /mob/living/fire_act()
 	TryIgniteMob(2)
@@ -199,29 +200,26 @@
 
 //Mobs on Fire end
 
-/mob/living/proc/update_weather(check_area = TRUE)
-	SHOULD_NOT_SLEEP(TRUE)
-	// Only player mobs are affected by weather.
-	if(!client)
-		return
-
-	// Do this always
-	clear_fullscreen("weather")
-	remove_weather_effects()
-
+/mob/living/proc/handle_weather(delta_time = 1)
+	var/starting_weather_type = current_weather_effect_type
 	var/area/area = get_area(src)
 	// Check if we're supposed to be something affected by weather
-	if(!SSweather.is_weather_event || !SSweather.weather_event_instance)
-		return
-	if(check_area && !SSweather.map_holder.should_affect_area(area))
-		return
-
-	// Fullscreens
-	if(SSweather.weather_event_instance.fullscreen_type)
-		overlay_fullscreen("weather", SSweather.weather_event_instance.fullscreen_type)
+	if(!SSweather.weather_event_instance || !SSweather.map_holder.should_affect_area(area))
+		current_weather_effect_type = null
 	else
-		clear_fullscreen("weather")
+		current_weather_effect_type = SSweather.weather_event_type
+		SSweather.weather_event_instance.process_mob_effect(src, delta_time)
 
-	// Effects
-	if(SSweather.weather_event_instance.effect_type)
-		new SSweather.weather_event_instance.effect_type(src)
+	if(current_weather_effect_type != starting_weather_type)
+		if(current_weather_effect_type)
+			overlay_fullscreen("weather", SSweather.weather_event_instance.fullscreen_type)
+		else
+			clear_fullscreen("weather")
+
+/mob/living/handle_flamer_fire(obj/flamer_fire/fire, damage, delta_time)
+	. = ..()
+	fire.set_on_fire(src)
+
+/mob/living/handle_flamer_fire_crossed(obj/flamer_fire/fire)
+	. = ..()
+	fire.set_on_fire(src)

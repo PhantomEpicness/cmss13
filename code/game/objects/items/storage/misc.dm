@@ -14,7 +14,7 @@
 	icon = 'icons/obj/items/food.dmi'
 	icon_state = "donutbox"
 	name = "\improper Yum! donuts"
-	desc = "A box of mouth watering \"<i>Yum!</i>\" brand donuts."
+	desc = "A box of mouth-watering \"<i>Yum!</i>\" brand donuts."
 	storage_slots = 6
 	var/startswith = 6
 	var/open = 0
@@ -68,10 +68,10 @@
 	new /obj/item/attachable/mateba/long(src)
 	new /obj/item/weapon/mateba_key(src)
 
-/obj/item/storage/mateba_case/captain/commodore
+/obj/item/storage/mateba_case/captain/council
 	icon_state = "c_matebacase"
-	name = "commodore's mateba customization kit case"
-	desc = "A black-ebony case used for storing the tools and parts needed to customize a Mateba revolver. This variant is custom-made for commodores."
+	name = "colonel's mateba customization kit case"
+	desc = "A black-ebony case used for storing the tools and parts needed to customize a Mateba revolver. This variant is custom-made for colonels."
 
 /obj/item/storage/mateba_case/general
 	icon_state = "c_matebacase"
@@ -89,7 +89,7 @@
 /obj/item/storage/beer_pack
 	name = "beer pack"
 	desc = "A pack of Aspen beer cans."
-	icon = 'icons/obj/items/drinks.dmi'
+	icon = 'icons/obj/items/drinkcans.dmi'
 	icon_state = "6_pack_6"
 	item_state = "souto_classic"
 	storage_slots = 6
@@ -126,14 +126,15 @@
 
 /obj/item/storage/box/c02_knife
 	name = "M8 cartridge bayonet packaging"
-	desc = "Contains one M8 Cartridge Bayonet and sister C02 cartridge. Thanks for being a dedicated Boots magazine subscriber!"
+	desc = "Contains one M8 Cartridge Bayonet and two sister C02 cartridges. Thanks for being a dedicated Boots magazine subscriber!"
 	icon_state = "c02_box"
 	can_hold = list(/obj/item/attachable/bayonet/c02, /obj/item/c02_cartridge)
 	foldable = TRUE
-	storage_slots = 2
+	storage_slots = 3
 	w_class = SIZE_SMALL
 	max_w_class = SIZE_SMALL
 
 /obj/item/storage/box/c02_knife/fill_preset_inventory()
 	new /obj/item/attachable/bayonet/c02(src)
+	new /obj/item/c02_cartridge(src)
 	new /obj/item/c02_cartridge(src)

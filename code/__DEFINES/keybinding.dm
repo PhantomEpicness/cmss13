@@ -36,14 +36,17 @@
 
 //Communication
 #define COMSIG_KB_CLIENT_OOC_DOWN "keybinding_client_ooc_down"
+#define COMSIG_KB_CLIENT_LOOC_DOWN "keybinding_client_looc_down"
 #define COMSIG_KB_CLIENT_SAY_DOWN "keybinding_client_say_down"
 #define COMSIG_KB_CLIENT_ME_DOWN "keybinding_client_me_down"
 #define COMSIG_KB_CLIENT_WHISPER_DOWN "keybinding_client_whisper_down"
+#define COMSIG_KG_CLIENT_RADIO_DOWN "keybinding_client_radio_down"
 
 //Human
 #define COMSIG_KB_HUMAN_QUICKEQUIP_DOWN "keybinding_human_quickequip_down"
 #define COMSIG_KB_HUMAN_SECONDARY_DOWN "keybinding_human_secondary_down"
 #define COMSIG_KB_HUMAN_TERTIARY_DOWN "keybinding_human_tertiary_down"
+#define COMSIG_KB_HUMAN_QUATERNARY_DOWN "keybinding_human_quaternary_down"
 #define COMSIG_KB_HUMAN_QUICK_EQUIP_DOWN "keybinding_human_quick_equip_down"
 
 #define COMSIG_KB_HUMAN_ISSUE_ORDER "keybinding_human_issue_order"
@@ -53,6 +56,8 @@
 
 #define COMSIG_KB_HUMAN_SPECIALIST_ACTIVATION_ONE "keybinding_human_specialist_activation_one"
 #define COMSIG_KB_HUMAN_SPECIALIST_ACTIVATION_TWO "keybinding_human_specialist_activation_two"
+
+#define COMSIG_KG_HUMAN_PICK_UP "keybinding_human_pick_up"
 
 // Human Combat
 #define COMSIG_KB_HUMAN_WEAPON_FIELDSTRIP "keybinding_human_weapon_fieldstrip"
@@ -65,6 +70,8 @@
 #define COMSIG_KB_HUMAN_WEAPON_UNLOAD "keybinding_human_weapon_unload"
 #define COMSIG_KB_HUMAN_WEAPON_ATTACHMENT "keybinding_human_weapon_attachment"
 #define COMSIG_KB_HUMAN_WEAPON_ATTACHMENT_RAIL "keybinding_human_weapon_attachment_rail"
+
+#define COMSIG_KB_HUMAN_WEAPON_TOGGLE_IFF "keybinding_human_weapon_toggle_iff"
 
 //Living
 #define COMSIG_KB_SURGERY_INTENT_DOWN "keybinding_living_surgery_intent_down"
@@ -79,6 +86,7 @@
 #define COMSIG_KB_MOB_FACESOUTH_DOWN "keybinding_mob_facesouth_down"
 #define COMSIG_KB_MOB_FACEWEST_DOWN "keybinding_mob_facewest_down"
 #define COMSIG_KB_MOB_STOPPULLING_DOWN "keybinding_mob_stoppulling_down"
+#define COMSIG_KB_MOB_MOVINTENT_DOWN "keybinding_mob_movintent_down"
 #define COMSIG_KB_MOB_CYCLEINTENTRIGHT_DOWN "keybinding_mob_cycleintentright_down"
 #define COMSIG_KB_MOB_CYCLEINTENTLEFT_DOWN "keybinding_mob_cycleintentleft_down"
 #define COMSIG_KB_MOB_SWAPHANDS_DOWN "keybinding_mob_swaphands_down"
@@ -122,11 +130,80 @@
 #define COMSIG_KB_XENO_PRIMARY_ATTACK_TWO "keybinding_xeno_primary_attack_two"
 #define COMSIG_KB_XENO_PRIMARY_ATTACK_THREE "keybinding_xeno_primary_attack_three"
 #define COMSIG_KB_XENO_PRIMARY_ATTACK_FOUR "keybinding_xeno_primary_attack_four"
+#define COMSIG_KB_XENO_PRIMARY_ATTACK_FIVE "keybinding_xeno_primary_attack_five"
 
-#define COMSIG_KB_XENO_EMIT_PHEROMONES "keybiding_xeno_emit_pheromones"
-#define COMSIG_KB_XENO_EMIT_PHEROMONES_FRENZY "keybiding_xeno_emit_pheromones_frenzy"
-#define COMSIG_KB_XENO_EMIT_PHEROMONES_WARDING "keybiding_xeno_emit_pheromones_warding"
-#define COMSIG_KB_XENO_EMIT_PHEROMONES_RECOVERY "keybiding_xeno_emit_pheromones_recovery"
+#define COMSIG_KB_XENO_EMIT_PHEROMONES "keybinding_xeno_emit_pheromones"
+#define COMSIG_KB_XENO_EMIT_PHEROMONES_FRENZY "keybinding_xeno_emit_pheromones_frenzy"
+#define COMSIG_KB_XENO_EMIT_PHEROMONES_WARDING "keybinding_xeno_emit_pheromones_warding"
+#define COMSIG_KB_XENO_EMIT_PHEROMONES_RECOVERY "keybinding_xeno_emit_pheromones_recovery"
 
 #define COMSIG_KB_XENO_CORROSIVE_ACID "keybinding_xeno_corrosive_acid"
 #define COMSIG_KB_XENO_TECH_SECRETE_RESIN "keybinding_xeno_tech_secrete_resin"
+#define COMSIG_KB_XENO_SCREECH "keybinding_xeno_screech"
+#define COMSIG_KB_TAIL_STAB "keybinding_tail_stab"
+
+// Yautja
+
+#define COMSIG_KB_YAUTJA_BUTCHER "keybinding_yautja_butcher"
+#define COMSIG_KB_YAUTJA_PRED_BUY "keybinding_yautja_pred_buy"
+#define COMSIG_KB_YAUTJA_MARK_PANEL "keybinding_yautja_mark_panel"
+#define COMSIG_KB_YAUTJA_MARK_FOR_HUNT "keybinding_yautja_mark_for_hunt"
+#define COMSIG_KB_YAUTJA_REMOVE_FROM_HUNT "keybinding_yautja_remove_from_hunt"
+
+// Yautja Bracer
+#define COMSIG_KB_YAUTJA_TOGGLE_NOTIFICATION_SOUND "keybinding_yautja_toggle_notification_sound"
+#define COMSIG_KB_YAUTJA_BRACER_MESSAGE "keybinding_yautja_bracer_message"
+#define COMSIG_KB_YAUTJA_WRISTBLADES "keybinding_yautja_wristblades"
+#define COMSIG_KB_YAUTJA_TRACK_GEAR "keybinding_yautja_track_gear"
+#define COMSIG_KB_YAUTJA_CLOAKER "keybinding_yautja_cloaker"
+#define COMSIG_KB_YAUTJA_CASTER "keybinding_yautja_caster"
+#define COMSIG_KB_YAUTJA_CHANGE_EXPLOSION_TYPE "keybinding_yautja_change_explosion_type"
+#define COMSIG_KB_YAUTJA_ACTIVATE_SUICIDE "keybinding_yautja_activate_suicide"
+#define COMSIG_KB_YAUTJA_INJECTORS "keybinding_yautja_injectors"
+#define COMSIG_KB_YAUTJA_CAPSULE "keybinding_yautja_capsule"
+#define COMSIG_KB_YAUTJA_CALL_DISK "keybinding_yautja_call_disk"
+#define COMSIG_KB_YAUTJA_REMOVE_TRACKED_ITEM "keybinding_yautja_remove_tracked_item"
+#define COMSIG_KB_YAUTJA_ADD_TRACKED_ITEM "keybinding_yautja_add_tracked_item"
+#define COMSIG_KB_YAUTJA_CALL_COMBI "keybinding_yautja_call_combi"
+#define COMSIG_KB_YAUTJA_TRANSLATE "keybinding_yautja_translate"
+#define COMSIG_KB_YAUTJA_BRACERNAME "keybinding_yautja_bracername"
+#define COMSIG_KB_YAUTJA_IDCHIP "keybinding_yautja_idchip"
+#define COMSIG_KB_YAUTJA_LINK_BRACER "keybinding_yautja_link_bracer"
+
+//mask
+#define COMSIG_KB_YAUTJA_MASK_TOGGLE_ZOOM "keybinding_yautja_mask_toggle_zoom"
+#define COMSIG_KB_YAUTJA_MASK_TOGGLESIGHT "keybinding_yautja_mask_togglesight"
+
+//misc yautja
+
+#define COMSIG_KB_YAUTJA_TELE_LOC "keybinding_yautja_tele_loc"
+
+#define CATEGORY_CLIENT "CLIENT"
+#define CATEGORY_EMOTE "EMOTE"
+#define CATEGORY_ADMIN "ADMIN"
+#define CATEGORY_XENO "XENO"
+#define CATEGORY_CARBON "CARBON"
+#define CATEGORY_HUMAN "HUMAN"
+#define CATEGORY_HUMAN_COMBAT "HUMAN COMBAT"
+#define CATEGORY_ROBOT "ROBOT"
+#define CATEGORY_YAUTJA "YAUTJA"
+#define CATEGORY_MISC "MISC"
+#define CATEGORY_MOVEMENT "MOVEMENT"
+#define CATEGORY_COMMUNICATION "COMMUNICATION"
+
+#define CATEGORY_XENO_EMOTE "XENO EMOTE"
+#define CATEGORY_HUMAN_EMOTE "HUMAN EMOTE"
+#define CATEGORY_YAUTJA_EMOTE "YAUTJA EMOTE"
+#define CATEGORY_SYNTH_EMOTE "SYNTH EMOTE"
+
+
+#define WEIGHT_HIGHEST 0
+#define WEIGHT_ADMIN 10
+#define WEIGHT_CLIENT 20
+#define WEIGHT_ROBOT 30
+#define WEIGHT_XENO 30
+#define WEIGHT_MOB 40
+#define WEIGHT_LIVING 50
+#define WEIGHT_DEAD 60
+#define WEIGHT_EMOTE 70
+#define WEIGHT_LOWEST 999

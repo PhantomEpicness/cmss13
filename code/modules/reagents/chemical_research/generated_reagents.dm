@@ -1,11 +1,15 @@
-/////////////////////////RANDOMLY GENERATED CHEMICALS/////////////////////////
+
+//*****************************************************************************************************/
+//***********************************Randomly Generated Chemicals**************************************/
+//*****************************************************************************************************/
+
 /datum/chemical_reaction/generated
 	result_amount = 1 //Makes it a bit harder to mass produce
 
 /datum/reagent/generated
 	reagent_state = LIQUID //why isn't this default, seriously
 	chemclass = CHEM_CLASS_ULTRA
-	objective_value = 20
+	objective_value = OBJECTIVE_HIGH_VALUE
 	flags = REAGENT_SCANNABLE
 
 /datum/reagent/generated/New()
@@ -131,7 +135,7 @@
 	id = "lambda"
 	gen_tier = 4
 
-/datum/chemical_reaction/generated/on_reaction(var/datum/reagents/holder, var/created_volume)
+/datum/chemical_reaction/generated/on_reaction(datum/reagents/holder, created_volume)
 	var/datum/reagent/R = holder.has_reagent(id)
 	if(!R || !R.properties)
 		return

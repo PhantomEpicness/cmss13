@@ -69,8 +69,8 @@
 		src.toggle(user)
 
 /obj/structure/closet/crate/secure/attackby(obj/item/W as obj, mob/user as mob)
-	if(isXeno(user))
-		var/mob/living/carbon/Xenomorph/opener = user
+	if(isxeno(user))
+		var/mob/living/carbon/xenomorph/opener = user
 		src.attack_alien(opener)
 		return
 	if(is_type_in_list(W, list(/obj/item/packageWrap, /obj/item/stack/cable_coil, /obj/item/device/radio/electropack, /obj/item/tool/wirecutters, /obj/item/tool/weldingtool)))
@@ -109,7 +109,7 @@
 
 
 //------------------------------------
-//			Secure Crates
+// Secure Crates
 //------------------------------------
 
 /obj/structure/closet/crate/secure/ammo
@@ -122,7 +122,7 @@
 
 /obj/structure/closet/crate/secure/explosives
 	name = "explosives crate"
-	desc = "A explosives crate"
+	desc = "An explosives crate"
 	icon_state = "secure_locked_explosives"
 	icon_opened = "secure_open_explosives"
 	icon_locked = "secure_locked_explosives"
@@ -175,3 +175,34 @@
 	icon_opened = "secure_open_weyland"
 	icon_locked = "secure_locked_weyland"
 	icon_unlocked = "secure_unlocked_weyland"
+
+//special version, able to store OB fuel and warheads only
+/obj/structure/closet/crate/secure/ob
+	name = "secure orbital bombardment ammunition crate"
+	desc = "A secure crate capable of storing orbital bombardment warheads and fuel."
+	icon_state = "secure_locked_ob"
+	icon_opened = "secure_open_ob"
+	icon_locked = "secure_locked_ob"
+	icon_unlocked = "secure_unlocked_ob"
+
+/obj/structure/closet/crate/secure/ob/close()
+	if(!opened)
+		return FALSE
+	if(!can_close())
+		return FALSE
+
+	playsound(src.loc, 'sound/machines/click.ogg', 15, 1)
+	var/itemcount = 0
+	for(var/obj/O in get_turf(src))
+		if(itemcount >= storage_capacity)
+			break
+		//Only OB warheads and fuel gets in this boi
+		if(!istype(O, /obj/structure/ob_ammo))
+			continue
+		O.forceMove(src)
+		itemcount++
+
+	opened = FALSE
+	climbable = TRUE
+	update_icon()
+	return TRUE

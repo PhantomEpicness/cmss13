@@ -3,15 +3,15 @@
  * .. Sorry for the shitty path name, I couldnt think of a better one.
  *
  * WARNING: var/icon_type is used for both examine text and sprite name. Please look at the procs below and adjust your sprite names accordingly
- *		TODO: Cigarette boxes should be ported to this standard
+ * TODO: Cigarette boxes should be ported to this standard
  *
  * Contains:
- *		Donut Box
- *		Egg Box
- *		Candle Box
- *		Crayon Box
- *		Cigarette Box
- *		Cigar Box
+ * Donut Box
+ * Egg Box
+ * Candle Box
+ * Crayon Box
+ * Cigarette Box
+ * Cigar Box
  */
 
 /obj/item/storage/fancy
@@ -20,23 +20,23 @@
 	name = "donut box"
 	var/icon_type = "donut"
 
-	update_icon()
-		icon_state = "[icon_type]box[contents.len]"
+/obj/item/storage/fancy/update_icon()
+	icon_state = "[icon_type]box[contents.len]"
 
-	remove_from_storage(obj/item/W, atom/new_location)
-		. = ..()
-		if(.)
-			update_icon()
+/obj/item/storage/fancy/remove_from_storage(obj/item/W, atom/new_location)
+	. = ..()
+	if(.)
+		update_icon()
 
 
-	examine(mob/user)
-		..()
-		if(contents.len <= 0)
-			to_chat(user, "There are no [src.icon_type]s left in the box.")
-		else if(contents.len == 1)
-			to_chat(user, "There is one [src.icon_type] left in the box.")
-		else
-			to_chat(user, "There are [src.contents.len] [src.icon_type]s in the box.")
+/obj/item/storage/fancy/get_examine_text(mob/user)
+	. = ..()
+	if(contents.len <= 0)
+		. += "There are no [src.icon_type]s left in the box."
+	else if(contents.len == 1)
+		. += "There is one [src.icon_type] left in the box."
+	else
+		. += "There are [src.contents.len] [src.icon_type]s in the box."
 
 
 /*
@@ -91,6 +91,7 @@
 	storage_slots = 6
 	icon_type = "crayon"
 	can_hold = list(/obj/item/toy/crayon)
+	black_market_value = 25
 
 /obj/item/storage/fancy/crayons/fill_preset_inventory()
 	new /obj/item/toy/crayon/red(src)
@@ -131,7 +132,7 @@
 		/obj/item/clothing/mask/cigarette,
 		/obj/item/clothing/mask/cigarette/ucigarette,
 		/obj/item/clothing/mask/cigarette/bcigarette,
-		/obj/item/tool/lighter
+		/obj/item/tool/lighter,
 	)
 	icon_type = "cigarette"
 	var/default_cig_type=/obj/item/clothing/mask/cigarette
@@ -233,6 +234,7 @@
 	storage_slots = 7
 	can_hold = list(/obj/item/clothing/mask/cigarette/cigar)
 	icon_type = "cigar"
+	black_market_value = 30
 	var/default_cigar_type = /obj/item/clothing/mask/cigarette/cigar
 
 /obj/item/storage/fancy/cigar/fill_preset_inventory()
@@ -342,6 +344,7 @@
 	icon_state = "vialbox0"
 	icon_type = "vial"
 	name = "vial storage box"
+	is_objective = TRUE
 	storage_slots = 6
 	storage_flags = STORAGE_FLAGS_DEFAULT|STORAGE_CLICK_GATHER
 	can_hold = list(/obj/item/reagent_container/glass/beaker/vial,/obj/item/reagent_container/hypospray/autoinjector)
@@ -391,7 +394,7 @@
 	storage_slots = 6
 	req_access = list(ACCESS_MARINE_MEDBAY)
 
-/obj/item/storage/lockbox/vials/update_icon(var/itemremoved = 0)
+/obj/item/storage/lockbox/vials/update_icon(itemremoved = 0)
 	var/total_contents = src.contents.len - itemremoved
 	src.icon_state = "vialbox[total_contents]"
 	src.overlays.Cut()

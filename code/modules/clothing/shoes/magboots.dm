@@ -20,16 +20,16 @@
 		magpulse = 1
 		icon_state = "magboots1"
 		to_chat(user, "You enable the mag-pulse traction system.")
-	user.update_inv_shoes()	//so our mob-overlays update
+	user.update_inv_shoes() //so our mob-overlays update
 
 	for(var/X in actions)
 		var/datum/action/A = X
 		A.update_button_icon()
 
 
-/obj/item/clothing/shoes/magboots/examine(mob/user)
-	..()
+/obj/item/clothing/shoes/magboots/get_examine_text(mob/user)
+	. = ..()
 	var/state = "disabled"
 	if(flags_inventory&NOSLIPPING)
 		state = "enabled"
-	to_chat(user, "Its mag-pulse traction system appears to be [state].")
+	. += "Its mag-pulse traction system appears to be [state]."

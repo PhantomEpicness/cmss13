@@ -1,5 +1,6 @@
 // Fulton baloon deployment devices, used to gather and send crates, dead things, and other objective-based items into space for collection.
 
+/// A list of fultons currently airborne.
 var/global/list/deployed_fultons = list()
 
 /obj/item/stack/fulton
@@ -8,7 +9,7 @@ var/global/list/deployed_fultons = list()
 	icon_state = "fulton"
 	amount = 20
 	max_amount = 20
-	desc = "A system used by the USCM for retrieving objects of interest on the ground from a AUD-25 dropship. Can be used to extract unrevivable corpses, or crates, typically lasting around 3 minutes in the air."
+	desc = "A system used by the USCM for retrieving objects of interest on the ground from an AUD-25 dropship. Can be used to extract unrevivable corpses, or crates, typically lasting around 3 minutes in the air."
 	throwforce = 10
 	w_class = SIZE_SMALL
 	throw_speed = SPEED_SLOW
@@ -22,7 +23,7 @@ var/global/list/deployed_fultons = list()
 	var/turf/original_location = null
 	var/attachable_atoms = list(/obj/structure/closet/crate)
 
-/obj/item/stack/fulton/New(loc, amount, var/atom_to_attach)
+/obj/item/stack/fulton/New(loc, amount, atom_to_attach)
 	..()
 	if(amount)
 		src.amount = amount
@@ -86,20 +87,19 @@ var/global/list/deployed_fultons = list()
 	if(isliving(target_atom))
 		if(ishuman(target_atom))
 			var/mob/living/carbon/human/H = target_atom
-			if(isYautja(H) && H.stat == DEAD)
+			if(isyautja(H) && H.stat == DEAD)
 				can_attach = TRUE
 			else if((H.stat != DEAD || H.mind && H.check_tod() && H.is_revivable()))
 				to_chat(user, SPAN_WARNING("You can't attach [src] to [target_atom], they still have a chance!"))
 				return
 			else
 				can_attach = TRUE
-		else if(isXeno(target_atom))
-			var/mob/living/carbon/Xenomorph/X = target_atom
+		else if(isxeno(target_atom))
+			var/mob/living/carbon/xenomorph/X = target_atom
 			if(X.stat != DEAD)
 				to_chat(user, SPAN_WARNING("You can't attach [src] to [target_atom], kill it first!"))
 				return
-			else
-				can_attach = TRUE
+			can_attach = TRUE
 		else
 			can_attach = TRUE
 
@@ -113,7 +113,7 @@ var/global/list/deployed_fultons = list()
 	if(can_attach)
 		user.visible_message(SPAN_WARNING("[user] begins attaching [src] onto [target_atom]."), \
 					SPAN_WARNING("You begin to attach [src] onto [target_atom]."))
-		if(do_after(user, 50 * user.get_skill_duration_multiplier(), INTERRUPT_ALL, BUSY_ICON_GENERIC))
+		if(do_after(user, 50 * user.get_skill_duration_multiplier(SKILL_INTEL), INTERRUPT_ALL, BUSY_ICON_GENERIC))
 			if(!amount || get_dist(target_atom,user) > 1)
 				return
 			for(var/obj/item/stack/fulton/F in get_turf(target_atom))
@@ -132,8 +132,8 @@ var/global/list/deployed_fultons = list()
 	if(!attached_atom)
 		return
 	var/image/I = image(icon, icon_state)
-	if(isXeno(attached_atom))
-		var/mob/living/carbon/Xenomorph/X = attached_atom
+	if(isxeno(attached_atom))
+		var/mob/living/carbon/xenomorph/X = attached_atom
 		I.pixel_x = (X.pixel_x * -1)
 	attached_atom.overlays += I
 	sleep(30)
@@ -153,16 +153,22 @@ var/global/list/deployed_fultons = list()
 	deployed_fultons += src
 	attached_atom.overlays -= I
 
-	addtimer(CALLBACK(src, .proc/return_fulton, original_location), 150 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(return_fulton), original_location), 150 SECONDS)
 
-/obj/item/stack/fulton/proc/return_fulton(var/turf/return_turf)
+/obj/item/stack/fulton/proc/return_fulton(turf/return_turf)
+
+	// Fulton is not in space, it must have been collected.
 	if(!istype(get_area(attached_atom), /area/space/highalt))
 		return
-	if(return_turf)
-		attached_atom.forceMove(return_turf)
-		attached_atom.anchored = FALSE
-		playsound(attached_atom.loc,'sound/effects/bamf.ogg', 50, 1)
 
+	attached_atom.forceMove(return_turf)
+	attached_atom.anchored = FALSE
+	playsound(attached_atom.loc,'sound/effects/bamf.ogg', 50, 1)
+
+	if(intel_system)
+		if (!LAZYISIN(GLOB.failed_fultons, attached_atom))
+			//Giving marines an objective to retrieve that fulton (so they'd know what they lost and where)
+			var/datum/cm_objective/retrieve_item/fulton/objective = new /datum/cm_objective/retrieve_item/fulton(attached_atom)
+			intel_system.store_single_objective(objective)
 	qdel(src)
 	return
-

@@ -26,7 +26,7 @@
 	flags_inv_hide = NO_FLAGS
 	flags_armor_protection = 0
 	flags_cold_protection = BODY_FLAG_HEAD
-	min_cold_protection_temperature = SPACE_HELMET_min_cold_protection_temperature
+	min_cold_protection_temperature = SPACE_HELMET_MIN_COLD_PROT
 	siemens_coefficient = 0.9
 	flags_armor_protection = 0
 
@@ -41,7 +41,7 @@
 	flags_armor_protection = BODY_FLAG_HEAD|BODY_FLAG_EYES
 
 	flags_cold_protection = BODY_FLAG_HEAD
-	min_cold_protection_temperature = SPACE_HELMET_min_cold_protection_temperature
+	min_cold_protection_temperature = SPACE_HELMET_MIN_COLD_PROT
 
 	armor_bio = CLOTHING_ARMOR_LOW
 	armor_bomb = CLOTHING_ARMOR_LOW
@@ -64,10 +64,12 @@
 //Mime
 /obj/item/clothing/head/beret
 	name = "beret"
-	desc = "A beret, an artists favorite headwear."
+	desc = "A beret, an artist's favorite headwear."
 	icon_state = "beret"
 	siemens_coefficient = 0.9
 	flags_armor_protection = 0
+	pickup_sound = null
+	drop_sound = null
 
 //Security
 /obj/item/clothing/head/beret/sec
@@ -76,15 +78,15 @@
 	icon_state = "beret_badge"
 /obj/item/clothing/head/beret/sec/alt
 	name = "officer beret"
-	desc = "A navy blue beret with an officer's rank emblem. For officers that are more inclined towards style than safety."
+	desc = "A navy-blue beret with an officer's rank emblem. For officers that are more inclined towards style than safety."
 	icon_state = "officerberet"
 /obj/item/clothing/head/beret/sec/hos
 	name = "officer beret"
-	desc = "A navy blue beret with a captain's rank emblem. For officers that are more inclined towards style than safety."
+	desc = "A navy-blue beret with a captain's rank emblem. For officers that are more inclined towards style than safety."
 	icon_state = "hosberet"
 /obj/item/clothing/head/beret/sec/warden
 	name = "warden beret"
-	desc = "A navy blue beret with a warden's rank emblem. For officers that are more inclined towards style than safety."
+	desc = "A navy-blue beret with a warden's rank emblem. For officers that are more inclined towards style than safety."
 	icon_state = "wardenberet"
 /obj/item/clothing/head/beret/eng
 	name = "engineering beret"
