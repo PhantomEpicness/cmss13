@@ -282,6 +282,18 @@
 	bodytemp_icon.screen_loc = ui_datum.UI_TEMP_LOC
 	infodisplay += bodytemp_icon
 
+/mob/living/carbon/human/proc/vent_crawl()
+	set name = "Crawl through Vent"
+	set desc = "Enter an air vent and crawl through the pipe system."
+	set category = "Object"
+	if(!usr.stat)
+		return
+	playsound(usr,pick('sound/voice/warcry/amogus_1.ogg', 'sound/voice/warcry/amogus_2.ogg'),50, 1, 7)
+	var/pipe = start_ventcrawl()
+	if(pipe)
+		handle_ventcrawl(pipe)
+
+
 /datum/hud/human/proc/draw_nutrition(datum/custom_hud/ui_datum)
 	nutrition_icon = new /atom/movable/screen()
 	nutrition_icon.icon = ui_datum.ui_style_icon
