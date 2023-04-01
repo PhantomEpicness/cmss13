@@ -1,6 +1,7 @@
 
 var/list/unansweredAhelps = list() //This feels inefficient, but I can't think of a better way. Stores the message indexed by CID
 
+GLOBAL_LIST_EMPTY(PressFaxes)
 GLOBAL_LIST_EMPTY(WYFaxes) //Departmental faxes
 GLOBAL_LIST_EMPTY(USCMFaxes)
 GLOBAL_LIST_EMPTY(ProvostFaxes)
@@ -26,6 +27,8 @@ GLOBAL_LIST_EMPTY(freed_mob_list) // List of mobs freed for ghosts
 GLOBAL_LIST_INIT(available_taskbar_icons, setup_taskbar_icons())
 
 GLOBAL_LIST_EMPTY(minimap_icons)
+
+GLOBAL_LIST_EMPTY(mainship_pipes)
 
 /proc/initiate_minimap_icons()
 	var/list/icons = list()

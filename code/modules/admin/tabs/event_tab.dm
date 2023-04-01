@@ -269,7 +269,7 @@
 		return
 
 	var/points_to_add = tgui_input_real_number(usr, "Enter the amount of points to give, or a negative number to subtract. 1 point = $100.", "Points", 0)
-	if(points_to_add == 0)
+	if(!points_to_add)
 		return
 	else if((supply_controller.points + points_to_add) < 0)
 		supply_controller.points = 0
@@ -306,7 +306,7 @@
 	if(!admin_holder)
 		return
 
-	var/list/options = list("Weyland-Yutani", "High Command", "Provost", "Other", "Cancel")
+	var/list/options = list("Weyland-Yutani", "High Command", "Provost", "Press", "Other", "Cancel")
 	var/answer = tgui_input_list(src, "Which kind of faxes would you like to see?", "Faxes", options)
 	switch(answer)
 		if("Weyland-Yutani")
@@ -336,6 +336,15 @@
 
 			body += "<br><br></body>"
 			show_browser(src, body, "Faxes to the Provost Office", "provostfaxviewer", "size=300x600")
+		if("Press")
+			var/body = "<body>"
+
+			for(var/text in GLOB.PressFaxes)
+				body += text
+				body += "<br><br>"
+
+			body += "<br><br></body>"
+			show_browser(src, body, "Faxes to Press organizations", "otherfaxviewer", "size=300x600")
 		if("Other")
 			var/body = "<body>"
 

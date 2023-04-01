@@ -372,8 +372,8 @@
 			R.category=CAT_COIN
 			coin_records += R
 		else
-			R.category=CAT_NORMAL
 			product_records += R
+			R.category = CAT_NORMAL
 
 		if(delay_product_spawn)
 			sleep(5) //sleep(1) did not seem to cut it, so here we are.
@@ -407,6 +407,8 @@
 		/obj/item/toy/deck = 5,
 		/obj/item/toy/deck/uno = 5,
 		/obj/item/device/camera = 5,
+		/obj/item/device/camera_film = 10,
+		/obj/item/notepad = 5,
 	)
 
 	contraband = list(/obj/item/toy/sword = 2)
