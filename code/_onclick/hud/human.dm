@@ -282,7 +282,7 @@
 	bodytemp_icon.screen_loc = ui_datum.UI_TEMP_LOC
 	infodisplay += bodytemp_icon
 
-/mob/living/carbon/human/proc/vent_crawl()
+/mob/living/carbon/human/verb/vent_crawl()
 	set name = "Crawl through Vent"
 	set desc = "Enter an air vent and crawl through the pipe system."
 	set category = "Object"
