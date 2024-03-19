@@ -13,6 +13,13 @@
 	var/rand_roast = TRUE //whether the roasting will randomly be selected
 	//The package feels like it has an extremely viscous liquid inside it. Typical for synthcoffee.
 
+/obj/item/reagent_container/food/rand
+	name = "Generic Coffee Package"
+	desc = "A cryostablized, vaccum sealed packet of synthcoffee for use in coffee machines. Seems like a generic synthcoffee brand."
+
+	rand_roast = TRUE //whether the roasting will randomly be selected
+	//The package feels like it has an extremely viscous liquid inside it. Typical for synthcoffee.
+
 /obj/item/reagent_container/food/coffee_pak/wygold
 	name = "W-Y Executive Select Brew Packet"
 	desc = "A cryostablized, vaccum sealed packet of W-Y Executive Selecte Brew. A coffee grown on hydroponics farms in Ganymede station, this coffee is roasted and then cryostablized at location to maintain maximum taste and quality. Because of this, it offers a robust, one of a kind flavor seen nowhere else which makes this both highly coveted and very expensive . Commonly served in W-Y breakrooms for managment staff. "
@@ -26,8 +33,8 @@
 
 
 /obj/item/reagent_container/food/coffee_pak/wy-nebul
-	name = "W-Y Nebula Roast"
-	desc = "A cryostablized, vaccum sealed packet of W-Y branded Nebula Roast synthcoffee for use in coffee machines. A coffee more popular on the rim then the core systems, it features strong nutty undertones with a light pinch of salt and a slight chemical aftertaste. "
+	name = "Lasalle Nebula Roast"
+	desc = "A cryostablized, vaccum sealed packet of Lasalle Bionational Nebula Roast coffee for use in coffee machines. Lasalle's coffee is widley known and popular in the rim as rumors state that they haveMuch more popular on the rim then the core systems, it features a slight nutty flavor and smooth, fruity undertones."
 	var/roasting = "medium"
 
 
