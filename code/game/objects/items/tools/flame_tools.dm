@@ -188,6 +188,8 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	var/lastHolder = null
 	var/smoketime = 10 MINUTES
 	var/chem_volume = 15
+	// if we are actively smoking or not
+	var/smoking_active = FALSE
 
 /obj/item/clothing/mask/cigarette/Initialize()
 	. = ..()
@@ -298,7 +300,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 
 /obj/item/clothing/mask/cigarette/proc/light(flavor_text)
 	SIGNAL_HANDLER
-
+	smoking_active = TRUE
 	if(!heat_source)
 		heat_source = 1000
 		damtype = "fire"
@@ -441,9 +443,12 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	chem_volume = 39
 	smoketime = 20 MINUTES
 	actions_types = list(/datum/action/item_action/hotbox)
+	// cooldown between puffs
 	var/puff_cooldown = 10 SECONDS
+	// bool whether we can puff or not
 	var/can_puff = TRUE
-	var/datum/effect_system/smoke_spread/smoke
+	// smoke datum of smoketype
+	var/smoke_type = /datum/effect_system/smoke_spread/weed
 
 /obj/item/clothing/mask/cigarette/weed/Initialize()
 	. = ..()
@@ -457,13 +462,13 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	set category = "Smoke"
 	set src in usr
 	var/mob/living/carbon/human/smoker = usr
-	var/datum/effect_system/smoke_spread/smoke = new /datum/effect_system/smoke_spread/weed
+	var/datum/effect_system/smoke_spread/smoke = new(smoke_type)
 	if(!smoker || smoker.is_mob_incapacitated(TRUE))
 		return
-		
+
 	if(smoker.wear_mask != src)
 		return
-		
+
 	if(!can_puff)
 		to_chat(smoker,SPAN_NOTICE("Your lungs lack fresh air, chill man."))
 		return
@@ -472,7 +477,7 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		to_chat(smoker,SPAN_NOTICE("You need to light it up first."))
 		return
 
-	smoker.visible_message(SPAN_NOTICE("[src] takes a massive breath!"),\
+	smoker.visible_message(SPAN_NOTICE("[smoker] takes a massive breath!"), \
 	SPAN_WARNING("You prepare for a massive cloud!"))
 
 	if(!do_after(smoker, 4 SECONDS, INTERRUPT_ALL, BUSY_ICON_FRIENDLY))
@@ -506,8 +511,8 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 	button.overlays += IMG
 
 /datum/action/item_action/hotbox/can_use_action()
-	var/mob/living/carbon/human/H = owner
-	if(istype(H) && !H.is_mob_incapacitated() && H.body_position == STANDING_UP && holder_item == H.wear_mask)
+	var/mob/living/carbon/human/smoker = owner
+	if(istype(smoker) && !smoker.is_mob_incapacitated() && smoker.body_position == STANDING_UP && holder_item == smoker.wear_mask)
 		return TRUE
 
 /datum/action/item_action/hotbox/action_activate()
@@ -516,7 +521,9 @@ CIGARETTE PACKETS ARE IN FANCY.DM
 		return
 	weed.puff()
 
-
+/obj/item/clothing/mask/cigarette/weed/Destroy()
+	QDEL_NULL(actions_types)
+	. = ..()
 ////////////
 // CIGARS //
 ////////////

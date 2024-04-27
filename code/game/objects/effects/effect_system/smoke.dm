@@ -340,6 +340,7 @@
 	opacity = FALSE
 	alpha = 75
 	var/xeno_affecting = TRUE
+	var/next_cough = 2 SECONDS
 
 /obj/effect/particle_effect/smoke/weed/affect(mob/living/carbon/affected)
 	..()
@@ -348,9 +349,9 @@
 			return
 		else
 			affected.updatehealth()
-			if(prob(15) && (affected.coughedtime < world.time))
-				affected.coughedtime = 1
+			if(affected.coughedtime < world.time)
 				affected.emote("cough")
+				affected.coughedtime = world.time + next_cough
 
 		affected.last_damage_data = cause_data
 
