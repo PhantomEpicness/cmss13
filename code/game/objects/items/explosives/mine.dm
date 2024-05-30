@@ -421,32 +421,34 @@
 	QDEL_NULL(sparks)
 
 /obj/item/explosive/mine/bury/antitank
-	name = "\improper M19 Anti-Tank Mine"
-	desc = "This older anti tank mine design from the 21st century was rolled back into service simply due to the currently-used M307 EMP anti tank mines being unable to trigger against the minimally armored vehicles commonly used by CLF. Featuring a 250 pound minimum detonation threshold, it can be employed against all but the lightest of vehicles. Despite being outdated, it can still pack a punch against APCs and lighter vehicles, while its plastic construction prevents detection by simple methods."
+	name = "\improper M29 Anti-Tank Mine"
+	desc = "An older anti tank mine from the mid 21st century. Even though shaped charge anti tank mines have largerly been surpassed by their focused EMP burst counterparts, the simplicity and cheapness of them remain a key factor in why they are still used today. These may not outright kill a tank but it'll definately knock the crew around and throw a track. Features a lightweight polymer body with the entire assembly being 99.9998% metal free to prevent detection by conventional metal detection."
 	icon_state = "antitank_mine"
 	w_class = SIZE_LARGE
 	layer = MOB_LAYER - 0.1 //You can't just randomly hide claymores under boxes. Booby-trapping bodies is fine though
 	explosive_power = 150
 	heavy_trigger = TRUE
+	var/fling_dist = 5
 
 /obj/item/explosive/mine/bury/antitank/prime()
 	set waitfor = 0
 	create_shrapnel(loc, shrapnel_count, , ,/datum/ammo/bullet/shrapnel, cause_data)
 	cell_explosion(loc, explosive_power, 25, EXPLOSION_FALLOFF_SHAPE_EXPONENTIAL_HALF, dir, cause_data)
-	for(var/mob/living/carbon/M in oview(1, src))
-		M.AdjustStun(4)
-		M.KnockDown(4)
-		to_chat(M, SPAN_HIGHDANGER("Molten copper rips through your lower body!"))
-		M.apply_damage(50,BURN)
-		if(ishuman(M))
+	for(var/mob/living/carbon/carbone in oview(1, src))
+		carbone.AdjustStun(4)
+		carbone.KnockDown(4)
+		to_chat(carbone, SPAN_HIGHDANGER("Molten copper rips through your lower body!"))
+		carbone.apply_damage(50,BURN)
+		if(ishuman(carbone))
 			sparks.start()
-			var/mob/living/carbon/human/H = M
-			var/obj/limb/L = H.get_limb("l_leg")
-			var/obj/limb/R = H.get_limb("r_leg")
-			R.droplimb()
-			L.droplimb()
-			playsound(M.loc, "bone_break", 45, TRUE)
-			playsound(M.loc, "bone_break", 45, TRUE)
+			var/mob/living/carbon/human/human = carbone
+			var/obj/limb/left = human.get_limb("l_leg")
+			var/obj/limb/right = human.get_limb("r_leg")
+			right.droplimb()
+			left.droplimb()
+			playsound(get_turf(carbone), "bone_break", 45, TRUE)
+			playsound(get_turf(carbone), "bone_break", 45, TRUE)
+			carbone.throw_atom(get_turf(src), fling_dist, SPEED_VERY_FAST, "M19 Anti-Tank Mine", TRUE)
 	for(var/mob/living/living_mob in viewers(7, src))
 		if(living_mob.client)
 			shake_camera(living_mob, 10, 1)
